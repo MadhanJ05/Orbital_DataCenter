@@ -121,6 +121,7 @@ some. We made each of our 16 guesses 25% worse, one at a time:
 | 📋 Every rule, one by one | Budget, grid, launch, chip and cooling rules, every speed target, users served, outages. Each is recalculated from the raw design | Design 1: 36 of 36. Design 2: 30 of 30 |
 | 🕐 A full day, minute by minute | Users in 3 time zones, live users first, background jobs fill the gaps. Run on a normal day and once per possible outage | No live user ever waits. Longest background wait: 87 min (limit 228) |
 | 🔥 What if our guesses are wrong | Each guessed number made 25% worse | Design 1 fits 13 of 16, Design 2 fits 12 of 16 |
+| 🧮 Hand calculation | 15 key numbers for Design 1 (demand, users per chip, first-reply time, one site's bill, launch, outage spare) redone with plain arithmetic, without our code | All match exactly |
 | 🔍 Code review | We read the model line by line and fixed 4 bugs that made designs look better than they were | Both designs re-optimized after the fixes and still pass |
 
 **Energy per answer:** a chat reply uses about **0.054 Wh** in both designs, and a full AI-agent
@@ -173,6 +174,7 @@ python3 twin/stress.py                                     # Design 1 with every
 python3 twin/stress.py --light --orbit-only                # Design 2 with every guess 25% worse
 python3 twin/test_calibration.py                           # our model matches the organizers' numbers
 python3 twin/check_rules.py                                # every deck rule, both designs, PASS/FAIL
+python3 twin/handcheck.py                                  # key numbers redone by hand
 ```
 
 Technical details, assumptions and the design file format are in [`twin/README.md`](twin/README.md).
