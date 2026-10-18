@@ -60,8 +60,9 @@ def site_pue(cooling, site):
 
 
 def replica_hw(chip, n):
+    """Usable memory (after the reserve), effective bandwidth and FLOPS of n chips."""
     ch = C.CHIPS[chip]
-    return (n * ch["mem"], n * ch["bw"] * C.BW_EFFICIENCY, n * ch["flops"] * C.FLOPS_EFFICIENCY)
+    return (n * ch["mem"] * C.MEMORY_USABLE, n * ch["bw"] * C.BW_EFFICIENCY, n * ch["flops"] * C.FLOPS_EFFICIENCY)
 
 
 def decode_replica(stream, chip, n, serving):
@@ -259,6 +260,9 @@ def _evaluate(design):
             errors.append(f"unknown case {c!r}")
     cases = [c for c in cases if c in C.CASES]
     d_out, d_in, reqs = demand(cases, serving)
+    margin = 1 + C.DEMAND_MARGIN       # size and check service against demand above the deck's
+    d_out = {k: v * margin for k, v in d_out.items()}
+    d_in = {k: v * margin for k, v in d_in.items()}
     raw_out = dict(d_out)
     d_out, d_in, moved_out, moved_in = valley_shift(d_out, d_in, serving)
     if serving["bg_fill_valleys"] and C.STREAMS["agent_bg"]["task_deadline"] < C.PEAK_WINDOW_H * 3600:
@@ -388,12 +392,12 @@ def _evaluate(design):
         ch = C.CHIPS[p["chip"]]
         ctx_gb = p["replicas"] * p["rep"].get("ctx_mem_bytes", 0.0) / 1e9
         it_mw = (p["racks"] * ch["rack_kw"] + ctx_gb * C.CONTEXT_MEM_W_PER_GB / 1000) / 1000
-        pool_rho = min(1.0, rho[(p["stream"], p["phase"])]) if p["slo_ok"] else 0.0
+        pool_rho = min(1.0, rho[(p["stream"], p["phase"])] / margin) if p["slo_ok"] else 0.0   # bill real demand
         avg_util = pool_rho / C.STREAMS[p["stream"]]["peak"]
         extra = (moved_out if p["phase"] == "decode" else moved_in).get(p["stream"], 0.0)
         cap_total = sum(q["cap"] for q in by(p["stream"], p["phase"]))
         if extra and cap_total and p["slo_ok"]:
-            avg_util = min(1.0, avg_util + extra / cap_total)
+            avg_util = min(1.0, avg_util + extra / margin / cap_total)
         load = C.IDLE_POWER_FRACTION + (1 - C.IDLE_POWER_FRACTION) * avg_util
         pue = site_pue(p["cooling"], p["site"])
         mwh = it_mw * load * pue * C.HOURS

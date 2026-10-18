@@ -2,243 +2,247 @@
  {
   "scenario": "Baseline (our numbers)",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.77821125402699,
+  "asbuilt_cost_busd": 29.04843069686847,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.77821125402699,
+  "best_cost_busd": 29.04843069686847,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.77821125402699
+  "live_only_cost_busd": 29.04843069686847
  },
  {
   "scenario": "Earth power prices",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.927485832740203,
+  "asbuilt_cost_busd": 29.199024964011613,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.927485832740203,
+  "best_cost_busd": 29.199024964011613,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.927485832740203
+  "live_only_cost_busd": 29.199024964011613
  },
  {
   "scenario": "Earth grid carbon",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.866666203245842,
+  "asbuilt_cost_busd": 29.137667647778834,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.866666203245842,
+  "best_cost_busd": 29.137667647778834,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.866666203245842
+  "live_only_cost_busd": 29.137667647778834
  },
  {
   "scenario": "Earth site grid caps",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.77821125402699,
+  "asbuilt_cost_busd": 29.04843069686847,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.77821125402699,
+  "best_cost_busd": 29.04843069686847,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.77821125402699
+  "live_only_cost_busd": 29.04843069686847
  },
  {
   "scenario": "Earth building cost",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 29.467113340072533,
+  "asbuilt_cost_busd": 29.74265094262964,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 29.467113340072533,
+  "best_cost_busd": 29.74265094262964,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 29.467113340072533
+  "live_only_cost_busd": 29.74265094262964
  },
  {
   "scenario": "Space solar+radiator hardware",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 29.565083923793328,
+  "asbuilt_cost_busd": 29.841381263452664,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 29.565083923793328,
+  "best_cost_busd": 29.841381263452664,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 29.565083923793328
+  "live_only_cost_busd": 29.841381263452664
  },
  {
   "scenario": "Chip compute (FLOPS)",
   "asbuilt_valid": false,
-  "asbuilt_cost_busd": 28.79301442834089,
+  "asbuilt_cost_busd": 29.065273226832225,
   "asbuilt_served": 0.8136100408058271,
   "asbuilt_errors": [
    "losing gulf drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)",
    "losing iceland drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)"
   ],
   "best_valid": false,
-  "best_cost_busd": 33.133352769695556,
+  "best_cost_busd": 33.67849504108746,
   "best_errors": [
-   "cost $33.13B > $30B budget (DECK s9)"
+   "cost $33.68B > $30B budget (DECK s9)"
   ],
   "live_only_valid": false,
-  "live_only_cost_busd": 32.702408351391554
+  "live_only_cost_busd": 33.24800152235291
  },
  {
   "scenario": "Achievable FLOPS share",
   "asbuilt_valid": false,
-  "asbuilt_cost_busd": 28.79301442834089,
+  "asbuilt_cost_busd": 29.065273226832225,
   "asbuilt_served": 0.8136100408058271,
   "asbuilt_errors": [
    "losing gulf drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)",
    "losing iceland drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)"
   ],
   "best_valid": false,
-  "best_cost_busd": 33.133352769695556,
+  "best_cost_busd": 33.67849504108746,
   "best_errors": [
-   "cost $33.13B > $30B budget (DECK s9)"
+   "cost $33.68B > $30B budget (DECK s9)"
   ],
   "live_only_valid": false,
-  "live_only_cost_busd": 32.702408351391554
+  "live_only_cost_busd": 33.24800152235291
  },
  {
   "scenario": "Air-card memory bandwidth",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.779510577992333,
+  "asbuilt_cost_busd": 29.04973002083381,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.779510577992333,
+  "best_cost_busd": 29.04973002083381,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.779510577992333
+  "live_only_cost_busd": 29.04973002083381
  },
  {
   "scenario": "Weight reads per step (calib)",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.778069214646695,
+  "asbuilt_cost_busd": 29.048397368305295,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.778069214646695,
+  "best_cost_busd": 29.048397368305295,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.778069214646695
+  "live_only_cost_busd": 29.048397368305295
  },
  {
   "scenario": "Attention math",
   "asbuilt_valid": false,
-  "asbuilt_cost_busd": 28.793358719899903,
+  "asbuilt_cost_busd": 29.063744667905063,
   "asbuilt_served": 1.0,
-  "asbuilt_errors": [
-   "losing gulf drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)",
-   "losing iceland drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)"
-  ],
-  "best_valid": true,
-  "best_cost_busd": 29.58437226161964,
-  "best_errors": [],
-  "live_only_valid": true,
-  "live_only_cost_busd": 29.58437226161964
- },
- {
-  "scenario": "Draft-token acceptance",
-  "asbuilt_valid": false,
-  "asbuilt_cost_busd": 28.68575935833707,
-  "asbuilt_served": 0.7664545242215156,
   "asbuilt_errors": [
    "losing gulf drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)",
    "losing iceland drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)"
   ],
   "best_valid": false,
-  "best_cost_busd": 35.24947021574042,
+  "best_cost_busd": 30.13172674187442,
   "best_errors": [
-   "cost $35.25B > $30B budget (DECK s9)"
+   "cost $30.13B > $30B budget (DECK s9)"
+  ],
+  "live_only_valid": true,
+  "live_only_cost_busd": 29.754323400848932
+ },
+ {
+  "scenario": "Draft-token acceptance",
+  "asbuilt_valid": false,
+  "asbuilt_cost_busd": 28.966004321455376,
+  "asbuilt_served": 0.7902870659613573,
+  "asbuilt_errors": [
+   "losing gulf drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)",
+   "losing iceland drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)"
+  ],
+  "best_valid": false,
+  "best_cost_busd": 35.62276557145857,
+  "best_errors": [
+   "cost $35.62B > $30B budget (DECK s9)"
   ],
   "live_only_valid": false,
-  "live_only_cost_busd": 34.94465754521146
+  "live_only_cost_busd": 34.99868425997566
  },
  {
   "scenario": "Cross-chip sync cost",
   "asbuilt_valid": false,
-  "asbuilt_cost_busd": 28.772331987131142,
+  "asbuilt_cost_busd": 29.04173593417657,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [
    "losing gulf drops chat, agent_int, agent_bg below 100% (resilience=all)",
    "losing iceland drops chat, agent_int, agent_bg below 100% (resilience=all)"
   ],
-  "best_valid": true,
-  "best_cost_busd": 29.896795573728237,
-  "best_errors": [],
-  "live_only_valid": true,
-  "live_only_cost_busd": 29.896795573728237
+  "best_valid": false,
+  "best_cost_busd": 30.40852071008732,
+  "best_errors": [
+   "cost $30.41B > $30B budget (DECK s9)"
+  ],
+  "live_only_valid": false,
+  "live_only_cost_busd": 30.04850547274765
  },
  {
   "scenario": "Context-memory price",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.833471598209183,
+  "asbuilt_cost_busd": 29.10329167991316,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.833471598209183,
+  "best_cost_busd": 29.10329167991316,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.833471598209183
+  "live_only_cost_busd": 29.10329167991316
  },
  {
   "scenario": "Context-tier link bandwidth",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.777553773063232,
+  "asbuilt_cost_busd": 29.048075672138733,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.777553436661538,
+  "best_cost_busd": 29.048075672138733,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.777553436661538
+  "live_only_cost_busd": 29.048075672138733
  },
  {
   "scenario": "Idle power draw",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.806521440242786,
+  "asbuilt_cost_busd": 29.07684522744044,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.806521440242786,
+  "best_cost_busd": 29.07684522744044,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.806521440242786
+  "live_only_cost_busd": 29.07684522744044
  },
  {
   "scenario": "Earth-orbit link bandwidth",
   "asbuilt_valid": true,
-  "asbuilt_cost_busd": 28.77821125402699,
+  "asbuilt_cost_busd": 29.04843069686847,
   "asbuilt_served": 1.0,
   "asbuilt_errors": [],
   "best_valid": true,
-  "best_cost_busd": 28.77821125402699,
+  "best_cost_busd": 29.04843069686847,
   "best_errors": [],
   "live_only_valid": true,
-  "live_only_cost_busd": 28.77821125402699
+  "live_only_cost_busd": 29.04843069686847
  },
  {
   "scenario": "ALL of the above at once",
   "asbuilt_valid": false,
-  "asbuilt_cost_busd": 30.408696453676598,
-  "asbuilt_served": 0.5584972312450545,
+  "asbuilt_cost_busd": 30.70696760038403,
+  "asbuilt_served": 0.560025966352896,
   "asbuilt_errors": [
-   "cost $30.41B > $30B budget (DECK s9)",
+   "cost $30.71B > $30B budget (DECK s9)",
    "losing gulf drops chat, agent_int, agent_int_sub, agent_bg, agent_bg_sub below 100% (resilience=all)"
   ],
   "best_valid": false,
-  "best_cost_busd": 51.60966932261092,
+  "best_cost_busd": 52.75804836598021,
   "best_errors": [
-   "cost $51.61B > $30B budget (DECK s9)"
+   "cost $52.76B > $30B budget (DECK s9)"
   ],
   "live_only_valid": false,
-  "live_only_cost_busd": 51.144065341283785
+  "live_only_cost_busd": 52.026194209282146
  }
 ]

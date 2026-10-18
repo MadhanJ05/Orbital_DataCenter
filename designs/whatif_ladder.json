@@ -14,12 +14,12 @@
     "structure_t": 4.0,
     "breakeven_nordics_usd_per_kg": 94.84497061255843,
     "orbit_usd_per_mw": 11181605.528973948,
-    "fleet_cost_usd": 26638931933.718147,
+    "fleet_cost_usd": 27205530775.29951,
     "served_fraction": 1.0,
     "valid": true,
-    "orbit_mw": 279.85194718349686,
-    "earth_mw": 484.7701451112186,
-    "space_mass_t": 5037.335049302943
+    "orbit_mw": 294.8503635558386,
+    "earth_mw": 484.8844319910528,
+    "space_mass_t": 5307.306544005095
   },
   {
     "label": "Best chip temperature (cooler: less leakage, less solar)",
@@ -36,12 +36,12 @@
     "structure_t": 4.2077956268160674,
     "breakeven_nordics_usd_per_kg": 108.83617804347975,
     "orbit_usd_per_mw": 11015009.29108618,
-    "fleet_cost_usd": 26592309652.15181,
+    "fleet_cost_usd": 27156409813.99127,
     "served_fraction": 1.0,
     "valid": true,
-    "orbit_mw": 279.85194718349686,
-    "earth_mw": 484.7701451112186,
-    "space_mass_t": 5299.019097816057
+    "orbit_mw": 294.8503635558386,
+    "earth_mw": 484.8844319910528,
+    "space_mass_t": 5583.015316509235
   },
   {
     "label": "Two loops: HBM on its own cool loop (no gain when chips run cool)",
@@ -59,12 +59,12 @@
     "structure_t": 4.2077956268160674,
     "breakeven_nordics_usd_per_kg": 108.83617804347975,
     "orbit_usd_per_mw": 11015009.29108618,
-    "fleet_cost_usd": 26592309652.15181,
+    "fleet_cost_usd": 27156409813.99127,
     "served_fraction": 1.0,
     "valid": true,
-    "orbit_mw": 279.85194718349686,
-    "earth_mw": 484.7701451112186,
-    "space_mass_t": 5299.019097816057
+    "orbit_mw": 294.8503635558386,
+    "earth_mw": 484.8844319910528,
+    "space_mass_t": 5583.015316509235
   },
   {
     "label": "Thin-film solar, 500 W/kg",
@@ -83,12 +83,12 @@
     "structure_t": 3.364085045769017,
     "breakeven_nordics_usd_per_kg": 134.07428366331263,
     "orbit_usd_per_mw": 10286823.724069372,
-    "fleet_cost_usd": 26457452615.54186,
+    "fleet_cost_usd": 26964494929.99505,
     "served_fraction": 1.0,
     "valid": true,
-    "orbit_mw": 543.1855994003209,
-    "earth_mw": 243.51199506150905,
-    "space_mass_t": 8222.951484088648
+    "orbit_mw": 513.9867227568158,
+    "earth_mw": 244.7465292037744,
+    "space_mass_t": 7780.927714875132
   },
   {
     "label": "Carbon-fiber radiators, 2 kg/m^2",
@@ -108,12 +108,12 @@
     "structure_t": 2.8148079388534115,
     "breakeven_nordics_usd_per_kg": 173.14187254504782,
     "orbit_usd_per_mw": 9629017.116723213,
-    "fleet_cost_usd": 26112417619.01564,
+    "fleet_cost_usd": 26626391067.677418,
     "served_fraction": 1.0,
     "valid": true,
-    "orbit_mw": 543.680009301971,
-    "earth_mw": 243.24365824257674,
-    "space_mass_t": 6886.596628705883
+    "orbit_mw": 513.9867227568158,
+    "earth_mw": 244.7465292037744,
+    "space_mass_t": 6510.482584565096
   },
   {
     "label": "Space-stripped racks (-30% compute mass)",
@@ -134,12 +134,12 @@
     "structure_t": 2.386236510281983,
     "breakeven_nordics_usd_per_kg": 204.23839602142135,
     "orbit_usd_per_mw": 9243302.831008926,
-    "fleet_cost_usd": 25805090763.47765,
+    "fleet_cost_usd": 26335212590.76939,
     "served_fraction": 1.0,
     "valid": true,
-    "orbit_mw": 892.2516959744843,
+    "orbit_mw": 907.2549697387084,
     "earth_mw": 0,
-    "space_mass_t": 9581.056079829004
+    "space_mass_t": 9742.162198163767
   },
   {
     "label": "Load-bearing arrays and radiators (structure 15%)",
@@ -161,12 +161,12 @@
     "structure_t": 1.2668871935766177,
     "breakeven_nordics_usd_per_kg": 228.09707839082813,
     "orbit_usd_per_mw": 9015913.64594135,
-    "fleet_cost_usd": 25602202377.45485,
+    "fleet_cost_usd": 26128912622.551994,
     "served_fraction": 1.0,
     "valid": true,
-    "orbit_mw": 892.2516959744843,
+    "orbit_mw": 907.2549697387084,
     "earth_mw": 0,
-    "space_mass_t": 8666.263894257703
+    "space_mass_t": 8811.98771894212
   },
   {
     "label": "+ Starship at $100/kg",
@@ -188,12 +188,12 @@
     "structure_t": 1.3537956143943828,
     "breakeven_nordics_usd_per_kg": 222.5935057543348,
     "orbit_usd_per_mw": 8016404.779933542,
-    "fleet_cost_usd": 24710388896.61785,
+    "fleet_cost_usd": 25222103236.56851,
     "served_fraction": 1.0,
     "valid": true,
-    "orbit_mw": 892.2516959744843,
+    "orbit_mw": 907.2549697387084,
     "earth_mw": 0,
-    "space_mass_t": 9260.769319254256
+    "space_mass_t": 9416.489793634917
   },
   {
     "label": "+ Starship at $50/kg",
@@ -215,11 +215,11 @@
     "structure_t": 1.3537956143943828,
     "breakeven_nordics_usd_per_kg": 222.5935057543348,
     "orbit_usd_per_mw": 7497449.794415696,
-    "fleet_cost_usd": 24247350430.655136,
+    "fleet_cost_usd": 24751278746.886765,
     "served_fraction": 1.0,
     "valid": true,
-    "orbit_mw": 892.2516959744843,
+    "orbit_mw": 907.2549697387084,
     "earth_mw": 0,
-    "space_mass_t": 9260.769319254256
+    "space_mass_t": 9416.489793634917
   }
 ]
