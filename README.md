@@ -95,6 +95,23 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 - **8 separate orbital planes.** Each plane is its own ring of satellites, about 8 satellites of
   8 MW in Design 1 and about 16 in Design 2. Each plane is also its own failure zone: losing
   one doesn't affect the others.
+- **A plane is a family of satellites, not one satellite.** Each plane is a ring of 8 MW
+  satellites spaced evenly and following one another around the same orbit. At about 650 km,
+  one lap is about 44,100 km and takes about 98 minutes.
+
+  | | Satellites per plane | Total satellites | Spacing within a plane |
+  |---|---|---|---|
+  | Design 1 (~68 MW per plane) | ~8 | ~64 | ~5,500 km apart, one every ~12 minutes |
+  | Design 2 (~128 MW per plane) | ~16 | ~128 | ~2,800 km apart, one every ~6 minutes |
+
+- **How far apart the planes are:** the model doesn't fix their exact positions. It treats them
+  only as independent failure zones. In the 3D twin they are turned about 2° to 10° from the
+  exact day/night line and stepped 30 km apart in height, from 550 to 760 km. That's realistic in
+  kind, because dawn-dusk planes can only fan out a little (within about an hour of 06:00 or 18:00
+  local time) before they see more shadow. The exact numbers are a drawing choice.
+- **Spread out, not clustered:** Google's Suncatcher flies 81 satellites 100-200 m apart so they
+  can link to each other at very high speed, which training needs. Answering questions doesn't
+  need that, so each of our satellites talks straight to the ground.
 - **They are all dawn-dusk sun-synchronous orbits (dawn-dusk SSO)** at about 650 km.
   *Sun-synchronous* means the orbit turns about 1° a day, so it keeps the same angle to the Sun
   all year. *Dawn-dusk* means that angle keeps it riding along the line between day and night,
