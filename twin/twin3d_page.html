@@ -337,8 +337,8 @@ a { color: var(--sun); }
     var orb = D().sites.filter(function (s) { return s.kind === "space"; });
     orb.forEach(function (s, i) {
       var morning = s.ltan === "06:00", k = Math.floor(i / 2);
-      var alt = 0.55 + 0.03 * i, r = R_EARTH + alt;
-      var raan = (morning ? 1 : -1) * (0.03 + 0.05 * k);       // small spread so the planes can be told apart
+      var alt = 0.55 + 0.22 * i / Math.max(1, orb.length - 1), r = R_EARTH + alt;   // 550-770 km, drawn apart
+      var raan = (morning ? 1 : -1) * (0.03 + 0.15 * k / Math.max(1, Math.ceil(orb.length / 2) - 1));   // small spread so the planes can be told apart
       var n = Math.max(4, Math.round(s.it_mw / SAT_MW));
       var ringG = new THREE.Group(); fleet.add(ringG);
       var pts = []; for (var u = 0; u <= 128; u++) { var a = u / 128 * Math.PI * 2; pts.push(new THREE.Vector3(0, r * Math.cos(a), r * Math.sin(a))); }

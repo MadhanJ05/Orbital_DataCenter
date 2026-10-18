@@ -63,13 +63,18 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 
 | Design | Users served | 5-year cost | Earth grid | Orbit |
 |---|---|---|---|---|
-| **Design 1: survives losing any one site or plane, and the worst eclipse day with it** | **4.45B (100%)** | **$29.98B** | **450 MW, 6 sites** | **8 planes x 68 MW, 10,470 t, batteries on live racks** |
-| **Design 2: 11.0 t/MW satellite, all orbit, batteries on every rack** | **4.45B (100%)** | **$30.39B (over by $0.39B)** | **0 MW** | **8 x 129 MW, 12,979 t** |
-| Design 2 with live-only outage protection | 4.45B (100%) | $29.63B | 0 MW | |
+| **Design 1: survives losing any one site or plane, and the worst eclipse day with it** | **4.45B (100%)** | **$29.88B** | **323 MW, 6 sites** | **12 planes x 50 MW, 84 satellites, 11,661 t, batteries on live racks** |
+| **Design 2: 11.0 t/MW satellite, all orbit, batteries on every rack** | **4.45B (100%)** | **$29.44B** | **0 MW** | **12 x 75 MW, 120 satellites, 11,452 t** |
 
-All include the 5% memory reserve (`MEMORY_USABLE = 0.95`) and tool sandboxes.
+Both include the 5% memory reserve (`MEMORY_USABLE = 0.95`), tool sandboxes (snapshotted between
+tool calls, `serving.sandbox_snapshot`), communications (`COMMS`) and eclipse batteries.
 `DEMAND_MARGIN` (default 0) makes the scorer size and check service at that much above the
 deck's demand, while energy is still billed at the real demand.
+
+**Cost cuts after comms were added:** sandbox snapshotting (-$0.14B in Design 1), then 12 orbital
+planes instead of 8 (each holds a twelfth of the orbital fleet, so less spare covers losing
+one): Design 1 $30.33B -> $29.88B, Design 2 $30.84B -> $29.44B. `optimize.py` can now start from an
+existing design (`from_design`) and do several fresh starts (`restarts`).
 
 ## What we took from the app and agents-in-orbit models
 
@@ -92,19 +97,18 @@ deck's demand, while energy is still billed at the real demand.
 
 ## Stress test (each assumption 25% worse)
 
-| | Design 1 ($29.98B) | Design 2 ($30.39B) |
+| | Design 1 ($29.88B) | Design 2 ($29.44B) |
 |---|---|---|
-| Single assumptions that still fit the budget with every outage covered | 4 of 16 | 0 of 16 (starts over budget) |
-| Same, protecting only live users in an outage | 9 of 16 | 12 of 16 |
-| Breaks it even then | building cost, space hardware, chip FLOPS, attention math, draft acceptance, cross-chip sync | space hardware, chip FLOPS, attention math, draft acceptance |
-| All 16 worse at once | $53.6B | $53.8B |
+| Single assumptions that still fit the budget with every outage covered | 9 of 16 | 10 of 16 |
+| Breaks it | building cost, space hardware, chip FLOPS, attention math, draft acceptance, cross-chip sync | space hardware, chip FLOPS, attention math, draft acceptance, cross-chip sync |
+| All 16 worse at once | $53.8B | $54.2B |
 
 ## Deck interpretations (where the slides leave room)
 
 - **Workloads:** the Kimi K3 / Qwen3.5 / gpt-oss set (slides 9-14, named on the Track 1 Challenge slide). The Sage/Titan slides later in the deck are an alternate version and are not used.
 - **500 MW** is counted as facility power: IT plus cooling, at nameplate. That's the strict reading.
 - **Virginia and the Midwest** use the midpoint of the deck's cold and desert PUE columns.
-- **Air cards in orbit** are radiator-cooled like everything else in space. If that is disallowed and GPUs do the orbital prefill, Design 1 costs $30.55B and Design 2 $30.65B: both over budget.
+- **Air cards in orbit** are radiator-cooled like everything else in space. If that is disallowed and GPUs do the orbital prefill, Design 1 costs $30.63B and Design 2 $30.06B: both over budget.
 - **Chip memory:** 5% is kept free for fragmentation and activations (`MEMORY_USABLE`).
 
 ## Model fixes from the code review

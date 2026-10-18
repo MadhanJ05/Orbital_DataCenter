@@ -19,7 +19,7 @@ import catalog as C
 
 SERVING_DEFAULTS = dict(easy_chat_share=0.0, subagent_share=0.0, spec_draft=0,
                         context_memory=False, bg_fill_valleys=False, autosize_util=0.95,
-                        resilience=None)
+                        resilience=None, sandbox_snapshot=False)
 VALLEY_PAIRS = (("agent_int", "agent_bg"), ("agent_int_sub", "agent_bg_sub"))
 INF = float("inf")
 
@@ -463,8 +463,12 @@ def _evaluate(design):
         total = sum(share.values())
         share = {k: v / total for k, v in share.items()}
         lose = max(share.values()) if serving["resilience"] == "all" and len(share) > 1 else 0.0
-        need = bg_tasks_s * task_s * C.SANDBOX_PEAK / (1 - lose) / C.SANDBOX["slots"]   # racks, whole fleet
-        busy = bg_tasks_s / margin * task_s / C.SANDBOX["slots"] / need if need else 0.0  # average occupancy
+        # snapshotting (agents-in-orbit lever): a task's microVM is saved to disk while the model is
+        # decoding and restored when its tool runs, so it holds a slot only for the tool time
+        held_s = C.STREAMS["agent_bg"]["steps"] * C.STREAMS["agent_bg"]["tool_s"] if serving["sandbox_snapshot"] else task_s
+        held_s = min(held_s, task_s)
+        need = bg_tasks_s * held_s * C.SANDBOX_PEAK / (1 - lose) / C.SANDBOX["slots"]   # racks, whole fleet
+        busy = bg_tasks_s / margin * held_s / C.SANDBOX["slots"] / need if need else 0.0  # average occupancy
         for site, f in share.items():
             racks = math.ceil(need * f)
             it_mw = racks * C.SANDBOX["kw"] / 1000
@@ -492,7 +496,8 @@ def _evaluate(design):
             sandbox["racks"] += racks
             sandbox["mw"] += it_mw
             sandbox["usd"] += sum(cost.values())
-        sandbox.update(concurrent_tasks=bg_tasks_s / margin * task_s, task_s=task_s)
+        sandbox.update(concurrent_tasks=bg_tasks_s / margin * held_s, task_s=task_s, held_s=held_s,
+                       snapshot=serving["sandbox_snapshot"])
     # ---- communications for orbit: laser terminals on every satellite, and the ground stations
     comms = dict(satellites={}, terminals=0, usd=0.0, ground_usd=0.0, terminal_usd=0.0, terminal_t=0.0)
     space_it = {}

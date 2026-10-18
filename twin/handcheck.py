@@ -29,6 +29,8 @@ accept = 0.7                                                 # ASSUMED draft acc
 qwen_total, qwen_active, qwen_kv, qwen_state = 397e9, 17e9, 15e3, 94e6   # DECK s10
 lpu_mem, lpu_bw, lpu_flops = 160 * GB, 200 * TB, 50e15       # DECK s13 (mem, bw); flops ASSUMED
 air_mem, air_bw, air_flops = 96 * GB, 4 * TB, 30e15          # ASSUMED
+gpu_mem, gpu_bw, gpu_flops = 3 * TB, 120 * TB, 250e15         # DECK s13 (mem, bw); flops ASSUMED
+PREFILL_CHIP = {"air": (air_bw, air_flops), "gpu": (gpu_bw, gpu_flops)}
 bw_eff, flops_eff = 0.6, 0.5                                 # DECK s13 (72/120); ASSUMED
 sync = 1.7e-3                                                # DECK s17
 usable, margin = 0.95, 1.0                                   # our safety rules: 5% memory free, no demand margin
@@ -75,11 +77,13 @@ show("chat tokens/s per LPU", replica_tps / n, pools["chat-decode-nordics"]["rep
 show("chat speed per user (>= 60)", tau / step, tau / pools["chat-decode-nordics"]["step_s"], "tok/s")
 
 # ---------------------------------------------------------------- 3. capacity of the Nordics and LEO chat pools
-chat_racks = racks["chat-decode-nordics"]                    # same count at every chat site
+chat_racks = racks["chat-decode-nordics"]
 replicas = chat_racks * 256 // n                             # racks x 256 LPUs per rack
+leo_racks = racks["chat-decode-leo_p1"]
 show("Nordics chat decode capacity", replicas * replica_tps, pools["chat-decode-nordics"]["cap"])
-show("one LEO plane chat capacity (95% chips)", replicas * replica_tps * 0.95, pools["chat-decode-leo_p1"]["cap"])
-total_chat = 6 * replicas * replica_tps + 8 * replicas * replica_tps * 0.95
+show("one LEO plane chat capacity (95% chips)", (leo_racks * 256 // n) * replica_tps * 0.95, pools["chat-decode-leo_p1"]["cap"])
+chat_pools = [q for q in design["pools"] if q["stream"] == "chat" and q["phase"] == "decode"]
+total_chat = sum((q["racks"] * 256 // n) * replica_tps * (0.95 if q["site"].startswith("leo") else 1) for q in chat_pools)
 after_loss = total_chat - replicas * replica_tps             # lose one Earth site
 show("chat capacity left after losing an Earth site / demand", after_loss / chat_peak_out,
      sum(p["cap"] for p in r["pools"] if p["stream"] == "chat" and p["phase"] == "decode" and p["site"] != "nordics")
@@ -87,9 +91,10 @@ show("chat capacity left after losing an Earth site / demand", after_loss / chat
 
 # ---------------------------------------------------------------- 4. chat first-token time, worst pair
 pre = pools["chat-prefill-gulf"]                             # farthest prefill site from users
-air_n = pre["chips_per_replica"]
-t_prefill = 8000 * (2 * qwen_active + 16 * qwen_kv * 60_000) / (air_n * air_flops * flops_eff) \
-    + 56_000 * qwen_kv / (air_n * air_bw * bw_eff)
+pn = pre["chips_per_replica"]
+p_bw, p_flops = PREFILL_CHIP[pre["chip"]]
+t_prefill = 8000 * (2 * qwen_active + 16 * qwen_kv * 60_000) / (pn * p_flops * flops_eff) \
+    + 56_000 * qwen_kv / (pn * p_bw * bw_eff)
 pre_cap = sum(p["cap"] for p in r["pools"] if p["stream"] == "chat" and p["phase"] == "prefill")
 rho = chat_peak_in / pre_cap
 queue = rho / (2 * (1 - rho)) * t_prefill                    # M/D/1 wait
@@ -106,8 +111,9 @@ mwh = it_mw * load * 1.07 * 5 * 8760                         # DECK s14: PUE 1.0
 show("Nordics chat pool: building", it_mw * 8e6, pools["chat-decode-nordics"]["cost"]["facility"], "$")
 show("Nordics chat pool: electricity", mwh * 25, pools["chat-decode-nordics"]["cost"]["energy"], "$")
 show("Nordics chat pool: carbon", mwh * 25 / 1000 * 100, pools["chat-decode-nordics"]["cost"]["carbon"], "$")
-battery_kg = it_mw * 1000 * (21 * 1.2 / 60) * 4                # live racks carry 25 min of battery at 250 Wh/kg
-show("LEO chat pool: launch (incl. eclipse battery)", (it_mw * 18_000 + battery_kg) * 200, pools["chat-decode-leo_p1"]["cost"]["launch"], "$")
+leo_mw = leo_racks * 516 / 1000
+battery_kg = leo_mw * 1000 * (21 * 1.2 / 60) * 4                # live racks carry 25 min of battery at 250 Wh/kg
+show("LEO chat pool: launch (incl. eclipse battery)", (leo_mw * 18_000 + battery_kg) * 200, pools["chat-decode-leo_p1"]["cost"]["launch"], "$")
 
 # ---------------------------------------------------------------- 6. off-peak shift
 int_out = (users["B"] * int_tasks["B"] + users["C"] * int_tasks["C"]) * (1 - sub_share) * steps * agent_out / 86400 * peak_int * margin

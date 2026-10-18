@@ -148,7 +148,7 @@ SITES = {
 # Orbital planes: independent constellations (own orbit plane, ground links and
 # launch cadence), each a separate failure domain. Same physics and prices as
 # "leo"; they share its dict so a what-if on leo's launch price applies to all.
-ORBIT_PLANES = 8
+ORBIT_PLANES = 12
 for _i in range(1, ORBIT_PLANES + 1):
     SITES[f"leo_p{_i}"] = SITES["leo"]
 LIVE_STREAMS = ("chat", "chat_easy", "agent_int", "agent_int_sub")   # users waiting on a reply

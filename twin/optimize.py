@@ -15,7 +15,8 @@ import catalog as C
 import score as S
 import build as B
 
-N_CHOICES = (1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128)
+N_CHOICES = (1, 2, 3, 4, 5, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32, 40, 48, 56, 64, 80, 96, 112, 128)
+CAP_CHOICES = (0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07, 0.075, 0.08, 0.09, 0.1, 0.12, 0.15, 0.2, 1.0)
 
 
 def run(cases, serving, choices, cooling, planes=0, cap=1.0):
@@ -26,12 +27,35 @@ def run(cases, serving, choices, cooling, planes=0, cap=1.0):
     return key, design, r
 
 
-def optimize(cases, verbose=True, planes=0, resilience=None):
-    serving = dict(S.SERVING_DEFAULTS, subagent_share=C.MAX_SUBAGENT_SHARE, spec_draft=3,
-                   context_memory=True, resilience=resilience)
-    choices = B.default_choices(cases, serving)
-    cooling = "direct_liquid"
-    cap = 1.0
+def from_design(design):
+    """Recover the levers a design file was built with, so a search can start from it."""
+    choices = {(p["stream"], p["phase"]): (p["chip"], p["chips_per_replica"]) for p in design["pools"]}
+    earth = [p["cooling"] for p in design["pools"] if C.SITES[p["site"]]["kind"] == "earth"]
+    return dict(design["serving"]), choices, (earth[0] if earth else "direct_liquid"), design.get("plan", {}).get("site_cap_share", 1.0)
+
+
+def optimize(cases, verbose=True, planes=0, resilience=None, start=None, restarts=0):
+    """Coordinate search. start=(serving, choices, cooling, cap) seeds it (e.g. from_design());
+    restarts adds fresh starts with different speculative depth and site caps; the best wins."""
+    if start:
+        serving, choices, cooling, cap = start
+        serving = dict(S.SERVING_DEFAULTS, **dict(serving, resilience=resilience))
+    else:
+        serving = dict(S.SERVING_DEFAULTS, subagent_share=C.MAX_SUBAGENT_SHARE, spec_draft=3,
+                       context_memory=True, resilience=resilience)
+        choices = B.default_choices(cases, serving)
+        cooling, cap = "direct_liquid", 1.0
+    best = _climb(cases, verbose, planes, serving, choices, cooling, cap)
+    for k in range(restarts):
+        sv = dict(serving, spec_draft=(2, 4, 6, 3, 5)[k % 5])
+        cp = (0.05, 0.08, 1.0, 0.06, 0.1)[k % 5] if planes else 1.0
+        cand = _climb(cases, False, planes, sv, B.default_choices(cases, sv), cooling, cp)
+        if cand[0] > best[0]:
+            best = cand
+    return best
+
+
+def _climb(cases, verbose, planes, serving, choices, cooling, cap):
     best = run(cases, serving, choices, cooling, planes, cap)
     improved = True
     while improved:
@@ -39,12 +63,13 @@ def optimize(cases, verbose=True, planes=0, resilience=None):
         trials = [("spec_draft", d) for d in range(C.SPEC_MAX_DRAFT + 1)]
         trials += [("context_memory", v) for v in (True, False)]
         trials += [("bg_fill_valleys", v) for v in (True, False)]
+        trials += [("sandbox_snapshot", v) for v in (True, False)]
         trials += [("cooling", c) for c in ("direct_liquid", "immersion")]
         if serving.get("resilience"):
             # the outage spare already covers bursts on a normal day; simulate.py must confirm
             trials += [("autosize_util", v) for v in (0.95, 0.97, 1.0)]
         if planes:
-            trials += [("site_cap_share", v) for v in (0.04, 0.05, 0.06, 0.07, 0.08, 0.1, 0.12, 0.15, 0.2, 1.0)]
+            trials += [("site_cap_share", v) for v in CAP_CHOICES]
         for key in list(choices):
             stream, phase = key
             for chip, ch in C.CHIPS.items():
@@ -71,7 +96,9 @@ def optimize(cases, verbose=True, planes=0, resilience=None):
                     r = cand[2]
                     print(f"  {lever!s:<28} -> {value!s:<14} served {r['twin_users_served'] / 1e9:.2f}B  "
                           f"cost ${r['cost_usd'] / 1e9:.2f}B  valid {r['valid']}")
-    return best
+    key, design, r = best
+    design["plan"] = dict(site_cap_share=cap, planes=planes)   # so a later search can start from it
+    return key, design, r
 
 
 def main():
