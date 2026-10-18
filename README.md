@@ -179,3 +179,21 @@ python3 twin/export_ui.py                                  # dashboard data -> d
 ```
 
 Technical details, assumptions and the design file format are in [`twin/README.md`](twin/README.md).
+
+## 🖥️ Web app: zoom in on one satellite
+
+The Python twin decides how many megawatts go to orbit. The web app in [`app/`](app/) zooms in on
+**one orbital data center**: pick an AI model, a workload (training or inference), a chip and an
+orbit, and an animation walks your design through every part of the satellite (compute, power,
+cooling, orbit and comms, mass and launch, lifetime, cost) with live numbers, then compares the
+cost with the same chips on the ground.
+
+```bash
+cd app
+npm install
+npm run dev    # opens on http://localhost:5173
+```
+
+Each part of the satellite is its own folder in `app/src/modules/`, so teammates can work on
+different parts at once. Shared numbers (like the $200/kg launch price) live in
+[`shared/assumptions.json`](shared/assumptions.json). Details: [`app/README.md`](app/README.md).
