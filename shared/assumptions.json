@@ -1,22 +1,114 @@
 {
-  "_about": "Constants shared by the Python fleet twin (twin/) and the web app (app/). Values tagged DECK come from the Sundai Hack 145 Track 1 organizer slides.",
-  "launch_usd_per_kg": { "value": 200, "source": "DECK s9" },
-  "radiator": {
-    "emissivity": 0.9,
-    "temp_k": 330,
-    "sink_k": 220,
-    "sides": 2,
-    "source": "DECK s14 (972 W/m^2)"
+  "_about": "Constants shared by the Python fleet twin (twin/) and the web app (app/). Every entry records value, unit, evidence, source, conditions and range (when known). DECK sN = Sundai Hack 145 Track 1 organizer slides, slide N.",
+  "_evidence": {
+    "organizer": "Given by the hackathon organizers (DECK). Used as stated, not independently checked.",
+    "demonstrated": "Measured or flown hardware result.",
+    "manufacturer_spec": "Vendor datasheet value.",
+    "published_proposal": "Number from a published design study or paper, not flown hardware.",
+    "team_projection": "Our extrapolation to 2035. Plausible, not sourced to a single measurement.",
+    "sensitivity": "A knob we vary to see what matters. The default is a placeholder, not a fact."
   },
+
+  "launch_usd_per_kg": {
+    "value": 200,
+    "unit": "USD/kg to LEO",
+    "evidence": "organizer",
+    "source": "DECK s9",
+    "conditions": "2035 fully reusable heavy lift, payload to LEO; excludes integration and insurance"
+  },
+
+  "radiator": {
+    "_about": "Radiator surface that reproduces the deck's 972 W/m^2 (two-sided).",
+    "emissivity": { "value": 0.9, "unit": "-", "evidence": "organizer", "source": "DECK s14 (972 W/m^2)", "conditions": "beginning of life coating" },
+    "temp_k": { "value": 330, "unit": "K", "evidence": "organizer", "source": "DECK s14 (972 W/m^2)", "conditions": "radiator surface temperature" },
+    "sink_k": { "value": 220, "unit": "K", "evidence": "organizer", "source": "DECK s14 (972 W/m^2)", "conditions": "effective sink, LEO with Earth IR and albedo averaged" },
+    "sides": { "value": 2, "unit": "faces", "evidence": "organizer", "source": "DECK s14 (972 W/m^2)", "conditions": "both faces see space" }
+  },
+
+  "accelerator_2035": {
+    "_about": "The app's 2035 accelerator (compute module defaults chipTdpW / chipPflops mirror these).",
+    "tdp_w": {
+      "value": 2000,
+      "unit": "W per accelerator",
+      "evidence": "team_projection",
+      "source": "team extrapolation from 2025 GPU/TPU roadmaps",
+      "conditions": "chip package power only; server overhead and spacecraft bus load are added separately"
+    },
+    "pflops_fp8": {
+      "value": 50,
+      "unit": "PFLOPS dense FP8",
+      "evidence": "team_projection",
+      "source": "team extrapolation from 2025 GPU/TPU roadmaps",
+      "conditions": "peak dense FP8 per accelerator; delivered throughput applies MFU separately"
+    }
+  },
+
+  "radiation": {
+    "_about": "Total ionizing dose (TID) for the lifetime module. Google Suncatcher (arXiv 2511.19468): HBM stress tests first showed irregularities near ~2 krad(Si); other tests continued to 15 krad(Si) with no hard failures attributed to TID. Neither number is an established accelerator failure threshold.",
+    "dose_rate_sso_rad_yr": {
+      "value": 150,
+      "unit": "rad(Si)/yr",
+      "evidence": "published_proposal",
+      "source": "https://arxiv.org/abs/2511.19468",
+      "conditions": "~650 km dawn-dusk SSO behind substantial shielding (~10 mm Al equivalent). The app has no shielding geometry model; thinner shielding means a higher dose."
+    },
+    "dose_rate_leo_rad_yr": {
+      "value": 60,
+      "unit": "rad(Si)/yr",
+      "evidence": "sensitivity",
+      "source": "team assumption (app/src/modules/orbit/fields.ts)",
+      "conditions": "550 km mid-inclination, shielded"
+    },
+    "dose_rate_geo_rad_yr": {
+      "value": 1500,
+      "unit": "rad(Si)/yr",
+      "evidence": "sensitivity",
+      "source": "team assumption (app/src/modules/orbit/fields.ts)",
+      "conditions": "GEO, shielded; order of magnitude only",
+      "range": [1000, 10000]
+    },
+    "tid_onset_krad": {
+      "value": 2,
+      "unit": "krad(Si)",
+      "evidence": "sensitivity",
+      "source": "https://arxiv.org/abs/2511.19468 (HBM irregularities first seen near this dose)",
+      "conditions": "dose where the model starts degrading capacity; the paper reports test irregularities, not a failure threshold"
+    },
+    "tid_loss_pct_per_krad": {
+      "value": 5,
+      "unit": "% capacity per krad above onset",
+      "evidence": "sensitivity",
+      "source": "team assumption",
+      "conditions": "gradual derate (memory errors, retired HBM, retries); no measured rate exists"
+    },
+    "tid_hard_fail_krad": {
+      "value": 15,
+      "unit": "krad(Si)",
+      "evidence": "sensitivity",
+      "source": "https://arxiv.org/abs/2511.19468 (tested to 15 krad without hard failures attributed to TID)",
+      "conditions": "team assumption that hard failures begin beyond the tested dose; a tested-without-failure dose, not a guaranteed safe limit"
+    },
+    "space_failure_mult": {
+      "value": 1.5,
+      "unit": "x terrestrial AFR",
+      "evidence": "sensitivity",
+      "source": "team assumption",
+      "conditions": "lumps thermal cycling, launch loads and single-event latch-up; not measured"
+    }
+  },
+
   "mass_t_per_mw": {
-    "_about": "Tonnes per MW of IT power, dry (no propellant). The app's 'deck' and 'light' presets reproduce these lines exactly.",
+    "_about": "Tonnes per MW of IT power, dry (no propellant). The app's 'deck' and 'light' presets reproduce the deck and light lines exactly. Subsystem numbers stay plain so existing readers keep working; the evidence fields describe the whole split.",
     "deck": {
       "compute": 5,
       "solar": 5,
       "radiators": 4,
       "structure": 4,
       "total": 18,
-      "source": "DECK s14; twin/catalog.py SPACE_MASS_SPLIT_T"
+      "unit": "t per MW IT, dry",
+      "evidence": "organizer",
+      "source": "DECK s14; twin/catalog.py SPACE_MASS_SPLIT_T",
+      "conditions": "per MW of IT power (not total spacecraft load); dry mass, propellant excluded"
     },
     "light": {
       "compute": 3.5,
@@ -24,8 +116,19 @@
       "radiators": 3.014,
       "structure": 2.386,
       "total": 10.738,
+      "unit": "t per MW IT, dry",
+      "evidence": "team_projection",
       "levers": "500 W/kg thin-film solar, 2 kg/m^2 carbon-fiber radiators, space-stripped racks (-30% compute), chips at 330 K (less leakage, power factor 0.919)",
-      "source": "Design 2: twin/orbit_mass.py ladder step 'Space-stripped racks' (designs/whatif_ladder.json)"
+      "source": "Design 2: twin/orbit_mass.py ladder step 'Space-stripped racks' (designs/whatif_ladder.json)",
+      "conditions": "team scenario, per MW of IT power; dry mass, propellant excluded"
+    },
+    "conservative": {
+      "total": 46.5,
+      "range": [34, 59],
+      "unit": "t per MW IT",
+      "evidence": "sensitivity",
+      "source": "https://arxiv.org/abs/2604.27197 (published estimates 34-59 t/MW)",
+      "conditions": "sensitivity only, not a default and not wired to a preset; total is the range midpoint; no subsystem split given"
     }
   }
 }
