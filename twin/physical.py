@@ -208,11 +208,34 @@ def twin(path):
     )
 
 
+def satellite_model():
+    """Everything the one-satellite view needs to redo orbit_mass.mass_per_mw in the browser, plus
+    reference answers it must reproduce (the page checks them on load)."""
+    gpu = C.CHIPS["gpu"]
+    spares = gpu["rack_usd"] / (gpu["rack_kw"] / 1000) * (1 / C.SPACE_CHIP_SURVIVAL - 1)
+    nordics = next(r["earth_usd_per_mw"] for r in S.breakeven_table() if r["chip"] == "gpu" and r["site"] == "nordics")
+    light = OM.ladder()[5]["params"]
+    presets = {"Design 1 satellite (organizers' 18 t/MW)": dict(OM.BASE),
+               "Design 2 satellite (our 11 t/MW)": dict(OM.BASE, **light)}
+    tests = []
+    for label, params in presets.items():
+        for t in (330, params["t_logic_k"], 380):
+            for loops in (1, 2):
+                q = dict(params, t_logic_k=t, loops=loops)
+                m = OM.mass_per_mw(q)
+                tests.append(dict(params=q, total_t=m["total_t"], power_factor=m["power_factor"], radiator_t=m["radiator_t"]))
+    return dict(base=OM.BASE, overhead=OM.OVERHEAD, radiator=C.RADIATOR, stefan_boltzmann=C.STEFAN_BOLTZMANN,
+                solar_constant=SOLAR_CONSTANT, cell_efficiency=CELL_EFFICIENCY, space_hw_usd_per_mw=C.SPACE_HW_USD_PER_MW,
+                spares_usd_per_mw=spares, nordics_usd_per_mw=nordics, battery=C.ECLIPSE_BATTERY, lpu_rack_kw=C.CHIPS["lpu"]["rack_kw"],
+                presets=presets, tests=tests)
+
+
 def main():
     paths = sys.argv[1:] or [ROOT / "designs" / f"{n}.json" for n in FEATURED]
     out = dict(about="Physical layer of the fleet digital twin, from twin/physical.py. Every number is derived "
-                     "from the scored designs; nothing on the twin page is computed in the browser.",
-               designs=[twin(p) for p in paths])
+                     "from the scored designs; the one-satellite view re-runs orbit_mass.mass_per_mw in the browser "
+                     "and checks itself against the reference answers in satellite_model.tests.",
+               designs=[twin(p) for p in paths], satellite_model=satellite_model())
     dest = ROOT / "designs" / "twin.json"
     dest.write_text(json.dumps(out, indent=1) + "\n")
     for d in out["designs"]:

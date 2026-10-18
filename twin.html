@@ -147,7 +147,7 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
 <div class="tip" id="tip" hidden></div>
 
 <script id="twin-data" type="application/json">{
- "about": "Physical layer of the fleet digital twin, from twin/physical.py. Every number is derived from the scored designs; nothing on the twin page is computed in the browser.",
+ "about": "Physical layer of the fleet digital twin, from twin/physical.py. Every number is derived from the scored designs; the one-satellite view re-runs orbit_mass.mass_per_mw in the browser and checks itself against the reference answers in satellite_model.tests.",
  "designs": [
   {
    "name": "final_resilient",
@@ -3622,7 +3622,302 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
     "bg_deadline_min": 240.0
    }
   }
- ]
+ ],
+ "satellite_model": {
+  "base": {
+   "loops": 1,
+   "t_logic_k": 358,
+   "t_logic_max_k": 398,
+   "t_mem_max_k": 368,
+   "chain_dt_k": 28,
+   "mem_heat_share": 0.2,
+   "leak_share": 0.15,
+   "leak_doubling_k": 25,
+   "solar_w_per_kg": 209.794168584,
+   "radiator_kg_per_m2": 3.7037037037037037,
+   "compute_t": 5.0,
+   "structure_share": 0.2857142857142857
+  },
+  "overhead": 1.04897084292,
+  "radiator": {
+   "emissivity": 0.9,
+   "temp_k": 330,
+   "sink_k": 220,
+   "sides": 2
+  },
+  "stefan_boltzmann": 5.67e-08,
+  "solar_constant": 1361,
+  "cell_efficiency": 0.3,
+  "space_hw_usd_per_mw": 6000000.0,
+  "spares_usd_per_mw": 1581605.5289739482,
+  "nordics_usd_per_mw": 9288815.0,
+  "battery": {
+   "min": 25.2,
+   "kg_per_kwh": 4.0,
+   "usd_per_kwh": 300.0
+  },
+  "lpu_rack_kw": 516,
+  "presets": {
+   "Design 1 satellite (organizers' 18 t/MW)": {
+    "loops": 1,
+    "t_logic_k": 358,
+    "t_logic_max_k": 398,
+    "t_mem_max_k": 368,
+    "chain_dt_k": 28,
+    "mem_heat_share": 0.2,
+    "leak_share": 0.15,
+    "leak_doubling_k": 25,
+    "solar_w_per_kg": 209.794168584,
+    "radiator_kg_per_m2": 3.7037037037037037,
+    "compute_t": 5.0,
+    "structure_share": 0.2857142857142857
+   },
+   "Design 2 satellite (our 11 t/MW)": {
+    "loops": 2,
+    "t_logic_k": 331,
+    "t_logic_max_k": 398,
+    "t_mem_max_k": 368,
+    "chain_dt_k": 28,
+    "mem_heat_share": 0.2,
+    "leak_share": 0.15,
+    "leak_doubling_k": 25,
+    "solar_w_per_kg": 500,
+    "radiator_kg_per_m2": 2.0,
+    "compute_t": 3.5,
+    "structure_share": 0.2857142857142857
+   }
+  },
+  "tests": [
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 330,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 19.86363320554489,
+    "power_factor": 0.9190140737968656,
+    "radiator_t": 5.854422124217254
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 330,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 19.86363320554489,
+    "power_factor": 0.9190140737968656,
+    "radiator_t": 5.854422124217254
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 358,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 18.0,
+    "power_factor": 1.0,
+    "radiator_t": 4.0
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 358,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 18.0,
+    "power_factor": 1.0,
+    "radiator_t": 4.000000000000001
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 380,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 17.8190227837293,
+    "power_factor": 1.0479261866159342,
+    "radiator_t": 3.6196090098208944
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 380,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 17.923017533318014,
+    "power_factor": 1.10084503614997,
+    "radiator_t": 3.4358995673863824
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 330,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 11.04354756304637,
+    "power_factor": 0.9190140737968656,
+    "radiator_t": 3.161387947077317
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 330,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 11.04354756304637,
+    "power_factor": 0.9190140737968656,
+    "radiator_t": 3.161387947077317
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 331,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 10.983262217000197,
+    "power_factor": 0.9209543235044196,
+    "radiator_t": 3.1104288138545426
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 331,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 10.983262217000197,
+    "power_factor": 0.9209543235044197,
+    "radiator_t": 3.1104288138545426
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 380,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 9.839670294713397,
+    "power_factor": 1.0479261866159342,
+    "radiator_t": 1.954588865303283
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 380,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 9.854864302342772,
+    "power_factor": 1.10084503614997,
+    "radiator_t": 1.8553857663886466
+   }
+  ]
+ }
 }
 </script>
 <script>

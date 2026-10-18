@@ -63,6 +63,11 @@ svg text { fill: var(--ink); font-family: var(--body); }
 svg .ax { font: 10px var(--mono); fill: var(--muted); }
 .tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--panel-solid); font-size: .78rem; padding: 5px 8px; border-radius: 6px; z-index: 30; max-width: 240px; }
 .fallback { padding: 40px 20px; text-align: center; color: var(--muted); }
+.sl { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; font-size: .8rem; color: var(--muted); }
+.sl input { grid-column: 1 / -1; accent-color: var(--sun); width: 100%; }
+.sl output { font-family: var(--mono); color: var(--ink); }
+.split { display: flex; height: 14px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--panel-solid); }
+.split i { display: block; height: 100%; }
 a { color: var(--sun); }
 </style>
 
@@ -70,11 +75,13 @@ a { color: var(--sun); }
   <header style="display:grid;gap:6px">
     <span class="eyebrow">Sundai Hack 145 · Track 1 · digital twin, view from space</span>
     <h1>Orbital Fleet Twin 3D</h1>
-    <p class="muted">Our two fleets for 4.45 billion AI users in 2035, drawn from the same numbers as the Python twin. Earth turns with real UTC time; satellites orbit; on an eclipse day one half of the planes tilts into Earth's shadow. Drag to look around, scroll to zoom, double-click to reset.</p>
+    <p class="muted" id="intro">Our two fleets for 4.45 billion AI users in 2035, drawn from the same numbers as the Python twin. Start with one satellite and tweak it, then step back to the whole fleet. Drag to look around, scroll to zoom, double-click to reset.</p>
   </header>
 
   <section class="bar" aria-label="Controls">
+    <div class="seg" role="group" aria-label="View" id="viewSeg"></div>
     <div class="seg" role="group" aria-label="Design" id="designSeg"></div>
+    <span id="fleetCtl" style="display:contents">
     <div class="seg" role="group" aria-label="Day" id="daySeg"></div>
     <label class="ctl" for="lose">Switch off <select id="lose"></select></label>
     <div class="seg" role="group" aria-label="Camera" id="camSeg"></div>
@@ -83,6 +90,11 @@ a { color: var(--sun); }
       <input id="hour" type="range" min="0" max="23.99" step="0.01" value="7" aria-label="UTC time">
       <span class="num" id="clock">07:00 UTC</span>
     </div>
+    </span>
+    <span id="satCtl" style="display:contents">
+      <div class="seg" role="group" aria-label="Light" id="lightSeg"></div>
+      <button class="btn" id="spin" type="button">Stop turning</button>
+    </span>
   </section>
 
   <section class="layout">
@@ -92,12 +104,19 @@ a { color: var(--sun); }
       <div class="overlay" id="overlay"></div>
     </div>
     <aside class="side">
-      <div class="panel">
+      <div class="panel" id="satPanel" hidden>
+        <h2>One satellite: tweak it</h2>
+        <label class="ctl" for="preset" style="display:grid;gap:4px">Start from <select id="preset"></select></label>
+        <div id="sliders" style="display:grid;gap:8px"></div>
+        <p id="selfcheck" class="muted" style="font-size:.75rem"></p>
+      </div>
+      <div class="panel" id="satOut" hidden></div>
+      <div class="panel" id="fleetK">
         <h2 id="dname">Design</h2>
         <div class="kpis" id="kpis"></div>
       </div>
       <div class="panel" id="outage"></div>
-      <div class="panel">
+      <div class="panel" id="cardPanel">
         <h2 id="cardTitle">Selected</h2>
         <dl class="card" id="card"></dl>
         <p class="muted" style="font-size:.75rem">Click a satellite or an Earth site in the scene to select it.</p>
@@ -105,7 +124,7 @@ a { color: var(--sun); }
     </aside>
   </section>
 
-  <section class="panel">
+  <section class="panel" id="stripPanel">
     <h2>Power drawn through the day</h2>
     <div class="legend"><span><i style="background:var(--earth)"></i>Earth sites</span><span><i style="background:var(--orbit)"></i>Orbital planes</span><span><i style="background:var(--sun)"></i>now</span></div>
     <svg id="strip" viewBox="0 0 900 140" role="img" aria-label="Power drawn by Earth sites and orbit for each UTC hour"></svg>
@@ -115,7 +134,7 @@ a { color: var(--sun); }
 <div class="tip" id="tip" hidden></div>
 
 <script id="twin-data" type="application/json">{
- "about": "Physical layer of the fleet digital twin, from twin/physical.py. Every number is derived from the scored designs; nothing on the twin page is computed in the browser.",
+ "about": "Physical layer of the fleet digital twin, from twin/physical.py. Every number is derived from the scored designs; the one-satellite view re-runs orbit_mass.mass_per_mw in the browser and checks itself against the reference answers in satellite_model.tests.",
  "designs": [
   {
    "name": "final_resilient",
@@ -3590,7 +3609,302 @@ a { color: var(--sun); }
     "bg_deadline_min": 240.0
    }
   }
- ]
+ ],
+ "satellite_model": {
+  "base": {
+   "loops": 1,
+   "t_logic_k": 358,
+   "t_logic_max_k": 398,
+   "t_mem_max_k": 368,
+   "chain_dt_k": 28,
+   "mem_heat_share": 0.2,
+   "leak_share": 0.15,
+   "leak_doubling_k": 25,
+   "solar_w_per_kg": 209.794168584,
+   "radiator_kg_per_m2": 3.7037037037037037,
+   "compute_t": 5.0,
+   "structure_share": 0.2857142857142857
+  },
+  "overhead": 1.04897084292,
+  "radiator": {
+   "emissivity": 0.9,
+   "temp_k": 330,
+   "sink_k": 220,
+   "sides": 2
+  },
+  "stefan_boltzmann": 5.67e-08,
+  "solar_constant": 1361,
+  "cell_efficiency": 0.3,
+  "space_hw_usd_per_mw": 6000000.0,
+  "spares_usd_per_mw": 1581605.5289739482,
+  "nordics_usd_per_mw": 9288815.0,
+  "battery": {
+   "min": 25.2,
+   "kg_per_kwh": 4.0,
+   "usd_per_kwh": 300.0
+  },
+  "lpu_rack_kw": 516,
+  "presets": {
+   "Design 1 satellite (organizers' 18 t/MW)": {
+    "loops": 1,
+    "t_logic_k": 358,
+    "t_logic_max_k": 398,
+    "t_mem_max_k": 368,
+    "chain_dt_k": 28,
+    "mem_heat_share": 0.2,
+    "leak_share": 0.15,
+    "leak_doubling_k": 25,
+    "solar_w_per_kg": 209.794168584,
+    "radiator_kg_per_m2": 3.7037037037037037,
+    "compute_t": 5.0,
+    "structure_share": 0.2857142857142857
+   },
+   "Design 2 satellite (our 11 t/MW)": {
+    "loops": 2,
+    "t_logic_k": 331,
+    "t_logic_max_k": 398,
+    "t_mem_max_k": 368,
+    "chain_dt_k": 28,
+    "mem_heat_share": 0.2,
+    "leak_share": 0.15,
+    "leak_doubling_k": 25,
+    "solar_w_per_kg": 500,
+    "radiator_kg_per_m2": 2.0,
+    "compute_t": 3.5,
+    "structure_share": 0.2857142857142857
+   }
+  },
+  "tests": [
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 330,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 19.86363320554489,
+    "power_factor": 0.9190140737968656,
+    "radiator_t": 5.854422124217254
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 330,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 19.86363320554489,
+    "power_factor": 0.9190140737968656,
+    "radiator_t": 5.854422124217254
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 358,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 18.0,
+    "power_factor": 1.0,
+    "radiator_t": 4.0
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 358,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 18.0,
+    "power_factor": 1.0,
+    "radiator_t": 4.000000000000001
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 380,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 17.8190227837293,
+    "power_factor": 1.0479261866159342,
+    "radiator_t": 3.6196090098208944
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 380,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 209.794168584,
+     "radiator_kg_per_m2": 3.7037037037037037,
+     "compute_t": 5.0,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 17.923017533318014,
+    "power_factor": 1.10084503614997,
+    "radiator_t": 3.4358995673863824
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 330,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 11.04354756304637,
+    "power_factor": 0.9190140737968656,
+    "radiator_t": 3.161387947077317
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 330,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 11.04354756304637,
+    "power_factor": 0.9190140737968656,
+    "radiator_t": 3.161387947077317
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 331,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 10.983262217000197,
+    "power_factor": 0.9209543235044196,
+    "radiator_t": 3.1104288138545426
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 331,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 10.983262217000197,
+    "power_factor": 0.9209543235044197,
+    "radiator_t": 3.1104288138545426
+   },
+   {
+    "params": {
+     "loops": 1,
+     "t_logic_k": 380,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 9.839670294713397,
+    "power_factor": 1.0479261866159342,
+    "radiator_t": 1.954588865303283
+   },
+   {
+    "params": {
+     "loops": 2,
+     "t_logic_k": 380,
+     "t_logic_max_k": 398,
+     "t_mem_max_k": 368,
+     "chain_dt_k": 28,
+     "mem_heat_share": 0.2,
+     "leak_share": 0.15,
+     "leak_doubling_k": 25,
+     "solar_w_per_kg": 500,
+     "radiator_kg_per_m2": 2.0,
+     "compute_t": 3.5,
+     "structure_share": 0.2857142857142857
+    },
+    "total_t": 9.854864302342772,
+    "power_factor": 1.10084503614997,
+    "radiator_t": 1.8553857663886466
+   }
+  ]
+ }
 }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -3605,7 +3919,7 @@ a { color: var(--sun); }
   var SAT_MW = 8;               // one dot = one 8 MW-class satellite (the app's presets)
   var R_EARTH = 6.371;          // scene unit = 1,000 km
   var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var S = { d: 0, day: "normal", lose: "", cam: "overview", t: 7, playing: !REDUCED, sel: null, speed: 1 };
+  var S = { view: "sat", d: 0, day: "normal", lose: "", cam: "overview", t: 7, playing: !REDUCED, sel: null, speed: 1, shade: false, spin: !REDUCED };
   var D = function () { return DATA.designs[S.d]; };
   var site = function (n) { return D().sites.filter(function (x) { return x.site === n; })[0]; };
   var dayKey = function () { return S.day === "jun" ? "eclipse" : S.day === "dec" ? "eclipse18" : "normal"; };
@@ -3754,7 +4068,7 @@ a { color: var(--sun); }
     camera.position.set(x, y, z); camera.up.set(0, 1, 0); camera.lookAt(cam.target);
   }
   var drag = null, moved = 0;
-  canvas.addEventListener("pointerdown", function (e) { drag = { x: e.clientX, y: e.clientY }; moved = 0; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener("pointerdown", function (e) { canvas.setPointerCapture(e.pointerId); if (S.view === "sat") return; drag = { x: e.clientX, y: e.clientY }; moved = 0; });
   canvas.addEventListener("pointermove", function (e) {
     if (!drag) return; var dx = e.clientX - drag.x, dy = e.clientY - drag.y; moved += Math.abs(dx) + Math.abs(dy);
     if (S.cam === "ride") { S.cam = "overview"; ui(); }
@@ -3762,8 +4076,8 @@ a { color: var(--sun); }
   });
   canvas.addEventListener("pointerup", function (e) { if (drag && moved < 6) pick(e); drag = null; });
   canvas.addEventListener("pointercancel", function () { drag = null; });
-  canvas.addEventListener("wheel", function (e) { e.preventDefault(); cam.dist = Math.min(80, Math.max(9, cam.dist * Math.exp(e.deltaY * 0.0012))); }, { passive: false });
-  canvas.addEventListener("dblclick", function () { Object.assign(cam, HOME.overview); S.cam = "overview"; ui(); });
+  canvas.addEventListener("wheel", function (e) { e.preventDefault(); if (S.view === "sat") return; cam.dist = Math.min(80, Math.max(9, cam.dist * Math.exp(e.deltaY * 0.0012))); }, { passive: false });
+  canvas.addEventListener("dblclick", function () { if (S.view === "sat") { satCam.theta = .75; satCam.phi = 1.2; satRebuild.sized = false; satRebuild(); return; } Object.assign(cam, HOME.overview); S.cam = "overview"; ui(); });
   canvas.addEventListener("keydown", function (e) {
     var step = { ArrowLeft: [-0.12, 0], ArrowRight: [0.12, 0], ArrowUp: [0, -0.12], ArrowDown: [0, 0.12] }[e.key];
     if (step) { e.preventDefault(); cam.theta += step[0]; cam.phi = Math.min(3, Math.max(.15, cam.phi + step[1])); }
@@ -3833,7 +4147,8 @@ a { color: var(--sun); }
       v.copy(pos).project(camera);
       var behind = occludable && pos.clone().sub(camera.position).dot(pos.clone().normalize()) > 0 && pos.length() < R_EARTH * 1.1;
       var vis = v.z < 1 && Math.abs(v.x) < 1.05 && Math.abs(v.y) < 1.05 && !behind;
-      el.hidden = !vis; el.style.left = ((v.x + 1) / 2 * w) + "px"; el.style.top = ((1 - v.y) / 2 * h) + "px";
+      var wanted = key === "sun" || key === S.sel || key === S.lose;
+      el.hidden = !vis || !wanted; el.style.left = ((v.x + 1) / 2 * w) + "px"; el.style.top = ((1 - v.y) / 2 * h) + "px";
       el.classList.toggle("off", S.lose === key);
     }
     pins.forEach(function (p) { put(p.s.site, p.dot.getWorldPosition(new THREE.Vector3()), true); });
@@ -3912,9 +4227,163 @@ a { color: var(--sun); }
     var cx = L + (S.t) * bw; el("line", { x1: cx, x2: cx, y1: T, y2: B, stroke: "#ffd27a", "stroke-width": 2 });
   }
 
+  // ================================================================ one satellite
+  var SM = DATA.satellite_model, presetNames = Object.keys(SM.presets);
+  var P = Object.assign({ mw: 8, battery: 0, launch: 200 }, SM.presets[presetNames[0]]);
+  function radiatorWm2(T) { var r = SM.radiator; return r.emissivity * SM.stefan_boltzmann * (Math.pow(T, 4) - Math.pow(r.sink_k, 4)) * r.sides; }
+  function massPerMW(p) {               // twin/orbit_mass.py mass_per_mw, line for line
+    var tl = Math.min(p.t_logic_k, p.t_logic_max_k); if (p.loops === 1) tl = Math.min(tl, p.t_mem_max_k);
+    var t0 = SM.base.t_logic_k, leak = function (t) { return (1 - p.leak_share) + p.leak_share * Math.pow(2, (t - t0) / p.leak_doubling_k); };
+    var power, heat;
+    if (p.loops === 1) { power = leak(tl); heat = [[power * SM.overhead, tl - p.chain_dt_k]]; }
+    else { var tm = Math.min(tl, p.t_mem_max_k - 10), pl = (1 - p.mem_heat_share) * leak(tl), pm = p.mem_heat_share * leak(tm);
+      power = pl + pm; heat = [[pl * SM.overhead, tl - p.chain_dt_k], [pm * SM.overhead, tm - p.chain_dt_k]]; }
+    var rad = heat.reduce(function (a, h) { return a + h[0] * 1e6 / radiatorWm2(h[1]) * p.radiator_kg_per_m2; }, 0) / 1000;
+    var radM2 = heat.reduce(function (a, h) { return a + h[0] * 1e6 / radiatorWm2(h[1]); }, 0);
+    var solar = power * SM.overhead * 1e6 / p.solar_w_per_kg / 1000, struct = p.structure_share * (rad + solar + p.compute_t);
+    return { total_t: rad + solar + p.compute_t + struct, power_factor: power, radiator_t: rad, solar_t: solar, compute_t: p.compute_t, structure_t: struct,
+      t_logic_k: tl, radiator_m2: radM2, radiator_k: tl - p.chain_dt_k };
+  }
+  // self-check against the Python reference answers
+  var worst = 0; SM.tests.forEach(function (t) { var m = massPerMW(t.params); worst = Math.max(worst, Math.abs(m.total_t - t.total_t) / t.total_t, Math.abs(m.power_factor - t.power_factor) / t.power_factor); });
+  var selfOK = worst < 1e-9;
+
+  var SLIDERS = [
+    ["mw", "Satellite power", 2, 20, 1, function (v) { return v + " MW"; }],
+    ["chip_c", "Chip temperature", 45, 125, 1, function (v) { return v + " °C"; }],
+    ["loops", "Cooling loops (2 = memory on its own cool loop)", 1, 2, 1, function (v) { return v; }],
+    ["solar_w_per_kg", "Solar array, watts per kg", 150, 800, 10, function (v) { return v + " W/kg"; }],
+    ["radiator_kg_per_m2", "Radiator, kg per m²", 1, 5, 0.1, function (v) { return Number(v).toFixed(1) + " kg/m²"; }],
+    ["compute_t", "Racks, tonnes per MW", 3, 6, 0.1, function (v) { return Number(v).toFixed(1) + " t"; }],
+    ["structure_pct", "Structure, % of the rest", 10, 35, 1, function (v) { return v + "%"; }],
+    ["battery", "Racks with eclipse batteries", 0, 100, 10, function (v) { return v + "%"; }],
+    ["launch", "Launch price", 20, 500, 10, function (v) { return "$" + v + "/kg"; }],
+  ];
+  function pget(k) { return k === "chip_c" ? Math.round(P.t_logic_k - 273.15) : k === "structure_pct" ? Math.round(P.structure_share * 100) : P[k]; }
+  function pset(k, v) { if (k === "chip_c") P.t_logic_k = v + 273.15; else if (k === "structure_pct") P.structure_share = v / 100; else P[k] = v; }
+  function sliders() {
+    var box = $("sliders"); box.innerHTML = "";
+    SLIDERS.forEach(function (sd) {
+      var id = "s_" + sd[0], lab = document.createElement("label"); lab.className = "sl"; lab.setAttribute("for", id);
+      lab.innerHTML = "<span>" + sd[1] + "</span><output id='o_" + sd[0] + "'>" + sd[5](pget(sd[0])) + "</output><input id='" + id + "' type='range' min='" + sd[2] + "' max='" + sd[3] + "' step='" + sd[4] + "' value='" + pget(sd[0]) + "'>";
+      box.appendChild(lab);
+      lab.querySelector("input").oninput = function () { pset(sd[0], +this.value); $("o_" + sd[0]).textContent = sd[5](+this.value); satRebuild(); };
+    });
+    var pr = $("preset"); pr.innerHTML = presetNames.map(function (n, i) { return "<option value='" + i + "'>" + n + "</option>"; }).join("");
+    pr.onchange = function () { Object.assign(P, SM.presets[presetNames[+this.value]]); sliders(); satRebuild(); };
+    $("selfcheck").innerHTML = selfOK ? "✓ Same physics as the Python twin (twin/orbit_mass.py): " + SM.tests.length + " of " + SM.tests.length + " reference cases match."
+      : "✗ This page's physics drifted from the Python twin by " + (worst * 100).toFixed(2) + "%. Rebuild the page.";
+  }
+
+  var satScene = new THREE.Scene(); satScene.background = new THREE.Color(0x04060d);
+  var satCamera = new THREE.PerspectiveCamera(40, 1, 0.5, 40000);
+  satScene.add(new THREE.AmbientLight(0x404a70, 0.4));
+  var satSun = new THREE.DirectionalLight(0xfff1dc, 1.4); satSun.position.set(1, .25, .2).multiplyScalar(1000); satScene.add(satSun);
+  var earthShine = new THREE.DirectionalLight(0x6f8fd0, 0.35); earthShine.position.set(0, -1, 0); satScene.add(earthShine);
+  (function () { var n = 1200, pos = new Float32Array(n * 3);
+    for (var i = 0; i < n; i++) { var v = new THREE.Vector3(Math.random() - .5, Math.random() - .5, Math.random() - .5).normalize().multiplyScalar(15000); pos.set([v.x, v.y, v.z], i * 3); }
+    var g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    satScene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0x9fb0e0, size: 1.5, sizeAttenuation: false }))); })();
+  var backdrop = new THREE.Mesh(new THREE.SphereGeometry(5000, 96, 64), new THREE.MeshPhongMaterial({ map: earthTexture(), shininess: 8 }));
+  backdrop.position.set(0, -5600, 0); satScene.add(backdrop);
+  var satG = new THREE.Group(); satScene.add(satG);
+  var M = {
+    truss: new THREE.MeshStandardMaterial({ color: 0xb8bec9, metalness: .6, roughness: .4 }),
+    rack: new THREE.MeshStandardMaterial({ color: 0x2e334d, metalness: .3, roughness: .7 }),
+    solar: new THREE.MeshStandardMaterial({ color: 0x1a2a6c, metalness: .5, roughness: .35, emissive: 0x050a20, side: THREE.DoubleSide }),
+    rad: new THREE.MeshStandardMaterial({ color: 0xdde2ea, metalness: .1, roughness: .6, side: THREE.DoubleSide }),
+    batt: new THREE.MeshStandardMaterial({ color: 0x2f7a4a, metalness: .3, roughness: .6, emissive: 0x000000 }),
+    laser: new THREE.MeshStandardMaterial({ color: 0xf2d35a, emissive: 0x6a5a10, emissiveIntensity: .5, roughness: .4 }),
+    seam: new THREE.LineBasicMaterial({ color: 0x5060a0 }),
+  };
+  var satCam = { theta: 0.75, phi: 1.2, dist: 400 }, satTags = {}, SATTAGS = { solar: "solar array", rad: "radiator (edge-on to the Sun)", racks: "compute racks", batt: "eclipse batteries", laser: "laser link to Earth", earth: "Earth (not to scale)", sun: "☀ to the Sun" };
+  var satAnchors = {};
+  for (var k in SATTAGS) { var d = document.createElement("div"); d.className = "tag"; d.textContent = SATTAGS[k]; d.hidden = true; $("tags").appendChild(d); satTags[k] = d; }
+  var LAST = null;
+  function satRebuild() {
+    var m = massPerMW(P), mw = P.mw;
+    var arrayM2 = mw * 1e6 * m.power_factor * SM.overhead / (SM.solar_constant * SM.cell_efficiency);
+    var radM2 = mw * m.radiator_m2, racks = Math.max(1, Math.round(mw * 1000 / SM.lpu_rack_kw));
+    var battKwh = mw * (P.battery / 100) * 1000 * SM.battery.min / 60, battT = battKwh * SM.battery.kg_per_kwh / 1000;
+    var satT = m.total_t * mw + battT, perMW = satT / mw;
+    var costMW = perMW * 1000 * P.launch + SM.space_hw_usd_per_mw * m.power_factor + SM.spares_usd_per_mw + (P.battery / 100) * 1000 * SM.battery.min / 60 * SM.battery.usd_per_kwh;
+    LAST = { m: m, arrayM2: arrayM2, radM2: radM2, racks: racks, battKwh: battKwh, satT: satT, perMW: perMW, costMW: costMW };
+    // geometry, in metres: spine along Z, arrays face the Sun (+X), radiator edge-on behind the spine
+    satScene.remove(satG); satG = new THREE.Group(); satScene.add(satG);
+    var L = Math.max(24, racks * 2.6 + 8);
+    satG.add(new THREE.Mesh(new THREE.BoxGeometry(2, 2, L), M.truss));
+    for (var i = 0; i < racks; i++) { var b = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.4, 1.2), M.rack); b.position.set(1.9, 0, -L / 2 + 4 + i * 2.6); satG.add(b); }
+    satAnchors.racks = new THREE.Vector3(2, 1.6, 0);
+    var wing = arrayM2 / 2, span = Math.sqrt(wing * 4), height = wing / span;
+    [1, -1].forEach(function (sgn) {
+      var w = new THREE.Mesh(new THREE.PlaneGeometry(height, span), M.solar); w.rotation.y = Math.PI / 2; w.position.set(0.5, sgn * (span / 2 + 3), 0); satG.add(w);
+      var boom = new THREE.Mesh(new THREE.BoxGeometry(.6, 3, .6), M.truss); boom.position.set(0, sgn * 2, 0); satG.add(boom);
+      var pts = []; for (var c = 1; c < 8; c++) { var yy = sgn * (3 + span * c / 8); pts.push(new THREE.Vector3(0.52, yy, -height / 2), new THREE.Vector3(0.52, yy, height / 2)); }
+      satG.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), M.seam));
+    });
+    satAnchors.solar = new THREE.Vector3(0.5, span * 0.75 + 3, height / 2);
+    var rl = Math.max(L, Math.sqrt(radM2 / 2)), rw = radM2 / rl;
+    var r = new THREE.Mesh(new THREE.PlaneGeometry(rw, rl), M.rad); r.rotation.x = -Math.PI / 2; r.position.set(-(rw / 2 + 1.5), 0, 0); satG.add(r);
+    satAnchors.rad = new THREE.Vector3(-rw * 0.7, 0, rl / 2);
+    if (battKwh > 0) { var side = Math.cbrt(battKwh / 300) + 0.8; var bb = new THREE.Mesh(new THREE.BoxGeometry(side, side, side), M.batt); bb.position.set(1.9, -2.6, L / 2 - side); satG.add(bb); satAnchors.batt = bb.position.clone(); }
+    else delete satAnchors.batt;
+    var lz = new THREE.Mesh(new THREE.CylinderGeometry(.5, .5, 1.6, 16), M.laser); lz.position.set(0, -2, -L / 2 + 1); satG.add(lz); satAnchors.laser = lz.position.clone();
+    var size = Math.max(span * 2 + 6, rw + 10, L);
+    satAnchors.earth = new THREE.Vector3(0, -size * 1.4, 0); satAnchors.sun = new THREE.Vector3(size * 0.9, size * 0.25, 0);
+    backdrop.scale.setScalar(Math.max(1, size / 260)); backdrop.position.set(0, -5600 * Math.max(1, size / 260), 0);
+    if (!satRebuild.sized || satRebuild.lastSize !== Math.round(size / 50)) { satCam.dist = size * 1.25; satRebuild.lastSize = Math.round(size / 50); satRebuild.sized = true; }
+    satOutputs();
+  }
+  function satOutputs() {
+    var o = LAST, m = o.m, nord = SM.nordics_usd_per_mw, cheaper = o.costMW < nord;
+    var parts = [["compute", m.compute_t, "#2e334d"], ["solar", m.solar_t, "#3987e5"], ["radiators", m.radiator_t, "#dde2ea"], ["structure", m.structure_t, "#9aa5bf"],
+      ["batteries", o.perMW - m.total_t, "#199e70"]];
+    var tot = o.perMW;
+    $("satOut").innerHTML = "<h2>What this satellite weighs and costs</h2>" +
+      "<div class='kpis'><div class='kpi'><b class='num'>" + fmt(o.perMW, 1) + " t/MW</b><span>organizers' baseline 18.0</span></div>" +
+      "<div class='kpi'><b class='num'>" + fmt(o.satT) + " t</b><span>whole satellite, " + Math.ceil(o.satT / 100) + " Starship launch" + (Math.ceil(o.satT / 100) > 1 ? "es" : "") + " of 100 t</span></div>" +
+      "<div class='kpi'><b class='num'>$" + fmt(o.costMW / 1e6, 2) + "M</b><span>per MW over 5 years, chips aside</span></div>" +
+      "<div class='kpi'><b class='num'>" + (cheaper ? "✓ " : "✗ ") + "$" + fmt(Math.abs(nord - o.costMW) / 1e6, 2) + "M</b><span>" + (cheaper ? "cheaper" : "dearer") + " than the Nordics ($" + fmt(nord / 1e6, 2) + "M/MW)</span></div></div>" +
+      "<div class='split' role='img' aria-label='mass split'>" + parts.filter(function (p) { return p[1] > 0.001; }).map(function (p) { return "<i title='" + p[0] + " " + p[1].toFixed(1) + " t/MW' style='width:" + (p[1] / tot * 100) + "%;background:" + p[2] + "'></i>"; }).join("") + "</div>" +
+      "<div class='legend'>" + parts.filter(function (p) { return p[1] > 0.001; }).map(function (p) { return "<span><i style='background:" + p[2] + "'></i>" + p[0] + " " + p[1].toFixed(1) + " t</span>"; }).join("") + "</div>" +
+      "<dl class='card'><dt>Compute racks</dt><dd>" + o.racks + " × " + SM.lpu_rack_kw + " kW</dd><dt>Solar arrays</dt><dd>" + fmt(o.arrayM2) + " m²</dd>" +
+      "<dt>Radiator</dt><dd>" + fmt(o.radM2) + " m² at " + fmt(m.radiator_k - 273.15) + " °C</dd><dt>Chips run at</dt><dd>" + fmt(m.t_logic_k - 273.15) + " °C" + (P.loops === 1 && P.t_logic_k > P.t_mem_max_k ? " (capped by memory)" : "") + "</dd>" +
+      "<dt>Power drawn vs 85 °C chips</dt><dd>" + fmt(m.power_factor * 100, 1) + "% (leakage)</dd><dt>Eclipse battery</dt><dd>" + (o.battKwh ? fmt(o.battKwh / 1000, 1) + " MWh" : "none") + "</dd></dl>";
+  }
+  var satDrag = null;
+  canvas.addEventListener("pointerdown", function (e) { if (S.view === "sat") satDrag = { x: e.clientX, y: e.clientY }; }, true);
+  canvas.addEventListener("pointermove", function (e) { if (S.view !== "sat" || !satDrag) return; satCam.theta += (e.clientX - satDrag.x) * .006; satCam.phi = Math.min(3, Math.max(.15, satCam.phi - (e.clientY - satDrag.y) * .006)); satDrag = { x: e.clientX, y: e.clientY }; }, true);
+  canvas.addEventListener("pointerup", function () { satDrag = null; }, true);
+  canvas.addEventListener("wheel", function (e) { if (S.view === "sat") satCam.dist = Math.min(20000, Math.max(30, satCam.dist * Math.exp(e.deltaY * .0012))); }, { passive: true });
+  $("spin").onclick = function () { S.spin = !S.spin; this.textContent = S.spin ? "Stop turning" : "Turn slowly"; };
+  function satFrame(dt) {
+    if (S.spin && !satDrag) satCam.theta += dt * 0.08;
+    var r = satCam.dist;
+    satCamera.position.set(r * Math.sin(satCam.phi) * Math.cos(satCam.theta), r * Math.cos(satCam.phi), r * Math.sin(satCam.phi) * Math.sin(satCam.theta));
+    satCamera.lookAt(0, 0, 0);
+    backdrop.rotation.y += dt * 0.01;
+    satSun.intensity = S.shade ? 0.02 : 1.4;
+    M.batt.emissive.setHex(S.shade && LAST && LAST.battKwh ? 0x1f8a4a : 0x000000);
+    M.solar.emissive.setHex(S.shade ? 0x000000 : 0x050a20);
+    var w = canvas.clientWidth, h = canvas.clientHeight, v = new THREE.Vector3();
+    for (var key in satTags) { var a = satAnchors[key], el = satTags[key]; if (!a) { el.hidden = true; continue; }
+      v.copy(a).project(satCamera); el.hidden = !(v.z < 1 && Math.abs(v.x) < 1.05 && Math.abs(v.y) < 1.05);
+      el.style.left = ((v.x + 1) / 2 * w) + "px"; el.style.top = ((1 - v.y) / 2 * h) + "px"; }
+    $("overlay").innerHTML = '<span class="chip' + (S.shade ? " warn" : "") + '">' + (S.shade ? "In Earth's shadow: " + (LAST.battKwh ? "batteries carry " + P.battery + "% of the racks" : "no batteries, racks pause") : "In sunlight: arrays " + fmt(P.mw * LAST.m.power_factor * SM.overhead, 1) + " MW") + "</span>";
+  }
+
   var lastBuilt = -1;
   function ui() {
     if (lastBuilt !== S.d) { build(); lastBuilt = S.d; }
+    seg("viewSeg", [{ label: "One satellite", value: "sat" }, { label: "Whole fleet", value: "fleet" }], "view", function () { if (S.view === "sat") satRebuild(); });
+    seg("lightSeg", [{ label: "In sunlight", value: false }, { label: "In Earth's shadow", value: true }], "shade");
+    var sat = S.view === "sat";
+    $("fleetCtl").style.display = sat ? "none" : "contents"; $("satCtl").style.display = sat ? "contents" : "none";
+    $("designSeg").style.display = sat ? "none" : "";
+    ["satPanel", "satOut"].forEach(function (id) { $(id).hidden = !sat; });
+    ["fleetK", "outage", "cardPanel", "stripPanel"].forEach(function (id) { $(id).hidden = sat; });
+    for (var k in tagEls) if (sat) tagEls[k].hidden = true;
+    for (var k2 in satTags) if (!sat) satTags[k2].hidden = true;
     seg("designSeg", DATA.designs.map(function (d, i) { return { label: d.label.split(":")[0], value: i }; }), "d", function () { S.sel = null; S.lose = ""; });
     seg("daySeg", [{ label: "Normal day", value: "normal" }, { label: "June eclipse", value: "jun" }, { label: "December eclipse", value: "dec" }], "day");
     seg("camSeg", [{ label: "Overview", value: "overview" }, { label: "From the Sun", value: "sun" }, { label: "Ride a satellite", value: "ride" }, { label: "Earth sites", value: "sites" }], "cam",
@@ -3931,11 +4400,14 @@ a { color: var(--sun); }
     renderer.setSize(w, h, false); canvas.style.height = h + "px"; camera.aspect = w / h; camera.updateProjectionMatrix();
   }
   window.addEventListener("resize", resize);
-  ui(); resize();
+  function resizeSat() { satCamera.aspect = camera.aspect; satCamera.updateProjectionMatrix(); }
+  window.addEventListener("resize", resizeSat);
+  sliders(); satRebuild(); ui(); resize(); resizeSat();
   var last = performance.now(), lastHour = -1;
   (function loop(now) {
     var dt = Math.min(0.1, ((now || performance.now()) - last) / 1000); last = now || performance.now();
-    frame(S.playing ? dt * 0.25 * S.speed : 0);       // 4 s of real time = 1 hour of twin time
+    if (S.view === "sat") { satFrame(dt); renderer.render(satScene, satCamera); requestAnimationFrame(loop); return; }
+    frame(S.playing ? dt * 0.125 * S.speed : 0);      // 8 s of real time = 1 hour of twin time
     if (hourKey() !== lastHour) { lastHour = hourKey(); card(); strip(); }
     renderer.render(scene, camera);
     requestAnimationFrame(loop);
