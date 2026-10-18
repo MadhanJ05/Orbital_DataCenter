@@ -19,7 +19,24 @@ All three user groups together are 4.45 billion people: chat users, agent develo
 office workers. **Earth runs out of power first.** If we stay on Earth, the grid is full when
 only 58% of them are served.
 
-## Our answer: part of the fleet in orbit, with nothing that can fail alone
+## Our answer: two designs
+
+| | 🏁 **Design 1: plays by the rules** | 💡 **Design 2: our what-if** |
+|---|---|---|
+| What it is | The organizers' catalog exactly as given (18-tonne satellite) | Same fleet, with a lighter satellite we designed (10.7 tonnes) |
+| 💰 Budget ($30B) | ✅ $29.7B | ✅ $28.7B ($1.3B to spare) |
+| ⚡ Earth grid (500 MW) | ✅ 449 MW | ✅ 394 MW |
+| 🚀 Launch ($200/kg) | ✅ 9,727 t = $1.95B | ✅ 6,391 t = $1.28B |
+| ⏱️ Speed (chat 0.6 s, agents 2 s) | ✅ 0.23 s / 0.23 s | ✅ 0.23 s / 0.23 s |
+| 👥 Users served | ✅ 100% of 4.45 billion | ✅ 100% of 4.45 billion |
+| 🛡️ Lose any one site or plane | ✅ still 100% served | ✅ still 100% served |
+| File | `designs/final_resilient.json` | `designs/whatif_resilient_light.json` |
+
+**Design 1 is our entry.** The organizers say the catalog is fixed for every team, so it
+uses their numbers exactly. **Design 2 is our idea:** the organizers invite each team to change one
+assumption and show what happens, and ours is the satellite's weight.
+
+### Design 1 in detail
 
 | | |
 |---|---|
@@ -55,12 +72,30 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 5. **📍 Many small zones, not one big one.** Spread over every Earth site and 8 orbital planes,
    so the spare capacity we need for an outage stays small.
 
-## Our what-if: make the satellite lighter (the 18-tonne problem)
+## Design 2: make the satellite lighter (the 18-tonne problem)
 
 The organizers' orbital megawatt weighs 18 tonnes. Lighter solar panels, carbon-fiber
 radiators and racks stripped down for space bring it to **10.7 tonnes**. Then orbit becomes
 **cheaper than the cheapest place on Earth**, and the same failure-proof fleet costs
 **$28.7B** (`designs/whatif_resilient_light.json`).
+
+## What if our guesses are wrong?
+
+The organizers didn't give every number (for example local electricity prices), so we guessed
+some. We made each of our 15 guesses 25% worse, one at a time:
+
+- **Prices, carbon and site power limits hardly matter**: under $0.2B each.
+- **Design 2 still fits in 13 of 15 cases. Design 1 fits in 10 of 15.**
+- The two that break both designs are about **how good 2035 chips are** (compute speed, and
+  how often the AI's drafted words are right). Weaker chips mean every team needs more of
+  them, which makes Earth's power limit tighter and orbit *more* necessary.
+
+## Why we don't train AI in space (yet)
+
+Answering questions is the easy first job for orbit: every copy of the model works on its
+own, little data flows up and down, and a broken chip just means users move to another copy.
+Training needs thousands of chips working as one machine with very fast links. It also
+suffers more from radiation errors, and needs petabytes of data sent up. That comes later.
 
 Surprise: running chips *hotter* to shrink the radiators doesn't pay. Hot chips leak power,
 and in space every extra watt needs more solar panels.
@@ -77,7 +112,9 @@ and in space every extra watt needs more solar panels.
 ```bash
 git clone https://github.com/MadhanJ05/Orbital_DataCenter
 cd Orbital_DataCenter
-python3 twin/score.py designs/final_resilient.json   # check our final design
+python3 twin/score.py designs/final_resilient.json   # check Design 1
+python3 twin/simulate.py                             # a full day, minute by minute, every outage
+python3 twin/stress.py --light                       # Design 2 with every guess 25% worse
 python3 twin/test_calibration.py                   # our model matches the organizers' numbers
 ```
 
