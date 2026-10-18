@@ -1,0 +1,418 @@
+{
+  "name": "whatif_0",
+  "cases": [
+    "A",
+    "B",
+    "C"
+  ],
+  "serving": {
+    "easy_chat_share": 0.0,
+    "subagent_share": 0.5,
+    "spec_draft": 5,
+    "context_memory": true,
+    "bg_fill_valleys": true,
+    "autosize_util": 0.95
+  },
+  "pools": [
+    {
+      "name": "chat-decode-nordics",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "direct_liquid",
+      "racks": 123
+    },
+    {
+      "name": "chat-decode-iceland",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "direct_liquid",
+      "racks": 81
+    },
+    {
+      "name": "chat-decode-west_texas",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "west_texas",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "direct_liquid",
+      "racks": 193
+    },
+    {
+      "name": "chat-decode-leo",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "leo",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "radiators",
+      "racks": 238
+    },
+    {
+      "name": "chat-prefill-nordics",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 14
+    },
+    {
+      "name": "chat-prefill-iceland",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 9
+    },
+    {
+      "name": "chat-prefill-west_texas",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "west_texas",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 21
+    },
+    {
+      "name": "chat-prefill-leo",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "leo",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 26
+    },
+    {
+      "name": "agent_int-decode-nordics",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 128,
+      "cooling": "direct_liquid",
+      "racks": 31
+    },
+    {
+      "name": "agent_int-decode-iceland",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 128,
+      "cooling": "direct_liquid",
+      "racks": 20
+    },
+    {
+      "name": "agent_int-decode-west_texas",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "west_texas",
+      "chip": "lpu",
+      "chips_per_replica": 128,
+      "cooling": "direct_liquid",
+      "racks": 48
+    },
+    {
+      "name": "agent_int-decode-leo",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "leo",
+      "chip": "lpu",
+      "chips_per_replica": 128,
+      "cooling": "radiators",
+      "racks": 59
+    },
+    {
+      "name": "agent_int-prefill-nordics",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 22
+    },
+    {
+      "name": "agent_int-prefill-iceland",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 14
+    },
+    {
+      "name": "agent_int-prefill-west_texas",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "west_texas",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 34
+    },
+    {
+      "name": "agent_int-prefill-leo",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "leo",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 42
+    },
+    {
+      "name": "agent_int_sub-decode-nordics",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 2,
+      "cooling": "direct_liquid",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-decode-iceland",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 2,
+      "cooling": "direct_liquid",
+      "racks": 2
+    },
+    {
+      "name": "agent_int_sub-decode-west_texas",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "west_texas",
+      "chip": "lpu",
+      "chips_per_replica": 2,
+      "cooling": "direct_liquid",
+      "racks": 5
+    },
+    {
+      "name": "agent_int_sub-decode-leo",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "leo",
+      "chip": "lpu",
+      "chips_per_replica": 2,
+      "cooling": "radiators",
+      "racks": 6
+    },
+    {
+      "name": "agent_int_sub-prefill-nordics",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "air",
+      "chips_per_replica": 24,
+      "cooling": "direct_liquid",
+      "racks": 78
+    },
+    {
+      "name": "agent_int_sub-prefill-iceland",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "air",
+      "chips_per_replica": 24,
+      "cooling": "direct_liquid",
+      "racks": 51
+    },
+    {
+      "name": "agent_int_sub-prefill-west_texas",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "west_texas",
+      "chip": "air",
+      "chips_per_replica": 24,
+      "cooling": "direct_liquid",
+      "racks": 123
+    },
+    {
+      "name": "agent_int_sub-prefill-leo",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "leo",
+      "chip": "air",
+      "chips_per_replica": 24,
+      "cooling": "radiators",
+      "racks": 151
+    },
+    {
+      "name": "agent_bg-decode-nordics",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "direct_liquid",
+      "racks": 20
+    },
+    {
+      "name": "agent_bg-decode-iceland",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "direct_liquid",
+      "racks": 13
+    },
+    {
+      "name": "agent_bg-decode-west_texas",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "west_texas",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "direct_liquid",
+      "racks": 31
+    },
+    {
+      "name": "agent_bg-decode-leo",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "leo",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "radiators",
+      "racks": 38
+    },
+    {
+      "name": "agent_bg-prefill-nordics",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 14
+    },
+    {
+      "name": "agent_bg-prefill-iceland",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 9
+    },
+    {
+      "name": "agent_bg-prefill-west_texas",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "west_texas",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 22
+    },
+    {
+      "name": "agent_bg-prefill-leo",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "leo",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 27
+    },
+    {
+      "name": "agent_bg_sub-decode-nordics",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 2,
+      "cooling": "direct_liquid",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-decode-iceland",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 2,
+      "cooling": "direct_liquid",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-decode-west_texas",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "west_texas",
+      "chip": "lpu",
+      "chips_per_replica": 2,
+      "cooling": "direct_liquid",
+      "racks": 3
+    },
+    {
+      "name": "agent_bg_sub-decode-leo",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "leo",
+      "chip": "lpu",
+      "chips_per_replica": 2,
+      "cooling": "radiators",
+      "racks": 4
+    },
+    {
+      "name": "agent_bg_sub-prefill-nordics",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 50
+    },
+    {
+      "name": "agent_bg_sub-prefill-iceland",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 33
+    },
+    {
+      "name": "agent_bg_sub-prefill-west_texas",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "west_texas",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 79
+    },
+    {
+      "name": "agent_bg_sub-prefill-leo",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "leo",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 97
+    }
+  ]
+}
