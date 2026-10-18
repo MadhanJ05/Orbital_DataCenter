@@ -36,6 +36,8 @@ export interface Results {
     eclipseFracAvg: number
     worstEclipseMin: number
     eclipseCyclesYr: number
+    eclipseDaysPerYr: number
+    inclinationDeg: number
     rttMs: number
     velocityKms: number
   }

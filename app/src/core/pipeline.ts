@@ -59,6 +59,8 @@ export function simulate(i: Inputs): Results {
       eclipseFracAvg: orbit.eclipseFracAvg,
       worstEclipseMin: orbit.worstEclipseMin,
       eclipseCyclesYr: orbit.eclipseCyclesYr,
+      eclipseDaysPerYr: orbit.eclipseDaysPerYr,
+      inclinationDeg: orbit.inclinationDeg,
       rttMs: orbit.rttMs,
       velocityKms: orbit.velocityKms,
     },
