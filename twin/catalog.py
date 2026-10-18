@@ -94,6 +94,7 @@ SPEC_MAX_DRAFT = 8
 CONTEXT_MEM_USD_PER_GB = 3.0       # ASSUMED (pooled CXL DRAM, 2035)
 CONTEXT_MEM_W_PER_GB = 0.25        # ASSUMED
 
+PEAK_WINDOW_H = 3                  # ASSUMED: interactive demand sits near peak for <= 3 h a day
 IDLE_POWER_FRACTION = 0.3          # ASSUMED: an idle rack still draws 30% of nameplate
 KV_LINK_BYTES_S = 50e9             # ASSUMED: 400 Gb/s per replica between sites
 

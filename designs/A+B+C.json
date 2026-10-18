@@ -10,6 +10,7 @@
     "subagent_share": 0.5,
     "spec_draft": 5,
     "context_memory": true,
+    "bg_fill_valleys": false,
     "autosize_util": 0.95
   },
   "pools": [

@@ -47,13 +47,14 @@ def site_order(include_space):
     return sorted(costs, key=costs.get)
 
 
-def _pools(choices, split):
+def _pools(choices, split, cooling="direct_liquid"):
     return [dict(name=f"{s}-{phase}-{site}", stream=s, phase=phase, site=site,
-                 chip=chip, chips_per_replica=n, share=share)
+                 chip=chip, chips_per_replica=n, share=share,
+                 cooling="radiators" if C.SITES[site]["kind"] == "space" else cooling)
             for (s, phase), (chip, n) in choices.items() for site, share in split.items()]
 
 
-def plan(cases, serving, include_space=True, margin=0.98):
+def default_choices(cases, serving):
     d_out, _, _ = S.demand(cases, serving)
     choices = {}
     for s in C.STREAMS:
@@ -61,10 +62,15 @@ def plan(cases, serving, include_space=True, margin=0.98):
             for phase in ("decode", "prefill"):
                 _, chip, n, _ = chip_choice(s, phase, serving)
                 choices[(s, phase)] = (chip, n)
+    return choices
+
+
+def plan(cases, serving, include_space=True, margin=0.98, choices=None, cooling="direct_liquid"):
+    choices = choices or default_choices(cases, serving)
     name = "+".join(cases) + ("" if include_space else "-earth-only")
 
     def design(split):
-        return dict(name=name, cases=list(cases), serving=serving, pools=_pools(choices, split))
+        return dict(name=name, cases=list(cases), serving=serving, pools=_pools(choices, split, cooling))
 
     # true IT MW of the whole fleet, autosized at one site
     it_mw = sum(p["it_mw"] for p in S.evaluate(design({"nordics": 1.0}))["pools"])
@@ -79,7 +85,7 @@ def plan(cases, serving, include_space=True, margin=0.98):
         if st["kind"] == "space":
             take = left
         else:
-            pue = S.site_pue("direct_liquid", site)
+            pue = S.site_pue(cooling, site)
             take = min(left, min(st["cap_mw"] * margin, earth_left) / pue)
             earth_left -= take * pue
         if take > 0:

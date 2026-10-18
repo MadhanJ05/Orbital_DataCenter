@@ -1,65 +1,66 @@
-# Orbital Data Center: Track 1 twin and scorer
+# 🛰️ Orbital Data Center: our 2035 AI fleet
 
-A digital twin of the 2035 AI inference fleet for Sundai Hack 145, Track 1. You give it a
-design (where racks go, which chips, how requests are served). It returns the users served
-within every speed target, the 5-year cost, grid use, orbital mass, CO2, joules per request,
-and what happens if a site goes dark.
+**Sundai Hack 145, Track 1: Build the AI data center of 2035**
 
-Ranking follows the organizers' deck: users served within all SLOs and hard limits first
-($30B budget, 500 MW Earth grid), then the lowest 5-year cost.
+## The problem, simply
 
-No dependencies beyond Python 3.
+By 2035 billions of people use AI every day, and AI agents do hours of work for developers.
+Our job is to build the computers that answer all of them quickly, for the lowest cost.
+
+The rules from the organizers:
+- 💰 **$30 billion** total budget for 5 years
+- ⚡ Only **500 MW** of power from Earth's grid, across all our sites
+- 🚀 Space has free sunlight, but every kilogram costs **$200** to launch
+- ⏱️ Answers must start fast: chat in **0.6 s**, AI agents in **2 s**
+
+## The catch
+
+All three user groups together are 4.45 billion people: chat users, agent developers and
+office workers. **Earth runs out of power first.** If we stay on Earth, the grid is full when
+only 58% of them are served.
+
+## Our answer: put part of the fleet in orbit
+
+| | |
+|---|---|
+| 👥 **Users served** | **4.45 billion: 100% of all three groups** |
+| 💰 **5-year cost** | **$26.3B, $3.7B under budget** |
+| 🌍 **On Earth** | Nordics, Iceland and West Texas: 487 of 500 MW |
+| 🛰️ **In orbit** | 264 MW of computers in low Earth orbit (4,745 tonnes launched) |
+| ⏱️ **Speed** | Chat starts in 0.19 s (limit 0.6 s); agents in 0.26 s (limit 2 s) |
+| ✅ **All rules** | Budget, grid limit, every speed target, cooling rules: all met |
+
+Why orbit and not the Moon or Mars? The Moon is 2.6 s away and Mars 25 minutes, which is too
+slow for chat. Orbit is only 40 ms away, about as close as a data center in Virginia.
+
+## The five tricks that made it fit
+
+1. **🌙 Night shift.** Background agents have 4 hours to finish their work. They run in the quiet
+   hours of the racks that serve live agents, so we don't buy separate racks for them.
+   This one trick saved about $4B.
+2. **🧠 Small helpers.** Half of each agent's steps go to a smaller sub-agent model, which is
+   about 10x cheaper per step.
+3. **⚡ Guess ahead (speculative decoding).** The AI drafts a few words ahead and checks them in
+   one go, so every chip writes 2-3x more words.
+4. **🔧 The right chip for each job.** "Reading" the question (prefill) runs on GPUs and cheap
+   cards. "Writing" the answer (decode) runs on fast-memory LPU chips.
+5. **📍 Cheapest power first.** Fill the cheap, cold, clean sites on Earth up to their power
+   limits, then put the rest in orbit. Orbit beats Virginia, the Midwest and the Gulf on cost.
+
+## Things we learned
+
+- Sending easy questions to a smaller AI **does not** save money. The slow part is reading the
+  conversation memory, and the small model's memory per word is actually bigger.
+- For AI agents, *reading* the question needs as much hardware as *writing* the answer.
+- Earth runs out of **power** before it runs out of **money**. That's why orbit matters.
+
+## Try it yourself (just Python, nothing to install)
 
 ```bash
-python3 twin/test_calibration.py              # twin reproduces the deck's own numbers
-python3 twin/score.py --napkin                # tokens/s per chip, all-GPU sizing per case
-python3 twin/score.py --breakeven             # launch $/kg where orbit ties each Earth site
-python3 twin/build.py A B C                   # greedy valid starting design -> designs/A+B+C.json
-python3 twin/score.py designs/A+B+C.json      # score a design (add --json for the full result)
+git clone https://github.com/MadhanJ05/Orbital_DataCenter
+cd Orbital_DataCenter
+python3 twin/score.py "designs/final_A+B+C.json"   # check our final design
+python3 twin/test_calibration.py                   # our model matches the organizers' numbers
 ```
 
-## Files
-
-| File | What it is |
-|---|---|
-| `twin/catalog.py` | Every constant. Each one is tagged `DECK sN` (from slide N), `ASSUMED`, or `CALIB` (tuned to reproduce a deck number). |
-| `twin/score.py` | The model and the scorer. |
-| `twin/build.py` | Greedy planner: best chip per stream, cheapest sites up to their grid caps, the rest in LEO. |
-| `twin/test_calibration.py` | Checks against the deck: ~960 chat and ~117 agent sessions per GPU, per-user peak tokens, 972 W/m² radiators, $3.6M/MW launch, orbit break-even with the Nordics at $95/kg and West Texas at $170/kg, Moon and Mars latency rules. |
-| `designs/*.json` | Saved designs. |
-
-## Design format
-
-```json
-{
-  "name": "my-design",
-  "cases": ["A", "B", "C"],
-  "serving": {"easy_chat_share": 0.0, "subagent_share": 0.5, "spec_draft": 3, "context_memory": true},
-  "pools": [
-    {"name": "chat-decode-leo", "stream": "chat", "phase": "decode", "site": "leo",
-     "chip": "lpu", "chips_per_replica": 12, "racks": 292}
-  ]
-}
-```
-
-- **Streams:** `chat`, `chat_easy` (routed to gpt-oss-120b), `agent_int`, `agent_int_sub`, `agent_bg`, `agent_bg_sub` (the `_sub` streams are Qwen3.5-122B sub-agents).
-- **Phases:** `prefill` runs on `gpu` or `air`; `decode` runs on `gpu` or `lpu`.
-- **Sites:** `n_virginia`, `midwest`, `west_texas`, `nordics`, `iceland`, `gulf`, `leo`, `moon`, `mars`.
-- **Cooling:** Earth uses `direct_liquid` (default), `immersion`, `air_evap` or `air_chillers`. Space uses `radiators`.
-- **Sizing:** give `"share": 0.4` instead of `racks` and the scorer sizes the pool for 40% of that stream's peak demand.
-
-## Results so far (greedy planner, our assumptions)
-
-| Design | Users served | 5-year cost | Earth grid | Orbit |
-|---|---|---|---|---|
-| Case A, prompters | 4.0B (100%) | $13.1B | 386 MW | none |
-| Case B, agent developers | 50M (100%) | $8.5B | 240 MW | none |
-| Case C, knowledge workers | 400M (100%) | $8.3B | 234 MW | none |
-| A+B+C, Earth only | 2.6B of 4.45B (58%) | $16.8B | 488 MW (full) | none |
-| A+B+C, with orbit | 4.45B (100%) | $30.8B (over budget) | 490 MW | 370 MW, 6,656 t |
-
-## Known simplifications
-
-- Earth site prices, carbon and grid caps are our assumptions, because the deck gives only the round trips. The Nordics and West Texas values are tuned to the deck's break-even prices.
-- Load is sized at the peak hour. There is no hour-by-hour simulation yet, so background agents are not time-shifted.
-- Chat prefix caches are treated as free to store. Agent caches parked during tool calls are charged to HBM, or to the context-memory tier when it is on.
+Technical details, assumptions and the design file format are in [`twin/README.md`](twin/README.md).

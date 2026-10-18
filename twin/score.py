@@ -18,7 +18,8 @@ from pathlib import Path
 import catalog as C
 
 SERVING_DEFAULTS = dict(easy_chat_share=0.0, subagent_share=0.0, spec_draft=0,
-                        context_memory=False, autosize_util=0.95)
+                        context_memory=False, bg_fill_valleys=False, autosize_util=0.95)
+VALLEY_PAIRS = (("agent_int", "agent_bg"), ("agent_int_sub", "agent_bg_sub"))
 INF = float("inf")
 
 
@@ -136,6 +137,28 @@ def demand(cases, serving):
     return out, inp, reqs
 
 
+def valley_shift(d_out, d_in, serving):
+    """Night shift: background agents (4 h deadline) run in the off-peak capacity of
+    the interactive pools of the same model, so their own pools only cover what
+    does not fit there. Interactive pools sized for peak P with daily average a
+    have P - a of spare capacity on average; background work b beyond that still
+    needs its own racks (DECK s21: flexible batch deadlines).
+    Returns shifted demand and the average tokens/s moved into each interactive stream."""
+    out, inp, moved_out, moved_in = dict(d_out), dict(d_in), {}, {}
+    if not serving["bg_fill_valleys"]:
+        return out, inp, moved_out, moved_in
+    for it, bg in VALLEY_PAIRS:
+        if out[bg] <= 0 or out[it] <= 0:
+            continue
+        spare = out[it] - out[it] / C.STREAMS[it]["peak"]
+        moved = min(out[bg], spare)
+        ratio = inp[bg] / out[bg]
+        out[bg] -= moved
+        inp[bg] -= moved * ratio
+        moved_out[it], moved_in[it] = moved, moved * ratio
+    return out, inp, moved_out, moved_in
+
+
 def case_streams(case):
     c = C.CASES[case]
     streams = []
@@ -186,6 +209,9 @@ def evaluate(design):
             errors.append(f"unknown case {c!r}")
     cases = [c for c in cases if c in C.CASES]
     d_out, d_in, reqs = demand(cases, serving)
+    d_out, d_in, moved_out, moved_in = valley_shift(d_out, d_in, serving)
+    if serving["bg_fill_valleys"] and C.STREAMS["agent_bg"]["task_deadline"] < C.PEAK_WINDOW_H * 3600:
+        errors.append("night shift needs the background deadline to outlast the peak window")
 
     # ---- build pools
     pools = []
@@ -281,10 +307,14 @@ def evaluate(design):
             cap_d = sum(p["cap"] for p in by(s, "decode", True) if pool_filter(p))
             cap_p = sum(p["cap"] for p in by(s, "prefill", True) if pool_filter(p))
             frac[s] = min(1.0, cap_d / d_out[s], cap_p / d_in[s])
+        for it, bg in VALLEY_PAIRS:
+            if bg in moved_out_by_bg:
+                frac[bg] = min(frac[bg], frac[it])
         per_case = {c: min(frac[s] for s in case_streams(c)) for c in cases}
         users = sum(C.CASES[c]["users"] * f for c, f in per_case.items())
         return frac, per_case, users
 
+    moved_out_by_bg = {bg for it, bg in VALLEY_PAIRS if it in moved_out}
     stream_frac, case_frac, users = served()
 
     # ---- power, energy, money
@@ -298,7 +328,12 @@ def evaluate(design):
         ctx_gb = p["replicas"] * p["rep"].get("ctx_mem_bytes", 0.0) / 1e9
         it_mw = (p["racks"] * ch["rack_kw"] + ctx_gb * C.CONTEXT_MEM_W_PER_GB / 1000) / 1000
         pool_rho = min(1.0, rho[(p["stream"], p["phase"])]) if p["slo_ok"] else 0.0
-        load = C.IDLE_POWER_FRACTION + (1 - C.IDLE_POWER_FRACTION) * pool_rho / C.STREAMS[p["stream"]]["peak"]
+        avg_util = pool_rho / C.STREAMS[p["stream"]]["peak"]
+        extra = (moved_out if p["phase"] == "decode" else moved_in).get(p["stream"], 0.0)
+        cap_total = sum(q["cap"] for q in by(p["stream"], p["phase"]))
+        if extra and cap_total and p["slo_ok"]:
+            avg_util = min(1.0, avg_util + extra / cap_total)
+        load = C.IDLE_POWER_FRACTION + (1 - C.IDLE_POWER_FRACTION) * avg_util
         pue = site_pue(p["cooling"], p["site"])
         mwh = it_mw * load * pue * C.HOURS
         cost = dict(chips=p["racks"] * ch["rack_usd"], context_memory=ctx_gb * C.CONTEXT_MEM_USD_PER_GB)
