@@ -21,7 +21,14 @@ only 58% of them are served.
 
 ## 🛰️ The digital twin
 
-**[`twin.html`](twin.html)** (open it straight in a browser, no server needed) is the live twin of both designs:
+**[`twin3d.html`](twin3d.html)** is the twin in 3D, seen from space:
+- Earth turns with real UTC time, under real sunlight.
+- Our six Earth sites glow with the power they draw.
+- Eight dawn-dusk orbital planes of satellites circle the planet; one dot is an 8 MW satellite.
+- On a June or December eclipse day, that half of the planes tilts into Earth's shadow, and you can watch satellites switch to batteries or pause.
+- Switch off any site or plane. Camera views: overview, from the Sun, ride along with a satellite, Earth sites.
+
+**[`twin.html`](twin.html)** (open it straight in a browser, no server needed) is the same twin as flat charts and tables:
 - **Pick a design and a day** (normal, or the worst eclipse day).
 - **Switch off any site or orbital plane.**
 - **Scrub or play the 24 hours.**
