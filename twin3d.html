@@ -3982,7 +3982,14 @@ a { color: var(--sun); }
     var px = function (lon) { return (lon + 180) / 360 * W; }, py = function (lat) { return (90 - lat) / 180 * H; };
     x.fillStyle = "#3d5f45"; x.strokeStyle = "#5f8466"; x.lineWidth = 2;
     LAND.forEach(function (poly) { x.beginPath(); poly.forEach(function (p, i) { var X = px(p[0]), Y = py(p[1]); i ? x.lineTo(X, Y) : x.moveTo(X, Y); }); x.closePath(); x.fill(); x.stroke(); });
-    x.fillStyle = "#cfd8e3"; x.fillRect(0, py(-66), W, H - py(-66)); x.fillRect(0, 0, W, py(80));
+    // polar ice: Antarctica as land with an uneven coast, Arctic sea ice as a faint sheet, both fading out
+    x.fillStyle = "#e4ebf2"; x.beginPath(); x.moveTo(0, H);
+    for (var lo = -180; lo <= 180; lo += 10) x.lineTo(px(lo), py(-70 - 4 * Math.sin(lo * Math.PI / 60) - 2 * Math.cos(lo * Math.PI / 25)));
+    x.lineTo(W, H); x.closePath(); x.fill();
+    var gS = x.createLinearGradient(0, py(-64), 0, py(-72)); gS.addColorStop(0, "rgba(228,235,242,0)"); gS.addColorStop(1, "rgba(228,235,242,.35)");
+    x.fillStyle = gS; x.fillRect(0, py(-64), W, py(-72) - py(-64));
+    var gN = x.createLinearGradient(0, 0, 0, py(74)); gN.addColorStop(0, "rgba(220,232,245,.55)"); gN.addColorStop(1, "rgba(220,232,245,0)");
+    x.fillStyle = gN; x.fillRect(0, 0, W, py(74));
     x.strokeStyle = "rgba(170,200,255,.16)"; x.lineWidth = 1;
     for (var lon = -180; lon <= 180; lon += 30) { x.beginPath(); x.moveTo(px(lon), 0); x.lineTo(px(lon), H); x.stroke(); }
     for (var lat = -60; lat <= 60; lat += 30) { x.beginPath(); x.moveTo(0, py(lat)); x.lineTo(W, py(lat)); x.stroke(); }
