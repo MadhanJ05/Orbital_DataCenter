@@ -73,8 +73,8 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
    about 10x cheaper per step.
 3. **⚡ Guess ahead (speculative decoding).** The AI drafts a few words ahead and checks them in
    one go, so every chip writes 2-3x more words.
-4. **🔧 The right chip for each job.** "Reading" the question (prefill) runs on GPUs and cheap
-   cards. "Writing" the answer (decode) runs on fast-memory LPU chips.
+4. **🔧 The right chip for each job.** "Reading" the question (prefill) runs on cheap "air cards".
+   "Writing" the answer (decode) runs on fast-memory LPU chips.
 5. **📍 Many small zones, not one big one.** Spread over every Earth site and 8 orbital planes,
    so the spare capacity we need for an outage stays small.
 
@@ -113,6 +113,36 @@ some. We made each of our 16 guesses 25% worse, one at a time:
   how often the AI's drafted words are right). Weaker chips mean every team needs more of
   them, which makes Earth's power limit tighter and orbit *more* necessary.
 
+## How we checked it
+
+| Check | What it does | Result |
+|---|---|---|
+| 🎯 Matches the organizers | Our model reproduces the deck's own numbers: 960 chat users per chip, 117 agents per chip, $3.6M to launch a megawatt, orbit breaking even with the Nordics at $95/kg | 11 of 11 tests pass |
+| 📋 Every rule, one by one | Budget, grid, launch, chip and cooling rules, every speed target, users served, outages. Each is recalculated from the raw design | Design 1: 36 of 36. Design 2: 30 of 30 |
+| 🕐 A full day, minute by minute | Users in 3 time zones, live users first, background jobs fill the gaps. Run on a normal day and once per possible outage | No live user ever waits. Longest background wait: 87 min (limit 228) |
+| 🔥 What if our guesses are wrong | Each guessed number made 25% worse | Design 1 fits 13 of 16, Design 2 fits 12 of 16 |
+| 🔍 Code review | We read the model line by line and fixed 4 bugs that made designs look better than they were | Both designs re-optimized after the fixes and still pass |
+
+**Energy per answer:** a chat reply uses about **0.054 Wh** in both designs, and a full AI-agent
+task (80 steps) about **6.7 Wh**. For comparison, Google reported 0.24 Wh for a typical
+Gemini prompt in 2025.
+
+## Questions a judge might ask
+
+- **"Air cards are air-cooled. How do they work in space?"** In orbit every rack, air cards
+  included, is cooled through radiators. If air cards aren't allowed in space, GPUs can do the
+  reading instead. Design 1 then costs $29.70B and Design 2 $29.14B, so both still fit.
+- **"Why not put everything in orbit with the organizers' satellite?"** It would cost $30.6B,
+  over budget. An orbital megawatt costs $11.2M against $9.3M in the Nordics, so Earth is still
+  cheaper where it's available.
+- **"What if a solar storm hits every satellite at once?"** That's Design 2's worst case, and why
+  Design 1 is our entry: it keeps 435 MW on Earth, which fails for different reasons.
+- **"What does 500 MW include?"** We count IT power plus cooling, at full power. That's the strict
+  reading.
+- **"How sure are the numbers?"** Every number the organizers gave is used exactly. Where they
+  gave none (local electricity prices, some chip details), we guessed, labeled the guess in
+  the code, and stress-tested it.
+
 ## Why we don't train AI in space (yet)
 
 Answering questions is the easy first job for orbit: every copy of the model works on its
@@ -139,6 +169,7 @@ cd Orbital_DataCenter
 python3 twin/score.py designs/final_resilient.json         # check Design 1
 python3 twin/score.py designs/whatif_all_orbit_light.json  # check Design 2
 python3 twin/simulate.py designs/final_resilient.json designs/whatif_all_orbit_light.json   # a full day, every outage
+python3 twin/stress.py                                     # Design 1 with every guess 25% worse
 python3 twin/stress.py --light --orbit-only                # Design 2 with every guess 25% worse
 python3 twin/test_calibration.py                           # our model matches the organizers' numbers
 python3 twin/check_rules.py                                # every deck rule, both designs, PASS/FAIL
