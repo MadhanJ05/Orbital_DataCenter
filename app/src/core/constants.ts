@@ -1,0 +1,11 @@
+export const RE = 6371 // km
+export const MU = 398600.4418 // km^3/s^2
+export const SOLAR = 1361 // W/m^2 at 1 AU
+export const SIGMA = 5.670374e-8
+export const C_KMS = 299792.458
+export const G0 = 9.80665
+export const HRS_YR = 8766
+export const SEC_YR = HRS_YR * 3600
+export const GEO_ALT = 35786
+export const CD = 2.2
+export const HORIZON_YR = 25 // lifetime simulation horizon
