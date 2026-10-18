@@ -8,11 +8,12 @@
   "serving": {
     "easy_chat_share": 0.0,
     "subagent_share": 0.5,
-    "spec_draft": 4,
+    "spec_draft": 5,
     "context_memory": true,
     "bg_fill_valleys": true,
     "autosize_util": 0.95,
-    "resilience": null
+    "resilience": null,
+    "sandbox_snapshot": true
   },
   "pools": [
     {
@@ -23,7 +24,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "direct_liquid",
-      "racks": 118
+      "racks": 112
     },
     {
       "name": "chat-decode-leo",
@@ -33,7 +34,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 551
+      "racks": 556
     },
     {
       "name": "chat-prefill-nordics",
@@ -41,9 +42,9 @@
       "phase": "prefill",
       "site": "nordics",
       "chip": "gpu",
-      "chips_per_replica": 32,
+      "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 13
+      "racks": 12
     },
     {
       "name": "chat-prefill-leo",
@@ -51,9 +52,9 @@
       "phase": "prefill",
       "site": "leo",
       "chip": "gpu",
-      "chips_per_replica": 32,
+      "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 58
+      "racks": 59
     },
     {
       "name": "agent_int-decode-nordics",
@@ -61,9 +62,9 @@
       "phase": "decode",
       "site": "nordics",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 112,
       "cooling": "direct_liquid",
-      "racks": 30
+      "racks": 28
     },
     {
       "name": "agent_int-decode-leo",
@@ -71,9 +72,9 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 112,
       "cooling": "radiators",
-      "racks": 136
+      "racks": 138
     },
     {
       "name": "agent_int-prefill-nordics",
@@ -81,9 +82,9 @@
       "phase": "prefill",
       "site": "nordics",
       "chip": "gpu",
-      "chips_per_replica": 1,
+      "chips_per_replica": 32,
       "cooling": "direct_liquid",
-      "racks": 20
+      "racks": 19
     },
     {
       "name": "agent_int-prefill-leo",
@@ -91,9 +92,9 @@
       "phase": "prefill",
       "site": "leo",
       "chip": "gpu",
-      "chips_per_replica": 1,
+      "chips_per_replica": 32,
       "cooling": "radiators",
-      "racks": 93
+      "racks": 94
     },
     {
       "name": "agent_int_sub-decode-nordics",
@@ -101,7 +102,7 @@
       "phase": "decode",
       "site": "nordics",
       "chip": "lpu",
-      "chips_per_replica": 4,
+      "chips_per_replica": 20,
       "cooling": "direct_liquid",
       "racks": 3
     },
@@ -111,9 +112,9 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 4,
+      "chips_per_replica": 20,
       "cooling": "radiators",
-      "racks": 13
+      "racks": 14
     },
     {
       "name": "agent_int_sub-prefill-nordics",
@@ -121,9 +122,9 @@
       "phase": "prefill",
       "site": "nordics",
       "chip": "air",
-      "chips_per_replica": 2,
+      "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 73
+      "racks": 69
     },
     {
       "name": "agent_int_sub-prefill-leo",
@@ -131,9 +132,9 @@
       "phase": "prefill",
       "site": "leo",
       "chip": "air",
-      "chips_per_replica": 2,
+      "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 339
+      "racks": 343
     },
     {
       "name": "agent_bg-decode-nordics",
@@ -141,9 +142,9 @@
       "phase": "decode",
       "site": "nordics",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 64,
       "cooling": "direct_liquid",
-      "racks": 19
+      "racks": 18
     },
     {
       "name": "agent_bg-decode-leo",
@@ -151,29 +152,29 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 64,
       "cooling": "radiators",
-      "racks": 87
+      "racks": 89
     },
     {
       "name": "agent_bg-prefill-nordics",
       "stream": "agent_bg",
       "phase": "prefill",
       "site": "nordics",
-      "chip": "gpu",
-      "chips_per_replica": 1,
+      "chip": "air",
+      "chips_per_replica": 128,
       "cooling": "direct_liquid",
-      "racks": 13
+      "racks": 460
     },
     {
       "name": "agent_bg-prefill-leo",
       "stream": "agent_bg",
       "phase": "prefill",
       "site": "leo",
-      "chip": "gpu",
-      "chips_per_replica": 1,
+      "chip": "air",
+      "chips_per_replica": 128,
       "cooling": "radiators",
-      "racks": 60
+      "racks": 2272
     },
     {
       "name": "agent_bg_sub-decode-nordics",
@@ -181,7 +182,7 @@
       "phase": "decode",
       "site": "nordics",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 24,
       "cooling": "direct_liquid",
       "racks": 2
     },
@@ -191,7 +192,7 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 24,
       "cooling": "radiators",
       "racks": 9
     },
@@ -201,9 +202,9 @@
       "phase": "prefill",
       "site": "nordics",
       "chip": "air",
-      "chips_per_replica": 2,
+      "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 47
+      "racks": 45
     },
     {
       "name": "agent_bg_sub-prefill-leo",
@@ -211,11 +212,15 @@
       "phase": "prefill",
       "site": "leo",
       "chip": "air",
-      "chips_per_replica": 2,
+      "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 217
+      "racks": 220
     }
   ],
+  "plan": {
+    "site_cap_share": 1.0,
+    "planes": 0
+  },
   "satellite": {
     "kg_per_mw": 10983,
     "hw_factor": 0.921,

@@ -12,7 +12,8 @@
     "context_memory": true,
     "bg_fill_valleys": true,
     "autosize_util": 0.95,
-    "resilience": null
+    "resilience": null,
+    "sandbox_snapshot": true
   },
   "pools": [
     {
@@ -41,7 +42,7 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 128,
+      "chips_per_replica": 80,
       "cooling": "radiators",
       "racks": 167
     },
@@ -61,7 +62,7 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 4,
+      "chips_per_replica": 6,
       "cooling": "radiators",
       "racks": 16
     },
@@ -71,7 +72,7 @@
       "phase": "prefill",
       "site": "leo",
       "chip": "air",
-      "chips_per_replica": 2,
+      "chips_per_replica": 1,
       "cooling": "radiators",
       "racks": 416
     },
@@ -81,7 +82,7 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 80,
       "cooling": "radiators",
       "racks": 107
     },
@@ -101,7 +102,7 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 28,
       "cooling": "radiators",
       "racks": 11
     },
@@ -116,6 +117,10 @@
       "racks": 266
     }
   ],
+  "plan": {
+    "site_cap_share": 1.0,
+    "planes": 0
+  },
   "satellite": {
     "kg_per_mw": 9934,
     "hw_factor": 0.9171,

@@ -55,11 +55,13 @@ Point at the side panel: **$29.88B, 323 MW, 4.45B served.**
 > "Design 2 is our what-if: everything in orbit, zero grid power, $29.44 billion. It needs a
 > lighter satellite. The organizers' satellite weighs 18 tonnes per megawatt."
 
-**Move "Solar array, watts per kg" up to about 500, then "Radiator, kg per m²" down to 2.**
+**In "Start from", pick "Design 2 satellite (our 11 t/MW)".** Then drag "Racks, tonnes per MW" back
+up to 5 and down again, so people see the satellite and the numbers change.
 
-> "With thin-film solar panels and carbon-fiber radiators, it drops to about 11 tonnes, and
-> space becomes cheaper than the cheapest place on Earth. This slider runs the same physics as
-> our Python model, and checks itself against it every time the page loads."
+> "With thin-film solar panels, carbon-fiber radiators and racks stripped down for space, it
+> drops to 11 tonnes. At that weight a megawatt in orbit costs about the same as the cheapest
+> place on Earth, the Nordics, and one more step makes orbit cheaper. This panel runs the same
+> physics as our Python model and checks itself against it every time the page loads."
 > (Point at "✓ 12 of 12 reference cases match".)
 
 ### 4. Proof: none of these numbers are made up (90 s): switch to the terminal
@@ -85,8 +87,8 @@ Point at the side panel: **$29.88B, 323 MW, 4.45B served.**
 ### 5. What we learned (30 s)
 
 > "Three things surprised us.
-> One: unlimited power isn't cheap power. Orbit only beats the best places on Earth once
-> satellites get lighter.
+> One: unlimited power isn't cheap power. Orbit only matches the best places on Earth once
+> satellites get much lighter.
 > Two: chips are about two-thirds of the cost wherever they sit, so how you use them matters
 > more than where. Letting background agents work in quiet hours saved $4.8 billion.
 > Three: some ideas that sound smart don't pay. Running chips hotter, or sending easy questions

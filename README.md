@@ -166,17 +166,20 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 
 The organizers' orbital megawatt weighs 18 tonnes. Lighter solar panels, carbon-fiber
 radiators and racks stripped down for space bring it to **11.0 tonnes** (including the 5% of
-power lost in conversion, pumps and avionics that the organizers' 18 tonnes already includes). Then orbit becomes
-**cheaper than the cheapest place on Earth**, and the whole fleet fits in orbit, with no
-Earth grid, for **$29.2B** (`designs/whatif_all_orbit_light.json`). Kept as a mix of Earth and
-orbit, the lighter satellite would cost $28.75B (`designs/whatif_resilient_light.json`).
+power lost in conversion, pumps and avionics that the organizers' 18 tonnes already includes).
+At 11.0 tonnes an orbital megawatt costs **about the same as the cheapest place on Earth** (the
+Nordics), and the whole fleet fits in orbit, with no Earth grid, for **$29.44B**
+(`designs/whatif_all_orbit_light.json`). One more step, letting the arrays and radiators carry the
+structure, makes orbit cheaper. Kept as a mix of Earth and orbit, the lighter satellite would
+cost $28.75B (`designs/whatif_resilient_light.json`).
 
 | Satellite upgrade (each step adds to the one before) | Tonnes per MW | Cost per MW in orbit |
 |---|---|---|
 | Organizers' satellite | 18.0 | $11.18M |
-| Thin-film solar panels (500 W/kg) | 15.1 | $10.29M |
-| Carbon-fiber radiators (2 kg/m²) | 12.7 | $9.63M |
-| **Racks stripped down for space** | **10.7** | **$9.24M**, below the Nordics ($9.29M) |
+| Thin-film solar panels (500 W/kg) | 15.3 | $10.31M |
+| Carbon-fiber radiators (2 kg/m²) | 12.9 | $9.69M |
+| **Racks stripped down for space (Design 2)** | **11.0** | **$9.30M**, the same as the Nordics ($9.29M) |
+| Arrays and radiators carry the structure | 9.9 | $9.07M, cheaper than anywhere on Earth |
 
 Surprise: running chips *hotter* to shrink the radiators doesn't pay. Hot chips leak power,
 and in space every extra watt needs more solar panels.
@@ -286,8 +289,8 @@ suffers more from radiation errors, and needs petabytes of data sent up. That co
   conversation memory, and the small model's memory per word is actually bigger.
 - For AI agents, *reading* the question needs as much hardware as *writing* the answer.
 - Earth runs out of **power** before it runs out of **money**. That's why orbit matters.
-- Unlimited power is not the same as cheap power. Orbit only beats the best Earth sites once
-  the satellite gets lighter.
+- Unlimited power is not the same as cheap power. Orbit only matches the best Earth sites once
+  the satellite gets much lighter, and beats them only with one step more.
 - Chips are about 75% of the cost wherever they are, so the chips you pick matter more than
   where you put them.
 
