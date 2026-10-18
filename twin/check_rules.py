@@ -96,10 +96,32 @@ def check(path):
             heads.append(cap / d_out[s] - 1)
     add("s21", "demand bursts: spare above the peak hour (live)", "> 0%", f"min {min(heads):.0%}", min(heads) > 0)
 
+    # ---- network (DECK s21): user text between Earth and each orbital plane at the busiest hour.
+    # Cached context stays with the model; background agents run tools next to it, so only
+    # interactive work sends its new input up.
+    by_plane = {}
+    for s, st in C.STREAMS.items():
+        dec = [p for p in r["pools"] if p["stream"] == s and p["phase"] == "decode" and p["cap"] > 0]
+        total = sum(p["cap"] for p in dec)
+        steps = r["demand_out_tps"][s] / st["out"]
+        per_step = ((st["ctx"] - st["cached"]) if st["rtt_per_step"] else 0) + st["out"]
+        for p in dec:
+            if p["space"]:
+                by_plane[p["site"]] = by_plane.get(p["site"], 0) + steps * p["cap"] / total * per_step * C.TEXT_BYTES_PER_TOKEN * 8
+    if by_plane:
+        worst = max(by_plane.values())
+        add("s21", "network: busiest plane's Earth link", f"{C.PLANE_LINK_BPS / 1e12:.0f} Tbps", f"{worst / 1e12:.2f} Tbps", worst <= C.PLANE_LINK_BPS)
+
     # ---- energy per task (DECK s21 asks for joules per task)
     j = r["joules_per_request"]
-    agent_task = sum(j.get(x, 0) for x in ("agent_int", "agent_int_sub")) / 2 * C.STREAMS["agent_int"]["steps"]
-    add("s21", "energy per chat prompt / per agent task", "report", f"{j['chat'] / 3600:.3f} Wh / {agent_task / 3600:.1f} Wh", True)
+    _, _, reqs = S.demand(r["cases"], sv)
+    total_kwh = sum(p["it_mw"] * p["load"] * p["pue"] * C.HOURS * 1000 for p in r["pools"])
+    booked = sum(j[x] * reqs[x] * C.HOURS * 3600 for x in j) / 3.6e6
+    add("s21", "energy split across workloads adds up to the total", "100%", f"{booked / total_kwh:.2%}", abs(booked / total_kwh - 1) < 1e-6)
+    steps = C.STREAMS["agent_int"]["steps"]
+    task = lambda a, b: (j.get(a, 0) * (1 - sv["subagent_share"]) + j.get(b, 0) * sv["subagent_share"]) * steps
+    add("s21", "energy per chat prompt / per agent task", "report",
+        f"{j['chat'] / 3600:.3f} Wh / {task('agent_int', 'agent_int_sub') / 3600:.1f} Wh", True)
 
     name = design.get("name", Path(path).stem)
     print(f"\n=== {name}" + (f"  (what-if satellite {r['satellite']['kg_per_mw'] / 1000:.1f} t/MW)" if r.get("satellite") else ""))

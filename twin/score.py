@@ -395,11 +395,13 @@ def _evaluate(design):
         ctx_gb = p["replicas"] * p["rep"].get("ctx_mem_bytes", 0.0) / 1e9
         it_mw = (p["racks"] * ch["rack_kw"] + ctx_gb * C.CONTEXT_MEM_W_PER_GB / 1000) / 1000
         pool_rho = min(1.0, rho[(p["stream"], p["phase"])] / margin) if p["slo_ok"] else 0.0   # bill real demand
-        avg_util = pool_rho / C.STREAMS[p["stream"]]["peak"]
+        own_util = pool_rho / C.STREAMS[p["stream"]]["peak"]
+        avg_util = own_util
         extra = (moved_out if p["phase"] == "decode" else moved_in).get(p["stream"], 0.0)
         cap_total = sum(q["cap"] for q in by(p["stream"], p["phase"]))
         if extra and cap_total and p["slo_ok"]:
             avg_util = min(1.0, avg_util + extra / margin / cap_total)
+        moved_share = (avg_util - own_util) / avg_util if avg_util > 0 else 0.0   # off-peak work's share
         load = C.IDLE_POWER_FRACTION + (1 - C.IDLE_POWER_FRACTION) * avg_util
         pue = site_pue(p["cooling"], p["site"])
         mwh = it_mw * load * pue * C.HOURS
@@ -421,7 +423,11 @@ def _evaluate(design):
             totals[k] += v
         site_mw[p["site"]] = site_mw.get(p["site"], 0.0) + it_mw * pue
         site_it_mw[p["site"]] = site_it_mw.get(p["site"], 0.0) + it_mw
-        energy_by_stream[p["stream"]] += mwh * 1000
+        # charge off-peak background work in interactive pools to the background stream
+        bg = dict(VALLEY_PAIRS).get(p["stream"])
+        energy_by_stream[p["stream"]] += mwh * 1000 * (1 - moved_share)
+        if bg:
+            energy_by_stream[bg] += mwh * 1000 * moved_share
         p.update(it_mw=it_mw, facility_mw=it_mw * pue, pue=pue, load=load, cost=cost,
                  cost_usd=sum(cost.values()), ctx_gb=ctx_gb)
     total_usd = sum(totals.values())

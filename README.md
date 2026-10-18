@@ -123,14 +123,14 @@ some. We made each of our 16 guesses 25% worse, one at a time:
 |---|---|---|
 | 🎯 Matches the organizers | Our model reproduces the deck's own numbers: 960 chat users per chip, 117 agents per chip, $3.6M to launch a megawatt, orbit breaking even with the Nordics at $95/kg | 11 of 11 tests pass |
 | 🛡️ Safety rules | We keep 5% of every chip's memory free, as real systems do (see below) | Included in both designs |
-| 📋 Every rule, one by one | Budget, grid, launch, chip and cooling rules, every speed target, users served, outages. Each is recalculated from the raw design | Design 1: 36 of 36. Design 2: 30 of 30 |
+| 📋 Every rule, one by one | Budget, grid, launch, chip and cooling rules, every speed target, users served, outages, Earth-orbit network traffic, energy bookkeeping. Each is recalculated from the raw design | Design 1: 38 of 38. Design 2: 32 of 32 |
 | 🕐 A full day, minute by minute | Users in 3 time zones, live users first, background jobs fill the gaps. Run on a normal day and once per possible outage | No live user ever waits. Longest background wait: 87 min (limit 228) |
 | 🔥 What if our guesses are wrong | Each guessed number made 25% worse | Design 1 fits 11 of 16, Design 2 fits 10 of 16 |
 | 🧮 Hand calculation | 15 key numbers for Design 1 (demand, users per chip, first-reply time, one site's bill, launch, outage spare) redone with plain arithmetic, without our code | All match exactly |
 | 🔍 Code review | We read the model line by line and fixed 4 bugs that made designs look better than they were | Both designs re-optimized after the fixes and still pass |
 
 **Energy per answer:** a chat reply uses about **0.055 Wh** in both designs, and a full AI-agent
-task (80 steps) about **6.7 Wh**. For comparison, Google reported 0.24 Wh for a typical
+task (80 steps) about **2.7 Wh**. For comparison, Google reported 0.24 Wh for a typical
 Gemini prompt in 2025.
 
 ## Questions a judge might ask
