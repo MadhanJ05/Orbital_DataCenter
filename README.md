@@ -175,6 +175,7 @@ python3 twin/stress.py --light --orbit-only                # Design 2 with every
 python3 twin/test_calibration.py                           # our model matches the organizers' numbers
 python3 twin/check_rules.py                                # every deck rule, both designs, PASS/FAIL
 python3 twin/handcheck.py                                  # key numbers redone by hand
+python3 twin/export_ui.py                                  # dashboard data -> designs/ui.json; then open dashboard.html (serve the folder, e.g. python3 -m http.server)
 ```
 
 Technical details, assumptions and the design file format are in [`twin/README.md`](twin/README.md).

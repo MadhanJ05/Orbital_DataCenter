@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orbital Data Center</title>
+<meta name="description" content="Dashboard over the twin's scored designs: Design 1 (Earth + orbit) vs Design 2 (all orbit), sites and planes, the 24-hour night shift, the stress ladder and joules per request, plus the agents-in-orbit case-B strand.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Mission-control console, same system as agents-in-orbit/explorer.html: verdict cards, then instruments. Reads designs/ui.json; no model logic here. */
+:root {
+  --bg: #0b0f22; --panel: #111735; --panel-2: #171e42; --line: #27305e; --line-soft: #1c244c;
+  --fg: #e4e8f6; --fg-2: #a8b0cf; --fg-3: #6f789c; --accent: #4fd6ff;
+  --earth: #2e8fe6; --orbit: #d94fc4; --strand: #3ec98c; --good: #3ec98c; --warn: #f0b429; --bad: #ff5c7a;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #f5f6fb; --panel: #ffffff; --panel-2: #eef0f8; --line: #cfd4e6; --line-soft: #e2e5f0; --fg: #141a33; --fg-2: #4a5272; --fg-3: #7d85a6;
+  --accent: #0b6fb8; --earth: #1f6fd0; --orbit: #b1309f; --strand: #178a5b; --good: #178a5b; --warn: #b07a00; --bad: #d12a4e; color-scheme: light; } }
+:root[data-theme="light"] {
+  --bg: #f5f6fb; --panel: #ffffff; --panel-2: #eef0f8; --line: #cfd4e6; --line-soft: #e2e5f0; --fg: #141a33; --fg-2: #4a5272; --fg-3: #7d85a6;
+  --accent: #0b6fb8; --earth: #1f6fd0; --orbit: #b1309f; --strand: #178a5b; --good: #178a5b; --warn: #b07a00; --bad: #d12a4e; color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.45;
+  padding-block: 20px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 18px; }
+h1, h2, h3 { margin: 0; font-family: var(--mono); font-weight: 600; text-wrap: balance; }
+h1 { font-size: 26px; letter-spacing: -0.01em; } h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+h3 { font-size: 14px; }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-3); }
+.lede { color: var(--fg-2); max-width: 72ch; margin: 0; }
+header { display: grid; gap: 6px; }
+a { color: var(--accent); }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--c, var(--line)); padding: 14px 16px; display: grid; gap: 8px; min-width: 0; }
+.card .big { font-family: var(--mono); font-size: 28px; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.card .label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); font-family: var(--mono); }
+.rows { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; font-family: var(--mono); font-size: 12px; }
+.rows .k { color: var(--fg-3); } .rows .v { text-align: right; font-variant-numeric: tabular-nums; }
+.ok { color: var(--good); } .bad { color: var(--bad); } .warn { color: var(--warn); }
+.panel { background: var(--panel); border: 1px solid var(--line); padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 5px 8px; border-bottom: 1px solid var(--line-soft); white-space: nowrap; }
+th { color: var(--fg-3); font-weight: 500; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; position: sticky; top: 0; background: var(--panel); }
+th:first-child, td:first-child { text-align: left; }
+.tablewrap { overflow: auto; max-height: 420px; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: var(--mono); font-size: 11px; fill: var(--fg-2); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--mono); font-size: 11px; color: var(--fg-2); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; background: var(--c); opacity: var(--o, 1); }
+.note { font-size: 12px; color: var(--fg-3); max-width: 100ch; }
+.note b { color: var(--fg-2); font-weight: 500; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+button.chip { font: 500 11px var(--mono); letter-spacing: 0.04em; background: transparent; color: var(--fg-2); border: 1px solid var(--line); padding: 4px 8px; cursor: pointer; }
+button.chip[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+button.chip.invalid { color: var(--fg-3); text-decoration: line-through; }
+button.chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.kv { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 10px; font-family: var(--mono); font-size: 12px; align-items: center; }
+.kv .bar { height: 10px; background: var(--c); min-width: 1px; opacity: .85; }
+.kv .k { color: var(--fg-2); white-space: nowrap; } .kv .v { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.kv .head { grid-column: 1 / -1; font-weight: 600; color: var(--fg); margin-top: 6px; }
+.tip { position: fixed; pointer-events: none; background: var(--panel-2); border: 1px solid var(--line); color: var(--fg); font: 12px var(--mono); padding: 6px 8px; display: none; z-index: 5; white-space: nowrap; }
+.err { background: var(--panel); border: 1px solid var(--bad); padding: 16px; font-family: var(--mono); font-size: 12px; }
+@media (max-width: 900px) { .cards, .two { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Sundai // MIT AI Hackathon // Track 1 // Orbital Data Center</div>
+    <h1>Orbital Data Center</h1>
+    <p class="lede">The twin's scored designs on one page. Design 1 keeps the organizers' catalog and mixes six Earth sites with eight orbital planes; Design 2 changes one assumption, the satellite's weight, and leaves Earth's grid entirely. Beside them, the agents-in-orbit strand costs its own satellite for case B. Every number here comes from <code>twin/score.py</code> or <code>agents-in-orbit/model.py</code>; this page only draws them.</p>
+  </header>
+
+  <section class="cards" id="cards"></section>
+
+  <section class="panel">
+    <h2>Where the $30B goes, 5 years</h2>
+    <div id="coststack"></div>
+    <div class="legend" id="costlegend"></div>
+    <div class="note">Design 1 and 2 from the twin's cost model; the strand's bar is its own model (per-rack satellite with sandbox, shielding, propulsion, comms, ops and NRE), so the two are shown side by side, never added.</div>
+  </section>
+
+  <section class="panel">
+    <h2>Pick a design</h2>
+    <div class="chips" id="chips"></div>
+    <div class="note" id="designnote"></div>
+  </section>
+
+  <div class="two">
+    <section class="panel">
+      <h2>Sites and planes</h2>
+      <div class="kv" id="sites"></div>
+    </section>
+    <section class="panel">
+      <h2>Joules per request, by stream</h2>
+      <div class="kv" id="joules"></div>
+      <div class="note">Facility energy per request over the 5 years (orbit counts its solar-fed IT energy). The strand's figure is per step of an 80-step task at the fleet level, idle time included, so it is comparable with agent_int and agent_bg.</div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>Pools</h2>
+    <div class="tablewrap"><table id="pools"></table></div>
+  </section>
+
+  <section class="panel">
+    <h2>24 hours: demand and the night shift</h2>
+    <div id="daychart"></div>
+    <div class="legend"><span style="--c: var(--earth)">chat demand</span><span style="--c: var(--accent)">interactive agents</span><span style="--c: var(--orbit)">background agents, demand</span><span style="--c: var(--orbit); --o: .45">background served (uses the valleys)</span><span style="--c: var(--warn)">background queue, minutes</span></div>
+    <div class="tablewrap"><table id="outages"></table></div>
+    <div class="note" id="daynote"></div>
+  </section>
+
+  <div class="two">
+    <section class="panel">
+      <h2>Stress: every assumption 25% worse</h2>
+      <div class="tablewrap"><table id="stress"></table></div>
+    </section>
+    <section class="panel">
+      <h2>Satellite ladder</h2>
+      <div class="tablewrap"><table id="ladder"></table></div>
+      <div class="note">From <code>twin/orbit_mass.py</code>: what the satellite weighs per MW as the thermal design changes, and the launch price at which orbit beats the Nordics.</div>
+    </section>
+  </div>
+
+  <section class="panel">
+    <h2>Agents in orbit: the case-B strand, its own model</h2>
+    <div class="kv" id="strand"></div>
+    <div class="note" id="strandnote"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Links</h2>
+    <div class="note">Interactive case-B twin: <a href="https://claude.ai/artifact/WEPaqypHpvX1gx5SC2y2Xn">fleet and energy explorer</a> · <a href="https://claude.ai/artifact/KfZ2oyhyrLV1Taf8KEWD4B">orbital node in 3D</a> · source: <code>agents-in-orbit/</code>. Regenerate this page's data with <code>python3 twin/export_ui.py</code>.</div>
+  </section>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmtB = x => '$' + (x / 1e9).toFixed(2) + 'B', fmtM = x => '$' + (x / 1e6).toFixed(1) + 'M';
+const fmtN = x => Math.round(x).toLocaleString('en-US'), pct = x => (x * 100).toFixed(0) + '%';
+const fmtUsers = u => u >= 1e9 ? (u / 1e9).toFixed(2) + 'B' : (u / 1e6).toFixed(0) + 'M';
+const siteColor = kind => kind === 'earth' ? 'var(--earth)' : 'var(--orbit)';
+const COST = [['chips', 'Chips'], ['context_memory', 'Context memory'], ['facility', 'Buildings'], ['energy', 'Energy'], ['carbon', 'Carbon'], ['water', 'Water'], ['space_hw', 'Satellite hardware'], ['launch', 'Launch']];
+const STREAM_LABEL = { chat: 'chat', chat_easy: 'chat (easy, gpt-oss)', agent_int: 'interactive agent', agent_int_sub: 'interactive sub-agent', agent_bg: 'background agent', agent_bg_sub: 'background sub-agent' };
+let U, current;
+
+function card(d, color) {
+  const slo = U.slo, chat = d.ttft_s.chat, ag = d.ttft_s.agent_int;
+  const latOk = (chat == null || chat <= slo.chat_ttft_s) && (ag == null || ag <= slo.agent_ttft_s);
+  const res = d.resilience, resOk = res.served_fraction >= 0.999;
+  const grid = d.earth_grid_mw, gridOk = grid <= d.earth_grid_cap_mw + 1e-6;
+  const costOk = d.cost_usd <= d.budget_usd;
+  const row = (k, v, cls) => `<span class="k">${k}</span><span class="v ${cls || ''}">${v}</span>`;
+  return `<div class="card" style="--c:${color}"><div class="label">${d.label || d.name}</div><div class="big">${fmtB(d.cost_usd)}</div>
+    <div class="rows">${row('users served', `${pct(d.served_fraction)} of ${fmtUsers(d.users_target)}`, d.valid ? 'ok' : 'bad')}
+    ${row('budget $30B', costOk ? 'fits, ' + fmtB(d.budget_usd - d.cost_usd) + ' spare' : 'over by ' + fmtB(d.cost_usd - d.budget_usd), costOk ? 'ok' : 'bad')}
+    ${row('Earth grid (500 MW)', `${grid.toFixed(0)} MW`, gridOk ? 'ok' : 'bad')}
+    ${row('launch', `${fmtN(d.space_mass_t)} t, ${fmtB(d.cost_breakdown.launch)}`, 'ok')}
+    ${row('speed (chat 0.6 s, agents 2 s)', `${chat != null ? chat.toFixed(2) : '–'} s / ${ag != null ? ag.toFixed(2) : '–'} s`, latOk ? 'ok' : 'bad')}
+    ${row('lose any one site or plane', `${pct(res.served_fraction)} served${res.worst_site ? ', worst ' + res.worst_site : ''}`, resOk ? 'ok' : 'warn')}
+    ${row('file', `designs/${d.file}`)}</div>${d.satellite ? `<div class="note">${d.satellite.kg_per_mw ? (d.satellite.kg_per_mw / 1000).toFixed(1) + ' t/MW satellite' : ''}${d.satellite.note ? ': ' + d.satellite.note : ''}</div>` : '<div class="note">organizers\' catalog satellite, 18 t/MW</div>'}</div>`;
+}
+function strandCard(s) {
+  const row = (k, v, cls) => `<span class="k">${k}</span><span class="v ${cls || ''}">${v}</span>`;
+  return `<div class="card" style="--c:var(--strand)"><div class="label">Agents in orbit: case B, all in space (own model)</div><div class="big">${fmtB(s.cost_usd)}</div>
+    <div class="rows">${row('users served', `${pct(s.served_fraction)} of ${fmtUsers(s.users_target)} (case B only)`, 'ok')}
+    ${row('budget $30B', 'fits, ' + fmtB(s.budget_usd - s.cost_usd) + ' spare', 'ok')}${row('Earth grid', '0 MW', 'ok')}
+    ${row('fleet', `${fmtN(s.racks.total)} racks in ${s.racks.nodes_of_8} nodes, ${s.leo_it_mw.toFixed(0)} MW IT`)}
+    ${row('launch', `${fmtN(s.space_mass_t)} t at 24.9 to 27.4 t per rack`)}${row('energy', `${fmtN(s.gwh_per_year)} GWh/yr at PUE ${s.pue.leo.toFixed(3)}`)}
+    ${row('eclipses', `${s.eclipse.days} days/yr, ${s.eclipse.max_min.toFixed(0)} min max, ${s.eclipse.battery_min} min battery`)}${row('file', 'agents-in-orbit/model.py')}</div>
+    <div class="note">Different satellite and cost model from the catalog: shown beside Design 1 and 2, not added to them.</div></div>`;
+}
+
+function renderCostStack() {
+  const feats = U.featured.map(n => U.designs.find(d => d.name === n)), s = U.strand;
+  const bars = feats.map(d => ({ label: d.role || d.name, parts: COST.map(([k, n]) => [n, d.cost_breakdown[k] || 0]), total: d.cost_usd, color: d.earth_grid_mw > 0 ? 'var(--earth)' : 'var(--orbit)' }));
+  if (s) bars.push({ label: 'Strand (own model, case B only)', parts: Object.entries(s.rack.parts_usd).map(([k, v]) => [k, v / Object.values(s.rack.parts_usd).reduce((a, b) => a + b, 0) * s.cost_usd]), total: s.cost_usd, color: 'var(--strand)' });
+  const W = 900, rowH = 34, H = bars.length * rowH + 24, max = Math.max(U.budget_usd, ...bars.map(b => b.total)), L = 230;
+  let svg = '';
+  bars.forEach((b, i) => {
+    let x = L; const y = i * rowH + 4;
+    svg += `<text x="${L - 8}" y="${y + 18}" text-anchor="end" fill="var(--fg)">${b.label}</text>`;
+    b.parts.forEach(([n, v], j) => { if (v <= 0) return; const w = v / max * (W - L); svg += `<rect x="${x.toFixed(1)}" y="${y}" width="${Math.max(0, w - 1.5).toFixed(1)}" height="24" fill="${b.color}" opacity="${(1 - j * 0.1).toFixed(2)}" data-tip="${b.label}: ${n} ${fmtB(v)} (${pct(v / b.total)})"></rect>`; x += w; });
+    svg += `<text x="${(x + 6).toFixed(1)}" y="${y + 17}" fill="var(--fg)">${fmtB(b.total)}</text>`;
+  });
+  const capX = L + U.budget_usd / max * (W - L);
+  $('coststack').innerHTML = `<svg viewBox="-4 0 ${W + 70} ${H}" role="img" aria-label="Five-year cost by component for each design against the $30B budget">${svg}<line x1="${capX}" x2="${capX}" y1="0" y2="${H - 20}" stroke="var(--fg)" stroke-width="2"></line><text x="${capX - 6}" y="${H - 6}" text-anchor="end" fill="var(--fg)">$30B budget</text></svg>`;
+  $('costlegend').innerHTML = COST.map(([k, n], j) => `<span style="--c:var(--fg-2);--o:${(1 - j * 0.1).toFixed(2)}">${n}</span>`).join('');
+}
+
+function select(name) {
+  current = U.designs.find(d => d.name === name);
+  for (const b of $('chips').querySelectorAll('button')) b.setAttribute('aria-pressed', b.dataset.name === name);
+  const d = current, s = d.serving;
+  $('designnote').innerHTML = `<b>${d.label || d.name}</b> · cases ${d.cases.join('+')} · ${d.valid ? '<span class="ok">valid</span>' : '<span class="bad">invalid: ' + d.errors.join('; ') + '</span>'} · serving: spec draft ${s.spec_draft}, sub-agents ${pct(s.subagent_share)}, easy chat ${pct(s.easy_chat_share)}, context memory ${s.context_memory ? 'on' : 'off'}, night shift ${s.bg_fill_valleys ? 'on' : 'off'}, resilience ${s.resilience || 'none'} · CO₂ ${fmtN(d.co2_t / 1e3)} kt over 5 yr`;
+  renderSites(d); renderJoules(d); renderPools(d); renderDay(d); renderStress(d);
+}
+function renderSites(d) {
+  const entries = Object.entries(d.sites).sort((a, b) => (a[1].kind === 'earth' ? 0 : 1) - (b[1].kind === 'earth' ? 0 : 1) || b[1].facility_mw - a[1].facility_mw);
+  const max = Math.max(...entries.map(([, s]) => s.cap_mw || s.facility_mw), 1);
+  const row = (k, v, c, text) => `<span class="k">${k}</span><span class="bar" style="--c:${c};width:${(v / max * 100).toFixed(1)}%"></span><span class="v">${text}</span>`;
+  const earth = entries.filter(([, s]) => s.kind === 'earth'), orbit = entries.filter(([, s]) => s.kind !== 'earth');
+  $('sites').innerHTML = `<span class="head">Earth: ${d.earth_grid_mw.toFixed(0)} of ${d.earth_grid_cap_mw} MW grid, ${earth.length} sites</span>` +
+    earth.map(([n, s]) => row(n.replace('_', ' '), s.facility_mw, 'var(--earth)', `${s.facility_mw.toFixed(0)} MW${s.cap_mw ? ' of ' + s.cap_mw : ''} · ${fmtN(s.racks)} racks`)).join('') +
+    `<span class="head">Orbit: ${orbit.reduce((a, [, s]) => a + s.facility_mw, 0).toFixed(0)} MW, ${orbit.length} ${orbit.length === 1 ? 'plane' : 'planes'}, ${fmtN(d.space_mass_t)} t</span>` +
+    (orbit.length ? orbit.map(([n, s]) => row(n.replace('leo_p', 'plane ').replace('leo', 'LEO'), s.facility_mw, 'var(--orbit)', `${s.facility_mw.toFixed(0)} MW · ${fmtN(s.racks)} racks`)).join('') : '<span class="k">none</span><span></span><span></span>');
+}
+function renderJoules(d) {
+  const feats = U.featured.map(n => U.designs.find(x => x.name === n));
+  const all = [...feats.flatMap(f => Object.values(f.joules_per_request)), ...(U.strand ? Object.values(U.strand.joules_per_step) : [])];
+  const max = Math.max(...all, 1);
+  const row = (k, v, c) => `<span class="k">${k}</span><span class="bar" style="--c:${c};width:${(v / max * 100).toFixed(1)}%"></span><span class="v">${v.toFixed(0)} J</span>`;
+  let html = '';
+  for (const f of feats) html += `<span class="head">${f.role}: ${f.earth_grid_mw > 0 ? 'Earth + orbit' : 'all orbit'}</span>` + Object.entries(f.joules_per_request).map(([s, v]) => row(STREAM_LABEL[s] || s, v, f.earth_grid_mw > 0 ? 'var(--earth)' : 'var(--orbit)')).join('');
+  if (U.strand) html += `<span class="head">Strand, case B all-space, per step (own model)</span>` + Object.entries(U.strand.joules_per_step).map(([s, v]) => row(STREAM_LABEL[s] || s, v, 'var(--strand)')).join('');
+  $('joules').innerHTML = html;
+}
+function renderPools(d) {
+  const rows = [...d.pools].sort((a, b) => (a.space - b.space) || a.site.localeCompare(b.site) || a.stream.localeCompare(b.stream));
+  $('pools').innerHTML = `<thead><tr><th>Pool</th><th>Stream</th><th>Phase</th><th>Site</th><th>Chip</th><th>Cooling</th><th>Racks</th><th>IT MW</th><th>PUE</th><th>Load</th><th>TTFT s</th><th>5-yr cost</th></tr></thead><tbody>` +
+    rows.map(p => `<tr><td>${p.name}</td><td>${p.stream}</td><td>${p.phase}</td><td style="color:${siteColor(p.space ? 'space' : 'earth')}">${p.site}</td><td>${p.chip}×${p.chips_per_replica}</td><td>${p.cooling || ''}</td><td>${fmtN(p.racks)}</td><td>${(p.it_mw || 0).toFixed(1)}</td><td>${p.pue ? p.pue.toFixed(2) : ''}</td><td>${p.load != null ? pct(p.load) : ''}</td><td class="${p.slo_ok ? '' : 'bad'}">${p.ttft_s != null ? p.ttft_s.toFixed(2) : ''}</td><td>${p.cost_usd != null ? fmtB(p.cost_usd) : ''}</td></tr>`).join('') + '</tbody>';
+}
+function renderDay(d) {
+  const sim = U.sim_24h, runs = sim && sim.runs[d.name];
+  const W = 900, H = 220, L = 46, R = 46, T = 12, B = 28, pw = W - L - R, ph = H - T - B;
+  const xs = h => L + h / 23 * pw;
+  const curves = sim.curves_hourly, cmax = Math.max(...Object.values(curves).flat());
+  const ys = v => T + ph - v / cmax * ph;
+  const path = (arr, f) => arr.map((v, i) => (i ? 'L' : 'M') + xs(i).toFixed(1) + ' ' + f(v).toFixed(1)).join(' ');
+  let extra = '';
+  if (runs) {
+    const normal = runs.find(r => !r.lost_site) || runs[0], hb = normal.hourly.agent_bg;
+    const dmax = Math.max(...hb.map(h => Math.max(h.live_tps + h.bg_served_tps, h.live_capacity_tps + h.bg_capacity_tps)));
+    const yd = v => T + ph - v / dmax * ph;
+    const qmax = Math.max(1, ...hb.map(h => h.bg_queue_minutes));
+    extra = `<path d="${path(hb.map(h => h.bg_served_tps), yd)}" fill="none" stroke="var(--orbit)" stroke-width="2" opacity=".45" stroke-dasharray="5 4"></path>
+      <path d="${path(hb.map(h => h.bg_queue_minutes), v => T + ph - v / qmax * ph)}" fill="none" stroke="var(--warn)" stroke-width="1.5"></path><text x="${W - R + 6}" y="${T + 10}" fill="var(--warn)">${qmax.toFixed(0)} min</text>`;
+    $('outages').innerHTML = `<thead><tr><th>Lost site or plane</th><th>Live shortfall</th><th>Background max wait</th><th>Allowance</th><th>Within 4 h deadline</th></tr></thead><tbody>` +
+      runs.map(r => `<tr><td>${r.lost_site || 'normal day'}</td><td class="${r.live_shortfall_pct > 0 ? 'bad' : 'ok'}">${r.live_shortfall_pct.toFixed(1)}%</td><td>${Object.values(r.streams).map(s => s.max_wait_min).reduce((a, b) => Math.max(a, b), 0)} min</td><td>${Object.values(r.streams)[0]?.allowance_min ?? ''} min</td><td class="${r.ok ? 'ok' : 'bad'}">${r.ok ? 'yes' : 'NO'}</td></tr>`).join('') + '</tbody>';
+    $('daynote').innerHTML = `Night shift for <b>${d.label || d.name}</b>: background agents have ${U.slo.bg_deadline_h} h to finish, so they run in the valleys of the live demand; the dashed line is background tokens served, the amber line the queue in minutes. ${runs.length - 1} outage runs below, each losing one site or plane.`;
+  } else { $('outages').innerHTML = ''; $('daynote').innerHTML = `No 24-hour simulation saved for <b>${d.name}</b> (run <code>twin/simulate.py</code>); the curves are the global demand shape.`; }
+  const hours = Array.from({ length: 24 }, (_, h) => h % 3 === 0 ? `<text x="${xs(h)}" y="${H - 10}" text-anchor="middle">${h}:00</text>` : '').join('');
+  $('daychart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Hourly demand curves and the night shift">
+    <line x1="${L}" x2="${W - R}" y1="${T + ph}" y2="${T + ph}" stroke="var(--line)"></line>
+    <path d="${path(curves.chat, ys)}" fill="none" stroke="var(--earth)" stroke-width="2"></path><path d="${path(curves.agent_int, ys)}" fill="none" stroke="var(--accent)" stroke-width="2"></path><path d="${path(curves.agent_bg, ys)}" fill="none" stroke="var(--orbit)" stroke-width="2"></path>
+    <text x="${L - 6}" y="${T + 10}" text-anchor="end">×${cmax.toFixed(1)}</text><text x="${L - 6}" y="${T + ph}" text-anchor="end">×0</text>${extra}${hours}<text x="${L + pw / 2}" y="${H}" text-anchor="middle" fill="var(--fg-3)">UTC hour · demand as a multiple of the daily mean</text></svg>`;
+}
+function renderStress(d) {
+  const key = d.stress ? d.stress.replace('.json', '') : null, rows = key && U[key];
+  if (!rows) { $('stress').innerHTML = `<tbody><tr><td>No stress ladder saved for ${d.name}</td></tr></tbody>`; return; }
+  $('stress').innerHTML = `<thead><tr><th>Scenario</th><th>As built</th><th>Cost</th><th>Served</th><th>Re-optimised</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td>${r.scenario}</td><td class="${r.asbuilt_valid ? 'ok' : 'bad'}">${r.asbuilt_valid ? 'valid' : 'fails'}</td><td>$${r.asbuilt_cost_busd.toFixed(2)}B</td><td>${pct(r.asbuilt_served)}</td><td class="${r.best_valid ? 'ok' : 'bad'}">${r.best_valid ? '$' + r.best_cost_busd.toFixed(2) + 'B' : 'no valid design'}</td></tr>`).join('') + '</tbody>';
+}
+function renderLadder() {
+  const rows = U.whatif_ladder || [];
+  $('ladder').innerHTML = `<thead><tr><th>Satellite</th><th>t/MW</th><th>Solar</th><th>Radiator</th><th>Compute</th><th>Structure</th><th>Orbit beats Nordics at</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td>${r.label}</td><td>${r.total_t.toFixed(1)}</td><td>${r.solar_t.toFixed(1)}</td><td>${r.radiator_t.toFixed(1)}</td><td>${r.compute_t.toFixed(1)}</td><td>${r.structure_t.toFixed(1)}</td><td>$${r.breakeven_nordics_usd_per_kg.toFixed(0)}/kg</td></tr>`).join('') + '</tbody>';
+}
+function renderStrand() {
+  const s = U.strand; if (!s) { $('strand').innerHTML = '<span class="k">agents-in-orbit/model.py not found</span>'; return; }
+  const parts = Object.entries(s.rack.parts_usd), max = Math.max(...parts.map(([, v]) => v));
+  const row = (k, v, text) => `<span class="k">${k}</span><span class="bar" style="--c:var(--strand);width:${(v / max * 100).toFixed(1)}%"></span><span class="v">${text}</span>`;
+  $('strand').innerHTML = `<span class="head">One background rack, 5 years: ${fmtM(s.rack.background_usd)}, ${s.rack.background_t.toFixed(1)} t (interactive rack with eclipse battery ${fmtM(s.rack.interactive_usd)}, ${s.rack.interactive_t.toFixed(1)} t)</span>` +
+    parts.map(([k, v]) => row(k, v, fmtM(v))).join('') +
+    `<span class="head">Fleet</span>` + [['racks', `${fmtN(s.racks.interactive_battery)} interactive + ${fmtN(s.racks.background)} background = ${fmtN(s.racks.total)} in ${s.racks.nodes_of_8} nodes`], ['energy', `${fmtN(s.gwh_per_year)} GWh/yr, PUE ${s.pue.leo.toFixed(4)} (battery racks ${s.pue.leo_battery.toFixed(4)}), Earth reference ${s.pue.earth_reference.toFixed(4)}`],
+      ['kJ per task', `interactive ${s.kj_per_task.agent_i.fleet.toFixed(1)} fleet-level (${s.kj_per_task.agent_i.busy.toFixed(1)} busy), background ${s.kj_per_task.agent_b.fleet.toFixed(1)} (${s.kj_per_task.agent_b.busy.toFixed(1)} busy)`],
+      ['levers', `spec ${s.levers.spec}x, sub-agents ${pct(s.levers.subagent_share)}, context memory, background at ${s.levers.background_tps.toFixed(0)} tok/s, sandboxes snapshotted, background pooled onto idle interactive racks`]]
+      .map(([k, v]) => `<span class="k">${k}</span><span></span><span class="v" style="text-align:left;white-space:normal">${v}</span>`).join('');
+  $('strandnote').textContent = s.notes;
+}
+
+const tip = $('tip');
+document.addEventListener('mousemove', ev => { const t = ev.target.closest && ev.target.closest('[data-tip]'); if (t) { tip.textContent = t.dataset.tip; tip.style.display = 'block'; tip.style.left = (ev.clientX + 12) + 'px'; tip.style.top = (ev.clientY + 12) + 'px'; } else tip.style.display = 'none'; });
+
+async function main() {
+  try {
+    const res = await fetch('designs/ui.json'); if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+    U = await res.json();
+  } catch (e) {
+    $('cards').innerHTML = `<div class="err">Could not load designs/ui.json (${e.message}). Run <b>python3 twin/export_ui.py</b> and serve this folder (for example <b>python3 -m http.server</b>), or open the published copy.</div>`; return;
+  }
+  const feats = U.featured.map(n => U.designs.find(d => d.name === n));
+  $('cards').innerHTML = feats.map(d => card(d, d.earth_grid_mw > 0 ? 'var(--earth)' : 'var(--orbit)')).join('') + (U.strand ? strandCard(U.strand) : '');
+  renderCostStack();
+  const order = [...U.designs].sort((a, b) => (b.role ? 1 : 0) - (a.role ? 1 : 0) || a.name.localeCompare(b.name));
+  $('chips').innerHTML = order.map(d => `<button class="chip${d.valid ? '' : ' invalid'}" type="button" data-name="${d.name}" aria-pressed="false" title="${d.valid ? '' : d.errors.join('; ')}">${d.role ? d.role + ' · ' : ''}${d.name}</button>`).join('');
+  $('chips').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) select(b.dataset.name); });
+  renderLadder(); renderStrand();
+  select(U.featured[0] || U.designs[0].name);
+}
+main();
+</script>
+</body>
+</html>

@@ -1,0 +1,551 @@
+<title>Agents in Orbit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: mission-control console. Verdict strip on top, control deck on the left, instruments on the right. Dark-first, mono data. */
+:root {
+  --bg: #0b0f22; --panel: #111735; --panel-2: #171e42; --line: #27305e; --line-soft: #1c244c;
+  --fg: #e4e8f6; --fg-2: #a8b0cf; --fg-3: #6f789c;
+  --accent: #4fd6ff;                 /* cyan: headings, focus */
+  --earth: #2e8fe6; --orbit: #d94fc4; /* the two series, validated for dark */
+  --good: #3ec98c; --warn: #f0b429; --bad: #ff5c7a;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #f5f6fb; --panel: #ffffff; --panel-2: #eef0f8; --line: #cfd4e6; --line-soft: #e2e5f0;
+  --fg: #141a33; --fg-2: #4a5272; --fg-3: #7d85a6; --accent: #0b6fb8;
+  --earth: #1f6fd0; --orbit: #b1309f; --good: #178a5b; --warn: #b07a00; --bad: #d12a4e; color-scheme: light; } }
+:root[data-theme="light"] {
+  --bg: #f5f6fb; --panel: #ffffff; --panel-2: #eef0f8; --line: #cfd4e6; --line-soft: #e2e5f0;
+  --fg: #141a33; --fg-2: #4a5272; --fg-3: #7d85a6; --accent: #0b6fb8;
+  --earth: #1f6fd0; --orbit: #b1309f; --good: #178a5b; --warn: #b07a00; --bad: #d12a4e; color-scheme: light; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.45;
+  padding-block: 20px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 18px; }
+h1, h2, h3 { margin: 0; font-family: var(--mono); font-weight: 600; text-wrap: balance; }
+h1 { font-size: 26px; letter-spacing: -0.01em; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-3); }
+.lede { color: var(--fg-2); max-width: 68ch; margin: 0; }
+header { display: grid; gap: 6px; }
+
+/* verdict strip */
+.verdict { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tile { background: var(--panel); border: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 6px; min-width: 0; border-top: 3px solid var(--line); }
+.tile.ok { border-top-color: var(--good); } .tile.warn { border-top-color: var(--warn); } .tile.bad { border-top-color: var(--bad); }
+.tile .label { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-3); font-family: var(--mono); }
+.tile .big { font-family: var(--mono); font-size: 28px; font-weight: 600; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile .sub { color: var(--fg-2); font-size: 12px; min-height: 1.4em; }
+.meter { height: 6px; background: var(--line-soft); position: relative; margin-top: 4px; }
+.meter > i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--earth); }
+.meter > b { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--fg-2); }
+
+/* console grid */
+.console { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 18px; align-items: start; }
+.panel { background: var(--panel); border: 1px solid var(--line); padding: 16px; display: grid; gap: 14px; min-width: 0; }
+.group { display: grid; gap: 10px; padding-top: 10px; border-top: 1px solid var(--line-soft); }
+.group:first-of-type { border-top: 0; padding-top: 0; }
+.ctl { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; }
+.ctl label { font-size: 13px; color: var(--fg-2); }
+.ctl output { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; color: var(--fg); text-align: right; }
+.ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--accent); margin: 0; }
+.ctl.orbit input[type=range] { accent-color: var(--orbit); }
+.ctl.earth input[type=range] { accent-color: var(--earth); }
+.ctl .hint { grid-column: 1 / -1; font-size: 11px; color: var(--fg-3); font-family: var(--mono); }
+.check { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--fg-2); }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+button.mini { font: 500 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; background: transparent; color: var(--accent);
+  border: 1px solid var(--line); padding: 4px 8px; cursor: pointer; }
+button.mini:hover { border-color: var(--accent); }
+button.mini:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.stack { display: grid; gap: 18px; min-width: 0; }
+table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line-soft); white-space: nowrap; }
+th { color: var(--fg-3); font-weight: 500; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+th:first-child, td:first-child { text-align: left; }
+td.site::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; vertical-align: 0; }
+td.site.e::before { background: var(--earth); } td.site.o::before { background: var(--orbit); }
+tr.total td { border-top: 1px solid var(--line); color: var(--fg); font-weight: 600; }
+.tablewrap { overflow-x: auto; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: var(--mono); font-size: 11px; fill: var(--fg-2); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-family: var(--mono); font-size: 11px; color: var(--fg-2); }
+.legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; background: var(--c); }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.note { font-size: 12px; color: var(--fg-3); max-width: 90ch; }
+.note b { color: var(--fg-2); font-weight: 500; }
+.tip { position: fixed; pointer-events: none; background: var(--panel-2); border: 1px solid var(--line); color: var(--fg); font: 12px var(--mono);
+  padding: 6px 8px; display: none; z-index: 5; white-space: nowrap; }
+.kv { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 10px; font-family: var(--mono); font-size: 12px; align-items: center; }
+.kv .bar { height: 10px; background: var(--c); min-width: 1px; }
+.kv .k { color: var(--fg-2); } .kv .v { font-variant-numeric: tabular-nums; text-align: right; }
+.kv .head { grid-column: 1 / -1; font-weight: 600; color: var(--fg); margin-top: 4px; }
+.kv .head::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; background: var(--c); }
+@media (max-width: 900px) { .console { grid-template-columns: 1fr; } .verdict { grid-template-columns: repeat(2, minmax(0, 1fr)); } .two { grid-template-columns: 1fr; } }
+@media (max-width: 460px) { .verdict { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) { .meter > i { transition: width 180ms ease-out; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Sundai // MIT AI Hackathon // Track 1 // Case B</div>
+    <h1>Agents in Orbit</h1>
+    <p class="lede">50 million agent developers in 2035, served entirely from low Earth orbit: no Earth sites, no 500 MW grid cap, sunlight for power and deep space for cooling. The 40 ms round trip sits inside the 2 s time-to-first-token, so interactive steps fly too; their racks carry a full-load eclipse battery while background racks simply pause. A digital twin of the orbital data centre: PUE built from components, eclipses from the orbit geometry, a year of diurnal demand simulated hour by hour, and the levers the slides leave open swept for the fewest joules per task. The Earth design stays in as the reference.</p>
+  </header>
+
+  <section class="verdict" id="verdict"></section>
+
+  <div class="console">
+    <aside class="panel" id="controls">
+      <h2>Control deck</h2>
+      <div class="group">
+        <div class="eyebrow">Demand and software levers</div>
+        <div class="ctl"><label for="scale">Users served</label><output id="scale_o"></output><input type="range" id="scale" min="25" max="200" step="5" value="100"></div>
+        <div class="ctl"><label for="spec">Speculative decoding, tokens per step</label><output id="spec_o"></output><input type="range" id="spec" min="1" max="3" step="0.1" value="2.5"></div>
+        <div class="ctl"><label for="multi">Steps handed to Qwen3.5-122B sub-agents (32k)</label><output id="multi_o"></output><input type="range" id="multi" min="0" max="50" step="5" value="50"></div>
+        <label class="check"><input type="checkbox" id="ctxmem" checked> Context memory: park KV while a user waits on tools</label>
+        <div class="ctl"><label for="tpsb">Background decode rate, tok/s (slides: 30)</label><output id="tpsb_o"></output><input type="range" id="tpsb" min="30" max="150" step="1" value="67">
+          <div class="hint" id="tpsb_hint"></div></div>
+        <label class="check"><input type="checkbox" id="snapshot" checked> Snapshot idle sandboxes between tool calls</label>
+        <label class="check"><input type="checkbox" id="pool" checked> Pool: queued background work runs on idle interactive racks (all-space)</label>
+        <div><button class="mini" id="optimise" type="button">Optimise joules per task</button> <button class="mini" id="slides" type="button">Slides' levers</button></div>
+      </div>
+      <div class="group">
+        <div class="eyebrow">Placement</div>
+        <label class="check"><input type="checkbox" id="allspace" checked> All in space: no Earth sites. Interactive racks get a 35 min full-load battery; background racks throttle in eclipse</label>
+        <div class="ctl orbit"><label for="orbit">Hybrid only: background capacity in orbit</label><output id="orbit_o"></output><input type="range" id="orbit" min="0" max="100" step="5" value="50">
+          <div class="hint" id="orbit_hint"></div></div>
+        <div><button class="mini" id="fitcap" type="button">Set to minimum that fits 500 MW</button></div>
+      </div>
+      <div class="group">
+        <div class="eyebrow">Earth economics</div>
+        <div class="ctl earth"><label for="mwh">Grid power, $ per MWh</label><output id="mwh_o"></output><input type="range" id="mwh" min="20" max="250" step="5" value="50"></div>
+        <div class="ctl earth"><label for="capex">Site build, $M per MW</label><output id="capex_o"></output><input type="range" id="capex" min="4" max="20" step="0.5" value="10"></div>
+      </div>
+      <div class="group">
+        <div class="eyebrow">Orbit economics</div>
+        <div class="ctl orbit"><label for="launch">Launch, $ per kg</label><output id="launch_o"></output><input type="range" id="launch" min="0" max="100" step="1" value="50"></div>
+        <div class="ctl orbit"><label for="solar">Space solar, $ per W</label><output id="solar_o"></output><input type="range" id="solar" min="0.5" max="20" step="0.5" value="10"></div>
+        <div class="ctl orbit"><label for="spare">Spare chips for radiation, no repair</label><output id="spare_o"></output><input type="range" id="spare" min="0" max="50" step="5" value="20"></div>
+        <label class="check"><input type="checkbox" id="review" checked> Complete rack: tool sandbox, shielding, housekeeping battery + eclipse throttle, deorbit propulsion, laser comms, Earth-IR radiator derate</label>
+        <div class="hint" id="review_hint" style="font-family:var(--mono);font-size:11px;color:var(--fg-3)"></div>
+      </div>
+    </aside>
+
+    <div class="stack">
+      <section class="panel">
+        <h2>Fleet</h2>
+        <div class="tablewrap"><table id="fleet"></table></div>
+        <div class="note" id="fleetnote"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Joules per task and PUE</h2>
+        <div class="tablewrap"><table id="energy"></table></div>
+        <div class="note" id="energynote"></div>
+      </section>
+
+      <section class="panel" id="yearpanel">
+        <h2>One year in orbit</h2>
+        <div id="yearchart"></div>
+        <div class="legend"><span style="--c: var(--warn)">eclipse minutes per orbit</span><span style="--c: var(--orbit)">background backlog, hours of mean demand (chosen design)</span><span style="--c: var(--earth)">interactive demand, share of peak (one day, inset)</span></div>
+        <div class="tablewrap"><table id="yeartable"></table></div>
+        <div class="note" id="yearnote"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Where the $30B goes, 5 years</h2>
+        <div id="coststack"></div>
+        <div class="legend" id="costlegend"></div>
+      </section>
+
+      <div class="two">
+        <section class="panel">
+          <h2>One 792 kW GPU rack, 5 years</h2>
+          <div class="kv" id="rackkv"></div>
+        </section>
+        <section class="panel">
+          <h2>When orbit beats Earth</h2>
+          <div id="breakeven"></div>
+          <div class="legend"><span style="--c: var(--orbit)">LEO rack at the solar price you set</span><span style="--c: var(--fg-3)">LEO rack at $2/W and $0.5/W</span><span style="--c: var(--earth)">Earth rack</span></div>
+        </section>
+      </div>
+
+      <section class="panel">
+        <h2>Assumptions</h2>
+        <div class="note">
+          <b>From the slides:</b> Kimi K3 (2.8T total, 104B active, 14 KB KV per token + 217 MB state), Qwen3.5-122B (122B/10B, 12 KB + 75 MB), 2035 GPU rack of 144 chips, 3 TB at 120 TB/s (72 usable), 792 kW, $23.8M; 256k context with 250k cached, 500 tokens out, 80 steps per task; interactive 100 tok/s, background 30 tok/s; peaks 2.0x and 1.2x the daily average.
+          <b>Assumed (replace with the starter catalog):</b> 150 PFLOPS per GPU at 50% utilisation for prefill, 4-bit weights shared by 8 chips, Earth PUE 1.15 with direct liquid cooling, orbit PUE 1.05 in a dawn-dusk sun-synchronous orbit (99% sun), arrays at 300 W/kg, two-sided radiators at 1 kW/m² and 5 kg/m² and $1,000/m², $2M bus per rack, 3 t bare rack, 1.5x structure mass factor, 10 s tool wait for background steps.
+          <b>Added after the design review (all assumed):</b> one 100 kW CPU/NVMe sandbox rack per GPU rack (1.5 t, $2M) because ~170k background tasks run tool calls against each GPU rack; 600 kg of 5 mm-Al-equivalent shielding over HBM and power electronics ($100/kg); a 30 kWh housekeeping battery (250 Wh/kg, $300/kWh) and a 0.99 capacity factor because background work pauses during the ~1% of the year in eclipse instead of flying a GPU-sized battery; 350 kg and $1M of electric propulsion per rack for drag make-up and end-of-life deorbit under the 5-year rule; 150 kg and $1.5M of laser inter-satellite and relay/gateway terminals; 14% Earth-IR derate on the Earth-facing radiator face (7% more panel area).
+          <b>All in space (assumed):</b> interactive-agent racks cannot pause, so they carry a battery for the whole rack through the longest 35 min eclipse of a 550 to 600 km dawn-dusk orbit (576 kWh, 2.3 t, 28.2 t per rack launched) instead of the 0.99 throttle; the Earth design stays in the model as the reference.
+          <b>Derived, not assumed:</b> PUE is built from components. Orbit: array regulator 98.5%, HV harness 99%, rack converter 98% (4.6% together), ammonia two-phase loop pumps at 200 kPa (0.1%), 2 kW of avionics, gyros and laser terminals per rack (0.2%): PUE 1.050, 1.054 on battery racks. Earth: UPS 96% and PDUs 98.5% (5.8%), CDU pumps and dry coolers 8%, lighting and security 1%: PUE 1.148. Eclipses come from the orbit geometry: 575 km, 97.6° inclination, 06:00 local time of the ascending node; beta angle falls to 59° in June, so eclipses up to 21 min of a 96 min orbit on 96 days a year, 4.6% of the year. Background racks are sized so the worst eclipse day still clears its work (x1.067); interactive battery = longest eclipse + 20%, 26 min. The year simulation runs hourly with a diurnal cosine demand at the slides' peak factors; idle racks draw 30% (GPU) and 50% (sandbox) of full power.
+          <b>Second pass (all assumed):</b> the same sandbox rack on Earth, plus Earth ops at 1%/yr of capex; in orbit 1.5 kg/kW of power conditioning and harness, 750 kg of pumps, fluid, cold plates and a redundant loop per rack, 50 kg of attitude control per rack, arrays sized for 85% end-of-life output, ops at 2.5%/yr of hardware capex, and $1.5B of spacecraft NRE spread over 270 racks. Joules per task = GPU-seconds (decode shared by the users one GPU serves, plus prefill) × 5.5 kW per GPU, plus the sandbox slot's share of its 100 kW rack over the task's wall time (one of ~170k slots), × the site PUE: 1.15 on Earth with direct liquid cooling, 1.05 in orbit (2.5% power conversion, 1% pumps, 1.5% avionics and comms).
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+// ---------- catalog (slides) ----------
+const MODELS = {
+  'kimi-k3':      { total: 2.8e12, active: 104e9, kv: 14e3, state: 217e6 },
+  'qwen3.5-122b': { total: 122e9,  active: 10e9,  kv: 12e3, state: 75e6 },
+};
+const GPU = { mem: 3e12, bw: 120e12, perRack: 144, rackKw: 792, rackUsd: 23.8e6, flops: 150e15, replica: 8, rackKg: 3000 };
+const BW_EFF = 0.6, MFU = 0.5, BPP = 0.5, HEAD = 0.9, CAP_MW = 500, BUDGET = 30e9, HOURS5 = 8760 * 5;
+const WORK = {
+  agent_i: { label: 'Interactive agent steps', model: 'kimi-k3', ctx: 256e3, nw: 6e3, out: 500, steps: 80, tps: 100, peak: 2.0, toolWait: 25 * 60 / 80 - 5, perDay: 12 },
+  agent_b: { label: 'Background agent steps',  model: 'kimi-k3', ctx: 256e3, nw: 6e3, out: 500, steps: 80, tps: 30,  peak: 1.2, toolWait: 10, perDay: 30 },
+};
+const BASE_USERS = 50e6;
+const EARTH = { pue: 1.15, opsFrac: 0.01 }, LEO = { pue: 1.05, sun: 0.99, solarWkg: 300, radWm2: 1000, radKgm2: 5, radUsdm2: 1000, busFactor: 1.5, busUsd: 2e6,
+  // added after the design review; all ASSUMED (same values and rationale as model.py)
+  sandboxRacks: 1.0, sandboxKw: 100, sandboxKg: 1500, sandboxUsd: 2e6,   // one CPU/NVMe rack per GPU rack hosts ~170k mostly idle microVM sandboxes
+  shieldKg: 600, shieldUsdKg: 100,                                        // 5 mm Al-equivalent over HBM stacks and power electronics only
+  battKwh: 30, battKgKwh: 4, battUsdKwh: 300,                             // housekeeping through a 35 min eclipse; GPUs pause instead
+  eclipseThrottle: 0.99,                                                  // capacity factor: background work paused in eclipse (~1% of the year)
+  propKg: 350, propUsd: 1e6,                                              // electric propulsion share: ~200 m/s over 5 yr, drag make-up + deorbit
+  commsKg: 150, commsUsd: 1.5e6,                                          // two laser ring terminals + share of a relay/gateway terminal
+  radEarthDerate: 0.14,                                                   // Earth IR + albedo on the Earth-facing radiator face
+  // second pass: masses the structure factor was carrying, costs orbit had none of (ASSUMED, same as model.py)
+  sandboxSlots: 170e3, pcduKgKw: 1.5, loopKg: 750, acsKg: 50, solarEol: 0.85, opsFrac: 0.025, nreUsd: 1.5e9, nreRacks: 270,
+  battFullMin: 35 };                                                      // first-pass guess, replaced below by the derived longest eclipse + 20%
+
+// ---------- orbit geometry and PUE from components (same as model.py; DERIVED from ASSUMED component values) ----------
+const ORBIT = { altKm: 575, incDeg: 97.6, rEarth: 6371, mu: 3.986e14 };
+const betaDeg = day => { const d = 23.44 * Math.sin(2 * Math.PI * (day - 81) / 365.25), x = ORBIT.incDeg + d; return x > 90 ? 180 - x : x; };
+function eclipseFraction(beta) { const R = ORBIT.rEarth, h = ORBIT.altKm, c = Math.cos(beta * Math.PI / 180); if (c <= 0) return 0; const x = Math.sqrt(h * h + 2 * R * h) / ((R + h) * c); return x >= 1 ? 0 : Math.acos(x) / Math.PI; }
+const ECL = (() => { const perDay = Array.from({ length: 365 }, (_, d) => eclipseFraction(betaDeg(d))); const period = 2 * Math.PI * Math.sqrt(Math.pow((ORBIT.rEarth + ORBIT.altKm) * 1e3, 3) / ORBIT.mu) / 60;
+  const maxFrac = Math.max(...perDay); return { perDay, period, maxFrac, frac: perDay.reduce((a, b) => a + b, 0) / 365, maxMin: maxFrac * period, days: perDay.filter(f => f > 0).length }; })();
+LEO.eclipseThrottle = Math.min(1, (1 - ECL.maxFrac) * WORK.agent_b.peak);   // DERIVED: worst eclipse day must still clear its work
+LEO.battFullMin = Math.ceil(ECL.maxMin * 1.2);                              // DERIVED: longest eclipse + 20%
+const PUE_LEO = { mppt: 0.985, harness: 0.99, pdu: 0.98, loopDpKpa: 200, hfg: 1050, rho: 600, pumpEff: 0.4, housekeepingKw: 2.0, battRt: 0.92 };
+const PUE_EARTH = { ups: 0.96, pdu: 0.985, cooling: 0.08, misc: 0.01 };
+function leoPue(battery) { const c = PUE_LEO, it = GPU.rackKw + LEO.sandboxRacks * LEO.sandboxKw, conv = 1 / (c.mppt * c.harness * c.pdu) - 1;
+  const pump = it * (1 + conv) / c.hfg * c.loopDpKpa / c.rho / c.pumpEff;
+  const parts = { conversion: conv, pumps: pump / it, housekeeping: c.housekeepingKw / it, battery: battery ? ECL.frac * (1 / c.battRt - 1) : 0 };
+  return { pue: 1 + Object.values(parts).reduce((a, b) => a + b, 0), parts }; }
+function earthPue() { const c = PUE_EARTH, parts = { conversion: 1 / (c.ups * c.pdu) - 1, cooling: c.cooling, misc: c.misc }; return { pue: 1 + Object.values(parts).reduce((a, b) => a + b, 0), parts }; }
+LEO.pueAssumed = LEO.pue; EARTH.pueAssumed = EARTH.pue; LEO.pue = leoPue(false).pue; EARTH.pue = earthPue().pue;
+
+// ---------- model ----------
+function usersPerGpu(w, lv) {
+  const m = MODELS[w.model], kvUser = w.ctx * m.kv + m.state, wShare = m.total * BPP / GPU.replica;
+  const step = lv.spec / w.tps;
+  const bwUsers = (GPU.bw * BW_EFF * step - wShare) / kvUser;
+  const decTime = w.out / w.tps;
+  const duty = (lv.ctxmem || w.toolWait === 0) ? 1 : decTime / (decTime + w.toolWait);
+  const memUsers = (GPU.mem * HEAD - wShare) / kvUser * duty;
+  return Math.max(0, Math.min(bwUsers, memUsers));
+}
+const prefillTps = w => GPU.flops * MFU / (2 * MODELS[w.model].active);
+const applyTps = (w, lv) => (w === WORK.agent_b && lv.tpsB) ? { ...w, tps: lv.tpsB } : w;   // background decode rate is a design variable
+function tpsBalance(lv, w) {   // decode rate where the bandwidth-bound and memory-bound user counts meet: BW_eff x spec / (0.9 x HBM) to first order
+  const m = MODELS[w.model], kvUser = w.ctx * m.kv + m.state, wShare = m.total * BPP / GPU.replica, memUsers = (GPU.mem * HEAD - wShare) / kvUser;
+  return GPU.bw * BW_EFF * lv.spec / (memUsers * kvUser + wShare);
+}
+function sizeWorkload(users, w, lv) {
+  w = applyTps(w, lv);
+  const peakOut = users * w.perDay * w.steps * w.out / 86400 * w.peak;
+  const peakIn = users * w.perDay * w.steps * w.nw / 86400 * w.peak;
+  const variants = lv.multi > 0 ? [[w, 1 - lv.multi], [{ ...w, model: 'qwen3.5-122b', ctx: 32e3 }, lv.multi]] : [[w, 1]];
+  let dec = 0, pre = 0;
+  for (const [v, share] of variants) { dec += peakOut * share / (usersPerGpu(v, lv) * v.tps); pre += peakIn * share / prefillTps(v); }
+  return { peakOut, peakIn, dec, pre, gpus: dec + pre };
+}
+function earthRack(ec) {
+  // ec.review adds the same tool-sandbox rack the orbital rack carries (background agents need it on either site) and ops
+  const itKw = GPU.rackKw + (ec.review ? LEO.sandboxRacks * LEO.sandboxKw : 0), kw = itKw * (ec.review ? EARTH.pue : EARTH.pueAssumed);
+  const parts = { chips: GPU.rackUsd, building: kw / 1000 * ec.capex, energy: kw / 1000 * HOURS5 * ec.mwh };
+  if (ec.review) { parts.sandbox = LEO.sandboxRacks * LEO.sandboxUsd; parts.ops = (parts.chips + parts.sandbox + parts.building) * EARTH.opsFrac * 5; }
+  return { total: Object.values(parts).reduce((a, b) => a + b, 0), parts, gridKw: kw };
+}
+function leoRack(oc, eclipse = 'throttle') {
+  // oc.review = false reproduces the bare first-pass rack (15 t, $42.8M at $200/kg and $10/W); true adds the design-review items
+  // eclipse = 'battery': the whole rack rides through the longest eclipse on a battery (for work that cannot be paused), no throttle
+  const c = oc.review, batt = eclipse === 'battery';
+  const itW = GPU.rackKw * 1000 + (c ? LEO.sandboxRacks * LEO.sandboxKw * 1000 : 0);
+  const w = c ? itW * LEO.pue : itW * LEO.pueAssumed / LEO.sun;       // complete: derived PUE, eclipse handled by the throttle; bare: first-pass 1.05 and /0.99
+  const arrayW = c ? w / LEO.solarEol : w;                            // ...but the array is sized for end of life
+  const radM2 = w / (LEO.radWm2 * (c ? 1 - LEO.radEarthDerate / 2 : 1));
+  const kg = { rack: GPU.rackKg, solar: arrayW / LEO.solarWkg, radiator: radM2 * LEO.radKgm2 };
+  const parts = { chips: GPU.rackUsd * (1 + oc.spare), solar: arrayW * oc.solar, radiator: radM2 * LEO.radUsdm2, bus: LEO.busUsd };
+  if (c) {
+    const battKwh = LEO.battKwh + (batt ? w / 1000 * LEO.battFullMin / 60 : 0);
+    Object.assign(kg, { sandbox: LEO.sandboxRacks * LEO.sandboxKg, shield: LEO.shieldKg, battery: battKwh * LEO.battKgKwh, propulsion: LEO.propKg, comms: LEO.commsKg,
+      pcdu: w / 1000 * LEO.pcduKgKw, loop: LEO.loopKg, acs: LEO.acsKg });
+    Object.assign(parts, { sandbox: LEO.sandboxRacks * LEO.sandboxUsd, shield: LEO.shieldKg * LEO.shieldUsdKg, battery: battKwh * LEO.battUsdKwh, propulsion: LEO.propUsd, comms: LEO.commsUsd });
+  }
+  const mass = Object.values(kg).reduce((a, b) => a + b, 0) * LEO.busFactor;
+  if (c) { parts.ops = Object.values(parts).reduce((a, b) => a + b, 0) * LEO.opsFrac * 5; parts.nre = LEO.nreUsd / LEO.nreRacks; }
+  parts.launch = mass * oc.launch;
+  const total = Object.values(parts).reduce((a, b) => a + b, 0), throttle = (c && !batt) ? LEO.eclipseThrottle : 1;
+  return { total, parts, kg, mass, solarW: w, arrayW, radM2, throttle, perDelivered: total / throttle };
+}
+function energyPerTask(w, lv) {
+  // GPU-seconds per task (decode shared by the users one GPU serves, plus prefill) x per-GPU power, plus the sandbox slot's share of its rack
+  w = applyTps(w, lv);
+  const gpuKw = GPU.rackKw / GPU.perRack;
+  const variants = lv.multi > 0 ? [[w, 1 - lv.multi], [{ ...w, model: 'qwen3.5-122b', ctx: 32e3 }, lv.multi]] : [[w, 1]];
+  let gpuS = 0;
+  for (const [v, share] of variants) gpuS += share * (w.steps * v.out / v.tps / usersPerGpu(v, lv) + w.steps * v.nw / prefillTps(v));
+  const wallS = w.steps * (w.out / w.tps + w.toolWait);
+  const resident = lv.snapshot && w.toolWait ? w.toolWait / (w.toolWait + w.out / w.tps) : 1;   // snapshotting: a slot is resident only while its tool runs
+  const sandboxKj = lv.review ? LEO.sandboxKw / LEO.sandboxSlots * wallS * resident : 0;
+  const itKj = gpuKw * gpuS + sandboxKj;
+  const pueE = lv.review ? EARTH.pue : EARTH.pueAssumed, pueL = lv.review ? LEO.pue : LEO.pueAssumed;
+  return { gpuS, sandboxKj, itKj, earthKj: itKj * pueE, leoKj: itKj * pueL, wallS };
+}
+// ---------- one year in orbit (same as model.py simulate_year): eclipse seasons, diurnal demand, deferral and pooling ----------
+function simulateYear(d, margin, pooled, stepMin) {
+  const racks = { i: d.si.gpus / GPU.perRack, b: d.sb.gpus / GPU.perRack * margin }, gs = { i: d.ei.gpuS, b: d.eb.gpuS }, peak = { i: WORK.agent_i.peak, b: WORK.agent_b.peak };
+  const itKw = GPU.rackKw + LEO.sandboxRacks * LEO.sandboxKw, idleKw = GPU.rackKw * 0.3 + LEO.sandboxRacks * LEO.sandboxKw * 0.5, pue = { i: leoPue(true).pue, b: leoPue(false).pue };
+  const dtH = stepMin / 60, dtS = stepMin * 60, steps = Math.round(365 * 24 / dtH);
+  const tasksDay = { i: d.users * WORK.agent_i.perDay, b: d.users * WORK.agent_b.perDay }, cap = { i: racks.i * GPU.perRack * dtS, b: racks.b * GPU.perRack * dtS };
+  const e = { i: 0, b: 0 }, done = { i: 0, b: 0 }, backlog = new Array(365).fill(0);
+  let queue = 0, maxQ = 0, spill = 0, gsB = 0, gsI = 0;
+  for (let k = 0; k < steps; k++) {
+    const tH = k * dtH, day = Math.floor(tH / 24) % 365, hour = tH % 24, f = ECL.perDay[day];
+    const prof = n => 1 + (peak[n] - 1) * Math.cos(2 * Math.PI * (hour - 14) / 24);
+    const demI = tasksDay.i / 24 * prof('i') * dtH * gs.i, demB = tasksDay.b / 24 * prof('b') * dtH * gs.b;
+    const doneI = Math.min(demI, cap.i), spareI = cap.i - doneI;
+    const availB = cap.b * (1 - f), want = queue + demB, onB = Math.min(want, availB), onI = pooled ? Math.min(want - onB, spareI) : 0;
+    queue = want - onB - onI; maxQ = Math.max(maxQ, queue); backlog[day] = Math.max(backlog[day], queue); spill += onI; gsB += onB; gsI += doneI + onI;
+    const uI = (doneI + onI) / cap.i, uB = onB / cap.b;
+    const eI = racks.i * (uI * itKw + (1 - uI) * idleKw) * pue.i * dtH, eB = racks.b * (uB * itKw + Math.max(0, 1 - f - uB) * idleKw) * pue.b * dtH;
+    const shareB = doneI + onI > 0 ? onI / (doneI + onI) : 0;
+    e.i += eI * (1 - shareB); e.b += eB + eI * shareB; done.i += doneI / gs.i; done.b += (onB + onI) / gs.b;
+  }
+  const meanBh = tasksDay.b / 24 * gs.b;
+  return { gwh: (e.i + e.b) / 1e6, kj: { i: e.i * 3600 / done.i, b: e.b * 3600 / done.b }, racks, maxQueueH: maxQ / meanBh, backlogH: backlog.map(q => q / meanBh),
+    pooledShare: spill / (tasksDay.b * 365 * gs.b), util: { i: gsI / (cap.i * steps), b: gsB / (cap.b * steps) }, battCycles: ECL.frac * 8760 * 60 / LEO.battFullMin };
+}
+function sizeBackgroundBySim(d, pooled) {   // smallest background-rack margin whose worst backlog stays under 3 h of mean demand
+  let lo = 0.2, hi = 1.3;
+  for (let i = 0; i < 12; i++) { const mid = (lo + hi) / 2; if (simulateYear(d, mid, pooled, 60).maxQueueH <= 3) hi = mid; else lo = mid; }
+  return hi;
+}
+function design(p) {
+  const users = BASE_USERS * p.scale, lv = p;
+  const si = sizeWorkload(users, WORK.agent_i, lv), sb = sizeWorkload(users, WORK.agent_b, lv);
+  const toMw = g => g / GPU.perRack * GPU.rackKw / 1000;
+  const orbit = p.allspace ? 1 : p.orbit;
+  const ei = energyPerTask(WORK.agent_i, p), eb = energyPerTask(WORK.agent_b, p);
+  const pueE = p.review ? EARTH.pue : EARTH.pueAssumed;
+  // all-space: the year simulation sizes the background racks (pooled onto idle interactive racks, or with the worst-day eclipse margin)
+  let year = null, bMargin = 1 / (p.review ? LEO.eclipseThrottle : 1);
+  if (p.allspace) { const base = { si, sb, ei, eb, users }; if (p.pool) bMargin = sizeBackgroundBySim(base, true); year = simulateYear(base, bMargin, p.pool, 30); }
+  const rows = [
+    { name: WORK.agent_i.label, site: p.allspace ? 'o' : 'e', gpus: si.gpus, dec: si.dec, pre: si.pre },
+    { name: WORK.agent_b.label, site: 'e', gpus: sb.gpus * (1 - orbit), dec: sb.dec * (1 - orbit), pre: sb.pre * (1 - orbit) },
+    { name: WORK.agent_b.label, site: 'o', gpus: sb.gpus * orbit, dec: sb.dec * orbit, pre: sb.pre * orbit },
+  ];
+  const earthIt = p.allspace ? 0 : toMw(rows[0].gpus + rows[1].gpus), leoIt = toMw(rows[2].gpus) + (p.allspace ? toMw(si.gpus) : 0);
+  const er = earthRack(p), lr = leoRack(p), lrb = leoRack(p, 'battery');     // lrb: battery-backed rack for interactive work in the all-space design
+  const earthRacks = p.allspace ? 0 : (rows[0].gpus + rows[1].gpus) / GPU.perRack;
+  const leoRacksThr = p.allspace ? rows[2].gpus / GPU.perRack * bMargin : rows[2].gpus / GPU.perRack / lr.throttle;   // racks launched: eclipse margin or pooled sizing
+  const leoRacksBatt = p.allspace ? si.gpus / GPU.perRack : 0;
+  const leoRacks = leoRacksThr + leoRacksBatt;
+  const sum = (parts, n, keys) => n * keys.reduce((a, k) => a + (parts[k] || 0), 0);
+  const both = keys => sum(lr.parts, leoRacksThr, keys) + sum(lrb.parts, leoRacksBatt, keys);
+  const lp = lr.parts;
+  const cost = { earthChips: earthRacks * er.parts.chips, earthBuilding: earthRacks * er.parts.building, earthEnergy: earthRacks * er.parts.energy,
+    leoChips: both(['chips', 'sandbox']), leoPower: both(['solar', 'radiator', 'bus', 'shield', 'battery', 'propulsion', 'comms']), leoLaunch: both(['launch']) };
+  if (p.review) { cost.earthOps = earthRacks * er.parts.ops; cost.leoOps = both(['ops', 'nre']); cost.earthChips += earthRacks * er.parts.sandbox; }
+  const leoMass = leoRacksThr * lr.mass + leoRacksBatt * lrb.mass, leoArrayW = leoRacks * lr.arrayW;
+  const total = Object.values(cost).reduce((a, b) => a + b, 0);
+  const sbx = p.review ? LEO.sandboxRacks * LEO.sandboxKw / GPU.rackKw : 0;   // every Earth rack here serves agents, so each carries a sandbox rack
+  const grid = earthIt * (1 + sbx) * pueE;
+  const minOrbit = Math.max(0, Math.min(1, 1 - (CAP_MW / pueE / (1 + sbx) - toMw(si.gpus)) / toMw(sb.gpus)));
+  const earthOnlyGrid = toMw(si.gpus + sb.gpus) * (1 + sbx) * pueE, earthOnlyCost = (si.gpus + sb.gpus) / GPU.perRack * er.total;
+  const gwhBusy = (users * WORK.agent_i.perDay * (p.allspace ? ei.leoKj : ei.earthKj) + users * WORK.agent_b.perDay * ((1 - orbit) * eb.earthKj + orbit * eb.leoKj)) * 365 / 3.6e9;
+  const gwh = year ? year.gwh : gwhBusy;
+  const gwhEarth = (users * WORK.agent_i.perDay * ei.earthKj + users * WORK.agent_b.perDay * eb.earthKj) * 365 / 3.6e9;
+  return { users, rows, earthIt, leoIt, grid, earthRacks, leoRacks, leoRacksBatt, leoMass, leoArrayW, cost, total, er, lr, lrb, si, sb, minOrbit, earthOnlyGrid, earthOnlyCost, ei, eb, gwh, gwhBusy, gwhEarth, sbx, year, bMargin, pueE,
+    feasible: grid <= CAP_MW + 1e-9 && total <= BUDGET + 1e-9 };
+}
+function maxServed(p) {           // largest user share under both caps at this placement (bisection; monotonic in users)
+  let lo = 0, hi = 4;
+  for (let i = 0; i < 40; i++) { const mid = (lo + hi) / 2; if (design({ ...p, scale: mid }).feasible) lo = mid; else hi = mid; }
+  return lo;
+}
+
+// ---------- controls ----------
+const LAUNCH_MIN = 20, LAUNCH_MAX = 2000;
+const launchFromSlider = v => Math.round(LAUNCH_MIN * Math.pow(LAUNCH_MAX / LAUNCH_MIN, v / 100));
+const sliderFromLaunch = usd => 100 * Math.log(usd / LAUNCH_MIN) / Math.log(LAUNCH_MAX / LAUNCH_MIN);
+const $ = id => document.getElementById(id);
+const ids = ['scale', 'spec', 'multi', 'tpsb', 'orbit', 'mwh', 'capex', 'launch', 'solar', 'spare'];
+const checks = ['ctxmem', 'review', 'allspace', 'snapshot', 'pool'];
+$('launch').value = sliderFromLaunch(200).toFixed(0);
+function params() {
+  return { scale: +$('scale').value / 100, spec: +$('spec').value, multi: +$('multi').value / 100, ctxmem: $('ctxmem').checked,
+    orbit: +$('orbit').value / 100, mwh: +$('mwh').value, capex: +$('capex').value * 1e6,
+    launch: launchFromSlider(+$('launch').value), solar: +$('solar').value, spare: +$('spare').value / 100, review: $('review').checked, allspace: $('allspace').checked,
+    tpsB: +$('tpsb').value, snapshot: $('snapshot').checked, pool: $('pool').checked };
+}
+const fmtM = x => '$' + (x / 1e6).toFixed(1) + 'M', fmtB = x => '$' + (x / 1e9).toFixed(1) + 'B';
+const fmtN = x => Math.round(x).toLocaleString('en-US'), pct = x => (x * 100).toFixed(0) + '%';
+function showOutputs(p) {
+  $('scale_o').textContent = `${pct(p.scale)} = ${(BASE_USERS * p.scale / 1e6).toFixed(1)}M`;
+  $('spec_o').textContent = p.spec.toFixed(1) + 'x'; $('multi_o').textContent = pct(p.multi); $('orbit_o').textContent = pct(p.orbit); $('tpsb_o').textContent = p.tpsB + ' tok/s';
+  const tb = tpsBalance(p, WORK.agent_b);
+  $('tpsb_hint').textContent = `memory-bound below ${tb.toFixed(0)} tok/s (every slower token wastes GPU-seconds), bandwidth-bound above; a task takes ${(energyPerTask(WORK.agent_b, p).wallS / 60).toFixed(0)} min`;
+  $('mwh_o').textContent = '$' + p.mwh; $('capex_o').textContent = '$' + (p.capex / 1e6).toFixed(1) + 'M';
+  $('launch_o').textContent = '$' + p.launch; $('solar_o').textContent = '$' + p.solar.toFixed(1); $('spare_o').textContent = pct(p.spare);
+}
+
+// ---------- rendering ----------
+function tile(cls, label, big, sub, meter) {
+  return `<div class="tile ${cls}"><div class="label">${label}</div><div class="big">${big}</div><div class="sub">${sub}</div>${meter || ''}</div>`;
+}
+function meter(frac, color) { return `<div class="meter"><i style="width:${Math.min(100, frac * 100).toFixed(1)}%;background:${color}"></i><b style="left:${Math.min(100, 100 / Math.max(1, frac)).toFixed(1)}%"></b></div>`; }
+function render() {
+  const p = params(); showOutputs(p);
+  const d = design(p);
+  const served = d.feasible ? p.scale : maxServed(p);
+  const gridCls = d.grid > CAP_MW ? 'bad' : d.grid > CAP_MW * 0.9 ? 'warn' : 'ok';
+  const costCls = d.total > BUDGET ? 'bad' : d.total > BUDGET * 0.9 ? 'warn' : 'ok';
+  const vsEarth = d.total - d.earthOnlyCost;
+  $('verdict').innerHTML =
+    tile(d.feasible ? 'ok' : 'bad', 'Users served', pct(Math.min(served, p.scale)) + ' of target', d.feasible ? `${(d.users / 1e6).toFixed(1)}M developers, all 42 tasks a day` : `fits only ${(BASE_USERS * served / 1e6).toFixed(1)}M of ${(d.users / 1e6).toFixed(1)}M at this placement`) +
+    (p.allspace ? tile('ok', 'Earth grid draw', '0 MW', `no Earth sites · the Earth design would draw ${d.earthOnlyGrid.toFixed(0)} MW${d.earthOnlyGrid > CAP_MW ? ', over the cap' : ''}`, meter(0, 'var(--earth)'))
+      : tile(gridCls, 'Earth grid draw', `${d.grid.toFixed(0)} MW`, `cap 500 MW · ${(d.earthIt * (1 + d.sbx)).toFixed(0)} MW of IT${d.sbx ? ' incl. sandbox' : ''}, PUE ${d.pueE.toFixed(3)}`, meter(d.grid / CAP_MW, 'var(--earth)'))) +
+    tile(costCls, '5-year cost', fmtB(d.total), `budget $30B · ${vsEarth >= 0 ? '+' : '−'}${fmtB(Math.abs(vsEarth))} vs all on Earth (${d.earthOnlyGrid.toFixed(0)} MW grid${d.earthOnlyGrid > CAP_MW ? ', over cap' : ''})`, meter(d.total / BUDGET, 'var(--accent)')) +
+    tile(d.leoIt > 0 ? 'ok' : '', 'In orbit', `${d.leoIt.toFixed(0)} MW`, `${fmtN(d.leoRacks)} racks${d.leoRacksBatt ? ` (${fmtN(d.leoRacksBatt)} battery-backed)` : ''} in ${Math.ceil(d.leoRacks / 8)} nodes of 8 · ${(d.leoMass / 1e6).toFixed(1)} kt, ${Math.ceil(d.leoMass / 1e5)} launches of 100 t · ${(d.leoArrayW / 1e9).toFixed(2)} GW of arrays`);
+  $('orbit').disabled = p.allspace;
+
+  $('review_hint').textContent = p.review
+    ? `LEO rack ${fmtM(d.lr.total)}, ${(d.lr.mass / 1000).toFixed(1)} t, ${(d.lr.solarW / 1e3).toFixed(0)} kW electrical; capacity x${d.lr.throttle} in eclipse -> ${fmtM(d.lr.perDelivered)} per delivered rack; battery-backed interactive rack ${fmtM(d.lrb.total)}, ${(d.lrb.mass / 1000).toFixed(1)} t`
+    : `bare first-pass racks: LEO ${fmtM(d.lr.total)}, ${(d.lr.mass / 1000).toFixed(1)} t; Earth ${fmtM(d.er.total)} without its sandbox rack or ops; PUE at the assumed 1.05 / 1.15`;
+  $('orbit_hint').textContent = p.allspace ? 'all in space: everything is in orbit, the slider is for the hybrid reference design' : d.minOrbit > 0 ? `at least ${pct(d.minOrbit)} of background capacity must leave Earth to fit 500 MW` : 'Earth alone fits under 500 MW at these levers';
+
+  // fleet table
+  const toMw = g => g / GPU.perRack * GPU.rackKw / 1000;
+  const rowHtml = r => `<tr><td>${r.name}</td><td class="site ${r.site}">${r.site === 'e' ? 'Earth' : 'LEO'}</td><td>${fmtN(r.dec)}</td><td>${fmtN(r.pre)}</td><td>${fmtN(r.gpus / GPU.perRack)}</td><td>${toMw(r.gpus).toFixed(0)}</td></tr>`;
+  const all = d.rows.reduce((a, r) => ({ dec: a.dec + r.dec, pre: a.pre + r.pre, gpus: a.gpus + r.gpus }), { dec: 0, pre: 0, gpus: 0 });
+  $('fleet').innerHTML = `<thead><tr><th>Workload</th><th>Site</th><th>Decode GPUs</th><th>Prefill GPUs</th><th>Racks</th><th>IT MW</th></tr></thead><tbody>` +
+    d.rows.filter(r => r.gpus > 0).map(rowHtml).join('') +
+    `<tr class="total"><td>Total</td><td></td><td>${fmtN(all.dec)}</td><td>${fmtN(all.pre)}</td><td>${fmtN(all.gpus / GPU.perRack)}</td><td>${toMw(all.gpus).toFixed(0)}</td></tr></tbody>`;
+  const ui = usersPerGpu(WORK.agent_i, p), ub = usersPerGpu(WORK.agent_b, p);
+  $('fleetnote').innerHTML = `Peak demand: <b>${(d.si.peakOut / 1e6).toFixed(0)}M tok/s</b> interactive and <b>${(d.sb.peakOut / 1e6).toFixed(0)}M tok/s</b> background decode, plus <b>${((d.si.peakIn + d.sb.peakIn) / 1e9).toFixed(1)}B tok/s</b> of uncached prefill. One GPU decodes for <b>${ui.toFixed(0)}</b> interactive or <b>${ub.toFixed(0)}</b> background Kimi K3 users at once; each user's KV cache is 3.8 GB.`;
+
+  renderEnergy(p, d); renderCostStack(d); renderRack(d); renderBreakeven(p, d);
+}
+function renderEnergy(p, d) {
+  const naive = { ...p, spec: 1, multi: 0, ctxmem: false };
+  const rows = [['Interactive agent task, 80 steps', d.ei, energyPerTask(WORK.agent_i, naive), d.year && d.year.kj.i], ['Background agent task, 80 steps', d.eb, energyPerTask(WORK.agent_b, naive), d.year && d.year.kj.b]];
+  const pueL = p.review ? LEO.pue : LEO.pueAssumed;
+  $('energy').innerHTML = `<thead><tr><th>Task</th><th>GPU-s</th><th>Sandbox kJ</th><th>IT kJ</th><th>Earth kJ (PUE ${d.pueE.toFixed(3)})</th><th>LEO kJ (PUE ${pueL.toFixed(3)})</th><th>Fleet kJ incl. idle (year sim)</th><th>No levers, Earth kJ</th></tr></thead><tbody>` +
+    rows.map(([n, e, e0, fy]) => `<tr><td>${n}</td><td>${e.gpuS.toFixed(2)}</td><td>${e.sandboxKj.toFixed(2)}</td><td>${e.itKj.toFixed(1)}</td><td class="site e">${e.earthKj.toFixed(1)}</td><td class="site o">${e.leoKj.toFixed(1)}</td><td>${fy ? fy.toFixed(1) : '—'}</td><td>${e0.earthKj.toFixed(1)}</td></tr>`).join('') + '</tbody>';
+  const perTaskWh = (d.gwh * 3.6e9 / 365) / (d.users * (WORK.agent_i.perDay + WORK.agent_b.perDay)) / 3.6;
+  const lp = leoPue(false).parts, ep = earthPue().parts;
+  $('energynote').innerHTML = `Fleet energy at this placement: <b>${fmtN(d.gwh)} GWh/yr</b> for ${(d.users / 1e6).toFixed(0)}M developers${d.year ? ' (year simulation, idle time included)' : ''}, ${fmtN(d.gwhEarth)} GWh/yr busy-only if all on Earth. Average <b>${perTaskWh.toFixed(1)} Wh per task</b>. The software levers cut GPU-seconds per background task <b>${(rows[1][2].gpuS / d.eb.gpuS).toFixed(1)}x</b>; PUE moves the bill ${((EARTH.pue - LEO.pue) / EARTH.pue * 100).toFixed(0)}%. PUE from components: orbit <b>${LEO.pue.toFixed(3)}</b> = conversion ${(lp.conversion * 100).toFixed(1)}% + pumps ${(lp.pumps * 100).toFixed(2)}% + housekeeping ${(lp.housekeeping * 100).toFixed(2)}%; Earth <b>${EARTH.pue.toFixed(3)}</b> = conversion ${(ep.conversion * 100).toFixed(1)}% + cooling ${(ep.cooling * 100).toFixed(0)}% + misc ${(ep.misc * 100).toFixed(0)}%.`;
+  renderYear(p, d);
+}
+function renderYear(p, d) {
+  const panel = $('yearpanel');
+  if (!d.year) { panel.hidden = true; return; }
+  panel.hidden = false;
+  const base = { si: d.si, sb: d.sb, ei: d.ei, eb: d.eb, users: d.users };
+  const designs = [['peak-sized, no eclipse margin, no pooling', simulateYear(base, 1, false, 60), false],
+    [`background racks ×${(1 / LEO.eclipseThrottle).toFixed(3)} (worst eclipse day clears its work), no pooling`, simulateYear(base, 1 / LEO.eclipseThrottle, false, 60), !p.pool],
+    [`pooled onto idle interactive racks, background racks ×${d.bMargin.toFixed(2)}`, p.pool ? d.year : simulateYear(base, sizeBackgroundBySim(base, true), true, 60), p.pool]];
+  $('yeartable').innerHTML = `<thead><tr><th>Design</th><th>Racks</th><th>GWh/yr</th><th>Int kJ</th><th>Bg kJ</th><th>Util int</th><th>Util bg</th><th>Worst backlog</th><th>Bg on int racks</th></tr></thead><tbody>` +
+    designs.map(([n, y, chosen]) => `<tr${chosen ? ' class="total"' : ''}><td>${n}${chosen ? ' ← chosen' : ''}</td><td>${fmtN(y.racks.i + y.racks.b)}</td><td>${fmtN(y.gwh)}</td><td>${y.kj.i.toFixed(1)}</td><td>${y.kj.b.toFixed(1)}</td><td>${pct(y.util.i)}</td><td>${pct(y.util.b)}</td><td>${y.maxQueueH < 48 ? y.maxQueueH.toFixed(1) + ' h' : (y.maxQueueH / 24).toFixed(0) + ' days'}</td><td>${pct(y.pooledShare)}</td></tr>`).join('') + '</tbody>';
+  // chart: eclipse minutes per orbit and the chosen design's backlog over the year; inset: one day of interactive demand
+  const W = 900, H = 170, L = 40, R = 40, T = 12, B = 26, pw = W - L - R, ph = H - T - B, y = designs.find(x => x[2])[1];
+  const xs = dday => L + dday / 364 * pw;
+  const ecl = ECL.perDay.map(f => f * ECL.period), eMax = Math.max(1, ...ecl), qMax = Math.max(1, ...y.backlogH);
+  const path = (arr, max) => arr.map((v, i) => (i ? 'L' : 'M') + xs(i).toFixed(1) + ' ' + (T + ph - v / max * ph).toFixed(1)).join(' ');
+  const months = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'].map((m, i) => `<text x="${xs(i * 30.4 + 15)}" y="${H - 8}" text-anchor="middle">${m}</text>`).join('');
+  const inset = Array.from({ length: 25 }, (_, h) => { const v = (1 + Math.cos(2 * Math.PI * (h - 14) / 24)) / 2; return (h ? 'L' : 'M') + (L + 8 + h / 24 * 110).toFixed(1) + ' ' + (T + 4 + 44 - v * 40).toFixed(1); }).join(' ');
+  $('yearchart').innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Eclipse minutes per orbit and background backlog through one year">
+    <line x1="${L}" x2="${W - R}" y1="${T + ph}" y2="${T + ph}" stroke="var(--line)"></line>
+    <path d="${path(ecl, eMax)}" fill="none" stroke="var(--warn)" stroke-width="2"></path><text x="${L - 6}" y="${T + 10}" text-anchor="end" fill="var(--warn)">${eMax.toFixed(0)} min</text>
+    <path d="${path(y.backlogH, qMax)}" fill="none" stroke="var(--orbit)" stroke-width="2"></path><text x="${W - R + 6}" y="${T + 10}" fill="var(--orbit)">${qMax < 48 ? qMax.toFixed(1) + ' h' : (qMax / 24).toFixed(0) + ' d'}</text>
+    <rect x="${L + 4}" y="${T}" width="120" height="54" fill="var(--panel-2)" stroke="var(--line-soft)"></rect><path d="${inset}" fill="none" stroke="var(--earth)" stroke-width="1.5"></path><text x="${L + 8}" y="${T + 52}" font-size="9">one day, 14:00 peak</text>
+    ${months}</svg>`;
+  $('yearnote').innerHTML = `Orbit geometry: beta angle bottoms at 59° in June, so eclipses up to <b>${ECL.maxMin.toFixed(0)} min</b> of a ${ECL.period.toFixed(0)} min orbit on <b>${ECL.days} days</b>, ${(ECL.frac * 100).toFixed(1)}% of the year. Background racks go dark in eclipse and the work queues; sized for peak with no margin the backlog grows for weeks in June. Interactive demand peaks at 2x its mean, so those racks sit half idle: pooling background work onto them cuts the fleet to <b>${fmtN(y.racks.i + y.racks.b)} racks</b> and the fleet-level energy to <b>${fmtN(y.gwh)} GWh/yr</b>. Interactive batteries: ${LEO.battFullMin} min at full load, about ${fmtN(y.battCycles)} cycles a year.`;
+}
+
+const COST_SERIES = [
+  ['earthChips', 'Earth chips', 'var(--earth)', 1], ['earthBuilding', 'Earth site build', 'var(--earth)', 0.6], ['earthEnergy', 'Earth energy', 'var(--earth)', 0.3],
+  ['earthOps', 'Earth ops', 'var(--earth)', 0.15],
+  ['leoChips', 'Orbit chips, spares, sandbox', 'var(--orbit)', 1], ['leoPower', 'Orbit power, thermal, bus, propulsion, comms', 'var(--orbit)', 0.6], ['leoOps', 'Orbit ops + NRE', 'var(--orbit)', 0.45], ['leoLaunch', 'Launch', 'var(--orbit)', 0.3]];
+function renderCostStack(d) {
+  const W = 900, H = 64, pad = 2, max = Math.max(BUDGET, d.total);
+  let x = 0, segs = '', labels = '';
+  for (const [k, name, color, op] of COST_SERIES) {
+    const v = d.cost[k]; if (!(v > 0)) continue;
+    const w = v / max * W;
+    segs += `<rect x="${x.toFixed(1)}" y="10" width="${Math.max(0, w - pad).toFixed(1)}" height="28" fill="${color}" opacity="${op}" data-tip="${name}: ${fmtB(v)} (${pct(v / d.total)})"></rect>`;
+    if (w > 70) labels += `<text x="${(x + 6).toFixed(1)}" y="54">${fmtB(v)}</text>`;
+    x += w;
+  }
+  const capX = BUDGET / max * W;
+  $('coststack').innerHTML = `<svg viewBox="-4 0 ${W + 60} ${H}" role="img" aria-label="Five-year cost by component against the $30B budget">${segs}${labels}
+    <line x1="${capX}" x2="${capX}" y1="4" y2="44" stroke="var(--fg)" stroke-width="2"></line><text x="${capX - 6}" y="8" text-anchor="end" fill="var(--fg)">$30B budget</text></svg>`;
+  $('costlegend').innerHTML = COST_SERIES.map(([k, n, c, op]) => `<span style="--c:${c};opacity:${0.55 + op * 0.45}">${n}</span>`).join('');
+}
+function renderRack(d) {
+  const e = d.er, l = d.lr, max = Math.max(e.total, l.total);
+  const row = (k, v, c) => `<span class="k">${k}</span><span class="bar" style="--c:${c};width:${(v / max * 100).toFixed(1)}%;opacity:.8"></span><span class="v">${fmtM(v)}</span>`;
+  $('rackkv').innerHTML =
+    `<span class="head" style="--c:var(--earth)">Earth rack ${fmtM(e.total)}</span>` + row('chips', e.parts.chips, 'var(--earth)') + (e.parts.sandbox ? row(`sandbox rack, ${LEO.sandboxKw} kW`, e.parts.sandbox, 'var(--earth)') : '') + row('site build', e.parts.building, 'var(--earth)') + row('energy', e.parts.energy, 'var(--earth)') + (e.parts.ops ? row('ops, 5 yr', e.parts.ops, 'var(--earth)') : '') +
+    `<span class="head" style="--c:var(--orbit)">LEO rack ${fmtM(l.total)} · ${(l.mass / 1000).toFixed(1)} t${l.throttle < 1 ? ` · ${fmtM(l.perDelivered)} per delivered rack` : ''}</span>` +
+    row('chips + spares', l.parts.chips, 'var(--orbit)') + (l.parts.sandbox ? row(`sandbox rack, ${LEO.sandboxKw} kW`, l.parts.sandbox, 'var(--orbit)') : '') + row('solar arrays', l.parts.solar, 'var(--orbit)') +
+    row('radiators', l.parts.radiator, 'var(--orbit)') + row('bus, structure', l.parts.bus, 'var(--orbit)') +
+    (l.parts.shield ? row('shielding', l.parts.shield, 'var(--orbit)') + row('housekeeping battery', l.parts.battery, 'var(--orbit)') + row('deorbit propulsion', l.parts.propulsion, 'var(--orbit)') + row('laser + relay comms', l.parts.comms, 'var(--orbit)') + row('ops, 5 yr', l.parts.ops, 'var(--orbit)') + row('NRE share', l.parts.nre, 'var(--orbit)') : '') +
+    row('launch', l.parts.launch, 'var(--orbit)') +
+    (d.lrb && d.lrb.parts.battery > l.parts.battery ? `<span class="head" style="--c:var(--orbit)">Interactive rack with full-load eclipse battery ${fmtM(d.lrb.total)} · ${(d.lrb.mass / 1000).toFixed(1)} t</span>` + row(`battery, ${fmtN(d.lrb.kg.battery / LEO.battKgKwh)} kWh`, d.lrb.parts.battery, 'var(--orbit)') + row('extra launch mass', d.lrb.parts.launch - l.parts.launch, 'var(--orbit)') : '');
+}
+function renderBreakeven(p, d) {
+  const W = 440, H = 240, L = 46, R = 12, T = 14, B = 34, pw = W - L - R, ph = H - T - B;
+  const xs = v => L + Math.log(v / LAUNCH_MIN) / Math.log(LAUNCH_MAX / LAUNCH_MIN) * pw;
+  const curves = [[p.solar, 'var(--orbit)', 2, 1], [2, 'var(--fg-3)', 1.5, 0.9], [0.5, 'var(--fg-3)', 1.5, 0.9]].map(([s, c, sw, op]) => ({ s, c, sw, op,
+    pts: Array.from({ length: 41 }, (_, i) => { const kg = LAUNCH_MIN * Math.pow(LAUNCH_MAX / LAUNCH_MIN, i / 40); return [kg, leoRack({ ...p, solar: s, launch: kg }).total]; }) }));
+  const yMax = Math.ceil(Math.max(d.er.total, ...curves.flatMap(c => c.pts.map(q => q[1]))) / 10e6) * 10e6, yMin = 0;
+  const ys = v => T + ph - (v - yMin) / (yMax - yMin) * ph;
+  let grid = '';
+  for (let v = 0; v <= yMax; v += 20e6) grid += `<line x1="${L}" x2="${W - R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line-soft)"></line><text x="${L - 6}" y="${ys(v) + 4}" text-anchor="end">$${v / 1e6}M</text>`;
+  const ticks = [20, 50, 100, 200, 500, 1000, 2000].map(v => `<text x="${xs(v)}" y="${H - 14}" text-anchor="middle">${v}</text>`).join('');
+  // end labels: push apart so they never overlap (min 12px)
+  const order = curves.map((c, i) => ({ i, y: ys(c.pts[40][1]) })).sort((a, b) => a.y - b.y);
+  for (let k = 1; k < order.length; k++) if (order[k].y - order[k - 1].y < 12) order[k].y = order[k - 1].y + 12;
+  const labelY = {}; for (const o of order) labelY[o.i] = o.y;
+  const lines = curves.map((c, i) => `<path d="${c.pts.map((q, j) => (j ? 'L' : 'M') + xs(q[0]).toFixed(1) + ' ' + ys(q[1]).toFixed(1)).join(' ')}" fill="none" stroke="${c.c}" stroke-width="${c.sw}" opacity="${c.op}"></path>
+    <text x="${W - R + 4}" y="${labelY[i] + 4}" fill="${c.c}" font-size="10">$${c.s}/W</text>`).join('');
+  const earthY = ys(d.er.total);
+  const cur = `<circle cx="${xs(p.launch)}" cy="${ys(d.lr.total)}" r="5" fill="var(--orbit)" stroke="var(--bg)" stroke-width="2"></circle>`;
+  $('breakeven').innerHTML = `<svg viewBox="0 0 ${W + 34} ${H}" role="img" aria-label="LEO rack cost versus launch price, with Earth rack cost as a reference line" id="besvg">${grid}
+    <line x1="${L}" x2="${W - R}" y1="${earthY}" y2="${earthY}" stroke="var(--earth)" stroke-width="2" stroke-dasharray="6 4"></line><text x="${L + 4}" y="${earthY - 5}" fill="var(--earth)">Earth rack ${fmtM(d.er.total)}</text>
+    ${lines}${cur}${ticks}<text x="${L + pw / 2}" y="${H - 2}" text-anchor="middle" fill="var(--fg-3)">launch $ per kg, log scale</text>
+    <rect x="${L}" y="${T}" width="${pw}" height="${ph}" fill="transparent" id="behit"></rect></svg>`;
+  const hit = $('behit');
+  hit.onmousemove = ev => {
+    const r = hit.getBoundingClientRect(), f = Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width));
+    const kg = LAUNCH_MIN * Math.pow(LAUNCH_MAX / LAUNCH_MIN, f);
+    showTip(ev, `launch $${kg.toFixed(0)}/kg → LEO ${fmtM(leoRack({ ...p, launch: kg }).total)} at $${p.solar}/W · Earth ${fmtM(d.er.total)}`);
+  };
+  hit.onmouseleave = hideTip;
+}
+const tip = $('tip');
+function showTip(ev, text) { tip.textContent = text; tip.style.display = 'block'; tip.style.left = (ev.clientX + 12) + 'px'; tip.style.top = (ev.clientY + 12) + 'px'; }
+function hideTip() { tip.style.display = 'none'; }
+document.addEventListener('mousemove', ev => { const t = ev.target.closest && ev.target.closest('[data-tip]'); if (t) showTip(ev, t.dataset.tip); else if (ev.target.id !== 'behit') hideTip(); });
+
+for (const id of ids) $(id).addEventListener('input', render);
+for (const id of checks) $(id).addEventListener('change', render);
+$('fitcap').addEventListener('click', () => { const d = design(params()); $('orbit').value = Math.ceil(d.minOrbit * 100 / 5) * 5; render(); });
+$('optimise').addEventListener('click', () => { $('spec').value = 2.5; $('multi').value = 50; $('ctxmem').checked = true; $('tpsb').value = Math.round(tpsBalance(params(), WORK.agent_b)); $('snapshot').checked = true; $('pool').checked = true; render(); });
+$('slides').addEventListener('click', () => { $('spec').value = 2.5; $('multi').value = 50; $('ctxmem').checked = true; $('tpsb').value = 30; $('snapshot').checked = false; $('pool').checked = false; render(); });
+render();
+</script>
