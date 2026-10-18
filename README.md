@@ -28,7 +28,7 @@ only 58% of them are served.
 | 🌍 **On Earth** | All 6 sites (Nordics, Iceland, West Texas, Virginia, Midwest, Gulf): 449 of 500 MW |
 | 🛰️ **In orbit** | 8 separate orbital planes, 68 MW each (9,727 tonnes launched) |
 | 🛡️ **Failure test** | Lose **any one** Earth site or orbital plane: **still 100% of users served** |
-| ⏱️ **Speed** | Chat starts in under 0.2 s (limit 0.6 s); agents in under 0.3 s (limit 2 s) |
+| ⏱️ **Speed** | Chat starts in 0.23 s (limit 0.6 s); agents in 0.23 s (limit 2 s) |
 | ✅ **All rules** | Budget, grid limit, every speed target, cooling rules: all met |
 
 **Why 8 planes and 6 Earth sites?** If everything sat in one place, one outage would take
