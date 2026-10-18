@@ -76,7 +76,7 @@ a { color: var(--sun); }
   <header style="display:grid;gap:6px">
     <span class="eyebrow">Sundai Hack 145 · Track 1 · digital twin, view from space</span>
     <h1>Orbital Fleet Twin 3D</h1>
-    <p class="muted" id="intro">Our two fleets for 4.45 billion AI users in 2035, drawn from the same numbers as the Python twin. Start with one satellite and tweak it, then step back to the whole fleet. Drag to look around, scroll to zoom, double-click to reset.</p>
+    <p class="muted" id="intro">Our two fleets for 4.45 billion AI users in 2035, drawn from the same numbers as the Python twin. Start with the whole fleet, then zoom into one satellite and tweak it. Drag to look around, scroll to zoom, double-click to reset.</p>
   </header>
 
   <section class="bar" aria-label="Controls">
@@ -147,7 +147,7 @@ a { color: var(--sun); }
   var SAT_MW = 8;               // one dot = one 8 MW-class satellite (the app's presets)
   var R_EARTH = 6.371;          // scene unit = 1,000 km
   var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var S = { view: location.hash === "#fleet" ? "fleet" : "sat", d: 0, day: "normal", lose: "", cam: "overview", t: 7, playing: !REDUCED, sel: null, speed: 1, shade: false, spin: !REDUCED };
+  var S = { view: location.hash === "#satellite" ? "sat" : "fleet", d: 0, day: "normal", lose: "", cam: "overview", t: 7, playing: !REDUCED, sel: null, speed: 1, shade: false, spin: !REDUCED };
   var D = function () { return DATA.designs[S.d]; };
   var site = function (n) { return D().sites.filter(function (x) { return x.site === n; })[0]; };
   var dayKey = function () { return S.day === "jun" ? "eclipse" : S.day === "dec" ? "eclipse18" : "normal"; };
@@ -691,7 +691,7 @@ a { color: var(--sun); }
   var lastBuilt = -1;
   function ui() {
     if (lastBuilt !== S.d) { build(); lastBuilt = S.d; }
-    seg("viewSeg", [{ label: "One satellite", value: "sat" }, { label: "Whole fleet", value: "fleet" }], "view", function () { if (S.view === "sat") satRebuild(); });
+    seg("viewSeg", [{ label: "Whole fleet", value: "fleet" }, { label: "One satellite", value: "sat" }], "view", function () { if (S.view === "sat") satRebuild(); });
     seg("lightSeg", [{ label: "In sunlight", value: false }, { label: "In Earth's shadow", value: true }], "shade");
     var sat = S.view === "sat";
     $("fleetCtl").style.display = sat ? "none" : "contents"; $("satCtl").style.display = sat ? "contents" : "none";

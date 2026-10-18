@@ -24,8 +24,8 @@ only 58% of them are served.
 **Plain-language explainer for anyone:** [`explained.html`](https://madhanj05.github.io/Orbital_DataCenter/explained.html): the two designs, the tests and the simulation in simple words and diagrams.
 
 **[`twin3d.html`](twin3d.html)** ([live](https://madhanj05.github.io/Orbital_DataCenter/twin3d.html)) is the twin in 3D, seen from space, with two views:
-- **One satellite:** a single satellite drawn to scale. Sliders change its size, chip temperature, cooling loops, solar W/kg, radiator kg/m², rack weight, structure, batteries and launch price; the wings, radiator and battery resize live, and it shows tonnes per MW, launches, and cost per MW against the Nordics. It runs the same physics as `twin/orbit_mass.py` and checks itself against Python's answers on every load.
-- **Realistic rendering:** Earth uses NASA's Blue Marble (day), Black Marble (city lights at night) and cloud imagery (public domain, `twin/assets/`). It adds an atmosphere glow, sunlight glinting off the oceans, the Sun with a lens flare, and a starfield with the Milky Way. Add `#fleet` to the link to open straight on the fleet view.
+- **One satellite** (`#satellite`): a single satellite drawn to scale. Sliders change its size, chip temperature, cooling loops, solar W/kg, radiator kg/m², rack weight, structure, batteries and launch price; the wings, radiator and battery resize live, and it shows tonnes per MW, launches, and cost per MW against the Nordics. It runs the same physics as `twin/orbit_mass.py` and checks itself against Python's answers on every load.
+- **Realistic rendering:** Earth uses NASA's Blue Marble (day), Black Marble (city lights at night) and cloud imagery (public domain, `twin/assets/`). It adds an atmosphere glow, sunlight glinting off the oceans, the Sun with a lens flare, and a starfield with the Milky Way. It opens on the whole fleet; add `#satellite` to the link to open straight on the one-satellite view.
 - **Whole fleet:**
 - Earth turns with real UTC time, under real sunlight.
 - Our six Earth sites glow with the power they draw.
