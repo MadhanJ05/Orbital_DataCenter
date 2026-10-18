@@ -1,0 +1,11 @@
+{
+  "_about": "Constants shared by the Python fleet twin (twin/) and the web app (app/). Values tagged DECK come from the Sundai Hack 145 Track 1 organizer slides.",
+  "launch_usd_per_kg": { "value": 200, "source": "DECK s9" },
+  "radiator": {
+    "emissivity": 0.9,
+    "temp_k": 330,
+    "sink_k": 220,
+    "sides": 2,
+    "source": "DECK s14 (972 W/m^2)"
+  }
+}
