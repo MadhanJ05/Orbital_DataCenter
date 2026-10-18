@@ -31,7 +31,7 @@ only 58% of them are served.
 - **Whole fleet:**
 - Earth turns with real UTC time, under real sunlight.
 - Our six Earth sites glow with the power they draw.
-- Eight dawn-dusk orbital planes of satellites circle the planet; one dot is an 8 MW satellite.
+- Twelve dawn-dusk orbital planes of satellites circle the planet; one dot is an 8 MW satellite.
 - On a June or December eclipse day, that half of the planes tilts into Earth's shadow, and you can watch satellites switch to batteries or pause.
 - Switch off any site or plane. Camera views: overview, from the Sun, ride along with a satellite, Earth sites.
 
@@ -101,7 +101,7 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 ## Our orbits, explained
 
 - **12 separate orbital planes.** Each plane is its own ring of satellites, about 7 satellites of
-  8 MW in Design 1 and about 16 in Design 2. Each plane is also its own failure zone: losing
+  8 MW in Design 1 and about 10 in Design 2. Each plane is also its own failure zone: losing
   one doesn't affect the others.
 - **A plane is a family of satellites, not one satellite.** Each plane is a ring of 8 MW
   satellites spaced evenly and following one another around the same orbit. At about 650 km,
@@ -145,7 +145,7 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
    hours of the racks that serve live agents, so we don't buy separate racks for them. "Quiet"
    means quiet for the whole world: demand worldwide is below average 13 hours a day.
    This one trick saves about $4.8B. We checked it with a minute-by-minute simulation of a full
-   day: the longest any background job waits is 50 minutes in Design 1 and 32 minutes in
+   day: the longest any background job waits is 55 minutes in Design 1 and 44 minutes in
    Design 2 (under 1.5 hours even with a site down), well inside the 4-hour deadline.
 2. **🧠 Small helpers.** Half of each agent's steps go to a smaller sub-agent model, which is
    about 10x cheaper per step.
@@ -238,7 +238,7 @@ Gemini prompt in 2025.
   hour, a plane uses about a seventh of its Earth link capacity.
 - **"Why not put satellites where they're always in sunlight?"** We checked. Above about 1,400 km,
   a dawn-dusk orbit never enters Earth's shadow (at our 650 km, the longest eclipse is 19.6
-  minutes). But eclipses only cost us $0.05B (Design 1) or $0.13B (Design 2) in batteries. The
+  minutes). But eclipses only cost us $0.06B (Design 1) or $0.11B (Design 2) in batteries. The
   higher orbit sits in the inner Van Allen radiation belt, is dearer to reach, and leaves dead
   satellites up for centuries instead of years. The Sun-Earth L1 point is always sunny too, but
   it is a 10-second round trip and priced like the Moon (6x launch cost). So 650 km, half the
