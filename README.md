@@ -178,6 +178,20 @@ Gemini prompt in 2025.
   half at 18:00 local time, so their eclipse seasons fall in June and December and never overlap.
   Racks serving live users carry batteries for the longest eclipse plus 20%. We simulated the
   worst eclipse day alone and combined with every possible outage: no live user goes unserved.
+- **"Why not put satellites where they're always in sunlight?"** We checked. Above about 1,400 km,
+  a dawn-dusk orbit never enters Earth's shadow (at our 650 km, the longest eclipse is 19.6
+  minutes). But eclipses only cost us $0.05B (Design 1) or $0.13B (Design 2) in batteries. The
+  higher orbit sits in the inner Van Allen radiation belt, is dearer to reach, and leaves dead
+  satellites up for centuries instead of years. The Sun-Earth L1 point is always sunny too, but
+  it is a 10-second round trip and priced like the Moon (6x launch cost). So 650 km, half the
+  planes on the opposite schedule, plus batteries, is cheaper and safer.
+
+  | Altitude | Eclipses? | Longest eclipse | Extra one-way delay |
+  |---|---|---|---|
+  | 650 km (ours) | yes, about 95 days a year | 19.6 min | 2.2 ms |
+  | 1,000 km | yes | 12.9 min | 3.3 ms |
+  | 1,300 km | yes | 5.5 min | 4.3 ms |
+  | 1,400 km | never | none | 4.7 ms |
 - **"Someone is always awake somewhere. Are there really quiet hours worldwide?"** Yes. Our
   simulation adds up the Americas, Europe/Africa and Asia, each busy in its own afternoon. Most
   people live in Asia and almost nobody over the Pacific, so world demand is below average for
