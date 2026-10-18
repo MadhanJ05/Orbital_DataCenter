@@ -68,13 +68,15 @@ CASES = {
 # decode GPU or LPU).
 CHIPS = {
     "gpu": dict(mem=3e12,   bw=120e12, flops=250e15, rack_chips=144, rack_kw=792, rack_usd=23.8e6,
-                phases=("prefill", "decode")),
+                ctx_link=900e9, phases=("prefill", "decode")),
     "lpu": dict(mem=160e9,  bw=200e12, flops=50e15,  rack_chips=256, rack_kw=516, rack_usd=14.3e6,
-                phases=("decode",)),
+                ctx_link=200e9, phases=("decode",)),
     "air": dict(mem=96e9,   bw=4e12,   flops=30e15,  rack_chips=32,  rack_kw=37,  rack_usd=0.5e6,
-                phases=("prefill",)),
+                ctx_link=100e9, phases=("prefill",)),
 }
 # flops (FP4 peak) for all three, and mem/bw for the air card: ASSUMED.
+# ctx_link: per-chip link to the context-memory tier. ASSUMED: GPU = today's
+# NVLink-C2C (900 GB/s on GB200), LPU and air card are guesses.
 BW_EFFICIENCY = 0.6                # DECK s13: a 120 TB/s GPU reads ~72 TB/s
 FLOPS_EFFICIENCY = 0.5             # ASSUMED
 STEP_SYNC_S = 1.7e-3               # DECK s17: per decode step, one-chip replica

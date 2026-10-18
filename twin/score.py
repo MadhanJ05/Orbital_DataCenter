@@ -84,18 +84,50 @@ def decode_replica(stream, chip, n, serving):
     per_session = kv / bw + (draft + 1) * (2 * m["active"] + C.ATTN_FLOPS_PER_KV_BYTE * kv) / flops
     b_bw = math.floor((budget - fixed) / per_session) if budget > fixed else 0
 
-    decode_s = s["out"] / s["rate"]
-    resident = (decode_s + s["tool_s"]) / decode_s   # sessions held per decoding session
     free = mem - weights
-    held = 1 if serving["context_memory"] else resident
-    b_mem = math.floor(free / (kv * held)) if free > 0 else 0
+    ctx = serving["context_memory"]
 
-    b = max(0, min(b_bw, b_mem))
-    r = dict(n=n, sessions=b, bound="bandwidth" if b_bw <= b_mem else "memory",
+    def parked_per_active(b):
+        """Sessions parked in tool calls per decoding session. A session that writes
+        faster spends a larger share of its cycle parked, so use the real speed."""
+        if s["tool_s"] <= 0:
+            return 0.0
+        rate = tau / (fixed + b * per_session)
+        return rate * s["tool_s"] / s["out"]
+
+    def fits(b):
+        held = 1 if ctx else 1 + parked_per_active(b)
+        if b * kv * held > free:
+            return False
+        if ctx and s["tool_s"] > 0:
+            # every tool call parks the cache in the tier and loads it back: the tier
+            # keeps last step's copy, so only the new tokens go out, the whole cache comes in
+            cycles = b * tau / (fixed + b * per_session) / s["out"]
+            moved = kv + m["kv"] * (s["ctx"] - s["cached"] + s["out"])
+            if moved * cycles > n * C.CHIPS[chip]["ctx_link"]:
+                return False
+        return True
+
+    lo, hi = 0, max(0, b_bw)                     # largest b that fits: memory and link grow with b
+    while lo < hi:
+        mid = (lo + hi + 1) // 2
+        if fits(mid):
+            lo = mid
+        else:
+            hi = mid - 1
+    b = lo if free > 0 else 0
+    r = dict(n=n, sessions=b, bound="bandwidth" if b == b_bw else ("context link" if ctx and b > 0 and
+             b * kv <= free and not fits(b + 1) and (b + 1) * kv <= free else "memory"),
              weights_fit=weights <= mem, tps=0.0, step_s=budget, ctx_mem_bytes=0.0,
              mem_used=weights, mem=mem)
     if b < 1 or weights > mem:
         return r
+    step = fixed + b * per_session
+    parked = b * parked_per_active(b)
+    r.update(tps=b * tau / step, step_s=step,
+             mem_used=weights + b * kv + (0 if ctx else parked * kv),
+             ctx_mem_bytes=parked * kv if ctx else 0.0)
+    return r
     step = fixed + b * per_session
     r.update(tps=b * tau / step, step_s=step, mem_used=weights + b * kv * held,
              ctx_mem_bytes=b * (resident - 1) * kv if serving["context_memory"] else 0.0)
@@ -227,6 +259,7 @@ def _evaluate(design):
             errors.append(f"unknown case {c!r}")
     cases = [c for c in cases if c in C.CASES]
     d_out, d_in, reqs = demand(cases, serving)
+    raw_out = dict(d_out)
     d_out, d_in, moved_out, moved_in = valley_shift(d_out, d_in, serving)
     if serving["bg_fill_valleys"] and C.STREAMS["agent_bg"]["task_deadline"] < C.PEAK_WINDOW_H * 3600:
         errors.append("night shift needs the background deadline to outlast the peak window")
@@ -320,19 +353,29 @@ def _evaluate(design):
         frac = {}
         for s in C.STREAMS:
             if d_out[s] <= 0:
-                frac[s] = 1.0
+                frac[s] = 1.0 if raw_out[s] <= 0 or s in dict(VALLEY_PAIRS).values() else 0.0
                 continue
             cap_d = sum(p["cap"] for p in by(s, "decode", True) if pool_filter(p))
             cap_p = sum(p["cap"] for p in by(s, "prefill", True) if pool_filter(p))
-            frac[s] = min(1.0, cap_d / d_out[s], cap_p / d_in[s])
+            frac[s] = min(1.0, cap_d / d_out[s], cap_p / d_in[s] if d_in[s] > 0 else 1.0)
         for it, bg in VALLEY_PAIRS:
-            if bg in moved_out_by_bg:
-                frac[bg] = min(frac[bg], frac[it])
+            if it not in moved_out:
+                continue
+            # work moved into the interactive pools needs their average spare:
+            # capacity left (after any outage) minus the interactive daily average
+            share = []
+            for phase, moved, dem in (("decode", moved_out[it], d_out[it]), ("prefill", moved_in[it], d_in[it])):
+                cap = sum(p["cap"] for p in by(it, phase, True) if pool_filter(p))
+                spare = cap - dem / C.STREAMS[it]["peak"]
+                share.append(max(0.0, min(1.0, spare / moved)) if moved > 0 else 1.0)
+            own = frac[bg] if raw_out[bg] > 0 else 1.0
+            moved_share = moved_out[it] / raw_out[bg]
+            frac[bg] = min(own if d_out[bg] > 0 else 1.0, 1.0) * (1 - moved_share) + min(share) * moved_share
+            frac[bg] = min(frac[bg], frac[it])
         per_case = {c: min(frac[s] for s in case_streams(c)) for c in cases}
         users = sum(C.CASES[c]["users"] * f for c, f in per_case.items())
         return frac, per_case, users
 
-    moved_out_by_bg = {bg for it, bg in VALLEY_PAIRS if it in moved_out}
     stream_frac, case_frac, users = served()
 
     # ---- power, energy, money
@@ -402,7 +445,7 @@ def _evaluate(design):
     if serving["resilience"] in ("live", "all"):
         protect = C.LIVE_STREAMS if serving["resilience"] == "live" else tuple(C.STREAMS)
         for s, frac in outage.items():
-            short = [x for x in protect if d_out[x] > 0 and frac[x] < 0.999]
+            short = [x for x in protect if raw_out[x] > 0 and frac[x] < 0.999]
             if short:
                 errors.append(f"losing {s} drops {', '.join(short)} below 100% "
                               f"(resilience={serving['resilience']})")

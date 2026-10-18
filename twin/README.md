@@ -62,23 +62,39 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | Case B, agent developers | 50M (100%) | $8.5B | 240 MW | none |
 | Case C, knowledge workers | 400M (100%) | $8.3B | 234 MW | none |
 | A+B+C, Earth only | 2.6B of 4.45B (58%) | $16.8B | 488 MW (full) | none |
-| A+B+C, with orbit (greedy) | 4.45B (100%) | $30.8B (over budget) | 490 MW | 370 MW, 6,656 t |
-| A+B+C, optimized, no failure protection | 4.45B (100%) | $26.3B | 487 MW | 264 MW, 4,745 t |
-| **A+B+C, final: survives losing any one site or plane** | **4.45B (100%)** | **$29.7B** | **449 MW, 6 sites** | **8 planes x 68 MW, 9,727 t** |
-| Same, with the 10.7 t/MW satellite | 4.45B (100%) | $28.7B | 394 MW | 8 x 74 MW, 6,391 t |
-| **Design 2: 10.7 t/MW satellite, all orbit** | **4.45B (100%)** | **$29.8B** | **0 MW** | **8 x 128 MW, 10,984 t** |
+| A+B+C, optimized, no failure protection | 4.45B (100%) | $26.6B | 485 MW | 280 MW, 5,037 t |
+| **Design 1: survives losing any one site or plane** | **4.45B (100%)** | **$28.78B** | **435 MW, 6 sites** | **8 planes x 66 MW, 9,442 t** |
+| Design 1 layout with the 10.7 t/MW satellite | 4.45B (100%) | $27.76B | 435 MW | 8 x 66 MW, 5,633 t |
+| **Design 2: 10.7 t/MW satellite, all orbit** | **4.45B (100%)** | **$28.79B** | **0 MW** | **8 x 124 MW, 10,660 t** |
+
+The Case A/B/C rows predate the model fixes below. Re-run `build.py` to refresh them.
 
 ## Stress test (each assumption 25% worse)
 
-| | Deck satellite ($29.7B) | 10.7 t satellite ($28.7B) |
+| | Design 1 ($28.78B) | Design 2 ($28.79B) |
 |---|---|---|
-| Single assumptions that still fit the budget with every outage covered | 10 of 15 | **13 of 15** |
-| Breaks it | building cost, space hardware, attention math (~$0.5B each); chip FLOPS (-$4.7B); draft acceptance (-$6.3B) | chip FLOPS (-$3.4B); draft acceptance (-$5.1B) |
-| All 15 worse at once | $53.8B | $51.9B |
+| Single assumptions that still fit the budget with every outage covered | **13 of 16** | 12 of 16 |
+| Breaks it | chip FLOPS (-$3.1B), draft acceptance (-$5.3B) | chip FLOPS (-$3.3B), draft acceptance (-$4.9B), space hardware (-$0.1B) |
+| All 16 worse at once | $51.6B | $51.1B |
 
-Earth prices, carbon and grid caps barely move the cost. The two that matter are about
-chip performance (prefill FLOPS, speculative-decoding acceptance). They change how many
-chips everyone needs, wherever the chips sit.
+Earth prices, carbon and grid caps barely move the cost. The two that matter are about chip
+performance (prefill FLOPS, speculative-decoding acceptance). They change how many chips
+everyone needs, wherever the chips sit.
+
+## Model fixes from the code review
+
+- **Night shift during outages:** background work riding in the interactive pools must fit in
+  their remaining average spare (capacity left after the outage, minus the interactive
+  average). The resilience check covers every stream that has demand before night shift.
+- **Parked agents:** sessions waiting on tools are counted at the real decode speed. Chips
+  run agents well above 100 tok/s, so about 8 caches are parked per decoding session, not 1.6.
+  The context-memory tier grew from 17 to 74 PB.
+- **Context-tier link:** each tool call loads the whole cache back from the tier and writes
+  out only the new tokens. This is capped by a per-chip link (`ctx_link` in `catalog.py`:
+  GPU 900 GB/s like today's NVLink-C2C, LPU 200 GB/s, air card 100 GB/s, all ASSUMED).
+- **Burst headroom:** with outage protection on, the optimizer may drop the 5% sizing headroom,
+  because the outage spare covers bursts on a normal day. `simulate.py` confirms no live
+  shortfall, minute by minute, on a normal day and in every outage.
 
 ## Failure test
 

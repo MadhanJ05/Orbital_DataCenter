@@ -24,10 +24,10 @@ only 58% of them are served.
 | | 🏁 **Design 1: the safest (Earth + orbit)** | 💡 **Design 2: our what-if (all orbit)** |
 |---|---|---|
 | What it is | The organizers' catalog exactly as given (18-tonne satellite), 6 Earth sites + 8 orbital planes | Our lighter satellite (10.7 tonnes); the whole fleet in 8 orbital planes, no Earth grid at all |
-| 💰 Budget ($30B) | ✅ $29.73B | ✅ $29.80B |
-| ⚡ Earth grid (500 MW) | ✅ 449 MW | ✅ 0 MW |
-| 🚀 Launch ($200/kg) | ✅ 9,727 t = $1.95B | ✅ 10,984 t = $2.20B |
-| ⏱️ Speed (chat 0.6 s, agents 2 s) | ✅ 0.23 s / 0.23 s | ✅ 0.12 s / 0.11 s |
+| 💰 Budget ($30B) | ✅ $28.78B | ✅ $28.79B |
+| ⚡ Earth grid (500 MW) | ✅ 435 MW | ✅ 0 MW |
+| 🚀 Launch ($200/kg) | ✅ 9,442 t = $1.89B | ✅ 10,660 t = $2.13B |
+| ⏱️ Speed (chat 0.6 s, agents 2 s) | ✅ 0.24 s / 0.25 s | ✅ 0.13 s / 0.12 s |
 | 👥 Users served | ✅ 100% of 4.45 billion | ✅ 100% of 4.45 billion |
 | 🛡️ Lose any one site or plane | ✅ still 100% served | ✅ still 100% served |
 | File | `designs/final_resilient.json` | `designs/whatif_all_orbit_light.json` |
@@ -38,24 +38,26 @@ idea:** the organizers invite each team to change one assumption, and ours is th
 weight. With a 10.7-tonne satellite, the entire fleet can leave Earth's grid and still fit the
 budget. Design 2 is also faster, because orbit is only 40 ms from everyone.
 
-**The honest trade-off:** Design 2 has less money to spare ($0.2B), and it depends on one kind of
-place (orbit), so a big solar storm hitting every plane at once is its worst case.
+**The trade-off:** the two cost about the same (both about $1.2B under budget), but Design 2
+depends on one kind of place (orbit), so a big solar storm hitting every plane at once is its
+worst case. Design 1 mixes two kinds of place that fail for different reasons.
 
 ## Design 1: the safest (Earth + orbit)
 
-- 🌍 **Earth:** all 6 sites (Nordics, Iceland, West Texas, Virginia, Midwest, Gulf), 449 of 500 MW
-- 🛰️ **Orbit:** 8 separate orbital planes of 68 MW each, 9,727 tonnes launched
-- 💰 **$29.73B:** chips $20.3B, buildings $3.3B, satellite hardware $3.2B, launch $2.0B, power and carbon $0.9B
+- 🌍 **Earth:** all 6 sites (Nordics, Iceland, West Texas, Virginia, Midwest, Gulf), 435 of 500 MW
+- 🛰️ **Orbit:** 8 separate orbital planes of 66 MW each, 9,442 tonnes launched
+- 💰 **$28.78B:** chips $19.4B, buildings $3.2B, satellite hardware $3.2B, launch $1.9B, power and carbon $1.0B, agent memory store $0.2B
 
 **Why not put everything in orbit?** Space has unlimited power, but with the organizers'
 18-tonne satellite, an orbital megawatt costs about $11.2M over 5 years, against $9.3M in the
 Nordics. So we use Earth where it's cheap, and orbit where Earth runs out. All-orbit with this
-satellite would cost $31.8B, over budget.
+satellite would cost $30.6B, over budget.
 
 **Why 8 planes and 6 Earth sites?** If everything sat in one place, one outage would take
 down everyone. We spread the fleet so no single site or plane holds more than about 1/12 of
 it, and carry just enough spare capacity that losing any one is a non-event. That insurance
-costs about $3.4B. Without it the same fleet is $26.3B (`designs/final_A+B+C.json`).
+costs about $2.1B. Without it the fleet is $26.6B, but losing one site would leave 36% of users
+without service (`designs/final_A+B+C.json`).
 
 Why orbit and not the Moon or Mars? The Moon is 2.6 s away and Mars 25 minutes, which is too
 slow for chat. Orbit is only 40 ms away, about as close as a data center in Virginia.
@@ -64,9 +66,9 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 
 1. **🌙 Night shift.** Background agents have 4 hours to finish their work. They run in the quiet
    hours of the racks that serve live agents, so we don't buy separate racks for them.
-   This one trick saved about $4B. We checked it with a minute-by-minute simulation of a full
-   day: the longest any background job waits is 35 minutes in Design 1 and 19 minutes in
-   Design 2 (under an hour even with a site down), well inside the 4-hour deadline.
+   This one trick saves about $4.9B. We checked it with a minute-by-minute simulation of a full
+   day: the longest any background job waits is 50 minutes in Design 1 and 32 minutes in
+   Design 2 (under 1.5 hours even with a site down), well inside the 4-hour deadline.
 2. **🧠 Small helpers.** Half of each agent's steps go to a smaller sub-agent model, which is
    about 10x cheaper per step.
 3. **⚡ Guess ahead (speculative decoding).** The AI drafts a few words ahead and checks them in
@@ -78,15 +80,15 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 
 ## Design 2: all orbit, with a lighter satellite (the 18-tonne problem)
 
-- 🛰️ **Orbit only:** 8 orbital planes of 128 MW each, 10,984 tonnes launched, **0 MW of Earth grid**
-- 💰 **$29.80B:** chips $21.9B, satellite hardware $5.6B, launch $2.2B
-- ⏱️ **Faster:** chat starts in 0.12 s, because orbit is only 40 ms from everyone
+- 🛰️ **Orbit only:** 8 orbital planes of 124 MW each, 10,660 tonnes launched, **0 MW of Earth grid**
+- 💰 **$28.79B:** chips $20.9B, satellite hardware $5.5B, launch $2.1B, agent memory store $0.3B
+- ⏱️ **Faster:** chat starts in 0.13 s, because orbit is only 40 ms from everyone
 
 The organizers' orbital megawatt weighs 18 tonnes. Lighter solar panels, carbon-fiber
 radiators and racks stripped down for space bring it to **10.7 tonnes**. Then orbit becomes
 **cheaper than the cheapest place on Earth**, and the whole fleet fits in orbit, with no
-Earth grid, for **$29.8B** (`designs/whatif_all_orbit_light.json`). Kept as a mix of Earth and
-orbit, the lighter satellite would cost $28.7B (`designs/whatif_resilient_light.json`).
+Earth grid, for **$28.8B** (`designs/whatif_all_orbit_light.json`). Kept as a mix of Earth and
+orbit, the lighter satellite would cost $27.8B (`designs/whatif_resilient_light.json`).
 
 | Satellite upgrade (each step adds to the one before) | Tonnes per MW | Cost per MW in orbit |
 |---|---|---|
@@ -101,12 +103,12 @@ and in space every extra watt needs more solar panels.
 ## What if our guesses are wrong?
 
 The organizers didn't give every number (for example local electricity prices), so we guessed
-some. We made each of our 15 guesses 25% worse, one at a time:
+some. We made each of our 16 guesses 25% worse, one at a time:
 
 - **Prices, carbon and site power limits hardly matter**: under $0.2B each.
-- **Design 1 still fits in 10 of 15 cases; Design 2 in 11 of 15.** Five of the guesses are about
-  Earth sites, so they don't affect Design 2 at all. What hurts Design 2 most is the price of
-  solar panels and radiators.
+- **Design 1 still fits in 13 of 16 cases; Design 2 in 12 of 16.** Five of the guesses are about
+  Earth sites, so they don't affect Design 2 at all. Design 2 is the more sensitive one to the
+  price of solar panels and radiators (25% dearer puts it $0.1B over budget).
 - The two that break both designs are about **how good 2035 chips are** (compute speed, and
   how often the AI's drafted words are right). Weaker chips mean every team needs more of
   them, which makes Earth's power limit tighter and orbit *more* necessary.
