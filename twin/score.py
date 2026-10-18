@@ -192,6 +192,23 @@ def _ttft(stream, p, d, rho_p):
 
 
 def evaluate(design):
+    """Score a design. An optional "satellite" block ({"kg_per_mw", "hw_factor"}) swaps in a
+    what-if orbital megawatt for this evaluation only (twin/orbit_mass.py)."""
+    sat = design.get("satellite")
+    if not sat:
+        return _evaluate(design)
+    saved = C.SPACE_KG_PER_MW, C.SPACE_HW_USD_PER_MW
+    try:
+        C.SPACE_KG_PER_MW = sat["kg_per_mw"]
+        C.SPACE_HW_USD_PER_MW = saved[1] * sat.get("hw_factor", 1.0)
+        r = _evaluate(design)
+        r["satellite"] = dict(sat)
+        return r
+    finally:
+        C.SPACE_KG_PER_MW, C.SPACE_HW_USD_PER_MW = saved
+
+
+def _evaluate(design):
     errors = []
     serving = dict(SERVING_DEFAULTS, **design.get("serving", {}))
     if not 0 <= serving["easy_chat_share"] <= C.MAX_EASY_CHAT_SHARE:
@@ -436,8 +453,10 @@ def _b(x):
 
 
 def print_report(r):
+    sat = r.get("satellite")
     print(f"\n=== {r['name']}  |  cases {'+'.join(r['cases']) or '-'}  |  "
-          f"{'VALID' if r['valid'] else 'INVALID'}")
+          f"{'VALID' if r['valid'] else 'INVALID'}"
+          + (f"  |  what-if satellite {sat['kg_per_mw'] / 1000:.1f} t/MW" if sat else ""))
     for e in r["errors"]:
         print(f"  ! {e}")
     print(f"\nUsers served   {r['twin_users_served'] / 1e6:,.0f}M of {r['users_target'] / 1e6:,.0f}M "

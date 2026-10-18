@@ -815,5 +815,10 @@
       "cooling": "radiators",
       "racks": 39
     }
-  ]
+  ],
+  "satellite": {
+    "kg_per_mw": 10738,
+    "hw_factor": 0.919,
+    "note": "what-if satellite: thin-film solar, carbon-fiber radiators, space-stripped racks (twin/orbit_mass.py)"
+  }
 }

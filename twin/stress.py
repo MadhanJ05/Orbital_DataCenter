@@ -95,6 +95,7 @@ def space_only():
 
 def run(pct, design_path, light=False, orbit_only=False):
     design = json.loads(design_path.read_text())
+    design.pop("satellite", None)        # the scenario patches the catalog itself
     rows = []
     saved_kg = C.SPACE_KG_PER_MW
     for label, fn in [("Baseline (our numbers)", lambda: None)] + scenarios(pct):
