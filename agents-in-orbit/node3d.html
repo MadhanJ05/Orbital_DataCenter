@@ -1,0 +1,318 @@
+<title>Orbital Compute Node</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a 3D stage with a HUD of dimensions, a control strip under it, and the engineering notes below. Dark-first; the stage is always deep space. */
+:root {
+  --bg: #0b0f22; --panel: #111735; --line: #27305e; --line-soft: #1c244c;
+  --fg: #e4e8f6; --fg-2: #a8b0cf; --fg-3: #6f789c; --accent: #4fd6ff; --orbit: #d94fc4; --earth: #2e8fe6;
+  --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #f5f6fb; --panel: #ffffff; --line: #cfd4e6; --line-soft: #e2e5f0; --fg: #141a33; --fg-2: #4a5272; --fg-3: #7d85a6;
+  --accent: #0b6fb8; --orbit: #b1309f; --earth: #1f6fd0; color-scheme: light; } }
+:root[data-theme="light"] {
+  --bg: #f5f6fb; --panel: #ffffff; --line: #cfd4e6; --line-soft: #e2e5f0; --fg: #141a33; --fg-2: #4a5272; --fg-3: #7d85a6;
+  --accent: #0b6fb8; --orbit: #b1309f; --earth: #1f6fd0; color-scheme: light; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.45;
+  padding-block: 20px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 18px; }
+h1, h2 { margin: 0; font-family: var(--mono); font-weight: 600; text-wrap: balance; }
+h1 { font-size: 26px; } h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+.eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-3); }
+.lede { color: var(--fg-2); max-width: 70ch; margin: 0; }
+.stage { position: relative; background: #05070f; border: 1px solid var(--line); overflow: hidden; }
+.stage canvas { display: block; width: 100%; height: auto; touch-action: none; cursor: grab; }
+.stage canvas:active { cursor: grabbing; }
+.tag { position: absolute; transform: translate(-50%, -100%); font: 11px var(--mono); color: #cfd6ee; background: rgba(5, 7, 15, 0.7); border: 1px solid #2a3360;
+  padding: 2px 6px; white-space: nowrap; pointer-events: none; }
+.tag::after { content: ""; position: absolute; left: 50%; bottom: -7px; width: 1px; height: 7px; background: #cfd6ee; }
+.hud { position: absolute; left: 12px; top: 12px; display: grid; gap: 2px; font: 12px var(--mono); color: #cfd6ee; background: rgba(5, 7, 15, 0.72);
+  border: 1px solid #2a3360; padding: 10px 12px; font-variant-numeric: tabular-nums; max-width: calc(100% - 24px); }
+.hud b { color: #4fd6ff; font-weight: 600; }
+.hud .h { color: #8f98bd; letter-spacing: 0.08em; text-transform: uppercase; font-size: 10px; margin-top: 4px; }
+.help { position: absolute; right: 12px; bottom: 10px; font: 11px var(--mono); color: #8f98bd; }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 24px; background: var(--panel); border: 1px solid var(--line); padding: 14px 16px; }
+.ctl { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; }
+.ctl label { font-size: 13px; color: var(--fg-2); }
+.ctl output { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; }
+.ctl input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--orbit); margin: 0; }
+input:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.panel { background: var(--panel); border: 1px solid var(--line); padding: 16px; display: grid; gap: 12px; min-width: 0; }
+table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--line-soft); white-space: nowrap; }
+th { color: var(--fg-3); font-weight: 500; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+th:first-child, td:first-child { text-align: left; white-space: normal; }
+.tablewrap { overflow-x: auto; }
+.notes { display: grid; gap: 10px; color: var(--fg-2); font-size: 13px; }
+.notes p { margin: 0; max-width: 70ch; }
+.notes b { color: var(--fg); font-weight: 600; }
+.swatch { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+@media (max-width: 800px) { .two { grid-template-columns: 1fr; } .hud { font-size: 11px; } }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:6px">
+    <div class="eyebrow">Sundai // MIT AI Hackathon // Agents in Orbit // Hardware</div>
+    <h1>Orbital Compute Node</h1>
+    <p class="lede">One satellite of the all-in-space agent fleet, drawn to scale from the same numbers as the fleet explorer. Arrays face the sun; radiators sit edge-on to it so both faces see deep space; the sealed GPU racks and their tool-sandbox boxes ride the shaded side of the spine, with the power conditioning, pumped loop, attitude control, propulsion, laser terminals and berthing fixture a real spacecraft needs. Drag to orbit the camera, scroll to zoom.</p>
+  </header>
+
+  <div class="stage" id="stage">
+    <canvas id="c"></canvas>
+    <div class="hud" id="hud"></div>
+    <div id="tags"></div>
+    <div class="help">drag · scroll · double-click resets</div>
+  </div>
+
+  <div class="controls">
+    <div class="ctl"><label for="racks">GPU racks on this node</label><output id="racks_o"></output><input type="range" id="racks" min="1" max="16" step="1" value="8"></div>
+    <div class="ctl"><label for="solar">Array output, W per m²</label><output id="solar_o"></output><input type="range" id="solar" min="200" max="600" step="10" value="400"></div>
+    <div class="ctl"><label for="rad">Radiator rejection, W per m² of panel</label><output id="rad_o"></output><input type="range" id="rad" min="400" max="2000" step="50" value="1000"></div>
+    <div class="ctl"><label for="fleet">Racks in orbit for the whole fleet</label><output id="fleet_o"></output><input type="range" id="fleet" min="16" max="1200" step="2" value="262"></div>
+    <div class="ctl"><label class="check" style="grid-column:1/-1"><input type="checkbox" id="batt"> Interactive node: full-load eclipse battery per rack (cannot pause in eclipse)</label></div>
+  </div>
+
+  <div class="two">
+    <section class="panel">
+      <h2>Bill of materials, one node</h2>
+      <div class="tablewrap"><table id="bom"></table></div>
+    </section>
+    <section class="panel">
+      <h2>Design choices</h2>
+      <div class="notes">
+        <p><b>Orbit.</b> Dawn-dusk sun-synchronous, 550 to 600 km: the node rides the day-night terminator and sees the sun almost continuously. During the ~1% of the year in eclipse a background node throttles its workload instead of carrying a GPU-sized battery; a 30 kWh housekeeping battery keeps avionics, loop pumps and sandbox state alive. The orbit geometry (575 km, 06:00 node) gives eclipses up to 21 min of a 96 min orbit on 96 days a year. An interactive node cannot pause, so each of its racks carries a 436 kWh battery (1.7 t) for the longest eclipse plus 20%: 27.4 t per rack instead of 24.9 t. At night the interactive nodes also run the queued background work, which is what shrinks the fleet to 261 racks. Round trip to a ground gateway is 40 ms, far inside the 10 s background-agent budget.</p>
+        <p><b>Attitude.</b> Spine along the velocity vector. <span class="swatch" style="background:#1a2a6c"></span>Arrays lie in the plane normal to the sun. <span class="swatch" style="background:#dde2ea"></span>Radiators are rotated 90° so sunlight only grazes their edge, and both faces radiate to 3 K space.</p>
+        <p><b>Thermal path.</b> Chips on cold plates, a pumped two-phase loop along the spine, manifolds at each truss end feeding the radiator wings at about 70 °C. No air anywhere: the 2035 rack is already direct-liquid.</p>
+        <p><b>Racks.</b> Sealed, conduction-cooled boxes on the shaded face of the spine, 20% spare chips for radiation and the absence of repair, 600 kg of 5 mm-Al-equivalent shielding over the HBM stacks and power electronics. No pressurised volume, no crew access.</p>
+        <p><b>Sandbox.</b> <span class="swatch" style="background:#1a7a8c"></span>Each GPU rack carries a 100 kW CPU/NVMe box: ~170k background tasks run their 80 tool calls per task in mostly idle microVMs that have to sit next to the model, not 40 ms away on Earth.</p>
+        <p><b>Power and thermal hardware.</b> <span class="swatch" style="background:#cc9933"></span>One power-conditioning box per rack on the spine's shaded flank (1.5 kg per kW), <span class="swatch" style="background:#9a3f8a"></span>supply and return lines of the two-phase loop under the racks, redundant pump packs on each radiator manifold, and a solar array drive with deployment hinges at each boom root. Arrays are sized for 85% output at end of life.</p>
+        <p><b>Attitude and assembly.</b> <span class="swatch" style="background:#3a4470"></span>A four-gyro CMG cluster near the centre of mass and two star trackers on the avionics box hold a 400 m structure sun-pointed against gravity-gradient torque. The ring on the +Z face is the berthing fixture: launch one is the spine with racks, launch two berths the wing and radiator package there.</p>
+        <p><b>Comms and propulsion.</b> <span class="swatch" style="background:#f2d35a"></span>Ring laser terminals sit on the booms 6 m off the spine so they look past the radiator wings; the gateway terminal hangs under the racks and looks nadir beneath the array plane. <span class="swatch" style="background:#e68a26"></span>Two Hall-thruster pods ride the booms 11 m out, canted 20° outboard so their plumes clear the aft radiator, with a krypton tank in the truss: ~200 m/s over 5 years for drag make-up and the end-of-life deorbit the 5-year rule needs.</p>
+        <p><b>Launch.</b> Wings fold flat along the spine; the stack fits a 9 m fairing. Each node of 8 racks is two 100 t launches at $200/kg, about $5.0M per 24.9 t rack (15 t and $3M before the review items). The all-in-space fleet for 50M developers is 261 racks (120 interactive with batteries, 141 background) in 33 nodes, about 6.6 kt and 67 launches once background work is pooled onto the interactive nodes at night.</p>
+        <p>Parametric source: <b>node.scad</b> (OpenSCAD, exports STL/3MF) uses these same formulas.</p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ---------- sizing (same as model.py) ----------
+// Design-review additions (ASSUMED, same as model.py's complete rack): a 100 kW sandbox rack per GPU rack, 14% Earth-IR derate on one
+// radiator face, arrays sized for 85% end-of-life output, 24.9 t per rack launched (15 t bare). Eclipse is handled by throttling.
+const RACK_KW = 792, SANDBOX_KW = 100, PUE = 1.0495, RAD_DERATE = 0.14, SOLAR_EOL = 0.85, ASPECT = 4, RACK_T = 24.9, RACK_T_BATT = 27.4, BATT_KWH = 436, LAUNCH_T = 100, RACK_PITCH = 1.6, TRUSS = 2.4, BOOM = 10, RAD_GAP = 3;
+const PCDU_KG_KW = 1.5, LOOP_KG = 750, ACS_KG = 400;
+function sizing(p) {
+  const elecKw = p.racks * (RACK_KW + SANDBOX_KW) * PUE;
+  const solarM2 = elecKw * 1000 / SOLAR_EOL / p.solar, radM2 = elecKw * 1000 / (p.rad * (1 - RAD_DERATE / 2));
+  const sw = Math.sqrt(solarM2 / (2 * ASPECT)), rw = Math.sqrt(radM2 / (2 * ASPECT));
+  const trussLen = p.racks * RACK_PITCH + 4;
+  const span = 2 * (TRUSS / 2 + BOOM + ASPECT * sw), length = trussLen + 2 * (RAD_GAP + ASPECT * rw);
+  return { elecKw, itMw: p.racks * RACK_KW / 1000, solarM2, radM2, sw, sl: ASPECT * sw, rw, rl: ASPECT * rw, trussLen, span, length,
+    rackT: p.batt ? RACK_T_BATT : RACK_T, massT: p.racks * (p.batt ? RACK_T_BATT : RACK_T), launches: Math.ceil(p.racks * (p.batt ? RACK_T_BATT : RACK_T) / LAUNCH_T), nodes: Math.ceil(p.fleet / p.racks) };
+}
+const $ = id => document.getElementById(id);
+const params = () => ({ racks: +$('racks').value, solar: +$('solar').value, rad: +$('rad').value, fleet: +$('fleet').value, batt: $('batt').checked });
+const f0 = x => Math.round(x).toLocaleString('en-US'), f1 = x => x.toFixed(1);
+
+// ---------- scene ----------
+const canvas = $('c'), stage = $('stage');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x05070f);
+const camera = new THREE.PerspectiveCamera(40, 1, 1, 20000);
+scene.add(new THREE.AmbientLight(0x8090c0, 0.35));
+const sunLight = new THREE.DirectionalLight(0xfff4e0, 1.3); sunLight.position.set(0, 0, 1); scene.add(sunLight);
+const fill = new THREE.DirectionalLight(0x3050a0, 0.3); fill.position.set(0.3, -0.5, -1); scene.add(fill);
+const earthshine = new THREE.DirectionalLight(0x9fb8ff, 0.55); earthshine.position.set(1, 0.4, 0.2); scene.add(earthshine);  // lights the radiator faces
+const earthshine2 = new THREE.DirectionalLight(0x9fb8ff, 0.4); earthshine2.position.set(-1, -0.4, 0.2); scene.add(earthshine2);
+// star field
+{ const n = 1500, pos = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const u = Math.random() * 2 - 1, t = Math.random() * Math.PI * 2, r = Math.sqrt(1 - u * u) * 9000; pos.set([r * Math.cos(t), r * Math.sin(t), u * 9000], i * 3); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0x9fb0e0, size: 2, sizeAttenuation: false }))); }
+
+const M = {
+  truss: new THREE.MeshStandardMaterial({ color: 0xb8bec9, metalness: 0.6, roughness: 0.4 }),
+  rack: new THREE.MeshStandardMaterial({ color: 0x2e334d, metalness: 0.3, roughness: 0.7 }),
+  plate: new THREE.MeshStandardMaterial({ color: 0xd94fc4, emissive: 0x6a1f60, emissiveIntensity: 0.6, roughness: 0.5 }),
+  solar: new THREE.MeshStandardMaterial({ color: 0x1a2a6c, metalness: 0.5, roughness: 0.35, side: THREE.DoubleSide }),
+  seam: new THREE.MeshStandardMaterial({ color: 0x5060a0, side: THREE.DoubleSide }),
+  rad: new THREE.MeshStandardMaterial({ color: 0xdde2ea, metalness: 0.1, roughness: 0.6, side: THREE.DoubleSide }),
+  manifold: new THREE.MeshStandardMaterial({ color: 0x8a9099, metalness: 0.7, roughness: 0.3 }),
+  avionics: new THREE.MeshStandardMaterial({ color: 0xd4a017, metalness: 0.6, roughness: 0.4 }),
+  sandbox: new THREE.MeshStandardMaterial({ color: 0x1a7a8c, metalness: 0.3, roughness: 0.6 }),
+  thruster: new THREE.MeshStandardMaterial({ color: 0xe68a26, metalness: 0.5, roughness: 0.5 }),
+  nozzle: new THREE.MeshStandardMaterial({ color: 0x4a4d55, metalness: 0.7, roughness: 0.4 }),
+  tank: new THREE.MeshStandardMaterial({ color: 0xc0c4cc, metalness: 0.8, roughness: 0.25 }),
+  laser: new THREE.MeshStandardMaterial({ color: 0xf2d35a, emissive: 0x6a5a10, emissiveIntensity: 0.5, roughness: 0.4 }),
+  pcdu: new THREE.MeshStandardMaterial({ color: 0xcc9933, metalness: 0.5, roughness: 0.5 }),
+  tube: new THREE.MeshStandardMaterial({ color: 0x9a3f8a, metalness: 0.4, roughness: 0.5 }),
+  cmg: new THREE.MeshStandardMaterial({ color: 0x3a4470, metalness: 0.4, roughness: 0.6 }),
+  battery: new THREE.MeshStandardMaterial({ color: 0x2f7a4a, metalness: 0.3, roughness: 0.6 }),
+  hinge: new THREE.MeshStandardMaterial({ color: 0x666a73, metalness: 0.7, roughness: 0.4 }),
+  ship: new THREE.MeshStandardMaterial({ color: 0x9aa3b5, metalness: 0.8, roughness: 0.3, transparent: true, opacity: 0.45 }),
+};
+const box = (w, h, d, mat, x, y, z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); return m; };
+let node = new THREE.Group(); scene.add(node);
+const anchors = {};   // label name -> world position
+
+function build(p, s) {
+  scene.remove(node); node = new THREE.Group(); scene.add(node);
+  const L = s.trussLen;
+  // spine: four longerons + a translucent shell
+  for (const [dx, dz] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) node.add(box(0.25, L, 0.25, M.truss, dx * TRUSS / 2, 0, dz * TRUSS / 2));
+  for (let y = -L / 2; y <= L / 2 + 0.01; y += 4) { node.add(box(TRUSS, 0.2, 0.2, M.truss, 0, y, TRUSS / 2)); node.add(box(TRUSS, 0.2, 0.2, M.truss, 0, y, -TRUSS / 2)); node.add(box(0.2, 0.2, TRUSS, M.truss, TRUSS / 2, y, 0)); node.add(box(0.2, 0.2, TRUSS, M.truss, -TRUSS / 2, y, 0)); }
+  // racks on the shaded (-Z) face
+  for (let i = 0; i < p.racks; i++) {
+    const y = -L / 2 + 2 + RACK_PITCH * (i + 0.5);
+    node.add(box(0.8, 1.3, 2.4, M.rack, 0, y, -TRUSS / 2 - 1.2));
+    node.add(box(0.84, 1.34, 0.3, M.plate, 0, y, -TRUSS / 2 - 0.15));
+    // tool-sandbox box (CPU + NVMe, 100 kW) beside the GPU rack on the same cold-plate loop
+    node.add(box(0.5, 1.1, 2.2, M.sandbox, 0.8, y, -TRUSS / 2 - 1.1));
+    node.add(box(0.54, 1.14, 0.3, M.plate, 0.8, y, -TRUSS / 2 - 0.15));
+    node.add(box(0.7, 1.0, 1.0, M.pcdu, -TRUSS / 2 - 0.35, y, 0));              // power conditioning + distribution for this rack
+    if (p.batt) node.add(box(0.7, 1.0, 1.1, M.battery, -TRUSS / 2 - 0.35, y, -1.15)); // full-load eclipse battery pack (436 kWh), under the PCDU box
+  }
+  if (p.batt) anchors.battpack = new THREE.Vector3(-TRUSS / 2 - 0.7, -L / 2 + 2 + RACK_PITCH * 2.5, -1.6);
+  anchors.pcdu = new THREE.Vector3(-TRUSS / 2 - 0.7, -L / 2 + 2 + RACK_PITCH * 1.5, 0.5);
+  // loop supply and return lines under the spine, above the cold plates
+  for (const dx of [-0.7, 0.7]) { const t = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, L - 1, 10), M.tube); t.position.set(dx, 0, -TRUSS / 2 - 0.08); node.add(t); }
+  anchors.racks = new THREE.Vector3(-0.4, 0, -TRUSS / 2 - 2.6);
+  anchors.sandbox = new THREE.Vector3(1.05, -L / 2 + 2 + RACK_PITCH * 0.5, -TRUSS / 2 - 2.4);
+  // solar wings along ±X, in the XY plane, facing +Z
+  for (const d of [1, -1]) {
+    node.add(box(BOOM, 0.6, 0.6, M.truss, d * (TRUSS / 2 + BOOM / 2), 0, 0));
+    const sada = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.6, 20), M.hinge); sada.position.set(d * (TRUSS / 2 + 0.5), 0, 0); sada.rotation.z = Math.PI / 2; node.add(sada);
+    for (const hx of [TRUSS / 2 + BOOM / 2, TRUSS / 2 + BOOM]) node.add(box(0.4, 0.9, 0.9, M.hinge, d * hx, 0, 0));
+    const cx = d * (TRUSS / 2 + BOOM + s.sl / 2);
+    node.add(box(s.sl, s.sw, 0.08, M.solar, cx, 0, 0));
+    for (let k = 1; k < 8; k++) node.add(box(0.3, s.sw, 0.1, M.seam, d * (TRUSS / 2 + BOOM + s.sl * k / 8), 0, 0));
+    if (d === 1) anchors.solar = new THREE.Vector3(cx, s.sw / 2, 0);
+  }
+  // radiator wings along ±Y beyond the spine ends, in the YZ plane (edge-on to the sun)
+  for (const d of [1, -1]) {
+    node.add(box(1.2, RAD_GAP, 1.2, M.manifold, 0, d * (L / 2 + RAD_GAP / 2), 0));
+    for (const dx of [-0.5, 0.5]) { const pump = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 1.0, 14), M.manifold); pump.position.set(dx, d * (L / 2 + RAD_GAP / 2), 0.9); node.add(pump); }
+    if (d === 1) anchors.pumps = new THREE.Vector3(0.5, L / 2 + RAD_GAP / 2, 1.2);
+    const cy = d * (L / 2 + RAD_GAP + s.rl / 2);
+    node.add(box(0.08, s.rl, s.rw, M.rad, 0, cy, 0));
+    for (let k = 1; k < 6; k++) node.add(box(0.12, 0.3, s.rw, M.manifold, 0, d * (L / 2 + RAD_GAP + s.rl * k / 6), 0));
+    if (d === 1) anchors.rad = new THREE.Vector3(0, cy, s.rw / 2);
+  }
+  node.add(box(1.2, 1.2, 1.2, M.avionics, 0, L / 2 - 2, TRUSS / 2 + 0.6));   // avionics
+  node.add(box(0.6, 0.8, 0.7, M.battery, 1.1, L / 2 - 2, TRUSS / 2 + 0.35));  // 30 kWh housekeeping battery
+  for (const dx of [-1, 1]) { const st = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.4, 12), M.nozzle); st.position.set(dx * 0.4, L / 2 - 2, TRUSS / 2 + 1.35); st.rotation.x = Math.PI / 2; st.rotation.z = dx * 0.5; node.add(st); }  // star trackers
+  anchors.avionics = new THREE.Vector3(0, L / 2 - 2, TRUSS / 2 + 1.5);
+  // attitude control: four-gyro CMG cluster on the +Z face near the centre of mass
+  node.add(box(1.2, 1.2, 1.0, M.cmg, 0, -4, TRUSS / 2 + 0.5));
+  for (const dx of [-0.3, 0.3]) for (const dy of [-0.3, 0.3]) { const g = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.3, 14), M.hinge); g.position.set(dx, -4 + dy, TRUSS / 2 + 1.15); g.rotation.x = Math.PI / 2; node.add(g); }
+  anchors.cmg = new THREE.Vector3(0, -4, TRUSS / 2 + 1.4);
+  // berthing ring for two-launch assembly, on the +Z face
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.7, 0.12, 10, 32), M.tank); ring.position.set(0, 3, TRUSS / 2 + 0.12); node.add(ring);
+  anchors.dock = new THREE.Vector3(0, 3, TRUSS / 2 + 0.5);
+  // propulsion: krypton tank inside the aft truss bay; two Hall-thruster pods out on the solar booms, canted 20° outboard so the
+  // plume (along -Y) clears the aft radiator wing in the x = 0 plane
+  const tank = new THREE.Mesh(new THREE.SphereGeometry(0.8, 20, 20), M.tank); tank.position.set(0, -L / 2 + 1.2, 0); node.add(tank);
+  const cant = 20 * Math.PI / 180;
+  for (const dx of [-1, 1]) {
+    const px = dx * (TRUSS / 2 + BOOM - 0.8), py = -0.9, ex = Math.sin(cant) * dx, ey = -Math.cos(cant);   // exhaust direction
+    node.add(box(0.3, 0.4, 0.3, M.hinge, px, py + 0.5, 0));
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.8, 20), M.thruster); body.position.set(px, py, 0); body.rotation.z = dx * cant; node.add(body);
+    const noz = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.35, 0.4, 20), M.nozzle); noz.position.set(px + ex * 0.6, py + ey * 0.6, 0); noz.rotation.z = dx * cant; node.add(noz);
+  }
+  anchors.thrusters = new THREE.Vector3(TRUSS / 2 + BOOM - 0.8, -0.9, 0.5);
+  // laser terminals: ring terminals on the booms 6 m off the spine (looking ±Y past the radiators), gateway hanging under the racks looking nadir (+X)
+  const laserAt = (x, y, z, dir, up = 1) => {
+    const post = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.3, 12), M.truss); post.position.set(x, y, z + up * 0.15); post.rotation.x = Math.PI / 2; node.add(post);
+    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), M.laser); ball.position.set(x, y, z + up * 0.45); node.add(ball);
+    const tel = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.6, 12), M.nozzle);
+    tel.position.set(x + dir[0] * 0.3, y + dir[1] * 0.3, z + up * 0.45); tel.rotation.z = dir[1] ? 0 : Math.PI / 2; node.add(tel);
+  };
+  laserAt(6, 0, 0.3, [0, 1]); laserAt(-6, 0, 0.3, [0, -1]); laserAt(0, 1, -TRUSS / 2 - 2.4, [1, 0], -1);
+  anchors.laser = new THREE.Vector3(6, 0, 1.1);
+  // scale reference: 120 m x 9 m launcher silhouette parked beside the node
+  const ship = new THREE.Mesh(new THREE.CylinderGeometry(4.5, 4.5, 120, 24), M.ship);
+  const sx = -(s.span / 2 + 40); ship.position.set(sx, 0, -60); ship.rotation.x = 0; node.add(ship);
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(4.5, 14, 24), M.ship); nose.position.set(sx, 67, -60); node.add(nose);
+  anchors.ship = new THREE.Vector3(sx, 74, -60);
+  // sun direction marker
+  const sun = new THREE.Mesh(new THREE.SphereGeometry(4, 16, 16), new THREE.MeshBasicMaterial({ color: 0xfff1c0 }));
+  sun.position.set(0, 0, s.span * 0.45 + 60); node.add(sun); anchors.sun = sun.position.clone().add(new THREE.Vector3(0, 6, 0));
+  const ray = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, s.span * 0.45 + 40, 8), new THREE.MeshBasicMaterial({ color: 0xfff1c0, transparent: true, opacity: 0.35 }));
+  ray.rotation.x = Math.PI / 2; ray.position.set(0, 0, (s.span * 0.45 + 60) / 2 + 10); node.add(ray);
+}
+
+// ---------- camera: simple orbit ----------
+const cam = { theta: 0.5, phi: 1.05, dist: 400, target: new THREE.Vector3() };
+let home = { ...cam };
+function applyCamera() {
+  const r = cam.dist, x = r * Math.sin(cam.phi) * Math.cos(cam.theta), y = r * Math.sin(cam.phi) * Math.sin(cam.theta), z = r * Math.cos(cam.phi);
+  camera.position.set(x, y, z); camera.up.set(0, 0, 1); camera.lookAt(cam.target);
+}
+let drag = null;
+canvas.addEventListener('pointerdown', e => { drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener('pointermove', e => { if (!drag) return; cam.theta -= (e.clientX - drag.x) * 0.006; cam.phi = Math.min(3.0, Math.max(0.15, cam.phi - (e.clientY - drag.y) * 0.006)); drag = { x: e.clientX, y: e.clientY }; });
+canvas.addEventListener('pointerup', () => drag = null); canvas.addEventListener('pointercancel', () => drag = null);
+canvas.addEventListener('wheel', e => { e.preventDefault(); cam.dist = Math.min(6000, Math.max(20, cam.dist * Math.exp(e.deltaY * 0.0012))); }, { passive: false });
+canvas.addEventListener('dblclick', () => Object.assign(cam, home));
+
+// ---------- labels ----------
+const tagsEl = $('tags'); const TAGS = { solar: 'solar array', rad: 'radiator', racks: 'GPU racks', sandbox: 'tool sandbox', pcdu: 'power conditioning', battpack: 'eclipse battery', pumps: 'pump pack', cmg: 'CMGs', dock: 'berthing ring', avionics: 'avionics + battery', thrusters: 'thrusters', laser: 'laser terminal', ship: '120 m launcher, for scale', sun: 'to Sun' };
+const tagEls = {}; for (const k in TAGS) { const d = document.createElement('div'); d.className = 'tag'; d.textContent = TAGS[k]; tagEls[k] = d; tagsEl.appendChild(d); }
+function placeTags() {
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  for (const k in TAGS) { const a = anchors[k]; if (!a) { tagEls[k].hidden = true; continue; }
+    const v = a.clone().project(camera); const vis = v.z < 1 && Math.abs(v.x) < 1.1 && Math.abs(v.y) < 1.1;
+    tagEls[k].hidden = !vis; tagEls[k].style.left = ((v.x + 1) / 2 * w) + 'px'; tagEls[k].style.top = ((1 - v.y) / 2 * h - 6) + 'px'; }
+}
+
+// ---------- readouts ----------
+function hud(p, s) {
+  $('hud').innerHTML = `<div class="h">This node</div><div><b>${f1(s.itMw)} MW</b> IT + ${f1(p.racks * SANDBOX_KW / 1000)} MW sandbox · ${f1(s.elecKw / 1000)} MW electrical · ${p.racks} racks</div>
+    <div>arrays <b>${f0(s.solarM2)} m²</b> · 2 × ${f1(s.sw)} × ${f1(s.sl)} m</div><div>radiators <b>${f0(s.radM2)} m²</b> · 2 × ${f1(s.rw)} × ${f1(s.rl)} m</div>
+    <div>span <b>${f0(s.span)} m</b> tip to tip · length ${f0(s.length)} m</div><div>mass <b>${f0(s.massT)} t</b> · ${s.launches} launch${s.launches > 1 ? 'es' : ''} of 100 t</div>
+    <div class="h">Fleet</div><div><b>${s.nodes} nodes</b> for ${p.fleet} racks · ${f1(p.fleet * RACK_KW / 1000)} MW IT · ${f0(p.fleet * s.rackT)} t</div>`;
+  const rows = [
+    ['GPU racks, 144 chips each, sealed and conduction-cooled', p.racks, 'ea', `${f0(p.racks * RACK_KW)} kW IT`],
+    ['Tool-sandbox racks, CPU + NVMe, one per GPU rack', p.racks, 'ea', `${f0(p.racks * SANDBOX_KW)} kW, ~170k microVMs each`],
+    ['Shielding, 5 mm Al-equivalent over HBM and power electronics', f0(p.racks * 600), 'kg', '600 kg per rack'],
+    ['Solar arrays, two wings, sized for 85% output at end of life', f0(s.solarM2), 'm²', `${f1(s.elecKw / 1000 / SOLAR_EOL)} MW at ${p.solar} W/m²`],
+    ['Power conditioning, HV distribution and harness', f0(s.elecKw * PCDU_KG_KW), 'kg', `${PCDU_KG_KW} kg per kW electrical`],
+    ['Solar array drives and deployment hinges', 2, 'sets', 'one per wing'],
+    ['Radiator panels, two wings, two-sided', f0(s.radM2), 'm²', `${f1(s.elecKw / 1000)} MW at ${p.rad} W/m², Earth face −${Math.round(RAD_DERATE * 100)}%`],
+    ['Spine truss', f1(s.trussLen), 'm', `${TRUSS} m square section`],
+    ['Pumped two-phase loop: pumps, fluid, cold plates, redundant loop', f0(p.racks * LOOP_KG), 'kg', '~70 °C radiator inlet, 750 kg per rack'],
+    ['Attitude control: CMG cluster and star trackers', f0(ACS_KG), 'kg', 'sun-pointed against gravity-gradient torque'],
+    ['Berthing ring for two-launch in-orbit assembly', 1, 'ea', 'launch 2 brings wings + radiators'],
+    p.batt ? ['Full-load eclipse batteries, one per rack', f0(p.racks * BATT_KWH), 'kWh', '26 min at full load (21 min eclipse + 20%), 1.7 t per rack'] : ['Avionics and 30 kWh housekeeping battery', 1, 'set', 'GPUs go dark in eclipse, 4.6% of the year, work is deferred'],
+    ['Laser terminals: 2 ring (on the booms) + 1 gateway (under the racks)', 3, 'ea', '40 ms to a ground gateway'],
+    ['Electric propulsion: 2 Hall pods on the booms, canted 20°, krypton tank', f0(p.racks * 350), 'kg', '~200 m/s over 5 yr, deorbit at end of life'],
+    [`Launch mass, complete, ${s.rackT} t per rack (bare rack would be 15 t)`, f0(s.massT), 't', `${s.launches} × 100 t, $${f1(s.massT * 1000 * 200 / 1e6)}M at $200/kg`],
+  ];
+  $('bom').innerHTML = '<thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th>Note</th></tr></thead><tbody>' + rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join('') + '</tbody>';
+  $('racks_o').textContent = p.racks; $('solar_o').textContent = p.solar; $('rad_o').textContent = p.rad; $('fleet_o').textContent = p.fleet;
+  if (anchors.battpack === undefined || !p.batt) delete anchors.battpack;
+}
+
+function update() {
+  const p = params(), s = sizing(p);
+  build(p, s); hud(p, s);
+  home = { theta: 0.5, phi: 1.05, dist: Math.max(s.span, s.length) * 1.15, target: new THREE.Vector3() };
+  if (!update.ran) { Object.assign(cam, home); update.ran = true; } else cam.dist = Math.max(cam.dist, 20);
+}
+function resize() {
+  const w = stage.clientWidth, h = Math.max(320, Math.min(640, Math.round(w * 0.6)));
+  renderer.setSize(w, h, false); canvas.style.height = h + 'px'; camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+for (const id of ['racks', 'solar', 'rad', 'fleet']) $(id).addEventListener('input', update);
+$('batt').addEventListener('change', update);
+window.addEventListener('resize', resize);
+resize(); update();
+(function loop() { applyCamera(); renderer.render(scene, camera); placeTags(); requestAnimationFrame(loop); })();
+</script>
