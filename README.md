@@ -43,7 +43,9 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 
 1. **🌙 Night shift.** Background agents have 4 hours to finish their work. They run in the quiet
    hours of the racks that serve live agents, so we don't buy separate racks for them.
-   This one trick saved about $4B.
+   This one trick saved about $4B. We checked it with a minute-by-minute simulation of a full
+   day: the longest any background job waits is 35 minutes (58 minutes even with a site down),
+   well inside its 4-hour deadline.
 2. **🧠 Small helpers.** Half of each agent's steps go to a smaller sub-agent model, which is
    about 10x cheaper per step.
 3. **⚡ Guess ahead (speculative decoding).** The AI drafts a few words ahead and checks them in

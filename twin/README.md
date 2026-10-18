@@ -28,6 +28,7 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | `twin/score.py` | The model and the scorer. |
 | `twin/build.py` | Greedy planner: best chip per stream, cheapest sites up to their grid caps, the rest in LEO. |
 | `twin/orbit_mass.py` | The 18-tonne what-if: one orbital MW broken into compute, solar, radiators and structure, with physical levers (chip temperature vs leakage, two cooling loops, solar W/kg, radiator kg/m², stripped racks, structure share, launch price). It re-optimizes the whole fleet at each step and writes `designs/whatif_ladder.json`. |
+| `twin/simulate.py` | Minute-by-minute day. Builds global demand curves from three regions in their own time zones, serves live work first, queues background work into what's left, and checks every background task against its 4 h deadline, on a normal day and with each site or plane lost. Writes `designs/sim_24h.json`. |
 | `twin/optimize.py` | Coordinate search over every lever. Keeps a change only if the design stays at 100% served, stays valid, and gets cheaper. |
 | `twin/test_calibration.py` | Checks against the deck: ~960 chat and ~117 agent sessions per GPU, per-user peak tokens, 972 W/m² radiators, $3.6M/MW launch, orbit break-even with the Nordics at $95/kg and West Texas at $170/kg, Moon and Mars latency rules. |
 | `designs/*.json` | Saved designs. |
@@ -75,5 +76,5 @@ Each plane is its own failure domain, with the same physics and prices as `leo`.
 ## Known simplifications
 
 - Earth site prices, carbon and grid caps are our assumptions, because the deck gives only the round trips. The Nordics and West Texas values are tuned to the deck's break-even prices.
-- Load is sized at the peak hour. With `bg_fill_valleys`, background agents use the interactive pools' off-peak spare capacity (peak minus daily average). This assumes the peak window is under 3 hours, shorter than the 4-hour background deadline. There is no hour-by-hour simulation yet.
+- Load is sized at the peak hour. With `bg_fill_valleys`, background agents use the interactive pools' off-peak spare capacity (peak minus daily average). This assumes the peak window is under 3 hours, shorter than the 4-hour background deadline. `twin/simulate.py` checks this minute by minute: interactive demand stays within 10% of its peak for only 1.5 h a day, and the longest background wait is 35 min on a normal day (58 min in the worst outage) against 228 min allowed.
 - Chat prefix caches are treated as free to store. Agent caches parked during tool calls are charged to HBM, or to the context-memory tier when it is on.
