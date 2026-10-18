@@ -90,6 +90,30 @@ without service (`designs/final_A+B+C.json`).
 Why orbit and not the Moon or Mars? The Moon is 2.6 s away and Mars 25 minutes, which is too
 slow for chat. Orbit is only 40 ms away, about as close as a data center in Virginia.
 
+## Our orbits, explained
+
+- **8 separate orbital planes.** Each plane is its own ring of satellites, about 8 satellites of
+  8 MW in Design 1 and about 16 in Design 2. Each plane is also its own failure zone: losing
+  one doesn't affect the others.
+- **They are all dawn-dusk sun-synchronous orbits (dawn-dusk SSO)** at about 650 km.
+  *Sun-synchronous* means the orbit turns about 1° a day, so it keeps the same angle to the Sun
+  all year. *Dawn-dusk* means that angle keeps it riding along the line between day and night,
+  so its satellites see sunlight almost all the time.
+- **"06:00" and "18:00" are local solar time, not UTC.** The space industry calls this the
+  *local time of the ascending node*: the local time on the ground directly below when a
+  satellite crosses the equator heading north. A 06:00 plane always crosses at local dawn, and
+  an 18:00 plane always crosses at local dusk, wherever that is and whatever UTC says.
+- **Half our planes fly at 06:00 and half at 18:00.** Both follow the day/night line, in
+  opposite directions, and their short eclipse seasons fall in opposite halves of the year (June
+  and December). So only half the fleet is ever in eclipse season at once.
+- **Why every plane is dawn-dusk:** a tilted orbit like Starlink's passes through Earth's
+  shadow on almost every lap, for about 35 of every 95 minutes, so every rack would need
+  batteries. Dawn-dusk orbits are only shadowed up to about 20 minutes per orbit, on about 95
+  days a year.
+- **In the 3D twin,** the clock shows UTC (world time, for demand and Earth's rotation). The
+  06:00 rings are solid and the 18:00 rings are dashed. The planes are drawn between 550 and
+  760 km so you can tell them apart; the model treats them all as about 650 km.
+
 ## The five tricks that made it fit
 
 1. **🕑 Off-peak shift.** Background agents have 4 hours to finish their work. They run in the quiet
