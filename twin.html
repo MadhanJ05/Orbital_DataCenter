@@ -153,23 +153,26 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
   {
    "name": "final_resilient",
    "label": "Design 1: the safest (Earth + orbit)",
-   "valid": true,
-   "errors": [],
-   "cost_busd": 29.975,
+   "valid": false,
+   "errors": [
+    "cost $30.33B > $30B budget (DECK s9)"
+   ],
+   "cost_busd": 30.325,
    "cost_breakdown_busd": {
     "chips": 20.109,
     "context_memory": 0.219,
     "facility": 3.26,
     "energy": 0.619,
     "carbon": 0.367,
-    "launch": 2.094,
+    "launch": 2.096,
     "space_hw": 3.253,
-    "battery": 0.053
+    "battery": 0.053,
+    "comms": 0.348
    },
    "users_served": 4450000000.0,
    "users_target": 4450000000.0,
    "earth_grid_mw": 450.3,
-   "space_mass_t": 10470.0,
+   "space_mass_t": 10481.0,
    "eclipse_battery": "live",
    "satellite": {
     "mass_t": {
@@ -337,7 +340,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 22.18,
      "battery_mw": 52.82,
      "link_tbps": 0.111,
-     "link_cap_tbps": 1.0
+     "satellites": 9,
+     "link_cap_tbps": 0.85
     },
     {
      "site": "leo_p2",
@@ -363,7 +367,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 22.18,
      "battery_mw": 52.82,
      "link_tbps": 0.111,
-     "link_cap_tbps": 1.0
+     "satellites": 9,
+     "link_cap_tbps": 0.85
     },
     {
      "site": "leo_p3",
@@ -389,7 +394,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 22.18,
      "battery_mw": 52.82,
      "link_tbps": 0.111,
-     "link_cap_tbps": 1.0
+     "satellites": 9,
+     "link_cap_tbps": 0.85
     },
     {
      "site": "leo_p4",
@@ -415,7 +421,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 22.18,
      "battery_mw": 52.82,
      "link_tbps": 0.111,
-     "link_cap_tbps": 1.0
+     "satellites": 9,
+     "link_cap_tbps": 0.85
     },
     {
      "site": "leo_p5",
@@ -441,7 +448,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 22.18,
      "battery_mw": 52.82,
      "link_tbps": 0.111,
-     "link_cap_tbps": 1.0
+     "satellites": 9,
+     "link_cap_tbps": 0.85
     },
     {
      "site": "leo_p6",
@@ -467,7 +475,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 22.18,
      "battery_mw": 52.82,
      "link_tbps": 0.111,
-     "link_cap_tbps": 1.0
+     "satellites": 9,
+     "link_cap_tbps": 0.85
     },
     {
      "site": "leo_p7",
@@ -493,7 +502,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 22.18,
      "battery_mw": 52.82,
      "link_tbps": 0.111,
-     "link_cap_tbps": 1.0
+     "satellites": 9,
+     "link_cap_tbps": 0.85
     },
     {
      "site": "leo_p8",
@@ -519,7 +529,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 22.18,
      "battery_mw": 52.82,
      "link_tbps": 0.111,
-     "link_cap_tbps": 1.0
+     "satellites": 9,
+     "link_cap_tbps": 0.85
     }
    ],
    "days": {
@@ -2221,6 +2232,12 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
     "orbit_it_gwh": 18613.3,
     "heat_radiated_to_space_gwh": 19524.8
    },
+   "comms": {
+    "satellites": 72,
+    "terminals": 216,
+    "ground_stations": 16,
+    "cost_busd": 0.348
+   },
    "sandbox": {
     "racks": 244,
     "mw": 24.4,
@@ -2247,20 +2264,21 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
    "label": "Design 2: our what-if (all orbit)",
    "valid": false,
    "errors": [
-    "cost $30.39B > $30B budget (DECK s9)"
+    "cost $30.84B > $30B budget (DECK s9)"
    ],
-   "cost_busd": 30.388,
+   "cost_busd": 30.836,
    "cost_breakdown_busd": {
     "chips": 21.742,
     "context_memory": 0.242,
-    "launch": 2.596,
+    "launch": 2.6,
     "space_hw": 5.681,
-    "battery": 0.127
+    "battery": 0.127,
+    "comms": 0.444
    },
    "users_served": 4450000000.0,
    "users_target": 4450000000.0,
    "earth_grid_mw": 0,
-   "space_mass_t": 12979.0,
+   "space_mass_t": 13000.0,
    "eclipse_battery": "all",
    "satellite": {
     "mass_t": {
@@ -2301,7 +2319,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 52.75,
      "battery_mw": 125.61,
      "link_tbps": 0.199,
-     "link_cap_tbps": 1.0
+     "satellites": 17,
+     "link_cap_tbps": 1.61
     },
     {
      "site": "leo_p2",
@@ -2326,7 +2345,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 52.75,
      "battery_mw": 125.61,
      "link_tbps": 0.199,
-     "link_cap_tbps": 1.0
+     "satellites": 17,
+     "link_cap_tbps": 1.61
     },
     {
      "site": "leo_p3",
@@ -2351,7 +2371,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 52.75,
      "battery_mw": 125.61,
      "link_tbps": 0.199,
-     "link_cap_tbps": 1.0
+     "satellites": 17,
+     "link_cap_tbps": 1.61
     },
     {
      "site": "leo_p4",
@@ -2376,7 +2397,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 52.75,
      "battery_mw": 125.61,
      "link_tbps": 0.199,
-     "link_cap_tbps": 1.0
+     "satellites": 17,
+     "link_cap_tbps": 1.61
     },
     {
      "site": "leo_p5",
@@ -2401,7 +2423,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 52.75,
      "battery_mw": 125.61,
      "link_tbps": 0.199,
-     "link_cap_tbps": 1.0
+     "satellites": 17,
+     "link_cap_tbps": 1.61
     },
     {
      "site": "leo_p6",
@@ -2426,7 +2449,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 52.75,
      "battery_mw": 125.61,
      "link_tbps": 0.199,
-     "link_cap_tbps": 1.0
+     "satellites": 17,
+     "link_cap_tbps": 1.61
     },
     {
      "site": "leo_p7",
@@ -2451,7 +2475,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 52.75,
      "battery_mw": 125.61,
      "link_tbps": 0.199,
-     "link_cap_tbps": 1.0
+     "satellites": 17,
+     "link_cap_tbps": 1.61
     },
     {
      "site": "leo_p8",
@@ -2476,7 +2501,8 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
      "battery_mwh": 52.75,
      "battery_mw": 125.61,
      "link_tbps": 0.199,
-     "link_cap_tbps": 1.0
+     "satellites": 17,
+     "link_cap_tbps": 1.61
     }
    ],
    "days": {
@@ -3601,6 +3627,12 @@ details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
     "orbit_conversion_losses_gwh": 1663.7,
     "orbit_it_gwh": 33974.2,
     "heat_radiated_to_space_gwh": 35638.0
+   },
+   "comms": {
+    "satellites": 136,
+    "terminals": 408,
+    "ground_stations": 16,
+    "cost_busd": 0.444
    },
    "sandbox": {
     "racks": 232,

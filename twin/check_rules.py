@@ -38,15 +38,16 @@ def check(path):
     want = (r.get("satellite") or {}).get("launch_usd_per_kg", 200)
     mass = r["space_mass_t"] * 1000
     charged = r["cost_breakdown"]["launch"] / mass if mass else 0      # price actually billed
+    mass_no_comms = mass - r["comms"]["terminal_t"] * 1000
     add("s9" if want == 200 else "what-if", "launch price used for orbit", f"${want}/kg",
         f"${charged:.0f}/kg" if mass else "-", not mass or abs(charged - want) < 0.01)
     expect = (r.get("satellite") or {}).get("kg_per_mw", C.SPACE_KG_PER_MW)
     orbit_mw = sum(p["it_mw"] for p in r["pools"] if p["space"]) + sum(
         v["it_mw"] for s, v in r["sandbox"].get("by_site", {}).items() if C.SITES[s]["kind"] == "space")
     batt_kg = r["cost_breakdown"]["battery"] / C.ECLIPSE_BATTERY["usd_per_kwh"] * C.ECLIPSE_BATTERY["kg_per_kwh"]
-    add("s14" if not r.get("satellite") else "what-if", "orbit mass = MW x t/MW + eclipse batteries",
-        f"{expect / 1000:.1f} t/MW + {batt_kg / 1000:,.0f} t", f"{mass / 1000:,.0f} t",
-        not orbit_mw or abs(mass - orbit_mw * expect - batt_kg) < 1)
+    add("s14" if not r.get("satellite") else "what-if", "orbit mass = MW x t/MW + batteries + laser terminals",
+        f"{expect / 1000:.1f} t/MW + {batt_kg / 1000:,.0f} t + {r['comms']['terminal_t']:,.0f} t", f"{mass / 1000:,.0f} t",
+        not orbit_mw or abs(mass_no_comms - orbit_mw * expect - batt_kg) < 1)
     launch = r["cost_breakdown"]["launch"]
     add("s14", "launch bill = tonnes x $/kg", f"{mass / 1000:,.0f} t x ${want}", f"${launch / 1e9:.2f}B",
         abs(launch - mass * want) < 1e3)
@@ -120,8 +121,11 @@ def check(path):
             if p["space"]:
                 by_plane[p["site"]] = by_plane.get(p["site"], 0) + steps * p["cap"] / total * per_step * C.TEXT_BYTES_PER_TOKEN * 8
     if by_plane:
-        worst = max(by_plane.values())
-        add("s21", "network: busiest plane's Earth link", f"{C.PLANE_LINK_BPS / 1e12:.0f} Tbps", f"{worst / 1e12:.2f} Tbps", worst <= C.PLANE_LINK_BPS)
+        cm = C.COMMS
+        cap = {s: r["comms"]["satellites"].get(s, 0) * cm["ground_link_gbps"] * 1e9 * cm["link_availability"] for s in by_plane}
+        worst = max(by_plane, key=lambda s: by_plane[s] / cap[s] if cap[s] else 1e9)
+        add("s21", "network: busiest plane's Earth links (satellites x 100 Gbps x 95%)", f"{cap[worst] / 1e12:.2f} Tbps",
+            f"{by_plane[worst] / 1e12:.2f} Tbps", by_plane[worst] <= cap[worst])
 
     # ---- energy per task (DECK s21 asks for joules per task)
     j = r["joules_per_request"]

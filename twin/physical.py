@@ -145,7 +145,8 @@ def twin(path):
                                     * C.ECLIPSE_BATTERY["kg_per_kwh"] / 1000, 0),
                        battery_mwh=round(batt_mw * C.ECLIPSE_BATTERY["min"] / 60, 2),
                        battery_mw=round(batt_mw, 2), link_tbps=round(traffic.get(site, 0.0), 3),
-                       link_cap_tbps=C.PLANE_LINK_BPS / 1e12)
+                       satellites=r["comms"]["satellites"].get(site, 0),
+                       link_cap_tbps=round(r["comms"]["satellites"].get(site, 0) * C.COMMS["ground_link_gbps"] * C.COMMS["link_availability"] / 1000, 2))
         sites.append(row)
 
     # hour by hour: a normal day, and the worst eclipse day for the 06:00 planes
@@ -197,6 +198,9 @@ def twin(path):
         users_served=r["twin_users_served"], users_target=r["users_target"],
         earth_grid_mw=round(r["earth_grid_mw"], 1), space_mass_t=round(r["space_mass_t"], 0),
         eclipse_battery=batt, satellite=phys, sites=sites, days=days, outages=outages, energy_5yr=energy,
+        comms=dict(satellites=sum(r["comms"]["satellites"].values()), terminals=r["comms"]["terminals"],
+                   ground_stations=C.COMMS["ground_stations"] if r["comms"]["satellites"] else 0,
+                   cost_busd=round(r["comms"]["usd"] / 1e9, 3)),
         sandbox=dict(racks=r["sandbox"]["racks"], mw=round(r["sandbox"]["mw"], 1),
                      concurrent_tasks_m=round(r["sandbox"].get("concurrent_tasks", 0) / 1e6, 1)),
         energy_per=dict(chat_wh=round(j["chat"] / 3600, 4), agent_task_wh=round(task("agent_int", "agent_int_sub") / 3600, 2),

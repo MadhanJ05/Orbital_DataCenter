@@ -107,8 +107,15 @@ SANDBOX_PEAK = 1.3                 # DERIVED in simulate.py: background work run
 IDLE_POWER_FRACTION = 0.3          # ASSUMED: an idle rack still draws 30% of nameplate
 KV_LINK_BYTES_S = 50e9             # ASSUMED: 400 Gb/s per replica between sites
 TEXT_BYTES_PER_TOKEN = 4           # ASSUMED: UTF-8 text, about 4 characters per token
-PLANE_LINK_BPS = 1e12              # ASSUMED: optical ground + crosslink capacity per orbital plane
-                                   # (Google Suncatcher bench: 1.6 Tbps between two satellites)
+# Communications for orbit (values from the teammates' models, ASSUMED there too):
+# 3 laser terminals per satellite (2 crosslinks to neighbours for relaying, 1 to the ground), ~50 kg
+# and ~$0.5M each (agents-in-orbit/model.py); 100 Gbps per ground link at 95% availability for
+# weather (app/src/modules/comms); a global network of optical ground stations so every satellite,
+# relaying over crosslinks if needed, always reaches one under clear sky.
+COMMS = dict(sat_mw=8, terminals_per_sat=3, terminal_kg=50, terminal_usd=0.5e6,
+             ground_link_gbps=100, link_availability=0.95,
+             ground_stations=16, station_capex_usd=10e6, station_opex_usd_yr=1e6)
+PLANE_LINK_BPS = 1e12              # legacy fallback only; the check now uses satellites x COMMS link
 
 # ---------------------------------------------------------------- cooling
 # PUE: DECK s14 (cold / desert); "temperate" sites use the midpoint (ASSUMED).

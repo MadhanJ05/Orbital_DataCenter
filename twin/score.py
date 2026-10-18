@@ -386,7 +386,7 @@ def _evaluate(design):
 
     # ---- power, energy, money
     totals = dict(chips=0.0, context_memory=0.0, facility=0.0, energy=0.0, carbon=0.0,
-                  water=0.0, launch=0.0, space_hw=0.0, battery=0.0)
+                  water=0.0, launch=0.0, space_hw=0.0, battery=0.0, comms=0.0)
     batt = design.get("eclipse_battery", C.ECLIPSE_BATTERY_DEFAULT)   # None, "live" or "all"
     battery_on = lambda p: p["space"] and (batt == "all" or (batt == "live" and p["stream"] in C.LIVE_STREAMS))
     site_mw, site_it_mw = {}, {}
@@ -493,6 +493,28 @@ def _evaluate(design):
             sandbox["mw"] += it_mw
             sandbox["usd"] += sum(cost.values())
         sandbox.update(concurrent_tasks=bg_tasks_s / margin * task_s, task_s=task_s)
+    # ---- communications for orbit: laser terminals on every satellite, and the ground stations
+    comms = dict(satellites={}, terminals=0, usd=0.0, ground_usd=0.0, terminal_usd=0.0, terminal_t=0.0)
+    space_it = {}
+    for site, mw in site_it_mw.items():
+        if C.SITES[site]["kind"] == "space":
+            space_it[site] = mw
+    if space_it:
+        cm = C.COMMS
+        for site, mw in space_it.items():
+            n = math.ceil(mw / cm["sat_mw"] - 1e-9)
+            comms["satellites"][site] = n
+            kg = n * cm["terminals_per_sat"] * cm["terminal_kg"]
+            usd = n * cm["terminals_per_sat"] * cm["terminal_usd"]
+            launch = kg * C.SITES[site]["launch_usd_per_kg"]
+            launch_kg += kg
+            totals["launch"] += launch
+            comms["terminals"] += n * cm["terminals_per_sat"]
+            comms["terminal_usd"] += usd
+            comms["terminal_t"] += kg / 1000
+        comms["ground_usd"] = cm["ground_stations"] * (cm["station_capex_usd"] + cm["station_opex_usd_yr"] * C.YEARS)
+        comms["usd"] = comms["terminal_usd"] + comms["ground_usd"]
+        totals["comms"] = comms["usd"]
     total_usd = sum(totals.values())
 
     # ---- hard limits
@@ -554,7 +576,7 @@ def _evaluate(design):
                         served_fraction=worst_users / target if target else 0.0,
                         live_served_by_outage={s: min(f[x] for x in C.LIVE_STREAMS if d_out[x] > 0)
                                                for s, f in outage.items()} if any(d_out[x] > 0 for x in C.LIVE_STREAMS) else {}),
-        demand_out_tps=d_out, demand_in_tps=d_in, pools=pools, sandbox=sandbox,
+        demand_out_tps=d_out, demand_in_tps=d_in, pools=pools, sandbox=sandbox, comms=comms,
     )
 
 

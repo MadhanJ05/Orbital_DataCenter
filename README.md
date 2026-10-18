@@ -50,9 +50,10 @@ Rebuild after any model change: `python3 twin/physical.py && python3 twin/build_
 | | 🏁 **Design 1: the safest (Earth + orbit)** | 💡 **Design 2: our what-if (all orbit)** |
 |---|---|---|
 | What it is | The organizers' catalog exactly as given (18-tonne satellite), 6 Earth sites + 8 orbital planes | Our lighter satellite (10.7 tonnes); the whole fleet in 8 orbital planes, no Earth grid at all |
-| 💰 Budget ($30B) | ✅ $29.98B | ⚠️ $30.39B (over by $0.39B; cost cuts in progress) |
+| 💰 Budget ($30B) | ⚠️ $30.33B (over by $0.33B; cost cuts in progress) | ⚠️ $30.84B (over by $0.84B; cost cuts in progress) |
 | ⚡ Earth grid (500 MW) | ✅ 450 MW | ✅ 0 MW |
-| 🚀 Launch ($200/kg) | ✅ 10,470 t = $2.09B | ✅ 12,979 t = $2.60B |
+| 🚀 Launch ($200/kg) | ✅ 10,481 t = $2.10B | ✅ 13,000 t = $2.60B |
+| 📡 Communications | 72 satellites x 3 laser terminals + 16 ground stations = $0.35B | 136 satellites x 3 terminals + 16 stations = $0.44B |
 | ⏱️ Speed (chat 0.6 s, agents 2 s) | ✅ 0.24 s / 0.25 s | ✅ 0.13 s / 0.12 s |
 | 👥 Users served | ✅ 100% of 4.45 billion | ✅ 100% of 4.45 billion |
 | 🛡️ Lose any one site or plane | ✅ still 100% served | ✅ still 100% served |
@@ -65,16 +66,18 @@ idea:** the organizers invite each team to change one assumption, and ours is th
 weight. With a 10.7-tonne satellite, the entire fleet can leave Earth's grid and still fit the
 budget. Design 2 is also faster, because orbit is only 40 ms from everyone.
 
-**The trade-off:** Design 2 currently costs $0.4B more and is over budget until we find cuts. Design 2
+**Where we are:** adding the communications both designs need (laser terminals and ground stations)
+put both over budget; cost cuts are in progress. Design 2 costs $0.5B more than Design 1, and it
 depends on one kind of place (orbit), so a big solar storm hitting every plane at once is its
 worst case. Design 1 mixes two kinds of place that fail for different reasons.
 
 ## Design 1: the safest (Earth + orbit)
 
 - 🌍 **Earth:** all 6 sites (Nordics, Iceland, West Texas, Virginia, Midwest, Gulf), 450 of 500 MW
-- 🛰️ **Orbit:** 8 separate orbital planes of 68 MW each, half at 06:00 and half at 18:00 local time, 10,470 tonnes launched
+- 🛰️ **Orbit:** 8 separate orbital planes of 68 MW each, half at 06:00 and half at 18:00 local time, 10,481 tonnes launched
 - 🔋 **Eclipse batteries** on the racks that serve live users, so they keep working in Earth's shadow
-- 💰 **$29.98B:** chips and tool-sandbox racks $20.1B, buildings $3.3B, satellite hardware $3.3B, launch $2.1B, power and carbon $1.0B, agent memory store $0.2B, batteries $0.05B
+- 📡 **Comms:** 72 satellites with 3 laser terminals each (2 to neighbours for relaying, 1 to the ground) and 16 optical ground stations: $0.35B
+- 💰 **$30.33B:** comms $0.35B, chips and tool-sandbox racks $20.1B, buildings $3.3B, satellite hardware $3.3B, launch $2.1B, power and carbon $1.0B, agent memory store $0.2B, batteries $0.05B
 
 **Why not put everything in orbit?** Space has unlimited power, but with the organizers'
 18-tonne satellite, an orbital megawatt costs about $11.2M over 5 years, against $9.3M in the
@@ -150,9 +153,10 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 
 ## Design 2: all orbit, with a lighter satellite (the 18-tonne problem)
 
-- 🛰️ **Orbit only:** 8 orbital planes of 129 MW each (half at 06:00, half at 18:00), 12,979 tonnes launched, **0 MW of Earth grid**
+- 🛰️ **Orbit only:** 8 orbital planes of 129 MW each (half at 06:00, half at 18:00), 13,000 tonnes launched, **0 MW of Earth grid**
 - 🔋 **Eclipse batteries on every rack**, so the whole fleet keeps working in Earth's shadow
-- 💰 **$30.39B:** chips and tool-sandbox racks $21.7B, satellite hardware $5.7B, launch $2.6B, agent memory store $0.2B, batteries $0.13B. **$0.39B over budget for now.**
+- 📡 **Comms:** 136 satellites with 3 laser terminals each and 16 optical ground stations: $0.44B
+- 💰 **$30.84B:** chips and tool-sandbox racks $21.7B, satellite hardware $5.7B, launch $2.6B, comms $0.44B, agent memory store $0.2B, batteries $0.13B. **$0.84B over budget for now.**
 - ⏱️ **Faster:** chat starts in 0.13 s, because orbit is only 40 ms from everyone
 
 The organizers' orbital megawatt weighs 18 tonnes. Lighter solar panels, carbon-fiber
@@ -178,11 +182,11 @@ The organizers didn't give every number (for example local electricity prices), 
 some. We made each of our 16 guesses 25% worse, one at a time:
 
 - **Prices, carbon and site power limits hardly matter**: under $0.2B each.
-- **With batteries and tool sandboxes added, the budget margin is nearly gone.** Design 1 still
-  fits in 4 of 16 cases; Design 2 starts $0.39B over, so it fits in none until we cut costs.
-- **The cheapest fix we've found:** in an outage, protect live users fully and let background
-  jobs wait a little longer. That alone brings Design 2 to $29.63B, under budget, and keeps
-  Design 1 under budget in 9 of 16 cases.
+- **With batteries, tool sandboxes and communications added, both designs start over budget**, so
+  neither fits any stress case until we cut costs.
+- **The cheapest fix we've found so far:** in an outage, protect live users fully and let
+  background jobs wait a little longer. That alone brings Design 1 to $29.91B (fits) and Design 2
+  to $30.06B (just over), and Design 1 then fits in 6 of 16 stress cases.
 - The two that break both designs are about **how good 2035 chips are** (compute speed, and
   how often the AI's drafted words are right). Weaker chips mean every team needs more of
   them, which makes Earth's power limit tighter and orbit *more* necessary.
@@ -195,9 +199,10 @@ some. We made each of our 16 guesses 25% worse, one at a time:
 | 🛡️ Safety rules | We keep 5% of every chip's memory free, as real systems do (see below) | Included in both designs |
 | 🌑 Eclipses | Real orbit geometry (from Alfred's app and Andrey's model): Earth's shadow up to 21 minutes of every 96-minute orbit, about 95 days a year. Worst eclipse day simulated alone and with every possible outage | Design 1: 30 of 30 days OK. Design 2: 18 of 18 |
 | 🧰 Tool sandboxes | Background agents run their tools on CPU racks next to the model (from Andrey's model). We now buy, power and launch them | 232–244 racks, $0.6–0.7B |
-| 📋 Every rule, one by one | Budget, grid, launch, chip and cooling rules, every speed target, users served, outages, Earth-orbit network traffic, energy bookkeeping. Each is recalculated from the raw design | Design 1: 39 of 39. Design 2: 32 of 33 (only the budget) |
+| 📡 Communications | 3 laser terminals per 8 MW satellite (50 kg, $0.5M each, from Andrey's model) and 16 optical ground stations ($10M each + $1M/yr); each plane's Earth capacity = satellites x 100 Gbps x 95% weather availability (from Alfred's app) | $0.35–0.44B; busiest plane uses 0.11 of 0.85 Tbps (D1), 0.20 of 1.61 Tbps (D2) |
+| 📋 Every rule, one by one | Budget, grid, launch, chip and cooling rules, every speed target, users served, outages, Earth-orbit network traffic, energy bookkeeping. Each is recalculated from the raw design | Design 1: 38 of 39. Design 2: 32 of 33 (both miss only the budget) |
 | 🕐 A full day, minute by minute | Users in 3 time zones, live users first, background jobs fill the gaps. Run on a normal day, once per possible outage, and on the worst eclipse day with and without each outage | 72 days simulated: no live user ever waits. Longest background wait: 187 min (limit 228) |
-| 🔥 What if our guesses are wrong | Each guessed number made 25% worse | Design 1 fits 4 of 16; Design 2 none until cost cuts |
+| 🔥 What if our guesses are wrong | Each guessed number made 25% worse | Both over budget at baseline; with live-only outage protection Design 1 fits 6 of 16 |
 | 🧮 Hand calculation | 16 key numbers for Design 1 (demand, users per chip, first-reply time, one site's bill, launch, outage spare) redone with plain arithmetic, without our code | All match exactly |
 | 🔍 Code review | We read the model line by line and fixed 4 bugs that made designs look better than they were | Both designs re-optimized after the fixes and still pass |
 
@@ -220,6 +225,11 @@ Gemini prompt in 2025.
   half at 18:00 local time, so their eclipse seasons fall in June and December and never overlap.
   Racks serving live users carry batteries for the longest eclipse plus 20%. We simulated the
   worst eclipse day alone and combined with every possible outage: no live user goes unserved.
+- **"How do the satellites talk to each other and to Earth?"** They don't need to share work:
+  one copy of a model fits inside one satellite. Each satellite has 3 laser terminals: one to the
+  ground, and two to its neighbours in the same plane so it can relay to a satellite that sees a
+  clear-sky ground station. We pay for 16 optical ground stations spread worldwide. At the busiest
+  hour, a plane uses about an eighth of its Earth link capacity.
 - **"Why not put satellites where they're always in sunlight?"** We checked. Above about 1,400 km,
   a dawn-dusk orbit never enters Earth's shadow (at our 650 km, the longest eclipse is 19.6
   minutes). But eclipses only cost us $0.05B (Design 1) or $0.13B (Design 2) in batteries. The

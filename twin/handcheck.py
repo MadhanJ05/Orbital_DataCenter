@@ -120,7 +120,8 @@ left_spare = int_cap - biggest - int_out / peak_int
 show("after an outage: spare / off-peak work (>= 1, hand only)", left_spare / min(bg_out, spare), None, "x")
 
 # ---------------------------------------------------------------- 7. the total
-show("total = pools + tool sandboxes (consistency)", sum(p["cost_usd"] for p in r["pools"]) + r["sandbox"]["usd"], r["cost_usd"], "$")
+comms_launch = r["comms"]["terminal_t"] * 1000 * 200
+show("total = pools + sandboxes + comms (consistency)", sum(p["cost_usd"] for p in r["pools"]) + r["sandbox"]["usd"] + r["comms"]["usd"] + comms_launch, r["cost_usd"], "$")
 
 print(f"\nHand check of Design 1 ({len(rows)} quantities): by hand vs scorer")
 print(f"  {'quantity':<55} {'by hand':>16} {'scorer':>16}  diff")
