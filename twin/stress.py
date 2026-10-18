@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SNAPSHOT = ("SITES", "CHIPS", "COOLING", "FLOPS_EFFICIENCY", "WEIGHT_READ_FACTOR", "ATTN_FLOPS_PER_KV_BYTE",
             "SPEC_ACCEPT", "SPEC_DRAFT_OVERHEAD_S", "SYNC_PER_DOUBLING_S", "CONTEXT_MEM_USD_PER_GB",
             "CONTEXT_MEM_W_PER_GB", "IDLE_POWER_FRACTION", "KV_LINK_BYTES_S", "FACILITY_USD_PER_MW",
-            "SPACE_HW_USD_PER_MW", "SPACE_KG_PER_MW")
+            "SPACE_HW_USD_PER_MW", "SPACE_KG_PER_MW", "MEMORY_USABLE", "DEMAND_MARGIN", "ECLIPSE_BATTERY_DEFAULT")
 
 
 @contextmanager
@@ -137,10 +137,12 @@ def main():
     ap.add_argument("--design")
     ap.add_argument("--light", action="store_true", help="use the 10.7 t/MW what-if satellite")
     ap.add_argument("--orbit-only", action="store_true", help="no Earth sites (Design 2)")
+    ap.add_argument("--battery", choices=("live", "all"), help="eclipse batteries the re-optimized designs fly")
     a = ap.parse_args()
     default = ("whatif_all_orbit_light.json" if a.orbit_only else "whatif_resilient_light.json") if a.light else "final_resilient.json"
     design = Path(a.design or ROOT / "designs" / default)
     print(f"\nStress test: each assumption {a.pct:.0f}% worse ({design.name}, budget $30B)")
+    C.ECLIPSE_BATTERY_DEFAULT = a.battery or json.loads(design.read_text()).get("eclipse_battery")
     rows = run(a.pct, design, a.light, a.orbit_only)
     tag = f"stress_{int(a.pct)}" + ("_light" if a.light else "") + ("_orbit_only" if a.orbit_only else "")
     (ROOT / "designs" / f"{tag}.json").write_text(json.dumps(rows, indent=1) + "\n")

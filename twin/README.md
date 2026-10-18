@@ -30,7 +30,9 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | `twin/orbit_mass.py` | The 18-tonne what-if: one orbital MW broken into compute, solar, radiators and structure, with physical levers (chip temperature vs leakage, two cooling loops, solar W/kg, radiator kg/m², stripped racks, structure share, launch price). It re-optimizes the whole fleet at each step and writes `designs/whatif_ladder.json`. |
 | `twin/simulate.py` | Minute-by-minute day. Builds global demand curves from three regions in their own time zones, serves live work first, queues background work into what's left, and checks every background task against its 4 h deadline, on a normal day and with each site or plane lost. Writes `designs/sim_24h.json`. |
 | `twin/check_rules.py` | Rule-by-rule check against the deck for Design 1 and Design 2 (or any design). Each line gives the slide, the limit, the design's value and PASS/FAIL. It recomputes from the pools instead of trusting the scorer. |
-| `twin/handcheck.py` | Redoes 15 key Design 1 results with calculator arithmetic from deck numbers, without the scorer's physics, and compares: demand, sessions per chip, capacity, first-token time, one site's bill, launch, night shift, outage margins. |
+| `twin/handcheck.py` | Redoes 16 key Design 1 results with calculator arithmetic from deck numbers, without the scorer's physics, and compares: demand, sessions per chip, capacity, first-token time, one site's bill, launch, off-peak shift, outage margins. |
+| `twin/physical.py` | The twin's physical layer: per site and plane, power at the meter hour by hour (normal day and both eclipse days), solar-array and radiator area, chip and radiator temperature, batteries, link traffic, the 5-year energy flow, and every outage/eclipse day. Writes `designs/twin.json`. |
+| `twin/build_twin_page.py` | Embeds `designs/twin.json` into `twin_page.html` and writes the standalone `twin.html` at the repo root. The page has no model logic. |
 | `twin/stress.py` | Makes each ASSUMED/CALIB number 25% worse (`--pct`), one at a time and then all together. Re-scores the final design as built and re-optimizes from scratch. `--light` uses the 10.7 t/MW satellite; `--orbit-only` removes Earth sites (Design 2). Writes `designs/stress_25*.json`. |
 | `twin/optimize.py` | Coordinate search over every lever. Keeps a change only if the design stays at 100% served, stays valid, and gets cheaper. |
 | `twin/test_calibration.py` | Checks against the deck: ~960 chat and ~117 agent sessions per GPU, per-user peak tokens, 972 W/m² radiators, $3.6M/MW launch, orbit break-even with the Nordics at $95/kg and West Texas at $170/kg, Moon and Mars latency rules. |
@@ -61,42 +63,55 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 
 | Design | Users served | 5-year cost | Earth grid | Orbit |
 |---|---|---|---|---|
-| Case A, prompters | 4.0B (100%) | $13.1B | 386 MW | none |
-| Case B, agent developers | 50M (100%) | $8.5B | 240 MW | none |
-| Case C, knowledge workers | 400M (100%) | $8.3B | 234 MW | none |
-| A+B+C, Earth only | 2.6B of 4.45B (58%) | $16.8B | 488 MW (full) | none |
-| A+B+C, optimized, no failure protection | 4.45B (100%) | $26.6B | 485 MW | 280 MW, 5,037 t |
-| **Design 1: survives losing any one site or plane** | **4.45B (100%)** | **$28.78B** | **435 MW, 6 sites** | **8 planes x 66 MW, 9,442 t** |
-| Design 1 layout with the 10.7 t/MW satellite | 4.45B (100%) | $27.76B | 435 MW | 8 x 66 MW, 5,633 t |
-| **Design 2: 10.7 t/MW satellite, all orbit** | **4.45B (100%)** | **$28.79B** | **0 MW** | **8 x 124 MW, 10,660 t** |
+| **Design 1: survives losing any one site or plane, and the worst eclipse day with it** | **4.45B (100%)** | **$29.98B** | **450 MW, 6 sites** | **8 planes x 68 MW, 10,470 t, batteries on live racks** |
+| **Design 2: 11.0 t/MW satellite, all orbit, batteries on every rack** | **4.45B (100%)** | **$30.39B (over by $0.39B)** | **0 MW** | **8 x 129 MW, 12,979 t** |
+| Design 2 with live-only outage protection | 4.45B (100%) | $29.63B | 0 MW | |
 
-The Case A/B/C rows predate the model fixes below. Re-run `build.py` to refresh them.
+All include the 5% memory reserve (`MEMORY_USABLE = 0.95`) and tool sandboxes.
+`DEMAND_MARGIN` (default 0) makes the scorer size and check service at that much above the
+deck's demand, while energy is still billed at the real demand.
+
+## What we took from the app and agents-in-orbit models
+
+- **Tool sandboxes** (`SANDBOX` in `catalog.py`, values from `agents-in-orbit/model.py`): background
+  agents run their tools on CPU/NVMe racks next to the model (100 kW, $2M, 1.5 t, 170k concurrent
+  tasks per rack). They are sized by Little's law (task arrivals x wall time), for the busiest
+  off-peak hour (x1.3, from `simulate.py`), and for losing the site with the most background work.
+- **Eclipses** (`ECLIPSE_*`, `plane_ltan` in `catalog.py`; geometry from `app/src/modules/orbit` and
+  `agents-in-orbit`): up to 21 min of shadow per 96 min orbit on ~95 days a year at 575-650 km. A
+  steady 22% of a plane is dark on its worst day. Odd planes fly at 06:00, even at 18:00, so the two
+  halves are in season in June and December. `"eclipse_battery": "live" | "all"` in a design file
+  flies 25 min of Li-ion (250 Wh/kg, $300/kWh) on those racks. `simulate.py --eclipse` runs the
+  worst day for each half, alone and with every single outage.
+- **Orbit power overhead:** the deck's 1,080 m^2 of radiator for 1 MW of GPUs is 1.05 MW of heat,
+  the same 1.05 that `agents-in-orbit` derives from components. `orbit_mass.py` now carries it on
+  solar and radiators, so the deck satellite is still exactly 18 t/MW and the light one is 11.0 t/MW.
+- **Cross-checks:** chat energy agrees with `agents-in-orbit` (199 J vs ~200 J per turn). Radiation
+  is 150 rad/yr x 5 yr = 0.75 krad, below the 2 krad level where HBM first showed irregularities
+  (arXiv 2511.19468), consistent with the deck's 95% chip survival.
 
 ## Stress test (each assumption 25% worse)
 
-| | Design 1 ($28.78B) | Design 2 ($28.79B) |
+| | Design 1 ($29.98B) | Design 2 ($30.39B) |
 |---|---|---|
-| Single assumptions that still fit the budget with every outage covered | **13 of 16** | 12 of 16 |
-| Breaks it | chip FLOPS (-$3.1B), draft acceptance (-$5.3B) | chip FLOPS (-$3.3B), draft acceptance (-$4.9B), space hardware (-$0.1B) |
-| All 16 worse at once | $51.6B | $51.1B |
-
-Earth prices, carbon and grid caps barely move the cost. The two that matter are about chip
-performance (prefill FLOPS, speculative-decoding acceptance). They change how many chips
-everyone needs, wherever the chips sit.
+| Single assumptions that still fit the budget with every outage covered | 4 of 16 | 0 of 16 (starts over budget) |
+| Same, protecting only live users in an outage | 9 of 16 | 12 of 16 |
+| Breaks it even then | building cost, space hardware, chip FLOPS, attention math, draft acceptance, cross-chip sync | space hardware, chip FLOPS, attention math, draft acceptance |
+| All 16 worse at once | $53.6B | $53.8B |
 
 ## Deck interpretations (where the slides leave room)
 
 - **Workloads:** the Kimi K3 / Qwen3.5 / gpt-oss set (slides 9-14, named on the Track 1 Challenge slide). The Sage/Titan slides later in the deck are an alternate version and are not used.
 - **500 MW** is counted as facility power: IT plus cooling, at nameplate. That's the strict reading.
 - **Virginia and the Midwest** use the midpoint of the deck's cold and desert PUE columns.
-- **Air cards in orbit** are radiator-cooled like everything else in space. If that is disallowed and GPUs do the prefill, Design 1 costs $29.70B and Design 2 $29.14B: both still valid.
-- **Chip memory** is filled to 100% by weights and caches, with no reserve for fragmentation.
+- **Air cards in orbit** are radiator-cooled like everything else in space. If that is disallowed and GPUs do the orbital prefill, Design 1 costs $30.55B and Design 2 $30.65B: both over budget.
+- **Chip memory:** 5% is kept free for fragmentation and activations (`MEMORY_USABLE`).
 
 ## Model fixes from the code review
 
-- **Night shift during outages:** background work riding in the interactive pools must fit in
+- **Off-peak shift during outages:** background work riding in the interactive pools must fit in
   their remaining average spare (capacity left after the outage, minus the interactive
-  average). The resilience check covers every stream that has demand before night shift.
+  average). The resilience check covers every stream that has demand before off-peak shift.
 - **Parked agents:** sessions waiting on tools are counted at the real decode speed. Chips
   run agents well above 100 tok/s, so about 8 caches are parked per decoding session, not 1.6.
   The context-memory tier grew from 17 to 74 PB.

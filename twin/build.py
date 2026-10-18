@@ -158,6 +158,8 @@ def freeze(design):
     """Turn autosized shares into fixed rack counts so the file stands on its own."""
     r = S.evaluate(design)
     out = dict(design, pools=[])
+    if C.ECLIPSE_BATTERY_DEFAULT:
+        out["eclipse_battery"] = C.ECLIPSE_BATTERY_DEFAULT
     for p in r["pools"]:
         out["pools"].append({k: p[k] for k in ("name", "stream", "phase", "site", "chip",
                                                "chips_per_replica", "cooling", "racks")})

@@ -46,7 +46,12 @@ def radiator_w_per_m2(t_k):
     return r["emissivity"] * C.STEFAN_BOLTZMANN * (t_k ** 4 - r["sink_k"] ** 4) * r["sides"]
 
 
-BASE["radiator_kg_per_m2"] = 4000 / (1e6 / radiator_w_per_m2(C.RADIATOR["temp_k"]))
+# Power overhead in orbit (array regulation, harness, rack converters, pumps, avionics): the deck's
+# 1,080 m^2 of radiator for 1 MW of GPUs at 972 W/m^2 is 1.05 MW of heat, the same 1.05 that
+# agents-in-orbit/model.py derives from components. Solar and radiators carry it.
+OVERHEAD = 1080 * radiator_w_per_m2(C.RADIATOR["temp_k"]) / 1e6          # DERIVED from DECK s14: 1.05
+BASE["solar_w_per_kg"] = 200 * OVERHEAD                                  # deck: 5 t of array for 1.05 MW
+BASE["radiator_kg_per_m2"] = 4000 / 1080                                 # deck: 4 t for 1,080 m^2
 
 
 def mass_per_mw(p):
@@ -60,14 +65,14 @@ def mass_per_mw(p):
     logic_share = 1 - p["mem_heat_share"]
     if p["loops"] == 1:
         power = leak(t_logic)
-        heat_at = [(power, t_logic - p["chain_dt_k"])]
+        heat_at = [(power * OVERHEAD, t_logic - p["chain_dt_k"])]
     else:                                     # memory on its own cool loop
         t_mem = min(t_logic, p["t_mem_max_k"] - 10)
         p_logic, p_mem = logic_share * leak(t_logic), p["mem_heat_share"] * leak(t_mem)
         power = p_logic + p_mem
-        heat_at = [(p_logic, t_logic - p["chain_dt_k"]), (p_mem, t_mem - p["chain_dt_k"])]
+        heat_at = [(p_logic * OVERHEAD, t_logic - p["chain_dt_k"]), (p_mem * OVERHEAD, t_mem - p["chain_dt_k"])]
     radiator_t = sum(mw * 1e6 / radiator_w_per_m2(t) * p["radiator_kg_per_m2"] for mw, t in heat_at) / 1000
-    solar_t = power * 1e6 / p["solar_w_per_kg"] / 1000
+    solar_t = power * OVERHEAD * 1e6 / p["solar_w_per_kg"] / 1000
     compute_t = p["compute_t"]
     structure_t = p["structure_share"] * (radiator_t + solar_t + compute_t)
     return dict(total_t=radiator_t + solar_t + compute_t + structure_t, power_factor=power,
@@ -176,6 +181,8 @@ def main():
             rec.update(fleet_cost_usd=r["cost_usd"], served_fraction=r["served_fraction"], valid=r["valid"],
                        orbit_mw=orbit, earth_mw=r["earth_grid_mw"], space_mass_t=r["space_mass_t"])
             design["name"] = f"whatif_{len(out)}"
+            design["satellite"] = dict(kg_per_mw=round(row["total_t"] * 1000), hw_factor=round(row["power_factor"], 4),
+                                       launch_usd_per_kg=row["launch_usd_per_kg"], note=row["label"])
             (root / "designs" / f"whatif_{len(out)}.json").write_text(json.dumps(design, indent=2) + "\n")
         print(line)
         out.append(rec)

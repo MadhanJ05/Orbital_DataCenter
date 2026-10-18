@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Minute-by-minute day of the fleet: does night shift really work?
+"""Minute-by-minute day of the fleet: does off-peak shift really work?
 
     python3 twin/simulate.py                       # final designs, normal day + every outage
     python3 twin/simulate.py designs/x.json        # any design
@@ -51,28 +51,31 @@ def global_profile(peak):
     raise ValueError(f"no smooth global curve reaches peak {peak}")
 
 
-def capacities(result, lost_site=None):
+def capacities(result, lost_site=None, eclipse=None, battery=None):
     """Work capacity per stream in decode tokens/s: limited by decode pools and by
-    prefill pools (prefill tokens per decode token is fixed per stream)."""
+    prefill pools (prefill tokens per decode token is fixed per stream). eclipse="06:00"
+    darkens the planes flying at that local time (their worst eclipse day)."""
     cap = {}
     for s in C.STREAMS:
         st = C.STREAMS[s]
         ratio = (st["ctx"] - st["cached"]) / st["out"]
         ok = [p for p in result["pools"] if p["stream"] == s and p["slo_ok"] and p["site"] != lost_site]
-        d = sum(p["cap"] for p in ok if p["phase"] == "decode")
-        pf = sum(p["cap"] for p in ok if p["phase"] == "prefill")
+        on_battery = battery == "all" or (battery == "live" and s in C.LIVE_STREAMS)
+        lit = lambda p: 1 - C.ECLIPSE_DARK_SHARE if eclipse and not on_battery and C.plane_ltan(p["site"]) == eclipse else 1.0
+        d = sum(p["cap"] * lit(p) for p in ok if p["phase"] == "decode")
+        pf = sum(p["cap"] * lit(p) for p in ok if p["phase"] == "prefill")
         cap[s] = min(d, pf / ratio)
     return cap
 
 
-def simulate(design, lost_site=None):
+def simulate(design, lost_site=None, eclipse=None):
     r = S.evaluate(design)
     raw_out, _, _ = S.demand(r["cases"], r["serving"])
-    cap = capacities(r, lost_site)
+    cap = capacities(r, lost_site, eclipse, design.get("eclipse_battery", C.ECLIPSE_BATTERY_DEFAULT))
     curves = {s: global_profile(C.STREAMS[s]["peak"]) for s in C.STREAMS}
     avg = {s: raw_out[s] / C.STREAMS[s]["peak"] for s in C.STREAMS}
 
-    report = dict(lost_site=lost_site, live_shortfall_pct=0.0, streams={}, hourly={})
+    report = dict(lost_site=lost_site, eclipse=eclipse, live_shortfall_pct=0.0, streams={}, hourly={})
     live = [s for s in C.STREAMS if s not in dict(S.VALLEY_PAIRS).values()]
     for s in live:                          # live work must fit every minute
         worst = max(avg[s] * curves[s][m] - cap[s] for m in range(MINUTES))
@@ -119,23 +122,33 @@ def simulate(design, lost_site=None):
     return report, r
 
 
-def run(path, outages=True):
+def run(path, outages=True, eclipse=False):
     design = json.loads(Path(path).read_text())
     base, r = simulate(design)
     rows = [base]
+    sites = sorted({p["site"] for p in r["pools"]})
     if outages:
-        for site in sorted({p["site"] for p in r["pools"]}):
+        for site in sites:
             rows.append(simulate(design, site)[0])
+    if eclipse and any(C.plane_ltan(s) for s in sites):
+        for ltan in ("06:00", "18:00"):
+            rows.append(simulate(design, None, ltan)[0])
+            if outages:
+                for site in sites:
+                    rows.append(simulate(design, site, ltan)[0])
     return design, r, rows
 
 
 def print_rows(name, r, rows):
-    print(f"\n=== {name}  (${r['cost_usd'] / 1e9:.2f}B, night shift {'on' if r['serving']['bg_fill_valleys'] else 'off'})")
-    print(f"  {'scenario':<22} {'live short':>10} {'bg wait (max)':>14} {'sub wait (max)':>15} {'allowed':>8}  result")
+    print(f"\n=== {name}  (${r['cost_usd'] / 1e9:.2f}B, off-peak shift {'on' if r['serving']['bg_fill_valleys'] else 'off'})")
+    print(f"  {'scenario':<32} {'live short':>10} {'bg wait (max)':>14} {'sub wait (max)':>15} {'allowed':>8}  result")
     for row in rows:
         bg = row["streams"].get("agent_bg", {})
         sub = row["streams"].get("agent_bg_sub", {})
-        print(f"  {('lose ' + row['lost_site']) if row['lost_site'] else 'normal day':<22} "
+        label = ("lose " + row["lost_site"]) if row["lost_site"] else "normal day"
+        if row.get("eclipse"):
+            label = f"{row['eclipse']} eclipse" + (f" + lose {row['lost_site']}" if row["lost_site"] else "")
+        print(f"  {label:<32} "
               f"{row['live_shortfall_pct']:>9.1f}% {bg.get('max_wait_min', 0):>11} min {sub.get('max_wait_min', 0):>12} min "
               f"{bg.get('allowance_min', 0):>5} min  {'OK' if row['ok'] else 'MISSES'}")
 
@@ -143,12 +156,13 @@ def print_rows(name, r, rows):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("designs", nargs="*")
+    ap.add_argument("--eclipse", action="store_true", help="also run each plane group's worst eclipse day")
     a = ap.parse_args()
     root = Path(__file__).resolve().parent.parent
     paths = a.designs or [root / "designs" / "final_resilient.json", root / "designs" / "final_A+B+C.json"]
     out = {}
     for path in paths:
-        design, r, rows = run(path)
+        design, r, rows = run(path, eclipse=a.eclipse)
         print_rows(design.get("name", str(path)), r, rows)
         out[design.get("name", str(path))] = rows
     curves = {s: [round(x, 3) for x in global_profile(C.STREAMS[s]["peak"])[::60]] for s in ("chat", "agent_int", "agent_bg")}

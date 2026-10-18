@@ -97,8 +97,18 @@ CONTEXT_MEM_USD_PER_GB = 3.0       # ASSUMED (pooled CXL DRAM, 2035)
 CONTEXT_MEM_W_PER_GB = 0.25        # ASSUMED
 
 PEAK_WINDOW_H = 3                  # ASSUMED: interactive demand sits near peak for <= 3 h a day
+MEMORY_USABLE = 0.95               # ASSUMED safety rule: keep 5% of chip memory free
+DEMAND_MARGIN = 0.0                # optional safety rule: serve 100% at this much above the deck's demand
+# Tool sandboxes for background agents ("sandbox next to the model", DECK s16): CPU/NVMe racks
+# hosting mostly idle microVMs. Values from agents-in-orbit/model.py (ASSUMED there too).
+SANDBOX = dict(kw=100, usd=2e6, kg=1500, slots=170e3)
+SANDBOX_PEAK = 1.3                 # DERIVED in simulate.py: background work runs at up to ~1.27x
+                                   # its daily average while it fills the quiet hours
 IDLE_POWER_FRACTION = 0.3          # ASSUMED: an idle rack still draws 30% of nameplate
 KV_LINK_BYTES_S = 50e9             # ASSUMED: 400 Gb/s per replica between sites
+TEXT_BYTES_PER_TOKEN = 4           # ASSUMED: UTF-8 text, about 4 characters per token
+PLANE_LINK_BPS = 1e12              # ASSUMED: optical ground + crosslink capacity per orbital plane
+                                   # (Google Suncatcher bench: 1.6 Tbps between two satellites)
 
 # ---------------------------------------------------------------- cooling
 # PUE: DECK s14 (cold / desert); "temperate" sites use the midpoint (ASSUMED).
@@ -135,6 +145,22 @@ ORBIT_PLANES = 8
 for _i in range(1, ORBIT_PLANES + 1):
     SITES[f"leo_p{_i}"] = SITES["leo"]
 LIVE_STREAMS = ("chat", "chat_easy", "agent_int", "agent_int_sub")   # users waiting on a reply
+# Eclipses (geometry-derived in app/ orbit module and agents-in-orbit/model.py): a dawn-dusk plane
+# at 575-650 km is shadowed up to 21 min of a 96 min orbit on ~95 days a year. Satellites are spread
+# around the orbit, so on those days a steady 22% of the plane is dark. Odd planes fly at 06:00
+# local time (eclipse season in June), even planes at 18:00 (December), so only half the planes
+# are ever in season together.
+ECLIPSE_DARK_SHARE = 21.0 / 96.0
+ECLIPSE_SEASON_DAYS = 95
+# Eclipse battery (agents-in-orbit/model.py values, ASSUMED there): carry a rack through the
+# longest eclipse + 20%, Li-ion at 250 Wh/kg and $300/kWh.
+ECLIPSE_BATTERY = dict(min=21.0 * 1.2, kg_per_kwh=4.0, usd_per_kwh=300.0)
+ECLIPSE_BATTERY_DEFAULT = None     # design files say "eclipse_battery": "live" to fly them
+def plane_ltan(site):
+    """06:00 or 18:00 for an orbital plane leo_pN; None for anything else."""
+    if not site.startswith("leo_p"):
+        return "06:00" if site == "leo" else None
+    return "06:00" if int(site[5:]) % 2 else "18:00"
 
 # ---------------------------------------------------------------- space
 SPACE_KG_PER_MW = 18_000           # DECK s14: compute 5 t, solar 5, radiators 4, structure 4

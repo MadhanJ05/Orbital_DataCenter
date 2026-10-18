@@ -24,13 +24,14 @@ int_tasks = {"A": 0, "B": 12, "C": 1}                        # DECK s11
 bg_tasks = {"A": 0, "B": 30, "C": 4}                         # DECK s11
 steps, agent_out, chat_out = 80, 500, 3500                   # DECK s10
 peak_chat, peak_int = 2.0, 2.5                               # DECK s16
-sub_share, spec_draft, accept = 0.5, 5, 0.7                  # design choice; ASSUMED acceptance
+accept = 0.7                                                 # ASSUMED draft acceptance
 
 qwen_total, qwen_active, qwen_kv, qwen_state = 397e9, 17e9, 15e3, 94e6   # DECK s10
 lpu_mem, lpu_bw, lpu_flops = 160 * GB, 200 * TB, 50e15       # DECK s13 (mem, bw); flops ASSUMED
 air_mem, air_bw, air_flops = 96 * GB, 4 * TB, 30e15          # ASSUMED
 bw_eff, flops_eff = 0.6, 0.5                                 # DECK s13 (72/120); ASSUMED
 sync = 1.7e-3                                                # DECK s17
+usable, margin = 0.95, 1.0                                   # our safety rules: 5% memory free, no demand margin
 
 rows = []
 
@@ -44,19 +45,22 @@ def show(what, by_hand, scorer, unit=""):
     rows.append((what, by_hand, scorer, unit, diff))
 
 
-r = S.evaluate(json.loads((ROOT / "designs" / "final_resilient.json").read_text()))
+design = json.loads((ROOT / "designs" / "final_resilient.json").read_text())
+racks = {p["name"]: p["racks"] for p in design["pools"]}        # the design's inputs, read as given
+sub_share, spec_draft = design["serving"]["subagent_share"], design["serving"]["spec_draft"]
+r = S.evaluate(design)
 pools = {p["name"]: p for p in r["pools"]}
 
 # ---------------------------------------------------------------- 1. chat demand at peak
 prompts_per_s = (users["A"] * chat_per_day["A"] + users["C"] * chat_per_day["C"]) / 86400
-chat_peak_out = prompts_per_s * chat_out * peak_chat
-chat_peak_in = prompts_per_s * (64_000 - 56_000) * peak_chat
+chat_peak_out = prompts_per_s * chat_out * peak_chat * margin
+chat_peak_in = prompts_per_s * (64_000 - 56_000) * peak_chat * margin
 show("chat peak demand, tokens out per s", chat_peak_out, r["demand_out_tps"]["chat"])
 show("chat peak demand, new tokens in per s", chat_peak_in, r["demand_in_tps"]["chat"])
 
 # ---------------------------------------------------------------- 2. one chat decode replica: 12 LPUs
 n = 12
-mem = n * lpu_mem                                            # 1,920 GB
+mem = n * lpu_mem * usable                                   # 1,824 GB usable of 1,920
 weights = qwen_total * 0.5                                   # FP4: 198.5 GB
 kv = qwen_kv * (64_000 + chat_out / 2) + qwen_state          # 1.080 GB per session
 sessions = math.floor((mem - weights) / kv)                  # memory-bound
@@ -71,7 +75,8 @@ show("chat tokens/s per LPU", replica_tps / n, pools["chat-decode-nordics"]["rep
 show("chat speed per user (>= 60)", tau / step, tau / pools["chat-decode-nordics"]["step_s"], "tok/s")
 
 # ---------------------------------------------------------------- 3. capacity of the Nordics and LEO chat pools
-replicas = 48 * 256 // n                                     # 48 racks x 256 LPUs
+chat_racks = racks["chat-decode-nordics"]                    # same count at every chat site
+replicas = chat_racks * 256 // n                             # racks x 256 LPUs per rack
 show("Nordics chat decode capacity", replicas * replica_tps, pools["chat-decode-nordics"]["cap"])
 show("one LEO plane chat capacity (95% chips)", replicas * replica_tps * 0.95, pools["chat-decode-leo_p1"]["cap"])
 total_chat = 6 * replicas * replica_tps + 8 * replicas * replica_tps * 0.95
@@ -94,27 +99,28 @@ ttft = one_way["gulf"] + one_way["nordics"] + queue + t_prefill + link + step / 
 show("chat first token, worst case (<= 0.6 s)", ttft, pools["chat-decode-nordics"]["ttft_s"], "s")
 
 # ---------------------------------------------------------------- 5. Nordics chat pool, 5-year bill
-it_mw = 48 * 516 / 1000                                      # DECK s12: 516 kW per LPU rack
+it_mw = chat_racks * 516 / 1000                              # DECK s12: 516 kW per LPU rack
 rho_d = chat_peak_out / total_chat
-load = 0.3 + 0.7 * rho_d / peak_chat                         # ASSUMED 30% idle draw
+load = 0.3 + 0.7 * rho_d / margin / peak_chat                # ASSUMED 30% idle draw; billed at real demand
 mwh = it_mw * load * 1.07 * 5 * 8760                         # DECK s14: PUE 1.07, cold site
 show("Nordics chat pool: building", it_mw * 8e6, pools["chat-decode-nordics"]["cost"]["facility"], "$")
 show("Nordics chat pool: electricity", mwh * 25, pools["chat-decode-nordics"]["cost"]["energy"], "$")
 show("Nordics chat pool: carbon", mwh * 25 / 1000 * 100, pools["chat-decode-nordics"]["cost"]["carbon"], "$")
-show("LEO chat pool: launch", it_mw * 18_000 * 200, pools["chat-decode-leo_p1"]["cost"]["launch"], "$")
+battery_kg = it_mw * 1000 * (21 * 1.2 / 60) * 4                # live racks carry 25 min of battery at 250 Wh/kg
+show("LEO chat pool: launch (incl. eclipse battery)", (it_mw * 18_000 + battery_kg) * 200, pools["chat-decode-leo_p1"]["cost"]["launch"], "$")
 
-# ---------------------------------------------------------------- 6. night shift
-int_out = (users["B"] * int_tasks["B"] + users["C"] * int_tasks["C"]) * (1 - sub_share) * steps * agent_out / 86400 * peak_int
-bg_out = (users["B"] * bg_tasks["B"] + users["C"] * bg_tasks["C"]) * (1 - sub_share) * steps * agent_out / 86400
+# ---------------------------------------------------------------- 6. off-peak shift
+int_out = (users["B"] * int_tasks["B"] + users["C"] * int_tasks["C"]) * (1 - sub_share) * steps * agent_out / 86400 * peak_int * margin
+bg_out = (users["B"] * bg_tasks["B"] + users["C"] * bg_tasks["C"]) * (1 - sub_share) * steps * agent_out / 86400 * margin
 spare = int_out - int_out / peak_int                         # interactive peak minus its average
 show("background work left for its own racks", bg_out - min(bg_out, spare), r["demand_out_tps"]["agent_bg"])
 int_cap = sum(p["cap"] for p in r["pools"] if p["stream"] == "agent_int" and p["phase"] == "decode")
 biggest = max(p["cap"] for p in r["pools"] if p["stream"] == "agent_int" and p["phase"] == "decode")
 left_spare = int_cap - biggest - int_out / peak_int
-show("after an outage: spare / night-shift work (>= 1, hand only)", left_spare / min(bg_out, spare), None, "x")
+show("after an outage: spare / off-peak work (>= 1, hand only)", left_spare / min(bg_out, spare), None, "x")
 
 # ---------------------------------------------------------------- 7. the total
-show("total = sum of every pool's bill (consistency)", sum(p["cost_usd"] for p in r["pools"]), r["cost_usd"], "$")
+show("total = pools + tool sandboxes (consistency)", sum(p["cost_usd"] for p in r["pools"]) + r["sandbox"]["usd"], r["cost_usd"], "$")
 
 print(f"\nHand check of Design 1 ({len(rows)} quantities): by hand vs scorer")
 print(f"  {'quantity':<55} {'by hand':>16} {'scorer':>16}  diff")

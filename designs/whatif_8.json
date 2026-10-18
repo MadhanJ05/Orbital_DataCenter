@@ -23,7 +23,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 655
+      "racks": 675
     },
     {
       "name": "chat-prefill-leo",
@@ -43,7 +43,7 @@
       "chip": "lpu",
       "chips_per_replica": 128,
       "cooling": "radiators",
-      "racks": 162
+      "racks": 167
     },
     {
       "name": "agent_int-prefill-leo",
@@ -61,7 +61,7 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 12,
+      "chips_per_replica": 4,
       "cooling": "radiators",
       "racks": 16
     },
@@ -71,7 +71,7 @@
       "phase": "prefill",
       "site": "leo",
       "chip": "air",
-      "chips_per_replica": 1,
+      "chips_per_replica": 2,
       "cooling": "radiators",
       "racks": 416
     },
@@ -81,9 +81,9 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 96,
       "cooling": "radiators",
-      "racks": 104
+      "racks": 107
     },
     {
       "name": "agent_bg-prefill-leo",
@@ -101,9 +101,9 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 6,
+      "chips_per_replica": 2,
       "cooling": "radiators",
-      "racks": 10
+      "racks": 11
     },
     {
       "name": "agent_bg_sub-prefill-leo",
@@ -115,5 +115,11 @@
       "cooling": "radiators",
       "racks": 266
     }
-  ]
+  ],
+  "satellite": {
+    "kg_per_mw": 10690,
+    "hw_factor": 0.8995,
+    "launch_usd_per_kg": 50,
+    "note": "+ Starship at $50/kg"
+  }
 }
