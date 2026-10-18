@@ -1,0 +1,215 @@
+{
+  "name": "C",
+  "cases": [
+    "C"
+  ],
+  "serving": {
+    "easy_chat_share": 0.0,
+    "subagent_share": 0.5,
+    "spec_draft": 4,
+    "context_memory": true,
+    "autosize_util": 0.95
+  },
+  "pools": [
+    {
+      "name": "chat-decode-nordics",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "direct_liquid",
+      "racks": 25
+    },
+    {
+      "name": "chat-decode-iceland",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "direct_liquid",
+      "racks": 15
+    },
+    {
+      "name": "chat-prefill-nordics",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 3
+    },
+    {
+      "name": "chat-prefill-iceland",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 2
+    },
+    {
+      "name": "agent_int-decode-nordics",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 96,
+      "cooling": "direct_liquid",
+      "racks": 39
+    },
+    {
+      "name": "agent_int-decode-iceland",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 96,
+      "cooling": "direct_liquid",
+      "racks": 23
+    },
+    {
+      "name": "agent_int-prefill-nordics",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 28
+    },
+    {
+      "name": "agent_int-prefill-iceland",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 16
+    },
+    {
+      "name": "agent_int_sub-decode-nordics",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 3,
+      "cooling": "direct_liquid",
+      "racks": 4
+    },
+    {
+      "name": "agent_int_sub-decode-iceland",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 3,
+      "cooling": "direct_liquid",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-prefill-nordics",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-prefill-iceland",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg-decode-nordics",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 96,
+      "cooling": "direct_liquid",
+      "racks": 63
+    },
+    {
+      "name": "agent_bg-decode-iceland",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 96,
+      "cooling": "direct_liquid",
+      "racks": 36
+    },
+    {
+      "name": "agent_bg-prefill-nordics",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 44
+    },
+    {
+      "name": "agent_bg-prefill-iceland",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 26
+    },
+    {
+      "name": "agent_bg_sub-decode-nordics",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 3,
+      "cooling": "direct_liquid",
+      "racks": 6
+    },
+    {
+      "name": "agent_bg_sub-decode-iceland",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 3,
+      "cooling": "direct_liquid",
+      "racks": 4
+    },
+    {
+      "name": "agent_bg_sub-prefill-nordics",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 5
+    },
+    {
+      "name": "agent_bg_sub-prefill-iceland",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 3
+    }
+  ]
+}

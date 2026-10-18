@@ -1,0 +1,75 @@
+{
+  "name": "A",
+  "cases": [
+    "A"
+  ],
+  "serving": {
+    "easy_chat_share": 0.0,
+    "subagent_share": 0.5,
+    "spec_draft": 5,
+    "context_memory": true,
+    "autosize_util": 0.95
+  },
+  "pools": [
+    {
+      "name": "chat-decode-nordics",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "nordics",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "direct_liquid",
+      "racks": 227
+    },
+    {
+      "name": "chat-decode-iceland",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "iceland",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "direct_liquid",
+      "racks": 151
+    },
+    {
+      "name": "chat-decode-west_texas",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "west_texas",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "direct_liquid",
+      "racks": 205
+    },
+    {
+      "name": "chat-prefill-nordics",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "nordics",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 25
+    },
+    {
+      "name": "chat-prefill-iceland",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "iceland",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 17
+    },
+    {
+      "name": "chat-prefill-west_texas",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "west_texas",
+      "chip": "gpu",
+      "chips_per_replica": 1,
+      "cooling": "direct_liquid",
+      "racks": 23
+    }
+  ]
+}
