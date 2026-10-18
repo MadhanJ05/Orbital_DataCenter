@@ -35,17 +35,19 @@ def check(path):
         cap = C.SITES[site].get("cap_mw")
         if cap is not None:
             add("assumed", f"site grid cap: {site}", f"{cap} MW", f"{mw:.0f} MW", mw <= cap)
-    leo = {C.SITES[p["site"]]["launch_usd_per_kg"] for p in r["pools"] if p["space"]}
-    add("s9", "launch price used for orbit", "$200/kg", ", ".join(f"${x:.0f}/kg" for x in sorted(leo)) or "-", leo <= {200})
+    want = (r.get("satellite") or {}).get("launch_usd_per_kg", 200)
     mass = r["space_mass_t"] * 1000
+    charged = r["cost_breakdown"]["launch"] / mass if mass else 0      # price actually billed
+    add("s9" if want == 200 else "what-if", "launch price used for orbit", f"${want}/kg",
+        f"${charged:.0f}/kg" if mass else "-", not mass or abs(charged - want) < 0.01)
     orbit_mw = sum(p["it_mw"] for p in r["pools"] if p["space"])
     kg_mw = mass / orbit_mw if orbit_mw else 0
     expect = (r.get("satellite") or {}).get("kg_per_mw", C.SPACE_KG_PER_MW)
     add("s14" if not r.get("satellite") else "what-if", "satellite mass per MW", f"{expect / 1000:.1f} t/MW",
         f"{kg_mw / 1000:.2f} t/MW" if orbit_mw else "-", not orbit_mw or abs(kg_mw - expect) < 1)
     launch = r["cost_breakdown"]["launch"]
-    add("s14", "launch bill = tonnes x $/kg", f"{mass / 1000:,.0f} t x $200", f"${launch / 1e9:.2f}B",
-        abs(launch - mass * 200) < 1e3)
+    add("s14", "launch bill = tonnes x $/kg", f"{mass / 1000:,.0f} t x ${want}", f"${launch / 1e9:.2f}B",
+        abs(launch - mass * want) < 1e3)
     dead = all(abs(p["cap"] - p["replicas"] * p["rep"]["tps"] * C.SPACE_CHIP_SURVIVAL) < 1e-6 for p in r["pools"] if p["space"])
     add("s14", "space capacity counts only 95% of chips", "x 0.95", "applied" if dead else "missing", dead)
     add("s14", "carbon priced on Earth energy", "$100/t", f"${r['cost_breakdown']['carbon'] / 1e9:.2f}B for {r['co2_t'] / 1e6:.2f} Mt",

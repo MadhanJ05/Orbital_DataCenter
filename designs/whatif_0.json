@@ -415,5 +415,11 @@
       "cooling": "radiators",
       "racks": 104
     }
-  ]
+  ],
+  "satellite": {
+    "kg_per_mw": 18000,
+    "hw_factor": 1.0,
+    "launch_usd_per_kg": 200,
+    "note": "Deck satellite (85 C chips, one loop)"
+  }
 }

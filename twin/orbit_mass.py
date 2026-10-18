@@ -176,6 +176,8 @@ def main():
             rec.update(fleet_cost_usd=r["cost_usd"], served_fraction=r["served_fraction"], valid=r["valid"],
                        orbit_mw=orbit, earth_mw=r["earth_grid_mw"], space_mass_t=r["space_mass_t"])
             design["name"] = f"whatif_{len(out)}"
+            design["satellite"] = dict(kg_per_mw=round(row["total_t"] * 1000), hw_factor=round(row["power_factor"], 4),
+                                       launch_usd_per_kg=row["launch_usd_per_kg"], note=row["label"])
             (root / "designs" / f"whatif_{len(out)}.json").write_text(json.dumps(design, indent=2) + "\n")
         print(line)
         out.append(rec)

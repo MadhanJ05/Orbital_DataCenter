@@ -115,5 +115,11 @@
       "cooling": "radiators",
       "racks": 266
     }
-  ]
+  ],
+  "satellite": {
+    "kg_per_mw": 10738,
+    "hw_factor": 0.919,
+    "launch_usd_per_kg": 200,
+    "note": "Space-stripped racks (-30% compute mass)"
+  }
 }

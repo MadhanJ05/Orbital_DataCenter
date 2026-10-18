@@ -115,5 +115,11 @@
       "cooling": "radiators",
       "racks": 266
     }
-  ]
+  ],
+  "satellite": {
+    "kg_per_mw": 10379,
+    "hw_factor": 0.8995,
+    "launch_usd_per_kg": 100,
+    "note": "+ Starship at $100/kg"
+  }
 }

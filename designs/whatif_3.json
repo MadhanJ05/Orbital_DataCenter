@@ -315,5 +315,11 @@
       "cooling": "radiators",
       "racks": 182
     }
-  ]
+  ],
+  "satellite": {
+    "kg_per_mw": 15138,
+    "hw_factor": 0.9463,
+    "launch_usd_per_kg": 200,
+    "note": "Thin-film solar, 500 W/kg"
+  }
 }

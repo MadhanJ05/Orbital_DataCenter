@@ -315,5 +315,11 @@
       "cooling": "radiators",
       "racks": 182
     }
-  ]
+  ],
+  "satellite": {
+    "kg_per_mw": 12667,
+    "hw_factor": 0.919,
+    "launch_usd_per_kg": 200,
+    "note": "Carbon-fiber radiators, 2 kg/m^2"
+  }
 }

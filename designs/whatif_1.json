@@ -415,5 +415,11 @@
       "cooling": "radiators",
       "racks": 104
     }
-  ]
+  ],
+  "satellite": {
+    "kg_per_mw": 18935,
+    "hw_factor": 0.9411,
+    "launch_usd_per_kg": 200,
+    "note": "Best chip temperature (cooler: less leakage, less solar)"
+  }
 }

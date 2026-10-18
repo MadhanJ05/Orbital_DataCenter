@@ -225,20 +225,22 @@ def _ttft(stream, p, d, rho_p):
 
 
 def evaluate(design):
-    """Score a design. An optional "satellite" block ({"kg_per_mw", "hw_factor"}) swaps in a
-    what-if orbital megawatt for this evaluation only (twin/orbit_mass.py)."""
+    """Score a design. An optional "satellite" block ({"kg_per_mw", "hw_factor", and optionally
+    "launch_usd_per_kg"}) swaps in a what-if orbital megawatt for this evaluation only
+    (twin/orbit_mass.py)."""
     sat = design.get("satellite")
     if not sat:
         return _evaluate(design)
-    saved = C.SPACE_KG_PER_MW, C.SPACE_HW_USD_PER_MW
+    saved = C.SPACE_KG_PER_MW, C.SPACE_HW_USD_PER_MW, C.SITES["leo"]["launch_usd_per_kg"]
     try:
         C.SPACE_KG_PER_MW = sat["kg_per_mw"]
         C.SPACE_HW_USD_PER_MW = saved[1] * sat.get("hw_factor", 1.0)
+        C.SITES["leo"]["launch_usd_per_kg"] = sat.get("launch_usd_per_kg", saved[2])   # planes share leo's dict
         r = _evaluate(design)
         r["satellite"] = dict(sat)
         return r
     finally:
-        C.SPACE_KG_PER_MW, C.SPACE_HW_USD_PER_MW = saved
+        C.SPACE_KG_PER_MW, C.SPACE_HW_USD_PER_MW, C.SITES["leo"]["launch_usd_per_kg"] = saved
 
 
 def _evaluate(design):
