@@ -19,6 +19,22 @@ All three user groups together are 4.45 billion people: chat users, agent develo
 office workers. **Earth runs out of power first.** If we stay on Earth, the grid is full when
 only 58% of them are served.
 
+## 🛰️ The digital twin
+
+**[`twin.html`](twin.html)** (open it straight in a browser, no server needed) is the live twin of both designs:
+- **Pick a design and a day** (normal, or the worst eclipse day).
+- **Switch off any site or orbital plane.**
+- **Scrub or play the 24 hours.**
+
+It shows, for every Earth site and orbital plane:
+- power drawn hour by hour, and where it comes from (grid or solar arrays);
+- solar-array and radiator area, chip and radiator temperature, and eclipse batteries;
+- link traffic to Earth;
+- energy per chat and per agent task, and where 5 years of energy goes (sunlight to chips to heat);
+- all 72 failure days we simulate.
+
+Rebuild after any model change: `python3 twin/physical.py && python3 twin/build_twin_page.py`.
+
 ## Our answer: two designs
 
 | | 🏁 **Design 1: the safest (Earth + orbit)** | 💡 **Design 2: our what-if (all orbit)** |

@@ -1,0 +1,402 @@
+<title>Orbital AI Fleet Twin</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: control bar, then a fleet map beside the site card, then one row of charts per question
+   (when is power drawn, what demand drives it, who waits, where energy goes, what breaks). */
+:root {
+  --bg: #f2f4f8; --surface: #fcfcfb; --ink: #14203a; --muted: #566179; --line: #d7dde7; --soft: #e7ecf4;
+  --earth: #2a78d6; --orbit: #eb6834; --bgwork: #1baf7a; --good: #0ca30c; --bad: #d03b3b; --shadow: #3a4566;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "Atkinson Hyperlegible", "Verdana", "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11151f; --surface: #1a1a19; --ink: #eceef3; --muted: #a3abbd; --line: #2f3646; --soft: #222838;
+  --earth: #3987e5; --orbit: #d95926; --bgwork: #199e70; --shadow: #8d98bb; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11151f; --surface: #1a1a19; --ink: #eceef3; --muted: #a3abbd; --line: #2f3646; --soft: #222838;
+  --earth: #3987e5; --orbit: #d95926; --bgwork: #199e70; --shadow: #8d98bb; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 1180px; margin: 0 auto; padding-block: 28px 64px; display: grid; gap: 22px; }
+h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 800; }
+h2 { font-size: 1.15rem; font-weight: 600; }
+p { margin: 0; max-width: 70ch; }
+.muted { color: var(--muted); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.eyebrow { font: 500 .75rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--orbit); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+.bar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { font: 600 .9rem var(--body); color: var(--ink); background: transparent; border: 0; padding: 8px 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.seg button:focus-visible, select:focus-visible, input:focus-visible, .play:focus-visible { outline: 2px solid var(--orbit); outline-offset: 2px; }
+label.ctl { display: inline-flex; gap: 8px; align-items: center; font-size: .9rem; color: var(--muted); }
+select { font: .9rem var(--body); padding: 7px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.hourctl { display: flex; gap: 10px; align-items: center; flex: 1 1 260px; }
+.hourctl input { flex: 1; accent-color: var(--orbit); }
+.play { font: 600 .9rem var(--body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 2px; }
+.kpi b { font: 600 1.35rem/1.15 var(--display); }
+.kpi span { font-size: .82rem; color: var(--muted); }
+.pill { display: inline-flex; align-items: center; gap: 6px; font: 600 .78rem/1 var(--body); padding: 4px 8px; border-radius: 999px; border: 1px solid currentColor; }
+.pill.ok { color: var(--good); } .pill.bad { color: var(--bad); }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+@media (max-width: 820px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+svg { display: block; width: 100%; height: auto; }
+svg text { fill: var(--ink); font-family: var(--body); }
+svg .ax { font: 10.5px var(--mono); fill: var(--muted); }
+svg .lbl { font-size: 12px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .82rem; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+dl.card { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 0; font-size: .92rem; }
+dl.card dt { color: var(--muted); } dl.card dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.matrix { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.cell { border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; font-size: .8rem; display: grid; gap: 1px; background: var(--surface); cursor: pointer; text-align: left; color: var(--ink); font-family: var(--body); }
+.cell.ok { border-left: 4px solid var(--good); } .cell.bad { border-left: 4px solid var(--bad); }
+.cell[aria-pressed="true"] { outline: 2px solid var(--ink); }
+.tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--surface); font-size: .8rem; padding: 6px 9px; border-radius: 6px; max-width: 260px; z-index: 20; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .85rem; min-width: 480px; }
+th, td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+details summary { cursor: pointer; color: var(--muted); font-size: .88rem; }
+</style>
+
+<main>
+  <header style="display:grid;gap:8px">
+    <span class="eyebrow">Sundai Hack 145 · Track 1 · digital twin</span>
+    <h1>Orbital AI Fleet Twin</h1>
+    <p class="muted">Power generation, computing, cooling, network and workload for our two fleets serving 4.45 billion AI users in 2035. Every number comes from the Python twin (<span class="num">twin/physical.py</span>); this page only displays it.</p>
+  </header>
+
+  <section class="panel" aria-label="Controls">
+    <div class="bar">
+      <div class="seg" role="group" aria-label="Design" id="designSeg"></div>
+      <div class="seg" role="group" aria-label="Day" id="daySeg"></div>
+      <label class="ctl" for="lose">If this fails
+        <select id="lose"></select></label>
+      <div class="hourctl">
+        <button class="play" id="play" type="button">Play day</button>
+        <input id="hour" type="range" min="0" max="23" step="1" value="7" aria-label="UTC hour">
+        <span class="num" id="hourLabel">07:00 UTC</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="kpis" id="kpis" aria-label="Key numbers"></section>
+
+  <section class="grid2">
+    <div class="panel">
+      <h2>The fleet right now</h2>
+      <div class="legend">
+        <span><i style="background:var(--earth)"></i>Earth site (grid power)</span>
+        <span><i style="background:var(--orbit)"></i>Orbital plane, 06:00 orbit (filled)</span>
+        <span><i style="border:2px solid var(--orbit);background:transparent"></i>18:00 orbit (hollow)</span>
+      </div>
+      <svg id="map" viewBox="0 0 520 400" role="img" aria-label="Map of Earth sites and orbital planes with power drawn at the selected hour"></svg>
+      <p class="muted" style="font-size:.85rem">Dot size shows power drawn at the selected hour. Click a site or plane for its details.</p>
+    </div>
+    <div class="panel">
+      <h2 id="cardTitle">Site</h2>
+      <dl class="card" id="card"></dl>
+    </div>
+  </section>
+
+  <section class="grid3">
+    <div class="panel">
+      <h2>Power drawn, hour by hour</h2>
+      <div class="legend"><span><i style="background:var(--earth)"></i>Earth sites</span><span><i style="background:var(--orbit)"></i>Orbit</span></div>
+      <svg id="power" viewBox="0 0 560 250" role="img" aria-label="Stacked bars of power drawn by Earth sites and orbit for each UTC hour"></svg>
+    </div>
+    <div class="panel">
+      <h2>What drives it: worldwide demand</h2>
+      <div class="legend"><span><i style="background:var(--earth)"></i>Chat</span><span><i style="background:var(--orbit)"></i>Live agents</span><span><i style="background:var(--bgwork)"></i>Background agents</span></div>
+      <svg id="demand" viewBox="0 0 560 250" role="img" aria-label="Demand by UTC hour relative to the daily average, three workloads"></svg>
+    </div>
+    <div class="panel">
+      <h2>Who waits: background jobs in line</h2>
+      <svg id="queue" viewBox="0 0 560 250" role="img" aria-label="Minutes of background work waiting each hour against the deadline"></svg>
+      <p class="muted" style="font-size:.85rem">Background agents have 4 hours. They fill the quiet hours of the live-agent racks, so some wait while Asia is busy.</p>
+    </div>
+    <div class="panel">
+      <h2>Where 5 years of energy goes</h2>
+      <svg id="flow" viewBox="0 0 560 250" role="img" aria-label="Energy flow from sunlight and grid to chips and heat, in terawatt-hours"></svg>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Failure test: one thing breaks, on a normal day and on the worst eclipse day</h2>
+    <p class="muted">Each tile is a full simulated day with one site or plane switched off. Green means every live user was served and every background job finished inside its deadline. Click a tile to look at it on the map.</p>
+    <div class="matrix" id="matrix"></div>
+  </section>
+
+  <section class="panel">
+    <details>
+      <summary>Table view of every site and plane</summary>
+      <div class="scroll"><table id="table"></table></div>
+    </details>
+  </section>
+</main>
+<div class="tip" id="tip" hidden></div>
+
+<script id="twin-data" type="application/json">__TWIN_DATA__</script>
+<script>
+(function () {
+  var DATA = JSON.parse(document.getElementById("twin-data").textContent);
+  var NS = "http://www.w3.org/2000/svg";
+  var S = { d: 0, day: "normal", ecl: "06:00", hour: 7, site: null, lose: "", timer: null };
+  var NAMES = { n_virginia: "N. Virginia", midwest: "Midwest", west_texas: "West Texas", nordics: "Nordics", iceland: "Iceland", gulf: "Gulf" };
+  var nice = function (s) { return NAMES[s] || s.replace("leo_p", "Plane "); };
+  var fmt = function (x, d) { return Number(x).toLocaleString("en-US", { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); };
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, a, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in a) e.setAttribute(k, a[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function clear(svg) { while (svg.firstChild) svg.removeChild(svg.firstChild); }
+  var tip = $("tip");
+  function hover(node, html) {
+    node.addEventListener("mousemove", function (ev) { tip.innerHTML = html(); tip.hidden = false; tip.style.left = (ev.clientX + 14) + "px"; tip.style.top = (ev.clientY + 12) + "px"; });
+    node.addEventListener("mouseleave", function () { tip.hidden = true; });
+  }
+  var hh = function (h) { return (h < 10 ? "0" : "") + h + ":00"; };
+
+  // ---------------- controls
+  function seg(id, items, key) {
+    var box = $(id); box.innerHTML = "";
+    items.forEach(function (it) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = it.label;
+      b.setAttribute("aria-pressed", String(S[key] === it.value));
+      b.onclick = function () { S[key] = it.value; if (key === "d") { S.site = null; S.lose = ""; if (!D().days[S.day]) S.day = "normal"; } render(); };
+      box.appendChild(b);
+    });
+  }
+  var D = function () { return DATA.designs[S.d]; };
+  // the day buttons choose normal vs eclipse; which eclipse (06:00 or 18:00) follows the clicked tile
+  $("hour").oninput = function () { S.hour = +this.value; render(); };
+  $("lose").onchange = function () { S.lose = this.value; if (S.lose) S.site = S.lose; render(); };
+  $("play").onclick = function () {
+    if (S.timer) { clearInterval(S.timer); S.timer = null; this.textContent = "Play day"; return; }
+    this.textContent = "Pause";
+    S.timer = setInterval(function () { S.hour = (S.hour + 1) % 24; $("hour").value = S.hour; render(); }, 700);
+  };
+
+  function siteObj(name) { return D().sites.filter(function (x) { return x.site === name; })[0]; }
+  function dayData() { return D().days[S.day === "eclipse" && S.ecl === "18:00" ? "eclipse18" : S.day]; }
+  function powerAt(site, hour) { var p = dayData().power_mw[hour]; return p ? (p[site] || 0) : 0; }
+  function outageRow() {
+    return D().outages.filter(function (o) { return (o.lost || "") === S.lose && (o.eclipse || null) === (S.day === "eclipse" ? S.ecl : null); })[0];
+  }
+
+  // ---------------- KPI tiles
+  function kpis() {
+    var d = D(), o = outageRow(), box = $("kpis"); box.innerHTML = "";
+    var budgetOk = d.cost_busd <= 30;
+    var tiles = [
+      [fmt(d.users_served / 1e9, 2) + "B", "users served, of " + fmt(d.users_target / 1e9, 2) + "B"],
+      ["$" + fmt(d.cost_busd, 2) + "B", "5-year cost, budget $30B <span class='pill " + (budgetOk ? "ok'>✓ fits" : "bad'>✗ over") + "</span>"],
+      [fmt(d.earth_grid_mw) + " MW", "Earth grid used, cap 500 MW"],
+      [fmt(d.space_mass_t) + " t", "launched to orbit at $200/kg"],
+      [fmt(d.energy_per.chat_wh, 3) + " Wh", "energy per chat answer"],
+      [fmt(d.energy_per.agent_task_wh, 1) + " Wh", "per full agent task (80 steps)"],
+      [fmt(d.latency_s.chat, 2) + " s", "slowest chat first reply, limit " + d.slo.chat_ttft_s + " s"],
+    ];
+    if (o) {
+      var label = (S.lose ? "lose " + nice(S.lose) : "nothing lost") + (S.day === "eclipse" ? ", " + S.ecl + " eclipse day" : "");
+      tiles.push([o.ok ? "OK" : (o.live_short_pct ? fmt(o.live_short_pct, 1) + "% short" : "late"),
+        label + ": longest background wait " + fmt(o.bg_wait_min) + " of " + fmt(o.allowed_min) + " min <span class='pill " + (o.ok ? "ok'>✓ passes" : "bad'>✗ fails") + "</span>"]);
+    }
+    tiles.forEach(function (t) { var div = document.createElement("div"); div.className = "kpi"; div.innerHTML = "<b class='num'>" + t[0] + "</b><span>" + t[1] + "</span>"; box.appendChild(div); });
+  }
+
+  // ---------------- fleet map
+  var POS = { iceland: [-50, -42], nordics: [8, -56], midwest: [-58, -8], n_virginia: [-42, 18], west_texas: [-30, 46], gulf: [44, 26] };
+  function map() {
+    var svg = $("map"); clear(svg);
+    var cx = 260, cy = 200, R = 150, r = 74, d = D();
+    el("circle", { cx: cx, cy: cy, r: R, fill: "none", stroke: "var(--line)", "stroke-width": 1.5, "stroke-dasharray": "4 5" }, svg);
+    if (S.day === "eclipse") {   // Earth's shadow, cast away from the Sun on the left
+      el("path", { d: "M" + cx + "," + (cy - r) + " L" + (cx + R + 40) + "," + (cy - r * 0.7) + " L" + (cx + R + 40) + "," + (cy + r * 0.7) + " L" + cx + "," + (cy + r) + " Z", fill: "var(--shadow)", opacity: 0.18 }, svg);
+      el("text", { x: 16, y: 26, class: "lbl", style: "fill:var(--muted)" }, svg, "☀ Sun this way");
+      el("text", { x: cx + R - 6, y: cy + 6, class: "ax", "text-anchor": "end" }, svg, "Earth's shadow");
+    }
+    el("circle", { cx: cx, cy: cy, r: r, fill: "var(--soft)", stroke: "var(--line)", "stroke-width": 2 }, svg);
+    el("text", { x: cx, y: cy + 4, "text-anchor": "middle", class: "lbl", style: "font-weight:700" }, svg, "Earth");
+    var maxMW = 0; d.sites.forEach(function (s) { maxMW = Math.max(maxMW, s.it_mw); });
+    var size = function (mw) { return 5 + 11 * Math.sqrt(mw / maxMW); };
+    var planes = d.sites.filter(function (s) { return s.kind === "space"; });
+    function hit(g, s) {
+      g.style.cursor = "pointer"; g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", nice(s.site));
+      g.addEventListener("click", function () { S.site = s.site; render(); });
+      g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); S.site = s.site; render(); } });
+      hover(g, function () { return "<b>" + nice(s.site) + "</b><br>" + fmt(powerAt(s.site, S.hour), 1) + " MW drawn at " + hh(S.hour) + " UTC"; });
+    }
+    d.sites.filter(function (s) { return s.kind === "earth"; }).forEach(function (s) {
+      var p = POS[s.site] || [0, 0], lost = S.lose === s.site;
+      var g = el("g", {}, svg);
+      el("circle", { cx: cx + p[0], cy: cy + p[1], r: size(powerAt(s.site, S.hour)) * 0.9 + 4, fill: "transparent" }, g);
+      el("circle", { cx: cx + p[0], cy: cy + p[1], r: size(powerAt(s.site, S.hour)) * 0.9, fill: lost ? "var(--surface)" : "var(--earth)",
+        stroke: S.site === s.site ? "var(--ink)" : "var(--surface)", "stroke-width": 2, "stroke-dasharray": lost ? "3 3" : "" }, g);
+      if (lost) el("text", { x: cx + p[0], y: cy + p[1] + 4, "text-anchor": "middle", class: "ax", style: "fill:var(--bad)" }, g, "✗");
+      hit(g, s);
+    });
+    planes.forEach(function (s, i) {
+      var a = (i / planes.length) * Math.PI * 2 - Math.PI / 2 + Math.PI / planes.length;
+      var x = cx + R * Math.cos(a), y = cy + R * Math.sin(a), lost = S.lose === s.site;
+      var morning = s.ltan === "06:00", dark = S.day === "eclipse" && s.ltan === S.ecl;
+      var g = el("g", {}, svg);
+      var rad = size(powerAt(s.site, S.hour));
+      el("circle", { cx: x, cy: y, r: rad + 5, fill: "transparent" }, g);
+      el("circle", { cx: x, cy: y, r: rad, fill: lost ? "var(--surface)" : (morning ? "var(--orbit)" : "var(--surface)"),
+        stroke: S.site === s.site ? "var(--ink)" : "var(--orbit)", "stroke-width": S.site === s.site ? 3 : 2.5, "stroke-dasharray": lost ? "3 3" : "" }, g);
+      if (dark && !lost) el("path", { d: "M" + x + "," + (y - rad) + " A" + rad + "," + rad + " 0 0,1 " + (x + rad * Math.sin(2 * Math.PI * 0.22)) + "," + (y - rad * Math.cos(2 * Math.PI * 0.22)) + " L" + x + "," + y + " Z", fill: "var(--shadow)", opacity: 0.85 }, g);
+      el("text", { x: x + (Math.cos(a) > 0 ? rad + 6 : -rad - 6), y: y + 4, "text-anchor": Math.cos(a) > 0 ? "start" : "end", class: "ax" }, g, nice(s.site) + " · " + s.ltan);
+      hit(g, s);
+    });
+  }
+
+  // ---------------- site card
+  function card() {
+    var d = D(), s = siteObj(S.site) || d.sites[0]; S.site = s.site;
+    $("cardTitle").textContent = nice(s.site) + (s.kind === "space" ? " (orbital plane)" : " (Earth site)");
+    var rows = [["Power drawn at " + hh(S.hour) + " UTC", fmt(powerAt(s.site, S.hour), 1) + " MW"], ["Computers (IT power)", fmt(s.it_mw, 1) + " MW"]];
+    var racks = Object.keys(s.racks).map(function (k) { return fmt(s.racks[k]) + " " + ({ lpu: "LPU", gpu: "GPU", air: "air-card", sandbox: "sandbox" }[k] || k); }).join(", ");
+    rows.push(["Racks", racks]);
+    rows.push(["Round trip to users", fmt(s.rtt_ms) + " ms"]);
+    if (s.kind === "earth") {
+      rows.push(["Power source", "grid, " + fmt(s.facility_mw, 1) + " of " + fmt(s.grid_cap_mw) + " MW cap"],
+        ["Cooling", s.cooling.replace("_", " ") + ", PUE " + fmt(s.pue, 2)], ["Electricity", "$" + s.usd_per_mwh + "/MWh, " + s.g_co2_kwh + " g CO2/kWh"]);
+    } else {
+      rows.push(["Orbit", "dawn-dusk, crosses the equator at " + s.ltan], ["Eclipse season", s.eclipse_season + " (up to 21 of 96 min in shadow)"],
+        ["Solar arrays", fmt(s.array_km2, 3) + " km²"], ["Radiators", fmt(s.radiator_km2, 3) + " km² at " + fmt(s.radiator_c) + " °C"],
+        ["Chips run at", fmt(s.chip_c) + " °C"], ["Eclipse batteries", s.battery_mwh ? fmt(s.battery_mwh, 1) + " MWh for " + fmt(s.battery_mw, 1) + " MW" : "none"],
+        ["Mass launched", fmt(s.mass_t) + " t"], ["Earth link at busiest hour", fmt(s.link_tbps, 2) + " of " + fmt(s.link_cap_tbps) + " Tbps"]);
+    }
+    rows.push(["5-year cost", "$" + fmt(s.cost_busd, 2) + "B"]);
+    var dl = $("card"); dl.innerHTML = "";
+    rows.forEach(function (r) { var dt = document.createElement("dt"); dt.textContent = r[0]; var dd = document.createElement("dd"); dd.textContent = r[1]; dl.appendChild(dt); dl.appendChild(dd); });
+  }
+
+  // ---------------- charts (one scale per chart, hover per mark)
+  var L = 52, Rr = 548, T = 14, B = 214;
+  function axes(svg, ymax, ticks, unit) {
+    var y = function (v) { return B - v / ymax * (B - T); };
+    ticks.forEach(function (v) { el("line", { x1: L, x2: Rr, y1: y(v), y2: y(v), stroke: "var(--line)" }, svg); el("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", class: "ax" }, svg, fmt(v) + unit); });
+    for (var h = 0; h < 24; h += 3) el("text", { x: L + (h + 0.5) * (Rr - L) / 24, y: B + 16, "text-anchor": "middle", class: "ax" }, svg, hh(h));
+    el("text", { x: Rr, y: B + 32, "text-anchor": "end", class: "ax" }, svg, "UTC hour");
+    return y;
+  }
+  function niceMax(v) { var p = Math.pow(10, Math.floor(Math.log10(v))); var m = Math.ceil(v / p); return (m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; }
+  function cursor(svg) { var x = L + (S.hour + 0.5) * (Rr - L) / 24; el("line", { x1: x, x2: x, y1: T, y2: B, stroke: "var(--ink)", "stroke-width": 1, "stroke-dasharray": "3 3" }, svg); }
+
+  function power() {
+    var svg = $("power"); clear(svg); var d = D(), day = dayData(), rows = [];
+    for (var h = 0; h < 24; h++) {
+      var p = day.power_mw[h], e = 0, o = 0;
+      Object.keys(p).forEach(function (k) { if (S.lose === k) return; (siteObj(k).kind === "earth" ? (e += p[k]) : (o += p[k])); });
+      rows.push([e, o]);
+    }
+    var top = niceMax(Math.max.apply(null, rows.map(function (r) { return r[0] + r[1]; })));
+    var y = axes(svg, top, [0, top / 2, top], " MW"), bw = (Rr - L) / 24;
+    rows.forEach(function (r, h) {
+      var x = L + h * bw + 2, g = el("g", {}, svg);
+      el("rect", { x: L + h * bw, y: T, width: bw, height: B - T, fill: "transparent" }, g);
+      if (r[0] > 0) el("rect", { x: x, y: y(r[0]), width: bw - 4, height: Math.max(0, y(0) - y(r[0]) - 1), fill: "var(--earth)", rx: 2 }, g);
+      if (r[1] > 0) el("rect", { x: x, y: y(r[0] + r[1]), width: bw - 4, height: Math.max(0, y(r[0]) - y(r[0] + r[1]) - 2), fill: "var(--orbit)", rx: 2 }, g);
+      hover(g, function () { return "<b>" + hh(h) + " UTC</b><br>Earth " + fmt(r[0]) + " MW<br>Orbit " + fmt(r[1]) + " MW"; });
+    });
+    cursor(svg);
+  }
+  function demand() {
+    var svg = $("demand"); clear(svg); var dm = D().days.normal.demand;
+    var y = axes(svg, 2.5, [0, 1, 2], "×");
+    [["chat", "var(--earth)", "Chat"], ["agent_int", "var(--orbit)", "Live agents"], ["agent_bg", "var(--bgwork)", "Background"]].forEach(function (sr) {
+      var pts = dm[sr[0]].map(function (v, h) { return (L + (h + 0.5) * (Rr - L) / 24) + "," + y(v); }).join(" ");
+      el("polyline", { points: pts, fill: "none", stroke: sr[1], "stroke-width": 2, "stroke-linejoin": "round" }, svg);
+      var last = dm[sr[0]][23]; el("text", { x: Rr - 2, y: y(last) - 6, "text-anchor": "end", class: "ax", style: "fill:var(--ink)" }, svg, sr[2]);
+    });
+    el("line", { x1: L, x2: Rr, y1: y(1), y2: y(1), stroke: "var(--muted)", "stroke-dasharray": "2 4" }, svg);
+    for (var h = 0; h < 24; h++) (function (h) {
+      var r = el("rect", { x: L + h * (Rr - L) / 24, y: T, width: (Rr - L) / 24, height: B - T, fill: "transparent" }, svg);
+      hover(r, function () { return "<b>" + hh(h) + " UTC</b> (× daily average)<br>Chat " + fmt(dm.chat[h], 2) + "<br>Live agents " + fmt(dm.agent_int[h], 2) + "<br>Background " + fmt(dm.agent_bg[h], 2); });
+    })(h);
+    cursor(svg);
+  }
+  function queue() {
+    var svg = $("queue"); clear(svg); var d = D(), q = dayData().bg_queue_min, lim = d.outages[0].allowed_min;
+    var y = axes(svg, 240, [0, 60, 120, 180, 240], "m"), bw = (Rr - L) / 24;
+    el("line", { x1: L, x2: Rr, y1: y(lim), y2: y(lim), stroke: "var(--bad)", "stroke-width": 2 }, svg);
+    el("text", { x: Rr, y: y(lim) - 6, "text-anchor": "end", class: "ax", style: "fill:var(--bad)" }, svg, "most a job may wait: " + fmt(lim) + " min");
+    q.forEach(function (v, h) {
+      var g = el("g", {}, svg);
+      el("rect", { x: L + h * bw, y: T, width: bw, height: B - T, fill: "transparent" }, g);
+      if (v > 0) el("rect", { x: L + h * bw + 2, y: y(v), width: bw - 4, height: y(0) - y(v), fill: "var(--bgwork)", rx: 2 }, g);
+      hover(g, function () { return "<b>" + hh(h) + " UTC</b><br>" + fmt(v, 1) + " min of background work waiting"; });
+    });
+    var mx = Math.max.apply(null, q), at = q.indexOf(mx);
+    if (mx > 0) el("text", { x: L + (at + 0.5) * bw, y: y(mx) - 6, "text-anchor": "middle", class: "ax", style: "fill:var(--ink)" }, svg, fmt(mx) + " min");
+    cursor(svg);
+  }
+  function flow() {
+    var svg = $("flow"); clear(svg); var e = D().energy_5yr;
+    var rows = [];
+    if (e.orbit_it_gwh > 0) rows.push(["Sunlight on arrays", e.orbit_sunlight_on_arrays_gwh, "var(--orbit)", 0.35],
+      ["Array output (30% cells)", e.orbit_array_output_gwh, "var(--orbit)", 0.7], ["Orbit chips", e.orbit_it_gwh, "var(--orbit)", 1],
+      ["Heat out the radiators", e.heat_radiated_to_space_gwh, "var(--shadow)", 0.55]);
+    if (e.earth_grid_gwh > 0) rows.push(["Earth grid", e.earth_grid_gwh, "var(--earth)", 0.7], ["Earth chips", e.earth_it_gwh, "var(--earth)", 1],
+      ["Earth cooling and losses", e.earth_cooling_and_losses_gwh, "var(--earth)", 0.4]);
+    var max = Math.max.apply(null, rows.map(function (r) { return r[1]; })), rowH = Math.min(30, 220 / rows.length);
+    rows.forEach(function (r, i) {
+      var yy = 8 + i * rowH, w = (Rr - 190) * r[1] / max, g = el("g", {}, svg);
+      el("text", { x: 0, y: yy + rowH * 0.6, class: "lbl" }, g, r[0]);
+      el("rect", { x: 180, y: yy + 3, width: Math.max(2, w), height: rowH - 8, rx: 3, fill: r[2], opacity: r[3] }, g);
+      el("text", { x: 186 + w, y: yy + rowH * 0.6, class: "ax", style: "fill:var(--ink)" }, g, fmt(r[1] / 1000, 1) + " TWh");
+      hover(g, function () { return "<b>" + r[0] + "</b><br>" + fmt(r[1]) + " GWh over 5 years"; });
+    });
+  }
+
+  // ---------------- failure matrix and table
+  function matrix() {
+    var box = $("matrix"); box.innerHTML = ""; var d = D();
+    d.outages.forEach(function (o) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "cell " + (o.ok ? "ok" : "bad");
+      var sel = (o.lost || "") === S.lose && (o.eclipse ? "eclipse" : "normal") === S.day && (!o.eclipse || o.eclipse === S.ecl);
+      b.setAttribute("aria-pressed", String(sel));
+      b.innerHTML = "<b>" + (o.lost ? "Lose " + nice(o.lost) : "Nothing lost") + "</b><span>" + (o.eclipse ? o.eclipse + " eclipse day" : "normal day") + "</span><span class='num'>" +
+        (o.ok ? "✓ OK" : "✗ " + (o.live_short_pct ? fmt(o.live_short_pct, 1) + "% live short" : "late")) + " · wait " + fmt(o.bg_wait_min) + " min</span>";
+      b.onclick = function () { S.lose = o.lost || ""; S.day = o.eclipse ? "eclipse" : "normal"; S.ecl = o.eclipse || S.ecl; if (o.lost) S.site = o.lost; render(); };
+      box.appendChild(b);
+    });
+  }
+  function table() {
+    var d = D(), t = $("table");
+    var head = "<tr><th>Site</th><th>IT MW</th><th>At meter MW</th><th>Arrays km²</th><th>Radiators km²</th><th>Battery MWh</th><th>Link Tbps</th><th>Cost $B</th></tr>";
+    t.innerHTML = head + d.sites.map(function (s) {
+      return "<tr><td>" + nice(s.site) + "</td><td>" + fmt(s.it_mw, 1) + "</td><td>" + fmt(s.facility_mw, 1) + "</td><td>" + (s.array_km2 != null ? fmt(s.array_km2, 3) : "-") +
+        "</td><td>" + (s.radiator_km2 != null ? fmt(s.radiator_km2, 3) : "-") + "</td><td>" + (s.battery_mwh != null ? fmt(s.battery_mwh, 1) : "-") + "</td><td>" +
+        (s.link_tbps != null ? fmt(s.link_tbps, 2) : "-") + "</td><td>" + fmt(s.cost_busd, 2) + "</td></tr>";
+    }).join("");
+  }
+
+  function render() {
+    seg("designSeg", DATA.designs.map(function (d, i) { return { label: d.label.split(":")[0], value: i }; }), "d");
+    var days = [{ label: "Normal day", value: "normal" }]; if (D().days.eclipse) days.push({ label: "Worst eclipse day", value: "eclipse" });
+    seg("daySeg", days, "day");
+    var lose = $("lose"), opts = ['<option value="">nothing</option>'].concat(D().sites.map(function (s) { return '<option value="' + s.site + '">' + nice(s.site) + "</option>"; }));
+    lose.innerHTML = opts.join(""); lose.value = S.lose;
+    $("hourLabel").textContent = hh(S.hour) + " UTC";
+    kpis(); map(); card(); power(); demand(); queue(); flow(); matrix(); table();
+  }
+  render();
+})();
+</script>
