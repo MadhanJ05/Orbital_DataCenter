@@ -21,6 +21,8 @@ only 58% of them are served.
 
 ## 🛰️ The digital twin
 
+**Plain-language explainer for anyone:** [`explained.html`](https://madhanj05.github.io/Orbital_DataCenter/explained.html): the two designs, the tests and the simulation in simple words and diagrams.
+
 **[`twin3d.html`](twin3d.html)** ([live](https://madhanj05.github.io/Orbital_DataCenter/twin3d.html)) is the twin in 3D, seen from space, with two views:
 - **One satellite:** a single satellite drawn to scale. Sliders change its size, chip temperature, cooling loops, solar W/kg, radiator kg/m², rack weight, structure, batteries and launch price; the wings, radiator and battery resize live, and it shows tonnes per MW, launches, and cost per MW against the Nordics. It runs the same physics as `twin/orbit_mass.py` and checks itself against Python's answers on every load.
 - **Realistic rendering:** Earth uses NASA's Blue Marble (day), Black Marble (city lights at night) and cloud imagery (public domain, `twin/assets/`). It adds an atmosphere glow, sunlight glinting off the oceans, the Sun with a lens flare, and a starfield with the Milky Way. Add `#fleet` to the link to open straight on the fleet view.
@@ -88,8 +90,8 @@ satellite would cost $31.1B, over budget.
 **Why 12 planes and 6 Earth sites?** If everything sat in one place, one outage would take
 down everyone. We spread the fleet so no single site or plane holds more than about 1/12 of
 it, and carry just enough spare capacity that losing any one is a non-event. That insurance
-costs about $1.8B. Without it the fleet is $27.2B, but losing one site would leave 37% of users
-without service (`designs/final_A+B+C.json`).
+costs about $3.0B. Without it the fleet is $26.9B, but losing the orbit section would leave 37% of
+live users without service and background jobs waiting 33 hours (`designs/final_A+B+C.json`).
 
 Why orbit and not the Moon or Mars? The Moon is 2.6 s away and Mars 25 minutes, which is too
 slow for chat. Orbit is only 40 ms away, about as close as a data center in Virginia.
@@ -140,7 +142,7 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 1. **🕑 Off-peak shift.** Background agents have 4 hours to finish their work. They run in the quiet
    hours of the racks that serve live agents, so we don't buy separate racks for them. "Quiet"
    means quiet for the whole world: demand worldwide is below average 13 hours a day.
-   This one trick saves about $4.9B. We checked it with a minute-by-minute simulation of a full
+   This one trick saves about $4.8B. We checked it with a minute-by-minute simulation of a full
    day: the longest any background job waits is 50 minutes in Design 1 and 32 minutes in
    Design 2 (under 1.5 hours even with a site down), well inside the 4-hour deadline.
 2. **🧠 Small helpers.** Half of each agent's steps go to a smaller sub-agent model, which is
@@ -165,7 +167,7 @@ radiators and racks stripped down for space bring it to **11.0 tonnes** (includi
 power lost in conversion, pumps and avionics that the organizers' 18 tonnes already includes). Then orbit becomes
 **cheaper than the cheapest place on Earth**, and the whole fleet fits in orbit, with no
 Earth grid, for **$29.2B** (`designs/whatif_all_orbit_light.json`). Kept as a mix of Earth and
-orbit, the lighter satellite would cost $28.0B (`designs/whatif_resilient_light.json`).
+orbit, the lighter satellite would cost $28.75B (`designs/whatif_resilient_light.json`).
 
 | Satellite upgrade (each step adds to the one before) | Tonnes per MW | Cost per MW in orbit |
 |---|---|---|

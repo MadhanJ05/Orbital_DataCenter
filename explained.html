@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Orbital AI Fleet Explained</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one readable column like a mission briefing; diagrams break out a little wider. */
+:root {
+  --bg: #F3F5F9; --surface: #FFFFFF; --ink: #15213B; --muted: #586379; --line: #D8DEE8;
+  --earth: #1D7566; --orbit: #B86E0F; --live: #3557A6; --spare: #8FA7DD;
+  --good: #1D7A49; --bad: #B0281F; --soft: #E8EDF5;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "Atkinson Hyperlegible", "Verdana", "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0E1424; --surface: #161F35; --ink: #E6EBF4; --muted: #9CA7BE; --line: #2B3653;
+  --earth: #4DB4A1; --orbit: #E6A23E; --live: #7E9DE8; --spare: #45578A;
+  --good: #5CC48A; --bad: #F07067; --soft: #1C2742; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0E1424; --surface: #161F35; --ink: #E6EBF4; --muted: #9CA7BE; --line: #2B3653;
+  --earth: #4DB4A1; --orbit: #E6A23E; --live: #7E9DE8; --spare: #45578A;
+  --good: #5CC48A; --bad: #F07067; --soft: #1C2742; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font: 17px/1.6 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+main { max-width: 760px; margin: 0 auto; padding-block: 40px 72px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 6vw, 3.1rem); font-weight: 800; letter-spacing: -0.01em; }
+h2 { font-size: clamp(1.45rem, 4vw, 1.9rem); font-weight: 800; }
+h3 { font-size: 1.12rem; font-weight: 600; }
+p { margin: 0; max-width: 65ch; }
+section { display: grid; gap: 18px; }
+.eyebrow { font: 500 0.78rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--orbit); }
+.lede { font-size: 1.15rem; color: var(--muted); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+strong { font-weight: 700; }
+
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+.rule { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 4px; }
+.rule b { font: 600 1.35rem/1.1 var(--display); }
+.rule span { color: var(--muted); font-size: 0.92rem; }
+
+.fig { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: grid; gap: 12px; min-width: 0; }
+.fig svg { width: 100%; height: auto; display: block; }
+.fig figcaption, .caption { color: var(--muted); font-size: 0.92rem; }
+.scroll { overflow-x: auto; }
+svg text { font-family: var(--body); fill: var(--ink); }
+svg .lbl { font-size: 12px; }
+svg .small { font-size: 10.5px; fill: var(--muted); }
+svg .mono { font-family: var(--mono); }
+
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.design { display: grid; gap: 12px; align-content: start; }
+.tag { display: inline-flex; align-items: center; gap: 8px; font: 500 0.78rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.facts { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 0.97rem; }
+.facts li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-bottom: 6px; }
+.facts li span:last-child { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+
+table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 0.95rem; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 600 0.95rem/1.3 var(--display); }
+td.ok::before { content: "✓ "; color: var(--good); font-weight: 700; }
+td .num { white-space: nowrap; }
+
+.callout { background: var(--soft); border-radius: 12px; padding: 16px 18px; display: grid; gap: 8px; }
+ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 10px; max-width: 65ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.88rem; color: var(--muted); }
+.legend i { display: inline-block; width: 14px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+.zones { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.zone { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 0.85rem; display: grid; gap: 2px; background: var(--surface); }
+.zone b { font-weight: 700; }
+.zone .num { font-size: 0.8rem; }
+.zone.ok { border-left: 4px solid var(--good); }
+.zone.fail { border-left: 4px solid var(--bad); }
+.verdict { font: 600 1rem/1.3 var(--display); }
+.verdict.ok { color: var(--good); } .verdict.fail { color: var(--bad); }
+footer { color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--line); padding-top: 16px; }
+@media (prefers-reduced-motion: no-preference) { .sat { transition: transform .2s; } }
+</style>
+
+</head>
+<body>
+<main>
+  <header style="display:grid;gap:14px">
+    <span class="eyebrow">Sundai Hack 145 · Track 1</span>
+    <h1>How we serve 4.45 billion AI users, with help from space</h1>
+    <p class="lede">A plain-language guide to our two designs and the tests we ran on them. No space or chip knowledge needed.</p>
+  </header>
+
+  <section>
+    <span class="eyebrow">The job</span>
+    <h2>Build the computers behind everyone's AI in 2035</h2>
+    <p>Picture a giant kitchen that has to cook every AI answer in the world: chat replies for 4 billion people, plus AI "agents" that do hours of work for 450 million developers and office workers. The organizers gave us four rules.</p>
+    <div class="rules">
+      <div class="rule"><b class="num">$30B</b><span>to build and run it for 5 years</span></div>
+      <div class="rule"><b class="num">500 MW</b><span>of Earth's power grid, in total, for all our sites</span></div>
+      <div class="rule"><b class="num">$200/kg</b><span>to launch anything into space (sunlight up there is free)</span></div>
+      <div class="rule"><b class="num">0.6 s · 2 s</b><span>for chat and for AI agents to start answering</span></div>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">The catch</span>
+    <h2>Earth runs out of power first</h2>
+    <p>Money is not the first problem. Electricity is. Even with every trick we found, Earth's 500 MW is only enough for a bit more than half of everyone.</p>
+    <figure class="fig" style="margin:0">
+      <div class="scroll">
+      <svg viewBox="0 0 640 120" role="img" aria-label="Bar showing Earth's grid serves 58 percent of users, the remaining 42 percent need orbit">
+        <rect x="0" y="34" width="640" height="44" rx="8" fill="var(--soft)"/>
+        <rect x="0" y="34" width="371" height="44" rx="8" fill="var(--earth)"/>
+        <rect x="363" y="34" width="8" height="44" fill="var(--earth)"/>
+        <rect x="371" y="34" width="269" height="44" rx="8" fill="none" stroke="var(--orbit)" stroke-width="2" stroke-dasharray="6 5"/>
+        <text x="16" y="62" class="lbl" style="fill:#fff;font-weight:700">Earth's grid: 58% of users</text>
+        <text x="388" y="62" class="lbl" style="fill:var(--orbit);font-weight:700">Still waiting: 42%</text>
+        <text x="0" y="22" class="small">0 users</text>
+        <text x="640" y="22" class="small" text-anchor="end">4.45 billion users</text>
+        <text x="371" y="102" class="small" text-anchor="middle">the 500 MW wall</text>
+        <line x1="371" y1="28" x2="371" y2="86" stroke="var(--ink)" stroke-width="2"/>
+      </svg>
+      </div>
+      <figcaption>So we add computers in orbit. Up there, solar panels see the Sun almost all day, and there is no grid limit.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <span class="eyebrow">Our answer</span>
+    <h2>Two designs that both meet every rule</h2>
+    <p>Both serve <strong>100% of the 4.45 billion users</strong>. They differ in how much sits on Earth and how heavy each satellite is.</p>
+
+    <div class="pair">
+      <div class="fig design">
+        <span class="tag"><span class="dot" style="background:var(--earth)"></span>Design 1 · the safe one</span>
+        <h3>Earth and orbit, working together</h3>
+        <svg viewBox="0 0 320 300" role="img" aria-label="Earth with six data center sites and a ring of twelve satellite groups">
+          <circle cx="160" cy="150" r="118" fill="none" stroke="var(--orbit)" stroke-width="1.5" stroke-dasharray="4 5"/>
+          <circle cx="160" cy="150" r="68" fill="var(--soft)" stroke="var(--earth)" stroke-width="2"/>
+          <g id="d1-sats"></g>
+          <g id="d1-pins"></g>
+          <text x="160" y="146" text-anchor="middle" class="lbl" style="font-weight:700">Earth</text>
+          <text x="160" y="162" text-anchor="middle" class="small">6 sites · 323 MW</text>
+          <text x="160" y="292" text-anchor="middle" class="small">12 satellite groups · 50 MW each</text>
+        </svg>
+        <ul class="facts">
+          <li><span>On Earth</span><span>6 sites, 323 MW</span></li>
+          <li><span>In orbit</span><span>12 groups × 50 MW (84 satellites)</span></li>
+          <li><span>Satellite weight</span><span>18 t per MW</span></li>
+          <li><span>Launched</span><span>11,661 t</span></li>
+          <li><span>5-year cost</span><span>$29.88B</span></li>
+        </ul>
+        <p class="caption">Uses the organizers' numbers exactly. Cheap, clean Earth power where it exists, orbit for the rest.</p>
+      </div>
+
+      <div class="fig design">
+        <span class="tag"><span class="dot" style="background:var(--orbit)"></span>Design 2 · our big idea</span>
+        <h3>Everything in orbit, with a lighter satellite</h3>
+        <svg viewBox="0 0 320 300" role="img" aria-label="Earth using no grid power and a ring of twelve larger satellite groups">
+          <circle cx="160" cy="150" r="118" fill="none" stroke="var(--orbit)" stroke-width="1.5" stroke-dasharray="4 5"/>
+          <circle cx="160" cy="150" r="68" fill="var(--soft)" stroke="var(--line)" stroke-width="2"/>
+          <g id="d2-sats"></g>
+          <text x="160" y="146" text-anchor="middle" class="lbl" style="font-weight:700">Earth</text>
+          <text x="160" y="162" text-anchor="middle" class="small">0 MW of grid used</text>
+          <text x="160" y="292" text-anchor="middle" class="small">12 satellite groups · 75 MW each</text>
+        </svg>
+        <ul class="facts">
+          <li><span>On Earth</span><span>none</span></li>
+          <li><span>In orbit</span><span>12 groups × 75 MW (120 satellites)</span></li>
+          <li><span>Satellite weight</span><span>11.0 t per MW</span></li>
+          <li><span>Launched</span><span>11,452 t</span></li>
+          <li><span>5-year cost</span><span>$29.44B</span></li>
+        </ul>
+        <p class="caption">Our "what if": a lighter satellite makes space cheaper than the best place on Earth, so the whole fleet can leave the grid.</p>
+      </div>
+    </div>
+
+    <div class="fig scroll" style="padding:8px 4px">
+      <table>
+        <thead><tr><th>Rule</th><th>Design 1 (Earth + orbit)</th><th>Design 2 (all orbit)</th></tr></thead>
+        <tbody>
+          <tr><td>Budget, $30B</td><td class="ok"><span class="num">$29.88B</span></td><td class="ok"><span class="num">$29.44B</span></td></tr>
+          <tr><td>Earth grid, 500 MW</td><td class="ok"><span class="num">323 MW</span></td><td class="ok"><span class="num">0 MW</span></td></tr>
+          <tr><td>Launch at $200/kg</td><td class="ok"><span class="num">11,661 t = $2.33B</span></td><td class="ok"><span class="num">11,452 t = $2.29B</span></td></tr>
+          <tr><td>Chat starts in 0.6 s</td><td class="ok"><span class="num">0.22 s</span></td><td class="ok"><span class="num">0.14 s</span></td></tr>
+          <tr><td>Agents start in 2 s</td><td class="ok"><span class="num">0.26 s</span></td><td class="ok"><span class="num">0.16 s</span></td></tr>
+          <tr><td>Users served</td><td class="ok">100% of 4.45B</td><td class="ok">100% of 4.45B</td></tr>
+          <tr><td>Lose any one site or satellite group</td><td class="ok">still 100%</td><td class="ok">still 100%</td></tr>
+          <tr><td>Worst eclipse day, even with an outage</td><td class="ok">batteries on live racks</td><td class="ok">batteries on every rack</td></tr>
+          <tr><td>Communications (laser links, ground stations)</td><td class="ok"><span class="num">$0.37B</span></td><td class="ok"><span class="num">$0.42B</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">A common question</span>
+    <h2>How much do we launch?</h2>
+    <p>Think of delivery trucks. Design 2 sends 50% more computing to orbit, because it moved the whole job off Earth, but each of its trucks is 40% lighter. So both designs launch about the same weight.</p>
+    <figure class="fig" style="margin:0">
+      <div class="scroll"><svg id="trucks" viewBox="0 0 640 200" role="img" aria-label="Design 1 launches 604 megawatts at 18 tonnes each; Design 2 launches 905 megawatts at 11 tonnes each"></svg></div>
+      <figcaption>Each block is 50 MW of computers in orbit. Block height is the weight per megawatt. Tonnes launched = megawatts × weight per megawatt, plus eclipse batteries and laser terminals.</figcaption>
+    </figure>
+    <p>Design 2 carries more batteries (on every rack, not just the live ones), and 5% of chips in space break with nobody to fix them, so both designs launch a little extra.</p>
+  </section>
+
+  <section>
+    <span class="eyebrow">How it fits the budget</span>
+    <h2>The tricks that made it work</h2>
+    <ol class="steps">
+      <li><strong>Off-peak shift.</strong> Background agents get 4 hours to finish. They use the racks that serve live users during quiet hours, so we buy fewer racks. Saves about $4.8B.</li>
+      <li><strong>Small helpers.</strong> Half of each agent's steps go to a smaller AI model that is about 10× cheaper per step.</li>
+      <li><strong>Guess ahead.</strong> The AI drafts a few words at once and checks them together, so each chip writes 2–3× more.</li>
+      <li><strong>The right chip for each job.</strong> One kind of chip reads the question, another writes the answer.</li>
+      <li><strong>Many small places instead of one big one.</strong> 6 Earth sites and 12 satellite groups, so one outage only takes out a small slice.</li>
+      <li><strong>Pause idle tool sandboxes.</strong> A background agent's tool computer is saved to disk while the AI is writing, and woken up when its tool runs, so we buy fewer of them.</li>
+    </ol>
+  </section>
+
+  <section>
+    <span class="eyebrow">Test 1 · the 24-hour simulation</span>
+    <h2>We played out a full day, minute by minute</h2>
+    <p>The off-peak shift is our biggest saving, so we had to prove it works. The simulation rebuilds a real day: people in the Americas, Europe/Africa and Asia each get busy in their own afternoon. Someone is always awake, but most people live in Asia and almost nobody over the Pacific, so the whole world is still below its average demand 13 hours a day. Every minute the simulation does three things.</p>
+    <ol class="steps">
+      <li>Serve every live user first (chat and live agents). Nobody waits.</li>
+      <li>Give the leftover racks to background agent jobs.</li>
+      <li>Put any job that doesn't fit in a waiting line, and time how long it waits. It must finish within its 4-hour deadline.</li>
+    </ol>
+    <figure class="fig" style="margin:0">
+      <h3>A day on the agent racks (Design 1)</h3>
+      <div class="legend">
+        <span><i style="background:var(--live)"></i>Live agents (always served first)</span>
+        <span><i style="background:var(--spare)"></i>Background jobs using spare live racks</span>
+        <span><i style="background:var(--earth)"></i>Background jobs on their own racks</span>
+      </div>
+      <div class="scroll"><svg id="day" viewBox="0 0 640 300" role="img" aria-label="Stacked hourly chart of agent rack use over 24 hours"></svg></div>
+      <figcaption>Units are millions of words per second. When live demand peaks around 06:00–08:00 UTC (afternoon in Asia), the spare racks shrink, so some background jobs wait in line, then catch up.</figcaption>
+    </figure>
+    <figure class="fig" style="margin:0">
+      <h3>How long background jobs waited</h3>
+      <div class="scroll"><svg id="queue" viewBox="0 0 640 200" role="img" aria-label="Waiting time per hour, at most 54 minutes, against a 228-minute limit"></svg></div>
+      <figcaption>The longest wait all day was <strong>55 minutes</strong> in Design 1 and <strong>44 minutes</strong> in Design 2. The limit is 228 minutes: the 4-hour deadline minus the time the job itself takes.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <span class="eyebrow">Test 2 · switch things off</span>
+    <h2>What if a site or satellite group goes dark?</h2>
+    <p>We re-ran the day 18 times for Design 1, each time with one place switched off for the whole day. Every time, all live users were still served and background jobs waited under 1.5 hours. We also ran the worst eclipse day for each half of the satellite groups, alone and together with every possible outage: still no live user unserved, and the longest background wait was 200 minutes, inside the limit.</p>
+    <div class="zones" id="zones"></div>
+    <div class="callout">
+      <span class="verdict fail">Before we fixed it</span>
+      <p>Our first design had everything bunched into a few big places. Losing its orbit section left <strong>37% of live users</strong> without service and made background jobs wait <strong>over 32 hours</strong>. Spreading out over 12 satellite groups and adding backup costs about $3.0B, and it is why Design 1 is the safe one.</p>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Test 3 · what if our guesses are wrong?</span>
+    <h2>We made each of our guesses 25% worse</h2>
+    <p>The organizers didn't give every number, like local electricity prices, so we had to guess some. We pushed each guess 25% the wrong way, one at a time. Both designs also keep 5% of every chip's memory free, as real systems do.</p>
+    <ul class="facts" style="max-width:65ch">
+      <li><span>Energy per chat answer / per full agent task</span><span>0.05 Wh / 2.0–2.7 Wh</span></li>
+      <li><span>Included in both designs</span><span>comms, eclipse batteries, tool sandboxes</span></li>
+      <li><span>Prices, carbon, site power limits</span><span>barely matter (under $0.2B)</span></li>
+      <li><span>Design 1 still fits the budget</span><span>9 of 16 guesses</span></li>
+      <li><span>Design 2 still fits the budget</span><span>10 of 16 guesses</span></li>
+      <li><span>What really matters</span><span>how good 2035 chips are</span></li>
+    </ul>
+    <p>If chips turn out weaker, every team needs more of them. That makes Earth's power limit even tighter, and orbit even more necessary.</p>
+  </section>
+
+  <footer>
+    All numbers come from our open model: <span class="num">github.com/MadhanJ05/Orbital_DataCenter</span>. It reproduces the organizers' own figures (for example 960 chat users per chip and $3.6M to launch one megawatt) before using them.
+  </footer>
+</main>
+
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+
+  // ---- satellites on the ring (8 groups), sized by MW
+  function sats(id, size) {
+    var g = document.getElementById(id);
+    for (var i = 0; i < 12; i++) {
+      var a = (i / 12) * Math.PI * 2 - Math.PI / 2 + Math.PI / 12;
+      var x = 160 + 118 * Math.cos(a), y = 150 + 118 * Math.sin(a);
+      var s = el("g", { transform: "translate(" + x + "," + y + ")", class: "sat" }, g);
+      el("rect", { x: -size * 1.6, y: -size * 0.35, width: size * 1.1, height: size * 0.7, fill: "var(--orbit)", opacity: 0.55 }, s);
+      el("rect", { x: size * 0.5, y: -size * 0.35, width: size * 1.1, height: size * 0.7, fill: "var(--orbit)", opacity: 0.55 }, s);
+      el("rect", { x: -size * 0.5, y: -size * 0.5, width: size, height: size, rx: 2, fill: "var(--orbit)" }, s);
+    }
+  }
+  sats("d1-sats", 7);
+  sats("d2-sats", 9);
+
+  // ---- six Earth sites as pins on the globe
+  var pins = [["Iceland", -48, -40], ["Nordics", 6, -52], ["Midwest", -52, -6], ["N. Virginia", -40, 18],
+              ["W. Texas", -30, 42], ["Gulf", 40, 24]];
+  var pg = document.getElementById("d1-pins");
+  pins.forEach(function (p) {
+    var x = 160 + p[1], y = 150 + p[2];
+    el("circle", { cx: x, cy: y, r: 5, fill: "var(--earth)", stroke: "var(--surface)", "stroke-width": 1.5 }, pg);
+  });
+
+  // ---- trucks: blocks of 50 MW, height = tonnes per MW
+  var t = document.getElementById("trucks");
+  function row(y0, label, mw, tpm, color, total) {
+    var blocks = Math.round(mw / 50), h = tpm * 3.2, w = 22;
+    el("text", { x: 0, y: y0 - 6, class: "lbl", style: "font-weight:700" }, t, label);
+    for (var i = 0; i < blocks; i++) {
+      el("rect", { x: i * (w + 4), y: y0 + (58 - h), width: w, height: h, rx: 2, fill: color }, t);
+    }
+    el("text", { x: blocks * (w + 4) + 8, y: y0 + 50, class: "lbl mono" }, t, total);
+  }
+  row(26, "Design 1: 604 MW in orbit × 18 t per MW", 604, 18, "var(--earth)", "11,661 t");
+  row(124, "Design 2: 905 MW in orbit × 11.0 t per MW", 905, 11.0, "var(--orbit)", "11,452 t");
+
+  // ---- the simulated day (Design 1, agent racks), millions of words per second
+  var live = [46.9,46.8,48.5,73.9,179.4,377.6,552.0,552.0,377.7,185.0,118.2,198.1,334.8,401.4,334.9,201.0,128.1,177.0,286.9,342.3,286.8,171.5,83.7,51.4];
+  var bg = [717.6,717.6,717.6,717.6,717.6,638.0,463.6,463.6,637.9,830.6,897.4,817.5,680.8,614.2,680.7,814.6,887.5,838.6,728.7,673.3,728.8,844.1,717.6,717.6];
+  var ownCap = 397.6, allCap = 397.6 + 618.0, need = 717.6;
+  var d = document.getElementById("day");
+  var L = 48, R = 628, T = 16, B = 262, ymax = 1200;
+  var y = function (v) { return B - (v / ymax) * (B - T); };
+  var bw = (R - L) / 24;
+  [0, 300, 600, 900, 1200].forEach(function (v) {
+    el("line", { x1: L, x2: R, y1: y(v), y2: y(v), stroke: "var(--line)", "stroke-width": 1 }, d);
+    el("text", { x: L - 8, y: y(v) + 4, class: "small mono", "text-anchor": "end" }, d, String(v));
+  });
+  for (var h = 0; h < 24; h++) {
+    var x = L + h * bw + 2, own = Math.min(bg[h], ownCap), spare = bg[h] - own;
+    el("rect", { x: x, y: y(own), width: bw - 4, height: y(0) - y(own), fill: "var(--earth)" }, d);
+    el("rect", { x: x, y: y(own + spare), width: bw - 4, height: y(own) - y(own + spare), fill: "var(--spare)" }, d);
+    el("rect", { x: x, y: y(own + spare + live[h]), width: bw - 4, height: y(own + spare) - y(own + spare + live[h]), fill: "var(--live)" }, d);
+    if (h % 3 === 0) el("text", { x: L + h * bw + bw / 2, y: B + 18, class: "small mono", "text-anchor": "middle" }, d, (h < 10 ? "0" : "") + h + ":00");
+  }
+  el("line", { x1: L, x2: R, y1: y(allCap), y2: y(allCap), stroke: "var(--ink)", "stroke-width": 1.5, "stroke-dasharray": "5 4" }, d);
+  el("text", { x: R, y: y(allCap) - 6, class: "small", "text-anchor": "end", style: "fill:var(--ink)" }, d, "All agent racks (full)");
+  el("text", { x: L, y: B + 36, class: "small" }, d, "UTC hour");
+
+  // ---- queue waiting time per hour (Design 1)
+  var q = [0,0,0,0,0,1.3,16.1,38.9,53.5,51.4,38.0,25.6,23.1,29.9,36.5,33.9,21.9,9.0,3.6,5.7,7.8,2.0,0,0];
+  var s = document.getElementById("queue");
+  var T2 = 14, B2 = 166, qmax = 240;
+  var y2 = function (v) { return B2 - (v / qmax) * (B2 - T2); };
+  [0, 60, 120, 180, 240].forEach(function (v) {
+    el("line", { x1: L, x2: R, y1: y2(v), y2: y2(v), stroke: "var(--line)", "stroke-width": 1 }, s);
+    el("text", { x: L - 8, y: y2(v) + 4, class: "small mono", "text-anchor": "end" }, s, v + "m");
+  });
+  el("line", { x1: L, x2: R, y1: y2(228), y2: y2(228), stroke: "var(--bad)", "stroke-width": 2 }, s);
+  el("text", { x: R, y: y2(228) - 6, class: "small", "text-anchor": "end", style: "fill:var(--bad)" }, s, "Limit: 228 minutes");
+  for (var k = 0; k < 24; k++) {
+    var xx = L + k * bw + 2;
+    if (q[k] > 0) el("rect", { x: xx, y: y2(q[k]), width: bw - 4, height: y2(0) - y2(q[k]), fill: "var(--orbit)" }, s);
+    if (k % 3 === 0) el("text", { x: L + k * bw + bw / 2, y: B2 + 18, class: "small mono", "text-anchor": "middle" }, s, (k < 10 ? "0" : "") + k + ":00");
+  }
+  el("text", { x: L + 8 * bw + bw / 2, y: y2(53.5) - 8, class: "small mono", "text-anchor": "middle", style: "fill:var(--ink)" }, s, "54 min");
+
+  // ---- outage tiles (Design 1)
+  var zones = [["Normal day", 55], ["N. Virginia", 85], ["Midwest", 85], ["West Texas", 85], ["Nordics", 85], ["Iceland", 85], ["Gulf", 85]];
+  for (var p = 1; p <= 12; p++) zones.push(["Satellite group " + p, 84]);
+  var zg = document.getElementById("zones");
+  zones.forEach(function (z, i) {
+    var div = document.createElement("div");
+    div.className = "zone ok";
+    div.innerHTML = "<b>" + (i === 0 ? z[0] : "Lose " + z[0]) + "</b><span>Live users: 100%</span><span class='num'>Longest wait " + z[1] + " min</span>";
+    zg.appendChild(div);
+  });
+})();
+</script>
+
+</body>
+</html>
