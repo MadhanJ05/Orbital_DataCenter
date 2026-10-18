@@ -29,6 +29,7 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | `twin/build.py` | Greedy planner: best chip per stream, cheapest sites up to their grid caps, the rest in LEO. |
 | `twin/orbit_mass.py` | The 18-tonne what-if: one orbital MW broken into compute, solar, radiators and structure, with physical levers (chip temperature vs leakage, two cooling loops, solar W/kg, radiator kg/m², stripped racks, structure share, launch price). It re-optimizes the whole fleet at each step and writes `designs/whatif_ladder.json`. |
 | `twin/simulate.py` | Minute-by-minute day. Builds global demand curves from three regions in their own time zones, serves live work first, queues background work into what's left, and checks every background task against its 4 h deadline, on a normal day and with each site or plane lost. Writes `designs/sim_24h.json`. |
+| `twin/stress.py` | Makes each ASSUMED/CALIB number 25% worse (`--pct`), one at a time and then all together. Re-scores the final design as built and re-optimizes from scratch. `--light` uses the 10.7 t/MW satellite. Writes `designs/stress_25*.json`. |
 | `twin/optimize.py` | Coordinate search over every lever. Keeps a change only if the design stays at 100% served, stays valid, and gets cheaper. |
 | `twin/test_calibration.py` | Checks against the deck: ~960 chat and ~117 agent sessions per GPU, per-user peak tokens, 972 W/m² radiators, $3.6M/MW launch, orbit break-even with the Nordics at $95/kg and West Texas at $170/kg, Moon and Mars latency rules. |
 | `designs/*.json` | Saved designs. |
@@ -65,6 +66,18 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | A+B+C, optimized, no failure protection | 4.45B (100%) | $26.3B | 487 MW | 264 MW, 4,745 t |
 | **A+B+C, final: survives losing any one site or plane** | **4.45B (100%)** | **$29.7B** | **449 MW, 6 sites** | **8 planes x 68 MW, 9,727 t** |
 | Same, with the 10.7 t/MW satellite | 4.45B (100%) | $28.7B | 394 MW | 8 x 74 MW, 6,391 t |
+
+## Stress test (each assumption 25% worse)
+
+| | Deck satellite ($29.7B) | 10.7 t satellite ($28.7B) |
+|---|---|---|
+| Single assumptions that still fit the budget with every outage covered | 10 of 15 | **13 of 15** |
+| Breaks it | building cost, space hardware, attention math (~$0.5B each); chip FLOPS (-$4.7B); draft acceptance (-$6.3B) | chip FLOPS (-$3.4B); draft acceptance (-$5.1B) |
+| All 15 worse at once | $53.8B | $51.9B |
+
+Earth prices, carbon and grid caps barely move the cost. The two that matter are about
+chip performance (prefill FLOPS, speculative-decoding acceptance). They change how many
+chips everyone needs, wherever the chips sit.
 
 ## Failure test
 
