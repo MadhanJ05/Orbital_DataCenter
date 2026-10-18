@@ -32,10 +32,10 @@ export const computeDefaults: ComputeInputs = {
   serverOverhead: 1.3,
   serverKgPerChip: 10,
   seuOverheadPct: 3,
-  workload: 'training',
-  modelId: 'frontier',
-  activeParamsB: 2000,
-  mfuPct: 40,
+  workload: 'inference', // inference goes to orbit first (root README); training is a preset
+  modelId: 'kimi',
+  activeParamsB: 104,
+  mfuPct: 30,
   trainTokensT: 100,
 }
 

@@ -7,7 +7,7 @@ export interface CommsInputs {
 export const commsDefaults: CommsInputs = {
   linkGbpsPerSat: 100,
   linkAvailPct: 95,
-  ioBytesPerToken: 4,
+  ioBytesPerToken: 40, // inference: prompts in, tokens out
 }
 
 export interface CommsModel {

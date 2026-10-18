@@ -8,7 +8,7 @@ export const powerSections: Section[] = [
       num('solarEffPct', 'Solar cell efficiency', 15, 45, 0.5, '%'),
       num('solarDegPctYr', 'Array degradation', 0.2, 5, 0.1, '%/yr'),
       num('arrayMarginPct', 'Array oversize margin', 0, 100, 1, '%', 'Extra power at launch to offset degradation.'),
-      num('solarWPerKg', 'Array specific power', 50, 500, 5, 'W/kg'),
+      num('solarWPerKg', 'Array specific power', 50, 1000, 5, 'W/kg'),
       num('solarCostPerW', 'Array cost', 1, 200, 1, '$/W', undefined, { log: true }),
       num('busPowerPct', 'Bus power (avionics, comms)', 1, 20, 0.5, '% of IT'),
       { kind: 'bool', key: 'computeInEclipse', label: 'Keep computing during eclipse', help: 'On: batteries carry full load through shadow. Off: compute pauses.' },
