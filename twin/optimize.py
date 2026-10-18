@@ -40,6 +40,9 @@ def optimize(cases, verbose=True, planes=0, resilience=None):
         trials += [("context_memory", v) for v in (True, False)]
         trials += [("bg_fill_valleys", v) for v in (True, False)]
         trials += [("cooling", c) for c in ("direct_liquid", "immersion")]
+        if serving.get("resilience"):
+            # the outage spare already covers bursts on a normal day; simulate.py must confirm
+            trials += [("autosize_util", v) for v in (0.95, 0.97, 1.0)]
         if planes:
             trials += [("site_cap_share", v) for v in (0.04, 0.05, 0.06, 0.07, 0.08, 0.1, 0.12, 0.15, 0.2, 1.0)]
         for key in list(choices):

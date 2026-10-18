@@ -11,7 +11,8 @@
     "spec_draft": 4,
     "context_memory": true,
     "bg_fill_valleys": true,
-    "autosize_util": 0.95
+    "autosize_util": 0.95,
+    "resilience": null
   },
   "pools": [
     {
@@ -40,7 +41,7 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 128,
       "cooling": "radiators",
       "racks": 162
     },
@@ -60,7 +61,7 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 12,
       "cooling": "radiators",
       "racks": 16
     },
@@ -100,7 +101,7 @@
       "phase": "decode",
       "site": "leo",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 6,
       "cooling": "radiators",
       "racks": 10
     },

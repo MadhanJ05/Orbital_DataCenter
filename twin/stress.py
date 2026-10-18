@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SNAPSHOT = ("SITES", "CHIPS", "COOLING", "FLOPS_EFFICIENCY", "WEIGHT_READ_FACTOR", "ATTN_FLOPS_PER_KV_BYTE",
             "SPEC_ACCEPT", "SPEC_DRAFT_OVERHEAD_S", "SYNC_PER_DOUBLING_S", "CONTEXT_MEM_USD_PER_GB",
             "CONTEXT_MEM_W_PER_GB", "IDLE_POWER_FRACTION", "KV_LINK_BYTES_S", "FACILITY_USD_PER_MW",
-            "SPACE_HW_USD_PER_MW")
+            "SPACE_HW_USD_PER_MW", "SPACE_KG_PER_MW")
 
 
 @contextmanager
@@ -72,6 +72,7 @@ def scenarios(pct):
         ("Draft-token acceptance", scale("SPEC_ACCEPT", down)),
         ("Cross-chip sync cost", scale("SYNC_PER_DOUBLING_S", up)),
         ("Context-memory price", scale("CONTEXT_MEM_USD_PER_GB", up)),
+        ("Context-tier link bandwidth", scale_chips("ctx_link", down)),
         ("Idle power draw", scale("IDLE_POWER_FRACTION", up)),
         ("Earth-orbit link bandwidth", scale("KV_LINK_BYTES_S", down)),
     ]

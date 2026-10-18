@@ -60,6 +60,48 @@ def test_distance_rules():                 # DECK s12: Moon fails chat + interac
     assert not _single_site("agent_int", "mars") and _single_site("agent_bg", "mars")
 
 
+def test_parked_agents_follow_littles_law():   # parked caches = step rate x tool time
+    sv = dict(BASE, context_memory=True, spec_draft=4)
+    r = S.decode_replica("agent_int", "lpu", 48, sv)
+    s = C.STREAMS["agent_int"]
+    expected = r["tps"] / s["out"] * s["tool_s"] * S.session_kv_bytes("agent_int")
+    close(r["ctx_mem_bytes"], expected, 0.001)
+
+
+def test_context_link_caps_sessions():          # a slow tier link must cut the batch
+    sv = dict(BASE, context_memory=True)
+    fast = S.decode_replica("agent_int", "lpu", 48, sv)["sessions"]
+    saved = C.CHIPS["lpu"]["ctx_link"]
+    C.CHIPS["lpu"]["ctx_link"] = 1e9
+    try:
+        slow = S.decode_replica("agent_int", "lpu", 48, sv)["sessions"]
+    finally:
+        C.CHIPS["lpu"]["ctx_link"] = saved
+    assert slow < fast / 10, (slow, fast)
+
+
+def test_night_shift_needs_interactive_spare(): # shrink live-agent racks -> background suffers too
+    import json
+    from pathlib import Path
+    d = json.loads((Path(__file__).resolve().parent.parent / "designs" / "final_resilient.json").read_text())
+    assert S.evaluate(d)["stream_fraction"]["agent_bg"] >= 0.999
+    for p in d["pools"]:
+        if p["stream"] == "agent_int":
+            p["racks"] = int(p["racks"] * 0.6)
+    frac = S.evaluate(d)["stream_fraction"]
+    assert frac["agent_bg"] < 0.999, frac
+
+
+def test_final_designs_valid():                  # both designs meet every rule
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent / "designs"
+    for f in ("final_resilient.json", "whatif_all_orbit_light.json"):
+        r = S.evaluate(json.loads((root / f).read_text()))
+        assert r["valid"] and r["served_fraction"] >= 0.999, (f, r["errors"])
+        assert r["resilience"]["served_fraction"] >= 0.999, f
+
+
 if __name__ == "__main__":
     tests = [(n, f) for n, f in sorted(globals().items()) if n.startswith("test_")]
     for name, fn in tests:

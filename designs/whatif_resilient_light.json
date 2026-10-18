@@ -8,10 +8,10 @@
   "serving": {
     "easy_chat_share": 0.0,
     "subagent_share": 0.5,
-    "spec_draft": 4,
+    "spec_draft": 5,
     "context_memory": true,
     "bg_fill_valleys": true,
-    "autosize_util": 0.95,
+    "autosize_util": 1.0,
     "resilience": "all"
   },
   "pools": [
@@ -23,7 +23,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "direct_liquid",
-      "racks": 44
+      "racks": 48
     },
     {
       "name": "chat-decode-iceland",
@@ -33,7 +33,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "direct_liquid",
-      "racks": 44
+      "racks": 48
     },
     {
       "name": "chat-decode-west_texas",
@@ -43,7 +43,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "direct_liquid",
-      "racks": 44
+      "racks": 48
     },
     {
       "name": "chat-decode-gulf",
@@ -53,7 +53,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "direct_liquid",
-      "racks": 44
+      "racks": 48
     },
     {
       "name": "chat-decode-midwest",
@@ -63,7 +63,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "direct_liquid",
-      "racks": 44
+      "racks": 48
     },
     {
       "name": "chat-decode-n_virginia",
@@ -73,7 +73,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "direct_liquid",
-      "racks": 44
+      "racks": 48
     },
     {
       "name": "chat-decode-leo_p1",
@@ -83,7 +83,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 55
+      "racks": 48
     },
     {
       "name": "chat-decode-leo_p2",
@@ -93,7 +93,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 55
+      "racks": 48
     },
     {
       "name": "chat-decode-leo_p3",
@@ -103,7 +103,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 55
+      "racks": 48
     },
     {
       "name": "chat-decode-leo_p4",
@@ -113,7 +113,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 55
+      "racks": 48
     },
     {
       "name": "chat-decode-leo_p5",
@@ -123,7 +123,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 55
+      "racks": 48
     },
     {
       "name": "chat-decode-leo_p6",
@@ -133,7 +133,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 55
+      "racks": 48
     },
     {
       "name": "chat-decode-leo_p7",
@@ -143,7 +143,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 55
+      "racks": 48
     },
     {
       "name": "chat-decode-leo_p8",
@@ -153,7 +153,7 @@
       "chip": "lpu",
       "chips_per_replica": 12,
       "cooling": "radiators",
-      "racks": 55
+      "racks": 48
     },
     {
       "name": "chat-prefill-nordics",
@@ -163,7 +163,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "direct_liquid",
-      "racks": 179
+      "racks": 194
     },
     {
       "name": "chat-prefill-iceland",
@@ -173,7 +173,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "direct_liquid",
-      "racks": 179
+      "racks": 194
     },
     {
       "name": "chat-prefill-west_texas",
@@ -183,7 +183,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "direct_liquid",
-      "racks": 179
+      "racks": 194
     },
     {
       "name": "chat-prefill-gulf",
@@ -193,7 +193,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "direct_liquid",
-      "racks": 179
+      "racks": 194
     },
     {
       "name": "chat-prefill-midwest",
@@ -203,7 +203,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "direct_liquid",
-      "racks": 179
+      "racks": 194
     },
     {
       "name": "chat-prefill-n_virginia",
@@ -213,7 +213,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "direct_liquid",
-      "racks": 179
+      "racks": 194
     },
     {
       "name": "chat-prefill-leo_p1",
@@ -223,7 +223,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "radiators",
-      "racks": 225
+      "racks": 194
     },
     {
       "name": "chat-prefill-leo_p2",
@@ -233,7 +233,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "radiators",
-      "racks": 225
+      "racks": 194
     },
     {
       "name": "chat-prefill-leo_p3",
@@ -243,7 +243,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "radiators",
-      "racks": 225
+      "racks": 194
     },
     {
       "name": "chat-prefill-leo_p4",
@@ -253,7 +253,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "radiators",
-      "racks": 225
+      "racks": 194
     },
     {
       "name": "chat-prefill-leo_p5",
@@ -263,7 +263,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "radiators",
-      "racks": 225
+      "racks": 194
     },
     {
       "name": "chat-prefill-leo_p6",
@@ -273,7 +273,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "radiators",
-      "racks": 225
+      "racks": 194
     },
     {
       "name": "chat-prefill-leo_p7",
@@ -283,7 +283,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "radiators",
-      "racks": 225
+      "racks": 194
     },
     {
       "name": "chat-prefill-leo_p8",
@@ -293,7 +293,7 @@
       "chip": "air",
       "chips_per_replica": 4,
       "cooling": "radiators",
-      "racks": 225
+      "racks": 194
     },
     {
       "name": "agent_int-decode-nordics",
@@ -301,9 +301,9 @@
       "phase": "decode",
       "site": "nordics",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 11
+      "racks": 12
     },
     {
       "name": "agent_int-decode-iceland",
@@ -311,9 +311,9 @@
       "phase": "decode",
       "site": "iceland",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 11
+      "racks": 12
     },
     {
       "name": "agent_int-decode-west_texas",
@@ -321,9 +321,9 @@
       "phase": "decode",
       "site": "west_texas",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 11
+      "racks": 12
     },
     {
       "name": "agent_int-decode-gulf",
@@ -331,9 +331,9 @@
       "phase": "decode",
       "site": "gulf",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 11
+      "racks": 12
     },
     {
       "name": "agent_int-decode-midwest",
@@ -341,9 +341,9 @@
       "phase": "decode",
       "site": "midwest",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 11
+      "racks": 12
     },
     {
       "name": "agent_int-decode-n_virginia",
@@ -351,9 +351,9 @@
       "phase": "decode",
       "site": "n_virginia",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 11
+      "racks": 12
     },
     {
       "name": "agent_int-decode-leo_p1",
@@ -361,9 +361,9 @@
       "phase": "decode",
       "site": "leo_p1",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 14
+      "racks": 12
     },
     {
       "name": "agent_int-decode-leo_p2",
@@ -371,9 +371,9 @@
       "phase": "decode",
       "site": "leo_p2",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 14
+      "racks": 12
     },
     {
       "name": "agent_int-decode-leo_p3",
@@ -381,9 +381,9 @@
       "phase": "decode",
       "site": "leo_p3",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 14
+      "racks": 12
     },
     {
       "name": "agent_int-decode-leo_p4",
@@ -391,9 +391,9 @@
       "phase": "decode",
       "site": "leo_p4",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 14
+      "racks": 12
     },
     {
       "name": "agent_int-decode-leo_p5",
@@ -401,9 +401,9 @@
       "phase": "decode",
       "site": "leo_p5",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 14
+      "racks": 12
     },
     {
       "name": "agent_int-decode-leo_p6",
@@ -411,9 +411,9 @@
       "phase": "decode",
       "site": "leo_p6",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 14
+      "racks": 12
     },
     {
       "name": "agent_int-decode-leo_p7",
@@ -421,9 +421,9 @@
       "phase": "decode",
       "site": "leo_p7",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 14
+      "racks": 12
     },
     {
       "name": "agent_int-decode-leo_p8",
@@ -431,9 +431,9 @@
       "phase": "decode",
       "site": "leo_p8",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 14
+      "racks": 12
     },
     {
       "name": "agent_int-prefill-nordics",
@@ -443,7 +443,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 287
+      "racks": 311
     },
     {
       "name": "agent_int-prefill-iceland",
@@ -453,7 +453,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 287
+      "racks": 311
     },
     {
       "name": "agent_int-prefill-west_texas",
@@ -463,7 +463,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 287
+      "racks": 311
     },
     {
       "name": "agent_int-prefill-gulf",
@@ -473,7 +473,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 287
+      "racks": 311
     },
     {
       "name": "agent_int-prefill-midwest",
@@ -483,7 +483,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 287
+      "racks": 311
     },
     {
       "name": "agent_int-prefill-n_virginia",
@@ -493,7 +493,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 287
+      "racks": 311
     },
     {
       "name": "agent_int-prefill-leo_p1",
@@ -503,7 +503,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 360
+      "racks": 310
     },
     {
       "name": "agent_int-prefill-leo_p2",
@@ -513,7 +513,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 360
+      "racks": 310
     },
     {
       "name": "agent_int-prefill-leo_p3",
@@ -523,7 +523,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 360
+      "racks": 310
     },
     {
       "name": "agent_int-prefill-leo_p4",
@@ -533,7 +533,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 360
+      "racks": 310
     },
     {
       "name": "agent_int-prefill-leo_p5",
@@ -543,7 +543,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 360
+      "racks": 310
     },
     {
       "name": "agent_int-prefill-leo_p6",
@@ -553,7 +553,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 360
+      "racks": 310
     },
     {
       "name": "agent_int-prefill-leo_p7",
@@ -563,7 +563,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 360
+      "racks": 310
     },
     {
       "name": "agent_int-prefill-leo_p8",
@@ -573,147 +573,147 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 360
+      "racks": 310
     },
     {
       "name": "agent_int_sub-decode-nordics",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "nordics",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-iceland",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "iceland",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-west_texas",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "west_texas",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-gulf",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "gulf",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-midwest",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "midwest",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-n_virginia",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "n_virginia",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-leo_p1",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "leo_p1",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-leo_p2",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "leo_p2",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-leo_p3",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "leo_p3",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-leo_p4",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "leo_p4",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-leo_p5",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "leo_p5",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-leo_p6",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "leo_p6",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-leo_p7",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "leo_p7",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-decode-leo_p8",
       "stream": "agent_int_sub",
       "phase": "decode",
       "site": "leo_p8",
-      "chip": "lpu",
-      "chips_per_replica": 1,
+      "chip": "gpu",
+      "chips_per_replica": 48,
       "cooling": "radiators",
-      "racks": 2
+      "racks": 1
     },
     {
       "name": "agent_int_sub-prefill-nordics",
@@ -723,7 +723,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 28
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-iceland",
@@ -733,7 +733,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 28
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-west_texas",
@@ -743,7 +743,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 28
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-gulf",
@@ -753,7 +753,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 28
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-midwest",
@@ -763,7 +763,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 28
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-n_virginia",
@@ -773,7 +773,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 28
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-leo_p1",
@@ -783,7 +783,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 35
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-leo_p2",
@@ -793,7 +793,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 35
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-leo_p3",
@@ -803,7 +803,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 35
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-leo_p4",
@@ -813,7 +813,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 35
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-leo_p5",
@@ -823,7 +823,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 35
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-leo_p6",
@@ -833,7 +833,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 35
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-leo_p7",
@@ -843,7 +843,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 35
+      "racks": 30
     },
     {
       "name": "agent_int_sub-prefill-leo_p8",
@@ -853,7 +853,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 35
+      "racks": 30
     },
     {
       "name": "agent_bg-decode-nordics",
@@ -861,9 +861,9 @@
       "phase": "decode",
       "site": "nordics",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "direct_liquid",
-      "racks": 7
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-iceland",
@@ -871,9 +871,9 @@
       "phase": "decode",
       "site": "iceland",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "direct_liquid",
-      "racks": 7
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-west_texas",
@@ -881,9 +881,9 @@
       "phase": "decode",
       "site": "west_texas",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "direct_liquid",
-      "racks": 7
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-gulf",
@@ -891,9 +891,9 @@
       "phase": "decode",
       "site": "gulf",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "direct_liquid",
-      "racks": 7
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-midwest",
@@ -901,9 +901,9 @@
       "phase": "decode",
       "site": "midwest",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "direct_liquid",
-      "racks": 7
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-n_virginia",
@@ -911,9 +911,9 @@
       "phase": "decode",
       "site": "n_virginia",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "direct_liquid",
-      "racks": 7
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-leo_p1",
@@ -921,9 +921,9 @@
       "phase": "decode",
       "site": "leo_p1",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "radiators",
-      "racks": 9
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-leo_p2",
@@ -931,9 +931,9 @@
       "phase": "decode",
       "site": "leo_p2",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "radiators",
-      "racks": 9
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-leo_p3",
@@ -941,9 +941,9 @@
       "phase": "decode",
       "site": "leo_p3",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "radiators",
-      "racks": 9
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-leo_p4",
@@ -951,9 +951,9 @@
       "phase": "decode",
       "site": "leo_p4",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "radiators",
-      "racks": 9
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-leo_p5",
@@ -961,9 +961,9 @@
       "phase": "decode",
       "site": "leo_p5",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "radiators",
-      "racks": 9
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-leo_p6",
@@ -971,9 +971,9 @@
       "phase": "decode",
       "site": "leo_p6",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "radiators",
-      "racks": 9
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-leo_p7",
@@ -981,9 +981,9 @@
       "phase": "decode",
       "site": "leo_p7",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "radiators",
-      "racks": 9
+      "racks": 8
     },
     {
       "name": "agent_bg-decode-leo_p8",
@@ -991,9 +991,9 @@
       "phase": "decode",
       "site": "leo_p8",
       "chip": "lpu",
-      "chips_per_replica": 64,
+      "chips_per_replica": 32,
       "cooling": "radiators",
-      "racks": 9
+      "racks": 8
     },
     {
       "name": "agent_bg-prefill-nordics",
@@ -1003,7 +1003,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 184
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-iceland",
@@ -1013,7 +1013,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 184
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-west_texas",
@@ -1023,7 +1023,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 184
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-gulf",
@@ -1033,7 +1033,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 184
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-midwest",
@@ -1043,7 +1043,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 184
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-n_virginia",
@@ -1053,7 +1053,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "direct_liquid",
-      "racks": 184
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-leo_p1",
@@ -1063,7 +1063,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 231
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-leo_p2",
@@ -1073,7 +1073,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 231
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-leo_p3",
@@ -1083,7 +1083,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 231
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-leo_p4",
@@ -1093,7 +1093,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 231
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-leo_p5",
@@ -1103,7 +1103,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 231
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-leo_p6",
@@ -1113,7 +1113,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 231
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-leo_p7",
@@ -1123,7 +1123,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 231
+      "racks": 199
     },
     {
       "name": "agent_bg-prefill-leo_p8",
@@ -1133,7 +1133,7 @@
       "chip": "air",
       "chips_per_replica": 16,
       "cooling": "radiators",
-      "racks": 231
+      "racks": 199
     },
     {
       "name": "agent_bg_sub-decode-nordics",
@@ -1141,7 +1141,7 @@
       "phase": "decode",
       "site": "nordics",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
       "racks": 1
     },
@@ -1151,7 +1151,7 @@
       "phase": "decode",
       "site": "iceland",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
       "racks": 1
     },
@@ -1161,7 +1161,7 @@
       "phase": "decode",
       "site": "west_texas",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
       "racks": 1
     },
@@ -1171,7 +1171,7 @@
       "phase": "decode",
       "site": "gulf",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
       "racks": 1
     },
@@ -1181,7 +1181,7 @@
       "phase": "decode",
       "site": "midwest",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
       "racks": 1
     },
@@ -1191,7 +1191,7 @@
       "phase": "decode",
       "site": "n_virginia",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "direct_liquid",
       "racks": 1
     },
@@ -1201,7 +1201,7 @@
       "phase": "decode",
       "site": "leo_p1",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 1
     },
@@ -1211,7 +1211,7 @@
       "phase": "decode",
       "site": "leo_p2",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 1
     },
@@ -1221,7 +1221,7 @@
       "phase": "decode",
       "site": "leo_p3",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 1
     },
@@ -1231,7 +1231,7 @@
       "phase": "decode",
       "site": "leo_p4",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 1
     },
@@ -1241,7 +1241,7 @@
       "phase": "decode",
       "site": "leo_p5",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 1
     },
@@ -1251,7 +1251,7 @@
       "phase": "decode",
       "site": "leo_p6",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 1
     },
@@ -1261,7 +1261,7 @@
       "phase": "decode",
       "site": "leo_p7",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 1
     },
@@ -1271,7 +1271,7 @@
       "phase": "decode",
       "site": "leo_p8",
       "chip": "lpu",
-      "chips_per_replica": 2,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 1
     },
@@ -1283,7 +1283,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 18
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-iceland",
@@ -1293,7 +1293,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 18
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-west_texas",
@@ -1303,7 +1303,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 18
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-gulf",
@@ -1313,7 +1313,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 18
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-midwest",
@@ -1323,7 +1323,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 18
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-n_virginia",
@@ -1333,7 +1333,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "direct_liquid",
-      "racks": 18
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-leo_p1",
@@ -1343,7 +1343,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 23
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-leo_p2",
@@ -1353,7 +1353,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 23
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-leo_p3",
@@ -1363,7 +1363,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 23
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-leo_p4",
@@ -1373,7 +1373,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 23
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-leo_p5",
@@ -1383,7 +1383,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 23
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-leo_p6",
@@ -1393,7 +1393,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 23
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-leo_p7",
@@ -1403,7 +1403,7 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 23
+      "racks": 20
     },
     {
       "name": "agent_bg_sub-prefill-leo_p8",
@@ -1413,12 +1413,12 @@
       "chip": "air",
       "chips_per_replica": 1,
       "cooling": "radiators",
-      "racks": 23
+      "racks": 20
     }
   ],
   "satellite": {
     "kg_per_mw": 10738,
     "hw_factor": 0.919,
-    "note": "what-if satellite: thin-film solar, carbon-fiber radiators, space-stripped racks (twin/orbit_mass.py)"
+    "note": "what-if satellite (twin/orbit_mass.py)"
   }
 }

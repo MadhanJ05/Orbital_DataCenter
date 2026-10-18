@@ -29,6 +29,7 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | `twin/build.py` | Greedy planner: best chip per stream, cheapest sites up to their grid caps, the rest in LEO. |
 | `twin/orbit_mass.py` | The 18-tonne what-if: one orbital MW broken into compute, solar, radiators and structure, with physical levers (chip temperature vs leakage, two cooling loops, solar W/kg, radiator kg/m², stripped racks, structure share, launch price). It re-optimizes the whole fleet at each step and writes `designs/whatif_ladder.json`. |
 | `twin/simulate.py` | Minute-by-minute day. Builds global demand curves from three regions in their own time zones, serves live work first, queues background work into what's left, and checks every background task against its 4 h deadline, on a normal day and with each site or plane lost. Writes `designs/sim_24h.json`. |
+| `twin/check_rules.py` | Rule-by-rule check against the deck for Design 1 and Design 2 (or any design). Each line gives the slide, the limit, the design's value and PASS/FAIL. It recomputes from the pools instead of trusting the scorer. |
 | `twin/stress.py` | Makes each ASSUMED/CALIB number 25% worse (`--pct`), one at a time and then all together. Re-scores the final design as built and re-optimizes from scratch. `--light` uses the 10.7 t/MW satellite; `--orbit-only` removes Earth sites (Design 2). Writes `designs/stress_25*.json`. |
 | `twin/optimize.py` | Coordinate search over every lever. Keeps a change only if the design stays at 100% served, stays valid, and gets cheaper. |
 | `twin/test_calibration.py` | Checks against the deck: ~960 chat and ~117 agent sessions per GPU, per-user peak tokens, 972 W/m² radiators, $3.6M/MW launch, orbit break-even with the Nordics at $95/kg and West Texas at $170/kg, Moon and Mars latency rules. |
@@ -62,23 +63,47 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | Case B, agent developers | 50M (100%) | $8.5B | 240 MW | none |
 | Case C, knowledge workers | 400M (100%) | $8.3B | 234 MW | none |
 | A+B+C, Earth only | 2.6B of 4.45B (58%) | $16.8B | 488 MW (full) | none |
-| A+B+C, with orbit (greedy) | 4.45B (100%) | $30.8B (over budget) | 490 MW | 370 MW, 6,656 t |
-| A+B+C, optimized, no failure protection | 4.45B (100%) | $26.3B | 487 MW | 264 MW, 4,745 t |
-| **A+B+C, final: survives losing any one site or plane** | **4.45B (100%)** | **$29.7B** | **449 MW, 6 sites** | **8 planes x 68 MW, 9,727 t** |
-| Same, with the 10.7 t/MW satellite | 4.45B (100%) | $28.7B | 394 MW | 8 x 74 MW, 6,391 t |
-| **Design 2: 10.7 t/MW satellite, all orbit** | **4.45B (100%)** | **$29.8B** | **0 MW** | **8 x 128 MW, 10,984 t** |
+| A+B+C, optimized, no failure protection | 4.45B (100%) | $26.6B | 485 MW | 280 MW, 5,037 t |
+| **Design 1: survives losing any one site or plane** | **4.45B (100%)** | **$28.78B** | **435 MW, 6 sites** | **8 planes x 66 MW, 9,442 t** |
+| Design 1 layout with the 10.7 t/MW satellite | 4.45B (100%) | $27.76B | 435 MW | 8 x 66 MW, 5,633 t |
+| **Design 2: 10.7 t/MW satellite, all orbit** | **4.45B (100%)** | **$28.79B** | **0 MW** | **8 x 124 MW, 10,660 t** |
+
+The Case A/B/C rows predate the model fixes below. Re-run `build.py` to refresh them.
 
 ## Stress test (each assumption 25% worse)
 
-| | Deck satellite ($29.7B) | 10.7 t satellite ($28.7B) |
+| | Design 1 ($28.78B) | Design 2 ($28.79B) |
 |---|---|---|
-| Single assumptions that still fit the budget with every outage covered | 10 of 15 | **13 of 15** |
-| Breaks it | building cost, space hardware, attention math (~$0.5B each); chip FLOPS (-$4.7B); draft acceptance (-$6.3B) | chip FLOPS (-$3.4B); draft acceptance (-$5.1B) |
-| All 15 worse at once | $53.8B | $51.9B |
+| Single assumptions that still fit the budget with every outage covered | **13 of 16** | 12 of 16 |
+| Breaks it | chip FLOPS (-$3.1B), draft acceptance (-$5.3B) | chip FLOPS (-$3.3B), draft acceptance (-$4.9B), space hardware (-$0.1B) |
+| All 16 worse at once | $51.6B | $51.1B |
 
-Earth prices, carbon and grid caps barely move the cost. The two that matter are about
-chip performance (prefill FLOPS, speculative-decoding acceptance). They change how many
-chips everyone needs, wherever the chips sit.
+Earth prices, carbon and grid caps barely move the cost. The two that matter are about chip
+performance (prefill FLOPS, speculative-decoding acceptance). They change how many chips
+everyone needs, wherever the chips sit.
+
+## Deck interpretations (where the slides leave room)
+
+- **Workloads:** the Kimi K3 / Qwen3.5 / gpt-oss set (slides 9-14, named on the Track 1 Challenge slide). The Sage/Titan slides later in the deck are an alternate version and are not used.
+- **500 MW** is counted as facility power: IT plus cooling, at nameplate. That's the strict reading.
+- **Virginia and the Midwest** use the midpoint of the deck's cold and desert PUE columns.
+- **Air cards in orbit** are radiator-cooled like everything else in space. If that is disallowed and GPUs do the prefill, Design 1 costs $29.70B and Design 2 $29.14B: both still valid.
+- **Chip memory** is filled to 100% by weights and caches, with no reserve for fragmentation.
+
+## Model fixes from the code review
+
+- **Night shift during outages:** background work riding in the interactive pools must fit in
+  their remaining average spare (capacity left after the outage, minus the interactive
+  average). The resilience check covers every stream that has demand before night shift.
+- **Parked agents:** sessions waiting on tools are counted at the real decode speed. Chips
+  run agents well above 100 tok/s, so about 8 caches are parked per decoding session, not 1.6.
+  The context-memory tier grew from 17 to 74 PB.
+- **Context-tier link:** each tool call loads the whole cache back from the tier and writes
+  out only the new tokens. This is capped by a per-chip link (`ctx_link` in `catalog.py`:
+  GPU 900 GB/s like today's NVLink-C2C, LPU 200 GB/s, air card 100 GB/s, all ASSUMED).
+- **Burst headroom:** with outage protection on, the optimizer may drop the 5% sizing headroom,
+  because the outage spare covers bursts on a normal day. `simulate.py` confirms no live
+  shortfall, minute by minute, on a normal day and in every outage.
 
 ## Failure test
 
