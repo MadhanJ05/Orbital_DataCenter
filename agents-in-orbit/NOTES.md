@@ -7,7 +7,7 @@ design kept as the reference) plus `node3d.html` / `node.scad` (the orbital node
 ## The all-in-space design (case B; `python model.py` prints every block below)
 - Everything in a 575 km dawn-dusk sun-synchronous orbit (06:00 node). The 40 ms round trip sits inside the 2 s
   interactive TTFT, so interactive steps fly too; chat would as well (0.6 s TTFT).
-- Twin-optimised fleet: **261 racks** (120 interactive with eclipse batteries + 141 background) = 237 MW of IT,
+- Twin-optimised fleet: **261 racks** (120 interactive with eclipse batteries + 141 background) = 207 MW of IT,
   33 nodes of 8 racks, 6.8 kt, about 69 launches of 100 t, 0.29 GW of arrays. **$16.7B** over 5 years, inside
   the $30B budget, 100% of the 50M developers served, 0 MW from any grid. Energy **1,837 GWh/yr**, 3.0 Wh per
   task fleet-wide with idle time counted.
@@ -143,7 +143,7 @@ over 5 years and frees 137 MW of grid. Everything still fits the $30B budget.
    $63.6M needs Earth power at ~$450/MWh. The hedge is real but thin once the spacecraft is costed honestly.
 4. PUE: 1.05 in orbit against 1.15 on Earth is the one metric where orbit wins outright, but it is worth 9%
    of the energy per task, not the 2.5x the software levers are worth.
-5. All in space removes the grid question entirely: 237 MW of IT with 0 MW drawn from any grid, and the budget,
+5. All in space removes the grid question entirely: 207 MW of IT with 0 MW drawn from any grid, and the budget,
    not the cap, is the only limit (serves 100% at $16.7B).
 6. The twin pays for itself: deriving the eclipse season, serving background work at the memory/bandwidth balance
    point and pooling it onto idle interactive racks took the all-space design from $25.5B to $16.7B and from

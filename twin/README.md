@@ -33,6 +33,7 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | `twin/stress.py` | Makes each ASSUMED/CALIB number 25% worse (`--pct`), one at a time and then all together. Re-scores the final design as built and re-optimizes from scratch. `--light` uses the 10.7 t/MW satellite; `--orbit-only` removes Earth sites (Design 2). Writes `designs/stress_25*.json`. |
 | `twin/optimize.py` | Coordinate search over every lever. Keeps a change only if the design stays at 100% served, stays valid, and gets cheaper. |
 | `twin/test_calibration.py` | Checks against the deck: ~960 chat and ~117 agent sessions per GPU, per-user peak tokens, 972 W/m² radiators, $3.6M/MW launch, orbit break-even with the Nordics at $95/kg and West Texas at $170/kg, Moon and Mars latency rules. |
+| `twin/export_ui.py` | Scores every design in `designs/` and bundles the results with the 24-hour simulation, the stress ladders and the agents-in-orbit strand into `designs/ui.json`, the data behind `dashboard.html` (published copy: https://claude.ai/artifact/K2eTB3o7SGMvccLEJCppxL). The page has no model logic of its own. |
 | `designs/*.json` | Saved designs. |
 
 ## Design format

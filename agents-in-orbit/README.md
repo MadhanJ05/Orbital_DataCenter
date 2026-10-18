@@ -1,5 +1,7 @@
 # Agents in Orbit: case B, the whole agent fleet in space
 
+Shown beside the twin's Design 1 and 2 on the repo dashboard (`dashboard.html`, published at https://claude.ai/artifact/K2eTB3o7SGMvccLEJCppxL).
+
 Companion strand to the `twin/` package: a napkin model, an interactive explorer and a parametric satellite
 for case B (50M agent developers), with the whole fleet in a 575 km dawn-dusk sun-synchronous orbit.
 Every number comes from the slides unless tagged ASSUMED; a few first-pass guesses are now DERIVED
@@ -13,7 +15,7 @@ Every number comes from the slides unless tagged ASSUMED; a few first-pass guess
 | `node.scad` | Same node in OpenSCAD (F6, export STL/3MF). |
 | `NOTES.md` | Working notes: every number, what changed in each review pass, open items. |
 
-Headline (case B, all levers, twin-optimised): 261 racks in 33 nodes, 237 MW of IT, 0 MW of grid,
+Headline (case B, all levers, twin-optimised): 261 racks in 33 nodes, 207 MW of IT, 0 MW of grid,
 $16.7B over 5 years, 1,837 GWh/yr at PUE 1.0495, 100% of users served.
 Key findings: background decode should run at the bandwidth/memory balance point (67 tok/s, not 30);
 eclipses are 4.6% of the year, not 1%; pooling background work onto idle interactive racks at night cuts
