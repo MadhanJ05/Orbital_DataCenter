@@ -12,12 +12,12 @@ export interface ThermalInputs {
 
 const deck = assumptions.radiator
 export const thermalDefaults: ThermalInputs = {
-  radiatorTempK: deck.temp_k,
-  sinkTempK: deck.sink_k,
-  emissivity: deck.emissivity,
+  radiatorTempK: deck.temp_k.value,
+  sinkTempK: deck.sink_k.value,
+  emissivity: deck.emissivity.value,
   radiatorKgPerM2: 4,
   radiatorDegPctYr: 0.7,
-  twoSidedRadiator: deck.sides === 2,
+  twoSidedRadiator: deck.sides.value === 2,
 }
 
 export const RADIATOR_MARGIN = 1.1
