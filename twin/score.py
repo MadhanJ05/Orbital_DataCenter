@@ -18,7 +18,8 @@ from pathlib import Path
 import catalog as C
 
 SERVING_DEFAULTS = dict(easy_chat_share=0.0, subagent_share=0.0, spec_draft=0,
-                        context_memory=False, bg_fill_valleys=False, autosize_util=0.95)
+                        context_memory=False, bg_fill_valleys=False, autosize_util=0.95,
+                        resilience=None)
 VALLEY_PAIRS = (("agent_int", "agent_bg"), ("agent_int_sub", "agent_bg_sub"))
 INF = float("inf")
 
@@ -372,8 +373,24 @@ def evaluate(design):
     if not cases:
         errors.append("design serves no case")
 
-    valid = not errors
     target = sum(C.CASES[c]["users"] for c in cases)
+
+    # ---- failure test (DECK s21): lose any one site or orbital plane. "live" means
+    # chat and interactive agents stay at 100% (background agents wait it out
+    # inside their 4 h deadline); "all" means every stream stays at 100%.
+    outage = {}
+    for s in sorted({p["site"] for p in pools}):
+        frac, _, _ = served(lambda p, s=s: p["site"] != s)
+        outage[s] = frac
+    if serving["resilience"] in ("live", "all"):
+        protect = C.LIVE_STREAMS if serving["resilience"] == "live" else tuple(C.STREAMS)
+        for s, frac in outage.items():
+            short = [x for x in protect if d_out[x] > 0 and frac[x] < 0.999]
+            if short:
+                errors.append(f"losing {s} drops {', '.join(short)} below 100% "
+                              f"(resilience={serving['resilience']})")
+    elif serving["resilience"] is not None:
+        errors.append("resilience must be null, 'live' or 'all'")
 
     # ---- robustness: users served if the single most important site goes dark
     worst_site, worst_users = None, users
@@ -381,6 +398,8 @@ def evaluate(design):
         _, _, u = served(lambda p, s=s: p["site"] != s)
         if u < worst_users:
             worst_site, worst_users = s, u
+
+    valid = not errors
 
     # ---- joules per request (facility energy; orbit counts its solar-fed IT energy)
     seconds = C.HOURS * 3600
@@ -397,7 +416,9 @@ def evaluate(design):
         space_mass_t=launch_kg / 1000, co2_t=co2_t, water_m3=water_l / 1000,
         joules_per_request=j_per_req,
         resilience=dict(worst_site=worst_site,
-                        served_fraction=worst_users / target if target else 0.0),
+                        served_fraction=worst_users / target if target else 0.0,
+                        live_served_by_outage={s: min(f[x] for x in C.LIVE_STREAMS if d_out[x] > 0)
+                                               for s, f in outage.items()} if any(d_out[x] > 0 for x in C.LIVE_STREAMS) else {}),
         demand_out_tps=d_out, demand_in_tps=d_in, pools=pools,
     )
 

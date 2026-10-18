@@ -126,6 +126,14 @@ SITES = {
     "mars":       dict(kind="space", rtt=25 * 60, launch_usd_per_kg=200 * 15),  # DECK s12/s14: 15x
 }
 
+# Orbital planes: independent constellations (own orbit plane, ground links and
+# launch cadence), each a separate failure domain. Same physics and prices as
+# "leo"; they share its dict so a what-if on leo's launch price applies to all.
+ORBIT_PLANES = 8
+for _i in range(1, ORBIT_PLANES + 1):
+    SITES[f"leo_p{_i}"] = SITES["leo"]
+LIVE_STREAMS = ("chat", "chat_easy", "agent_int", "agent_int_sub")   # users waiting on a reply
+
 # ---------------------------------------------------------------- space
 SPACE_KG_PER_MW = 18_000           # DECK s14: compute 5 t, solar 5, radiators 4, structure 4
 SPACE_MASS_SPLIT_T = dict(compute=5, solar=5, radiators=4, structure=4)

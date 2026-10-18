@@ -16,6 +16,7 @@ python3 twin/score.py --napkin                # tokens/s per chip, all-GPU sizin
 python3 twin/score.py --breakeven             # launch $/kg where orbit ties each Earth site
 python3 twin/build.py A B C                   # greedy valid starting design -> designs/A+B+C.json
 python3 twin/optimize.py A B C                # search for the cheapest valid design -> designs/final_A+B+C.json
+python3 twin/optimize.py A B C --planes 8 --resilience all --name final_resilient --out designs/final_resilient.json
 python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json for the full result)
 ```
 
@@ -60,7 +61,16 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | Case C, knowledge workers | 400M (100%) | $8.3B | 234 MW | none |
 | A+B+C, Earth only | 2.6B of 4.45B (58%) | $16.8B | 488 MW (full) | none |
 | A+B+C, with orbit (greedy) | 4.45B (100%) | $30.8B (over budget) | 490 MW | 370 MW, 6,656 t |
-| **A+B+C, final (optimized)** | **4.45B (100%)** | **$26.3B** | **487 MW** | **264 MW, 4,745 t** |
+| A+B+C, optimized, no failure protection | 4.45B (100%) | $26.3B | 487 MW | 264 MW, 4,745 t |
+| **A+B+C, final: survives losing any one site or plane** | **4.45B (100%)** | **$29.7B** | **449 MW, 6 sites** | **8 planes x 68 MW, 9,727 t** |
+| Same, with the 10.7 t/MW satellite | 4.45B (100%) | $28.7B | 394 MW | 8 x 74 MW, 6,391 t |
+
+## Failure test
+
+`serving.resilience` is `"live"` (chat and interactive agents stay at 100% when any one site
+or orbital plane is lost; background agents wait inside their 4 h deadline) or `"all"`
+(every stream stays at 100%). Orbit can be split into independent planes `leo_p1`..`leo_p8`.
+Each plane is its own failure domain, with the same physics and prices as `leo`.
 
 ## Known simplifications
 

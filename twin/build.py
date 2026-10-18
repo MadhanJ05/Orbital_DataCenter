@@ -47,11 +47,39 @@ def site_order(include_space):
     return sorted(costs, key=costs.get)
 
 
-def _pools(choices, split, cooling="direct_liquid"):
-    return [dict(name=f"{s}-{phase}-{site}", stream=s, phase=phase, site=site,
-                 chip=chip, chips_per_replica=n, share=share,
-                 cooling="radiators" if C.SITES[site]["kind"] == "space" else cooling)
-            for (s, phase), (chip, n) in choices.items() for site, share in split.items()]
+def _pools(choices, split, cooling="direct_liquid", protected_split=None, protect=()):
+    pools = []
+    for (s, phase), (chip, n) in choices.items():
+        sp = protected_split if protected_split and s in protect else split
+        pools += [dict(name=f"{s}-{phase}-{site}", stream=s, phase=phase, site=site,
+                       chip=chip, chips_per_replica=n, share=share,
+                       cooling="radiators" if C.SITES[site]["kind"] == "space" else cooling)
+                  for site, share in sp.items() if share > 0]
+    return pools
+
+
+def spread_over_planes(split, planes, resilient, margin=1.01):
+    """Replace the single LEO share with `planes` equal planes. If resilient, add
+    spare so that losing any one site or plane still leaves 100%: with Earth
+    shares e (sum E, largest m) and plane share p, we need E + n p - max(m, p) >= 1."""
+    out = {s: v for s, v in split.items() if s != "leo"}
+    orbit = split.get("leo", 0.0)
+    if planes <= 0:
+        return dict(split)
+    if not resilient:
+        p = orbit / planes
+    else:
+        E, m = sum(out.values()), max(out.values(), default=0.0)
+        p = (1 - E) / (planes - 1) if planes > 1 else INF
+        if p < m:
+            p = (1 - E + m) / planes
+        p *= margin
+    if p > 0:
+        out.update({f"leo_p{i}": p for i in range(1, planes + 1)})
+    return out
+
+
+INF = float("inf")
 
 
 def default_choices(cases, serving):
@@ -65,18 +93,27 @@ def default_choices(cases, serving):
     return choices
 
 
-def plan(cases, serving, include_space=True, margin=0.98, choices=None, cooling="direct_liquid"):
+def plan(cases, serving, include_space=True, margin=0.98, choices=None, cooling="direct_liquid", planes=0,
+         site_cap_share=1.0):
     choices = choices or default_choices(cases, serving)
     name = "+".join(cases) + ("" if include_space else "-earth-only")
+    res = serving.get("resilience")
+    protect = C.LIVE_STREAMS if res == "live" else tuple(C.STREAMS) if res == "all" else ()
 
-    def design(split):
-        return dict(name=name, cases=list(cases), serving=serving, pools=_pools(choices, split, cooling))
+    def design(split, final=False):
+        if not final:
+            return dict(name=name, cases=list(cases), serving=serving, pools=_pools(choices, split, cooling))
+        return dict(name=name, cases=list(cases), serving=serving,
+                    pools=_pools(choices, spread_over_planes(split, planes, False), cooling,
+                                 spread_over_planes(split, planes, True), protect))
 
     # true IT MW of the whole fleet, autosized at one site
     it_mw = sum(p["it_mw"] for p in S.evaluate(design({"nordics": 1.0}))["pools"])
 
     # one split for the whole fleet: cheapest sites first, Earth limited by grid caps
     order = site_order(include_space)
+    if site_cap_share < 1.0 and include_space:   # spread over every Earth site before orbit
+        order = [x for x in order if x != "leo"] + ["leo"]
     split, left, earth_left = {}, it_mw, C.EARTH_GRID_CAP_MW * margin
     for site in order:
         if left <= 0:
@@ -86,7 +123,7 @@ def plan(cases, serving, include_space=True, margin=0.98, choices=None, cooling=
             take = left
         else:
             pue = S.site_pue(cooling, site)
-            take = min(left, min(st["cap_mw"] * margin, earth_left) / pue)
+            take = min(left, min(st["cap_mw"] * margin, earth_left) / pue, site_cap_share * it_mw)
             earth_left -= take * pue
         if take > 0:
             split[site] = take / it_mw
@@ -112,7 +149,9 @@ def plan(cases, serving, include_space=True, margin=0.98, choices=None, cooling=
                     or (not grid_full and mw.get(t, 0.0) < C.SITES[t]["cap_mw"] * margin * 0.9)]
             if room:
                 split[room[0]] = split.get(room[0], 0.0) + moved
-    return design(split)
+    if planes and include_space:
+        split.setdefault("leo", 0.0)
+    return design(split, final=bool(planes))
 
 
 def freeze(design):

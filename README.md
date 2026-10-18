@@ -19,16 +19,22 @@ All three user groups together are 4.45 billion people: chat users, agent develo
 office workers. **Earth runs out of power first.** If we stay on Earth, the grid is full when
 only 58% of them are served.
 
-## Our answer: put part of the fleet in orbit
+## Our answer: part of the fleet in orbit, with nothing that can fail alone
 
 | | |
 |---|---|
 | 👥 **Users served** | **4.45 billion: 100% of all three groups** |
-| 💰 **5-year cost** | **$26.3B, $3.7B under budget** |
-| 🌍 **On Earth** | Nordics, Iceland and West Texas: 487 of 500 MW |
-| 🛰️ **In orbit** | 264 MW of computers in low Earth orbit (4,745 tonnes launched) |
-| ⏱️ **Speed** | Chat starts in 0.19 s (limit 0.6 s); agents in 0.26 s (limit 2 s) |
+| 💰 **5-year cost** | **$29.7B, under the $30B budget** |
+| 🌍 **On Earth** | All 6 sites (Nordics, Iceland, West Texas, Virginia, Midwest, Gulf): 449 of 500 MW |
+| 🛰️ **In orbit** | 8 separate orbital planes, 68 MW each (9,727 tonnes launched) |
+| 🛡️ **Failure test** | Lose **any one** Earth site or orbital plane: **still 100% of users served** |
+| ⏱️ **Speed** | Chat starts in under 0.2 s (limit 0.6 s); agents in under 0.3 s (limit 2 s) |
 | ✅ **All rules** | Budget, grid limit, every speed target, cooling rules: all met |
+
+**Why 8 planes and 6 Earth sites?** If everything sat in one place, one outage would take
+down everyone. We spread the fleet so no single site or plane holds more than about 1/12 of
+it, and carry just enough spare capacity that losing any one is a non-event. That insurance
+costs about $3.4B. Without it the same fleet is $26.3B (`designs/final_A+B+C.json`).
 
 Why orbit and not the Moon or Mars? The Moon is 2.6 s away and Mars 25 minutes, which is too
 slow for chat. Orbit is only 40 ms away, about as close as a data center in Virginia.
@@ -44,8 +50,18 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
    one go, so every chip writes 2-3x more words.
 4. **🔧 The right chip for each job.** "Reading" the question (prefill) runs on GPUs and cheap
    cards. "Writing" the answer (decode) runs on fast-memory LPU chips.
-5. **📍 Cheapest power first.** Fill the cheap, cold, clean sites on Earth up to their power
-   limits, then put the rest in orbit. Orbit beats Virginia, the Midwest and the Gulf on cost.
+5. **📍 Many small zones, not one big one.** Spread over every Earth site and 8 orbital planes,
+   so the spare capacity we need for an outage stays small.
+
+## Our what-if: make the satellite lighter (the 18-tonne problem)
+
+The organizers' orbital megawatt weighs 18 tonnes. Lighter solar panels, carbon-fiber
+radiators and racks stripped down for space bring it to **10.7 tonnes**. Then orbit becomes
+**cheaper than the cheapest place on Earth**, and the same failure-proof fleet costs
+**$28.7B** (`designs/whatif_resilient_light.json`).
+
+Surprise: running chips *hotter* to shrink the radiators doesn't pay. Hot chips leak power,
+and in space every extra watt needs more solar panels.
 
 ## Things we learned
 
@@ -59,7 +75,7 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 ```bash
 git clone https://github.com/MadhanJ05/Orbital_DataCenter
 cd Orbital_DataCenter
-python3 twin/score.py "designs/final_A+B+C.json"   # check our final design
+python3 twin/score.py designs/final_resilient.json   # check our final design
 python3 twin/test_calibration.py                   # our model matches the organizers' numbers
 ```
 

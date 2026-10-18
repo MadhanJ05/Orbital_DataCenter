@@ -18,18 +18,21 @@ import build as B
 N_CHOICES = (1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128)
 
 
-def run(cases, serving, choices, cooling):
-    design, r = B.freeze(B.plan(cases, serving, choices=dict(choices), cooling=cooling))
+def run(cases, serving, choices, cooling, planes=0, cap=1.0):
+    design, r = B.freeze(B.plan(cases, serving, choices=dict(choices), cooling=cooling, planes=planes,
+                                site_cap_share=cap))
     target = r["users_target"] or 1
     key = (round(r["twin_users_served"] / target, 6), r["valid"], -r["cost_usd"])
     return key, design, r
 
 
-def optimize(cases, verbose=True):
-    serving = dict(S.SERVING_DEFAULTS, subagent_share=C.MAX_SUBAGENT_SHARE, spec_draft=3, context_memory=True)
+def optimize(cases, verbose=True, planes=0, resilience=None):
+    serving = dict(S.SERVING_DEFAULTS, subagent_share=C.MAX_SUBAGENT_SHARE, spec_draft=3,
+                   context_memory=True, resilience=resilience)
     choices = B.default_choices(cases, serving)
     cooling = "direct_liquid"
-    best = run(cases, serving, choices, cooling)
+    cap = 1.0
+    best = run(cases, serving, choices, cooling, planes, cap)
     improved = True
     while improved:
         improved = False
@@ -37,25 +40,29 @@ def optimize(cases, verbose=True):
         trials += [("context_memory", v) for v in (True, False)]
         trials += [("bg_fill_valleys", v) for v in (True, False)]
         trials += [("cooling", c) for c in ("direct_liquid", "immersion")]
+        if planes:
+            trials += [("site_cap_share", v) for v in (0.04, 0.05, 0.06, 0.07, 0.08, 0.1, 0.12, 0.15, 0.2, 1.0)]
         for key in list(choices):
             stream, phase = key
             for chip, ch in C.CHIPS.items():
                 if phase in ch["phases"]:
                     trials += [(key, (chip, n)) for n in N_CHOICES]
         for lever, value in trials:
-            sv, ch, co = dict(serving), dict(choices), cooling
+            sv, ch, co, cp = dict(serving), dict(choices), cooling, cap
             if lever == "cooling":
                 co = value
+            elif lever == "site_cap_share":
+                cp = value
             elif isinstance(lever, tuple):
                 ch[lever] = value
             else:
                 sv[lever] = value
             try:
-                cand = run(cases, sv, ch, co)
+                cand = run(cases, sv, ch, co, planes, cp)
             except (ZeroDivisionError, TypeError):
                 continue
             if cand[0] > best[0]:
-                best, serving, choices, cooling = cand, sv, ch, co
+                best, serving, choices, cooling, cap = cand, sv, ch, co, cp
                 improved = True
                 if verbose:
                     r = cand[2]
@@ -67,10 +74,13 @@ def optimize(cases, verbose=True):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("cases", nargs="+", choices=sorted(C.CASES))
+    ap.add_argument("--planes", type=int, default=0, help="split orbit into N independent planes")
+    ap.add_argument("--resilience", choices=("live", "all"), help="survive losing any one site or plane")
+    ap.add_argument("--name")
     ap.add_argument("--out")
     a = ap.parse_args()
-    _, design, r = optimize(a.cases)
-    design["name"] = "final_" + "+".join(a.cases)
+    _, design, r = optimize(a.cases, planes=a.planes, resilience=a.resilience)
+    design["name"] = a.name or "final_" + "+".join(a.cases)
     S.print_report(r)
     out = Path(a.out or Path(__file__).resolve().parent.parent / "designs" / f"{design['name']}.json")
     out.write_text(json.dumps(design, indent=2) + "\n")
