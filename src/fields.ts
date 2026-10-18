@@ -42,6 +42,7 @@ export const SECTIONS: Section[] = [
     title: 'Workload & model',
     fields: [
       { kind: 'select', key: 'workload', label: 'Workload', options: [{ value: 'training', label: 'Training' }, { value: 'inference', label: 'Inference' }] },
+      { kind: 'select', key: 'modelId', label: 'AI model', options: [] }, // filled from MODELS in the UI
       n('activeParamsB', 'Active parameters', 1, 20000, 1, 'B', 'Parameters touched per token (for MoE, the active experts only).', { log: true }),
       n('trainTokensT', 'Training tokens', 1, 1000, 1, 'T', 'Total training-set tokens. Compute = 6 x params x tokens.', { hideFor: (i) => i.workload !== 'training' }),
       n('mfuPct', 'Utilization (MFU)', 5, 80, 1, '%', 'Achieved share of peak FLOPS. Training ~35-50%, decode-heavy inference ~20-35%.'),

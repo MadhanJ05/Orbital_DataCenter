@@ -25,7 +25,9 @@ npm run baseline   # print all preset scenarios' results to the terminal
 - `src/sim/engine.ts` — all physics and economics (pure functions, no UI)
 - `src/sim/presets.ts` — scenarios and accelerator presets
 - `src/fields.ts` — input definitions (ranges, units, help text)
-- `src/App.tsx`, `src/components/` — dashboard UI (React + Recharts)
+- `src/stages.ts` — the 8 walkthrough steps and their live metrics
+- `src/components/PipelineVideo.tsx` — animated walkthrough of the design through each subsystem
+- `src/App.tsx`, `src/components/` — quick setup, module scorecards, all-inputs drawer, detailed charts (React + Recharts)
 
 ## Deploy
 Pushing to `main` runs `.github/workflows/pages.yml`. One-time setup by a repo admin: **Settings → Pages → Source: GitHub Actions**.

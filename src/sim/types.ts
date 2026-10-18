@@ -61,6 +61,7 @@ export interface Inputs {
 
   // Workload
   workload: Workload
+  modelId: string
   activeParamsB: number
   mfuPct: number
   trainTokensT: number

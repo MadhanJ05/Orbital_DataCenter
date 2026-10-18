@@ -18,6 +18,21 @@ export const CHIPS: ChipPreset[] = [
   { id: 'custom', label: 'Custom', tdpW: 1000, pflops: 5, priceUsd: 30000, pricePerHr: 3 },
 ]
 
+export interface ModelPreset {
+  id: string
+  label: string
+  activeB: number // parameters active per token
+}
+
+// Model sizes from the Track 1 organizer deck (Qwen3.5, Kimi-K3); the 2035 frontier model is a team projection.
+export const MODELS: ModelPreset[] = [
+  { id: 'qwen397', label: 'Qwen3.5-397B (17B active, MoE)', activeB: 17 },
+  { id: 'dense70', label: '70B dense (Llama-class)', activeB: 70 },
+  { id: 'kimi', label: 'Kimi-K3 (2.8T, 104B active, MoE)', activeB: 104 },
+  { id: 'frontier', label: '2035 frontier model (2T active)', activeB: 2000 },
+  { id: 'custom', label: 'Custom', activeB: 100 },
+]
+
 export const BASELINE: Inputs = {
   orbitType: 'sso',
   altitudeKm: 650,
@@ -70,6 +85,7 @@ export const BASELINE: Inputs = {
   linkAvailPct: 95,
 
   workload: 'training',
+  modelId: 'frontier',
   activeParamsB: 2000,
   mfuPct: 40,
   trainTokensT: 100,
@@ -152,6 +168,7 @@ export const SCENARIOS: Scenario[] = [
       opexPerSatMYr: 0,
       missionLifeYr: 3,
       workload: 'inference',
+      modelId: 'dense70',
       activeParamsB: 70,
       mfuPct: 30,
       ioBytesPerToken: 40,
@@ -168,7 +185,8 @@ export const SCENARIOS: Scenario[] = [
       altitudeKm: 550,
       doseRateRadYr: 60,
       workload: 'inference',
-      activeParamsB: 200,
+      modelId: 'kimi',
+      activeParamsB: 104,
       mfuPct: 30,
       ioBytesPerToken: 40,
       satellites: 200,

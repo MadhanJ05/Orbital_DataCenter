@@ -1,9 +1,32 @@
 import { useState } from 'react'
 import type { Inputs } from '../sim/types'
 import { SECTIONS, type Field, type NumField } from '../fields'
-import { CHIPS } from '../sim/presets'
+import { CHIPS, MODELS } from '../sim/presets'
 
 const CHIP_KEYS: (keyof Inputs)[] = ['chipTdpW', 'chipPflops', 'chipPriceUsd']
+
+/** Patch for a select change, applying preset side effects (chip specs, model size, orbit defaults). */
+export function selectPatch(key: keyof Inputs, v: string): Partial<Inputs> {
+  if (key === 'chipId') {
+    const c = CHIPS.find((x) => x.id === v)!
+    return { chipId: v, chipTdpW: c.tdpW, chipPflops: c.pflops, chipPriceUsd: c.priceUsd, pricePerChipHr: c.pricePerHr }
+  }
+  if (key === 'modelId') {
+    const m = MODELS.find((x) => x.id === v)!
+    return v === 'custom' ? { modelId: v } : { modelId: v, activeParamsB: m.activeB }
+  }
+  if (key === 'orbitType') {
+    const dose = v === 'geo' ? 1500 : v === 'leo' ? 60 : 150
+    return { orbitType: v as Inputs['orbitType'], doseRateRadYr: dose, ...(v === 'geo' ? {} : { altitudeKm: v === 'leo' ? 550 : 650 }) }
+  }
+  return { [key]: v }
+}
+
+export function selectOptions(key: keyof Inputs, fallback: { value: string; label: string }[]) {
+  if (key === 'chipId') return CHIPS.map((c) => ({ value: c.id, label: c.label }))
+  if (key === 'modelId') return MODELS.map((m) => ({ value: m.id, label: m.label }))
+  return fallback
+}
 
 interface Props {
   inputs: Inputs
@@ -34,7 +57,7 @@ export function InputPanel({ inputs, onChange }: Props) {
   )
 }
 
-function FieldRow({ field, inputs, onChange }: { field: Field; inputs: Inputs; onChange: Props['onChange'] }) {
+export function FieldRow({ field, inputs, onChange }: { field: Field; inputs: Inputs; onChange: Props['onChange'] }) {
   if (field.kind === 'bool') {
     return (
       <label className="field toggle" title={field.help}>
@@ -45,22 +68,13 @@ function FieldRow({ field, inputs, onChange }: { field: Field; inputs: Inputs; o
     )
   }
   if (field.kind === 'select') {
-    const options = field.key === 'chipId' ? CHIPS.map((c) => ({ value: c.id, label: c.label })) : field.options
+    const options = selectOptions(field.key, field.options)
     return (
       <label className="field">
         <span className="f-label">{field.label}</span>
         <select
           value={inputs[field.key] as string}
-          onChange={(e) => {
-            const v = e.target.value
-            if (field.key === 'chipId') {
-              const c = CHIPS.find((x) => x.id === v)!
-              onChange({ chipId: v, chipTdpW: c.tdpW, chipPflops: c.pflops, chipPriceUsd: c.priceUsd, pricePerChipHr: c.pricePerHr })
-            } else if (field.key === 'orbitType') {
-              const dose = v === 'geo' ? 1500 : v === 'leo' ? 60 : 150
-              onChange({ orbitType: v as Inputs['orbitType'], doseRateRadYr: dose, ...(v === 'geo' ? {} : { altitudeKm: v === 'leo' ? 550 : 650 }) })
-            } else onChange({ [field.key]: v })
-          }}
+          onChange={(e) => onChange(selectPatch(field.key, e.target.value))}
         >
           {options.map((o) => (
             <option key={o.value} value={o.value}>{o.label}</option>
@@ -86,6 +100,7 @@ function NumRow({ field, value, onChange }: { field: NumField; value: number; on
     if (!isFinite(v)) return
     const patch: Partial<Inputs> = { [field.key]: v }
     if (CHIP_KEYS.includes(field.key)) patch.chipId = 'custom'
+    if (field.key === 'activeParamsB') patch.modelId = 'custom'
     onChange(patch)
   }
   return (
