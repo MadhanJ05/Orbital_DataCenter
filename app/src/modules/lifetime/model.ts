@@ -1,21 +1,27 @@
 import { HORIZON_YR } from '../../core/constants'
 import type { SubsystemLife, TimePoint } from '../../core/types'
 import { RADIATOR_MARGIN } from '../thermal/model'
+import assumptions from '../../../../shared/assumptions.json'
 
 export interface LifetimeInputs {
   afrPct: number // terrestrial annualized failure rate of a node
-  radFailMult: number // failure-rate multiplier for the space environment
+  radFailMult: number // failure-rate multiplier for the space environment (sensitivity, not measured)
   doseRateRadYr: number // total ionizing dose behind shielding, rad(Si)/yr
-  tidToleranceKrad: number // dose at which accelerators start failing
+  tidOnsetKrad: number // dose where TID degradation begins (sensitivity; HBM test irregularities ~2 krad)
+  tidLossPctPerKrad: number // capacity lost per krad above onset (sensitivity)
+  tidHardFailKrad: number // dose beyond which chips hard-fail (team assumption; tested to 15 krad without)
   missionLifeYr: number
   usefulThresholdPct: number // useful life ends below this capacity
 }
 
+const rad = assumptions.radiation
 export const lifetimeDefaults: LifetimeInputs = {
   afrPct: 4,
-  radFailMult: 1.5,
-  doseRateRadYr: 150,
-  tidToleranceKrad: 2,
+  radFailMult: rad.space_failure_mult.value,
+  doseRateRadYr: rad.dose_rate_sso_rad_yr.value,
+  tidOnsetKrad: rad.tid_onset_krad.value,
+  tidLossPctPerKrad: rad.tid_loss_pct_per_krad.value,
+  tidHardFailKrad: rad.tid_hard_fail_krad.value,
   missionLifeYr: 6,
   usefulThresholdPct: 70,
 }
@@ -57,14 +63,22 @@ export interface LifetimeModel {
   warnings: string[]
 }
 
-const logistic = (x: number) => 1 / (1 + Math.exp(x))
+/**
+ * Share of accelerator capacity left after a dose (rad). No loss below onset, a linear derate per krad
+ * above it, and hard failures (e-folding over 10% of the hard dose) only beyond the hard-failure dose.
+ */
+export function tidCapacityFactor(doseRad: number, i: Pick<LifetimeInputs, 'tidOnsetKrad' | 'tidLossPctPerKrad' | 'tidHardFailKrad'>): number {
+  const krad = doseRad / 1000
+  const derate = Math.max(0, 1 - (i.tidLossPctPerKrad / 100) * Math.max(0, krad - i.tidOnsetKrad))
+  const hard = krad <= i.tidHardFailKrad ? 1 : Math.exp(-(krad - i.tidHardFailKrad) / (0.1 * i.tidHardFailKrad))
+  return derate * hard
+}
 
 /** Month-by-month ageing with no repairs: failures, radiation dose, array and radiator wear, batteries, propellant. */
 export function runLifetime(i: LifetimeInputs, d: LifetimeDeps): LifetimeModel {
   const warnings: string[] = []
   const { N } = d
   const lambda = -Math.log(1 - i.afrPct / 100) * i.radFailMult
-  const tol = i.tidToleranceKrad * 1000
   const thr = i.usefulThresholdPct / 100
   const econMonths = Math.round(i.missionLifeYr * 12)
   const months: MonthState[] = []
@@ -76,7 +90,7 @@ export function runLifetime(i: LifetimeInputs, d: LifetimeDeps): LifetimeModel {
   for (let m = 0; m <= HORIZON_YR * 12; m++) {
     const t = m / 12
     const alive = d.provisioned * Math.exp(-lambda * t)
-    const tidSurv = logistic((i.doseRateRadYr * t - tol) / (0.15 * tol))
+    const tidSurv = tidCapacityFactor(i.doseRateRadYr * t, i)
     const chipsCap = Math.min(alive * tidSurv, N)
     const powerCap = N * Math.pow(1 - d.solarDegPctYr / 100, t) * (1 + d.arrayMarginPct / 100)
     const thermalCap = N * RADIATOR_MARGIN * Math.pow(1 - d.radiatorDegPctYr / 100, t)
@@ -116,9 +130,11 @@ export function runLifetime(i: LifetimeInputs, d: LifetimeDeps): LifetimeModel {
     const s = series.find((p) => p.chipsPct < thr * 100)
     return s ? s.year : HORIZON_YR
   })()
+  // Dose at which TID alone takes capacity below the useful-life threshold.
+  const tidKradAtThreshold = Math.min(i.tidHardFailKrad, i.tidLossPctPerKrad > 0 ? i.tidOnsetKrad + ((1 - thr) * 100) / i.tidLossPctPerKrad : Infinity)
   const subsystems: SubsystemLife[] = [
     { name: 'Accelerators (random failures, no repair)', years: chipsLifeYr, note: `${d.sparesPct}% cold spares, AFR ${(i.afrPct * i.radFailMult).toFixed(1)}%/yr in orbit` },
-    { name: 'Radiation dose (TID)', years: i.doseRateRadYr > 0 ? tol / i.doseRateRadYr : Infinity, note: `${i.doseRateRadYr} rad/yr vs ${i.tidToleranceKrad} krad tolerance` },
+    { name: 'Radiation dose (TID)', years: i.doseRateRadYr > 0 ? (tidKradAtThreshold * 1000) / i.doseRateRadYr : Infinity, note: `${i.doseRateRadYr} rad/yr; derate ${i.tidLossPctPerKrad}%/krad above ${i.tidOnsetKrad} krad, hard failures past ${i.tidHardFailKrad} krad` },
     { name: 'Solar arrays', years: Math.min(HORIZON_YR, Math.log(thr / (1 + d.arrayMarginPct / 100)) / Math.log(1 - d.solarDegPctYr / 100)), note: `${d.solarDegPctYr}%/yr degradation, ${d.arrayMarginPct}% margin` },
     { name: 'Radiators', years: Math.min(HORIZON_YR, Math.log(thr / RADIATOR_MARGIN) / Math.log(1 - d.radiatorDegPctYr / 100)), note: `${d.radiatorDegPctYr}%/yr coating/MMOD loss` },
     { name: 'Batteries', years: d.batteryLifeYr, note: d.eclipseCyclesYr > 0 ? `${Math.round(d.eclipseCyclesYr)} cycles/yr` : 'No eclipses: calendar-limited' },
