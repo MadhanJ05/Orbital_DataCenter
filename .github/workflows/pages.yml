@@ -3,7 +3,7 @@ name: Deploy web app to GitHub Pages
 on:
   push:
     branches: [main]
-    paths: ['app/**', 'shared/**', '.github/workflows/pages.yml']
+    paths: ['app/**', 'shared/**', 'designs/**', 'agents-in-orbit/**', 'dashboard.html', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -32,9 +32,18 @@ jobs:
       - run: npm run build
         env:
           GITHUB_PAGES: 'true'
+      - name: Assemble site (dashboard at root, app under /app/)
+        working-directory: .
+        run: |
+          mkdir -p site/app site/designs site/agents-in-orbit
+          cp dashboard.html site/dashboard.html
+          cp dashboard.html site/index.html
+          cp designs/ui.json site/designs/ui.json
+          cp agents-in-orbit/*.html site/agents-in-orbit/
+          cp -r app/dist/. site/app/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: app/dist
+          path: site
   deploy:
     needs: build
     runs-on: ubuntu-latest

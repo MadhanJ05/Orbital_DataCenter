@@ -32,6 +32,8 @@ h3 { font-size: 14px; }
 .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-3); }
 .lede { color: var(--fg-2); max-width: 72ch; margin: 0; }
 header { display: grid; gap: 6px; }
+.frontdoor { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--fg-3); }
+.frontdoor a { margin-right: 14px; }
 a { color: var(--accent); }
 .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .card { background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--c, var(--line)); padding: 14px 16px; display: grid; gap: 8px; min-width: 0; }
@@ -72,6 +74,7 @@ button.chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2p
   <header>
     <div class="eyebrow">Sundai // MIT AI Hackathon // Track 1 // Orbital Data Center</div>
     <h1>Orbital Data Center</h1>
+    <nav class="frontdoor" aria-label="Other tools"><a href="app/">Satellite twin (app)</a><a href="agents-in-orbit/explorer.html">Case B explorer</a><a href="agents-in-orbit/node3d.html">3D node</a></nav>
     <p class="lede">The twin's scored designs on one page. Design 1 keeps the organizers' catalog and mixes six Earth sites with eight orbital planes; Design 2 changes one assumption, the satellite's weight, and leaves Earth's grid entirely. Beside them, the agents-in-orbit strand costs its own satellite for case B. Every number here comes from <code>twin/score.py</code> or <code>agents-in-orbit/model.py</code>; this page only draws them.</p>
   </header>
 
