@@ -1,0 +1,819 @@
+{
+  "name": "whatif_all_orbit_light",
+  "cases": [
+    "A",
+    "B",
+    "C"
+  ],
+  "serving": {
+    "easy_chat_share": 0.0,
+    "subagent_share": 0.5,
+    "spec_draft": 4,
+    "context_memory": true,
+    "bg_fill_valleys": true,
+    "autosize_util": 0.95,
+    "resilience": "all"
+  },
+  "pools": [
+    {
+      "name": "chat-decode-leo_p1",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "leo_p1",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "radiators",
+      "racks": 95
+    },
+    {
+      "name": "chat-decode-leo_p2",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "leo_p2",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "radiators",
+      "racks": 95
+    },
+    {
+      "name": "chat-decode-leo_p3",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "leo_p3",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "radiators",
+      "racks": 95
+    },
+    {
+      "name": "chat-decode-leo_p4",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "leo_p4",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "radiators",
+      "racks": 95
+    },
+    {
+      "name": "chat-decode-leo_p5",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "leo_p5",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "radiators",
+      "racks": 95
+    },
+    {
+      "name": "chat-decode-leo_p6",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "leo_p6",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "radiators",
+      "racks": 95
+    },
+    {
+      "name": "chat-decode-leo_p7",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "leo_p7",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "radiators",
+      "racks": 95
+    },
+    {
+      "name": "chat-decode-leo_p8",
+      "stream": "chat",
+      "phase": "decode",
+      "site": "leo_p8",
+      "chip": "lpu",
+      "chips_per_replica": 12,
+      "cooling": "radiators",
+      "racks": 95
+    },
+    {
+      "name": "chat-prefill-leo_p1",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "leo_p1",
+      "chip": "air",
+      "chips_per_replica": 3,
+      "cooling": "radiators",
+      "racks": 388
+    },
+    {
+      "name": "chat-prefill-leo_p2",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "leo_p2",
+      "chip": "air",
+      "chips_per_replica": 3,
+      "cooling": "radiators",
+      "racks": 388
+    },
+    {
+      "name": "chat-prefill-leo_p3",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "leo_p3",
+      "chip": "air",
+      "chips_per_replica": 3,
+      "cooling": "radiators",
+      "racks": 388
+    },
+    {
+      "name": "chat-prefill-leo_p4",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "leo_p4",
+      "chip": "air",
+      "chips_per_replica": 3,
+      "cooling": "radiators",
+      "racks": 388
+    },
+    {
+      "name": "chat-prefill-leo_p5",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "leo_p5",
+      "chip": "air",
+      "chips_per_replica": 3,
+      "cooling": "radiators",
+      "racks": 388
+    },
+    {
+      "name": "chat-prefill-leo_p6",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "leo_p6",
+      "chip": "air",
+      "chips_per_replica": 3,
+      "cooling": "radiators",
+      "racks": 388
+    },
+    {
+      "name": "chat-prefill-leo_p7",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "leo_p7",
+      "chip": "air",
+      "chips_per_replica": 3,
+      "cooling": "radiators",
+      "racks": 388
+    },
+    {
+      "name": "chat-prefill-leo_p8",
+      "stream": "chat",
+      "phase": "prefill",
+      "site": "leo_p8",
+      "chip": "air",
+      "chips_per_replica": 3,
+      "cooling": "radiators",
+      "racks": 388
+    },
+    {
+      "name": "agent_int-decode-leo_p1",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "leo_p1",
+      "chip": "lpu",
+      "chips_per_replica": 48,
+      "cooling": "radiators",
+      "racks": 24
+    },
+    {
+      "name": "agent_int-decode-leo_p2",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "leo_p2",
+      "chip": "lpu",
+      "chips_per_replica": 48,
+      "cooling": "radiators",
+      "racks": 24
+    },
+    {
+      "name": "agent_int-decode-leo_p3",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "leo_p3",
+      "chip": "lpu",
+      "chips_per_replica": 48,
+      "cooling": "radiators",
+      "racks": 24
+    },
+    {
+      "name": "agent_int-decode-leo_p4",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "leo_p4",
+      "chip": "lpu",
+      "chips_per_replica": 48,
+      "cooling": "radiators",
+      "racks": 24
+    },
+    {
+      "name": "agent_int-decode-leo_p5",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "leo_p5",
+      "chip": "lpu",
+      "chips_per_replica": 48,
+      "cooling": "radiators",
+      "racks": 24
+    },
+    {
+      "name": "agent_int-decode-leo_p6",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "leo_p6",
+      "chip": "lpu",
+      "chips_per_replica": 48,
+      "cooling": "radiators",
+      "racks": 24
+    },
+    {
+      "name": "agent_int-decode-leo_p7",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "leo_p7",
+      "chip": "lpu",
+      "chips_per_replica": 48,
+      "cooling": "radiators",
+      "racks": 24
+    },
+    {
+      "name": "agent_int-decode-leo_p8",
+      "stream": "agent_int",
+      "phase": "decode",
+      "site": "leo_p8",
+      "chip": "lpu",
+      "chips_per_replica": 48,
+      "cooling": "radiators",
+      "racks": 24
+    },
+    {
+      "name": "agent_int-prefill-leo_p1",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "leo_p1",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 621
+    },
+    {
+      "name": "agent_int-prefill-leo_p2",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "leo_p2",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 621
+    },
+    {
+      "name": "agent_int-prefill-leo_p3",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "leo_p3",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 621
+    },
+    {
+      "name": "agent_int-prefill-leo_p4",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "leo_p4",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 621
+    },
+    {
+      "name": "agent_int-prefill-leo_p5",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "leo_p5",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 621
+    },
+    {
+      "name": "agent_int-prefill-leo_p6",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "leo_p6",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 621
+    },
+    {
+      "name": "agent_int-prefill-leo_p7",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "leo_p7",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 621
+    },
+    {
+      "name": "agent_int-prefill-leo_p8",
+      "stream": "agent_int",
+      "phase": "prefill",
+      "site": "leo_p8",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 621
+    },
+    {
+      "name": "agent_int_sub-decode-leo_p1",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "leo_p1",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-decode-leo_p2",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "leo_p2",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-decode-leo_p3",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "leo_p3",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-decode-leo_p4",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "leo_p4",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-decode-leo_p5",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "leo_p5",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-decode-leo_p6",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "leo_p6",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-decode-leo_p7",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "leo_p7",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-decode-leo_p8",
+      "stream": "agent_int_sub",
+      "phase": "decode",
+      "site": "leo_p8",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 3
+    },
+    {
+      "name": "agent_int_sub-prefill-leo_p1",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "leo_p1",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 60
+    },
+    {
+      "name": "agent_int_sub-prefill-leo_p2",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "leo_p2",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 60
+    },
+    {
+      "name": "agent_int_sub-prefill-leo_p3",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "leo_p3",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 60
+    },
+    {
+      "name": "agent_int_sub-prefill-leo_p4",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "leo_p4",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 60
+    },
+    {
+      "name": "agent_int_sub-prefill-leo_p5",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "leo_p5",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 60
+    },
+    {
+      "name": "agent_int_sub-prefill-leo_p6",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "leo_p6",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 60
+    },
+    {
+      "name": "agent_int_sub-prefill-leo_p7",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "leo_p7",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 60
+    },
+    {
+      "name": "agent_int_sub-prefill-leo_p8",
+      "stream": "agent_int_sub",
+      "phase": "prefill",
+      "site": "leo_p8",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 60
+    },
+    {
+      "name": "agent_bg-decode-leo_p1",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "leo_p1",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "radiators",
+      "racks": 15
+    },
+    {
+      "name": "agent_bg-decode-leo_p2",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "leo_p2",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "radiators",
+      "racks": 15
+    },
+    {
+      "name": "agent_bg-decode-leo_p3",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "leo_p3",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "radiators",
+      "racks": 15
+    },
+    {
+      "name": "agent_bg-decode-leo_p4",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "leo_p4",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "radiators",
+      "racks": 15
+    },
+    {
+      "name": "agent_bg-decode-leo_p5",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "leo_p5",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "radiators",
+      "racks": 15
+    },
+    {
+      "name": "agent_bg-decode-leo_p6",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "leo_p6",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "radiators",
+      "racks": 15
+    },
+    {
+      "name": "agent_bg-decode-leo_p7",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "leo_p7",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "radiators",
+      "racks": 15
+    },
+    {
+      "name": "agent_bg-decode-leo_p8",
+      "stream": "agent_bg",
+      "phase": "decode",
+      "site": "leo_p8",
+      "chip": "lpu",
+      "chips_per_replica": 64,
+      "cooling": "radiators",
+      "racks": 15
+    },
+    {
+      "name": "agent_bg-prefill-leo_p1",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "leo_p1",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 398
+    },
+    {
+      "name": "agent_bg-prefill-leo_p2",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "leo_p2",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 398
+    },
+    {
+      "name": "agent_bg-prefill-leo_p3",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "leo_p3",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 398
+    },
+    {
+      "name": "agent_bg-prefill-leo_p4",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "leo_p4",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 398
+    },
+    {
+      "name": "agent_bg-prefill-leo_p5",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "leo_p5",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 398
+    },
+    {
+      "name": "agent_bg-prefill-leo_p6",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "leo_p6",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 398
+    },
+    {
+      "name": "agent_bg-prefill-leo_p7",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "leo_p7",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 398
+    },
+    {
+      "name": "agent_bg-prefill-leo_p8",
+      "stream": "agent_bg",
+      "phase": "prefill",
+      "site": "leo_p8",
+      "chip": "air",
+      "chips_per_replica": 16,
+      "cooling": "radiators",
+      "racks": 398
+    },
+    {
+      "name": "agent_bg_sub-decode-leo_p1",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "leo_p1",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-decode-leo_p2",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "leo_p2",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-decode-leo_p3",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "leo_p3",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-decode-leo_p4",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "leo_p4",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-decode-leo_p5",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "leo_p5",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-decode-leo_p6",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "leo_p6",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-decode-leo_p7",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "leo_p7",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-decode-leo_p8",
+      "stream": "agent_bg_sub",
+      "phase": "decode",
+      "site": "leo_p8",
+      "chip": "lpu",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 2
+    },
+    {
+      "name": "agent_bg_sub-prefill-leo_p1",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "leo_p1",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 39
+    },
+    {
+      "name": "agent_bg_sub-prefill-leo_p2",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "leo_p2",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 39
+    },
+    {
+      "name": "agent_bg_sub-prefill-leo_p3",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "leo_p3",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 39
+    },
+    {
+      "name": "agent_bg_sub-prefill-leo_p4",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "leo_p4",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 39
+    },
+    {
+      "name": "agent_bg_sub-prefill-leo_p5",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "leo_p5",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 39
+    },
+    {
+      "name": "agent_bg_sub-prefill-leo_p6",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "leo_p6",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 39
+    },
+    {
+      "name": "agent_bg_sub-prefill-leo_p7",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "leo_p7",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 39
+    },
+    {
+      "name": "agent_bg_sub-prefill-leo_p8",
+      "stream": "agent_bg_sub",
+      "phase": "prefill",
+      "site": "leo_p8",
+      "chip": "air",
+      "chips_per_replica": 1,
+      "cooling": "radiators",
+      "racks": 39
+    }
+  ]
+}

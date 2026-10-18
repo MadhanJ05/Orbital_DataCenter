@@ -6187,18 +6187,18 @@
     "ok": true
    }
   ],
-  "final_A+B+C": [
+  "whatif_all_orbit_light": [
    {
     "lost_site": null,
     "live_shortfall_pct": 0.0,
     "streams": {
      "agent_bg": {
-      "max_wait_min": 59,
+      "max_wait_min": 19,
       "allowance_min": 228,
       "meets_deadline": true
      },
      "agent_bg_sub": {
-      "max_wait_min": 59,
+      "max_wait_min": 18,
       "allowance_min": 228,
       "meets_deadline": true
      }
@@ -6208,192 +6208,192 @@
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 627082249,
-       "bg_queue_minutes": 1.7
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 452669821,
-       "bg_queue_minutes": 17.4
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 602177010,
+       "bg_queue_minutes": 3.9
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 452669821,
-       "bg_queue_minutes": 41.0
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 602177010,
+       "bg_queue_minutes": 15.0
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 626975656,
-       "bg_queue_minutes": 56.6
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 776482845,
+       "bg_queue_minutes": 18.1
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 819687554,
-       "bg_queue_minutes": 55.5
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 969194742,
+       "bg_queue_minutes": 4.4
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 886459902,
-       "bg_queue_minutes": 43.0
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 806586735,
-       "bg_queue_minutes": 31.4
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 669841823,
-       "bg_queue_minutes": 29.8
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 603248499,
-       "bg_queue_minutes": 37.5
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 669755626,
-       "bg_queue_minutes": 45.1
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 803640047,
-       "bg_queue_minutes": 43.4
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 876593653,
-       "bg_queue_minutes": 32.4
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 827650095,
-       "bg_queue_minutes": 20.4
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 717740190,
-       "bg_queue_minutes": 15.8
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 662350154,
-       "bg_queue_minutes": 18.9
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 717846783,
-       "bg_queue_minutes": 21.9
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 833190875,
-       "bg_queue_minutes": 17.0
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
-       "bg_served_tps": 920919894,
-       "bg_queue_minutes": 3.2
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 611585856,
-       "bg_capacity_tps": 393061382,
+       "live_capacity_tps": 703583499,
+       "bg_capacity_tps": 450570928,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       }
@@ -6402,192 +6402,192 @@
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 625582580,
-       "bg_queue_minutes": 1.7
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 451170152,
-       "bg_queue_minutes": 17.6
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 610344446,
+       "bg_queue_minutes": 3.4
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 451170152,
-       "bg_queue_minutes": 41.4
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 610344446,
+       "bg_queue_minutes": 13.9
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 625475987,
-       "bg_queue_minutes": 57.0
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 784650281,
+       "bg_queue_minutes": 16.2
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 818187884,
-       "bg_queue_minutes": 56.0
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 977362179,
+       "bg_queue_minutes": 1.9
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 884960232,
-       "bg_queue_minutes": 43.6
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 805087066,
-       "bg_queue_minutes": 32.2
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 668342154,
-       "bg_queue_minutes": 30.8
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 601748830,
-       "bg_queue_minutes": 38.6
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 668255957,
-       "bg_queue_minutes": 46.3
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 802140378,
-       "bg_queue_minutes": 44.8
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 875093983,
-       "bg_queue_minutes": 33.8
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 826150425,
-       "bg_queue_minutes": 21.9
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 716240520,
-       "bg_queue_minutes": 17.5
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 660850485,
-       "bg_queue_minutes": 20.7
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 716347113,
-       "bg_queue_minutes": 23.8
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 831691206,
-       "bg_queue_minutes": 19.1
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
-       "bg_served_tps": 919420224,
-       "bg_queue_minutes": 5.4
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 610531804,
-       "bg_capacity_tps": 392615765,
+       "live_capacity_tps": 704437493,
+       "bg_capacity_tps": 457884370,
        "bg_served_tps": 717592593,
        "bg_queue_minutes": 0.0
       }
@@ -6596,18 +6596,18 @@
     "ok": true
    },
    {
-    "lost_site": "iceland",
-    "live_shortfall_pct": 8.177682894608836,
+    "lost_site": "leo_p1",
+    "live_shortfall_pct": 0.0,
     "streams": {
      "agent_bg": {
-      "max_wait_min": 488,
+      "max_wait_min": 57,
       "allowance_min": 228,
-      "meets_deadline": false
+      "meets_deadline": true
      },
      "agent_bg_sub": {
-      "max_wait_min": 495,
+      "max_wait_min": 55,
       "allowance_min": 228,
-      "meets_deadline": false
+      "meets_deadline": true
      }
     },
     "hourly": {
@@ -6615,406 +6615,406 @@
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 827833812,
-       "bg_queue_minutes": 321.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 827920009,
-       "bg_queue_minutes": 312.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 826252010,
-       "bg_queue_minutes": 303.4
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 800850354,
-       "bg_queue_minutes": 295.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 695292545,
-       "bg_queue_minutes": 291.9
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 497146460,
-       "bg_queue_minutes": 301.7
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632320134,
+       "bg_queue_minutes": 1.5
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 342014450,
-       "bg_queue_minutes": 328.2
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 16.8
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 342014450,
-       "bg_queue_minutes": 359.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 40.0
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 497039867,
-       "bg_queue_minutes": 385.9
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632213541,
+       "bg_queue_minutes": 55.1
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 689751765,
-       "bg_queue_minutes": 395.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 824925439,
+       "bg_queue_minutes": 53.5
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 756524113,
-       "bg_queue_minutes": 394.0
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 891697787,
+       "bg_queue_minutes": 40.6
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 676650946,
-       "bg_queue_minutes": 393.3
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 811824620,
+       "bg_queue_minutes": 28.6
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 539906034,
-       "bg_queue_minutes": 402.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 675079709,
+       "bg_queue_minutes": 26.6
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 473312710,
-       "bg_queue_minutes": 421.2
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 608486384,
+       "bg_queue_minutes": 33.8
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 539819837,
-       "bg_queue_minutes": 439.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 674993512,
+       "bg_queue_minutes": 41.0
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 673704259,
-       "bg_queue_minutes": 448.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 808877933,
+       "bg_queue_minutes": 38.9
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 746657864,
-       "bg_queue_minutes": 448.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 881831538,
+       "bg_queue_minutes": 27.4
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 697714306,
-       "bg_queue_minutes": 447.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 832887980,
+       "bg_queue_minutes": 14.9
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 587804401,
-       "bg_queue_minutes": 453.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 722978075,
+       "bg_queue_minutes": 9.9
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 532414365,
-       "bg_queue_minutes": 467.7
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 667588039,
+       "bg_queue_minutes": 12.6
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 587910994,
-       "bg_queue_minutes": 481.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 723084668,
+       "bg_queue_minutes": 15.1
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 703255086,
-       "bg_queue_minutes": 487.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 838428760,
+       "bg_queue_minutes": 9.8
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 790984105,
-       "bg_queue_minutes": 484.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 532697000,
-       "bg_capacity_tps": 342014450,
-       "bg_served_tps": 823305323,
-       "bg_queue_minutes": 476.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       }
      ],
      "agent_bg_sub": [
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 826505130,
-       "bg_queue_minutes": 326.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 826591327,
-       "bg_queue_minutes": 317.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 824923328,
-       "bg_queue_minutes": 308.3
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 799521672,
-       "bg_queue_minutes": 300.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 693963863,
-       "bg_queue_minutes": 297.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 495817778,
-       "bg_queue_minutes": 307.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639466641,
+       "bg_queue_minutes": 1.2
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 341636736,
-       "bg_queue_minutes": 333.6
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 16.0
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 341636736,
-       "bg_queue_minutes": 365.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 38.6
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 495711185,
-       "bg_queue_minutes": 391.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639360048,
+       "bg_queue_minutes": 53.0
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 688423083,
-       "bg_queue_minutes": 401.2
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 832071946,
+       "bg_queue_minutes": 50.9
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 755195431,
-       "bg_queue_minutes": 399.7
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 898844294,
+       "bg_queue_minutes": 37.4
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 675322264,
-       "bg_queue_minutes": 399.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 818971127,
+       "bg_queue_minutes": 24.8
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 538577353,
-       "bg_queue_minutes": 408.6
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682226215,
+       "bg_queue_minutes": 22.2
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 471984028,
-       "bg_queue_minutes": 427.2
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 615632891,
+       "bg_queue_minutes": 28.8
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 538491156,
-       "bg_queue_minutes": 445.8
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682140018,
+       "bg_queue_minutes": 35.4
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 672375577,
-       "bg_queue_minutes": 455.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 816024439,
+       "bg_queue_minutes": 32.7
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 745329182,
-       "bg_queue_minutes": 455.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 888978045,
+       "bg_queue_minutes": 20.6
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 696385624,
-       "bg_queue_minutes": 453.9
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 840034487,
+       "bg_queue_minutes": 7.5
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 586475719,
-       "bg_queue_minutes": 460.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730124582,
+       "bg_queue_minutes": 1.9
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 531085683,
-       "bg_queue_minutes": 474.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 674734546,
+       "bg_queue_minutes": 4.0
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 586582312,
-       "bg_queue_minutes": 488.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730231175,
+       "bg_queue_minutes": 5.9
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 701926404,
-       "bg_queue_minutes": 494.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 845575267,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 789655423,
-       "bg_queue_minutes": 491.7
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 531746032,
-       "bg_capacity_tps": 341636736,
-       "bg_served_tps": 821976641,
-       "bg_queue_minutes": 484.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       }
      ]
     },
-    "ok": false
+    "ok": true
    },
    {
-    "lost_site": "leo",
-    "live_shortfall_pct": 32.753967774063995,
+    "lost_site": "leo_p2",
+    "live_shortfall_pct": 0.0,
     "streams": {
      "agent_bg": {
-      "max_wait_min": 1762,
+      "max_wait_min": 57,
       "allowance_min": 228,
-      "meets_deadline": false
+      "meets_deadline": true
      },
      "agent_bg_sub": {
-      "max_wait_min": 1774,
+      "max_wait_min": 55,
       "allowance_min": 228,
-      "meets_deadline": false
+      "meets_deadline": true
      }
     },
     "hourly": {
@@ -7022,406 +7022,406 @@
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 594930176,
-       "bg_queue_minutes": 1174.4
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 595016373,
-       "bg_queue_minutes": 1184.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 593348374,
-       "bg_queue_minutes": 1194.9
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 567946718,
-       "bg_queue_minutes": 1206.0
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 462388909,
-       "bg_queue_minutes": 1222.3
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 264242824,
-       "bg_queue_minutes": 1251.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632320134,
+       "bg_queue_minutes": 1.5
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 251307977,
-       "bg_queue_minutes": 1290.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 16.8
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 251307977,
-       "bg_queue_minutes": 1329.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 40.0
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 264136232,
-       "bg_queue_minutes": 1368.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632213541,
+       "bg_queue_minutes": 55.1
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 456848129,
-       "bg_queue_minutes": 1397.7
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 824925439,
+       "bg_queue_minutes": 53.5
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 523620477,
-       "bg_queue_minutes": 1415.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 891697787,
+       "bg_queue_minutes": 40.6
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 443747310,
-       "bg_queue_minutes": 1434.4
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 811824620,
+       "bg_queue_minutes": 28.6
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 307002399,
-       "bg_queue_minutes": 1463.2
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 675079709,
+       "bg_queue_minutes": 26.6
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 251307977,
-       "bg_queue_minutes": 1500.9
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 608486384,
+       "bg_queue_minutes": 33.8
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 306916202,
-       "bg_queue_minutes": 1538.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 674993512,
+       "bg_queue_minutes": 41.0
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 440800623,
-       "bg_queue_minutes": 1567.3
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 808877933,
+       "bg_queue_minutes": 38.9
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 513754228,
-       "bg_queue_minutes": 1586.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 881831538,
+       "bg_queue_minutes": 27.4
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 464810670,
-       "bg_queue_minutes": 1604.9
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 832887980,
+       "bg_queue_minutes": 14.9
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 354900765,
-       "bg_queue_minutes": 1630.7
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 722978075,
+       "bg_queue_minutes": 9.9
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 299510729,
-       "bg_queue_minutes": 1664.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 667588039,
+       "bg_queue_minutes": 12.6
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 355007358,
-       "bg_queue_minutes": 1697.4
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 723084668,
+       "bg_queue_minutes": 15.1
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 470351450,
-       "bg_queue_minutes": 1722.9
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 838428760,
+       "bg_queue_minutes": 9.8
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 558080469,
-       "bg_queue_minutes": 1739.4
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 390499837,
-       "bg_capacity_tps": 251307977,
-       "bg_served_tps": 590401687,
-       "bg_queue_minutes": 1751.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       }
      ],
      "agent_bg_sub": [
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 592677455,
-       "bg_queue_minutes": 1182.7
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 592763652,
-       "bg_queue_minutes": 1193.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 591095653,
-       "bg_queue_minutes": 1203.6
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 565693997,
-       "bg_queue_minutes": 1214.9
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 460136188,
-       "bg_queue_minutes": 1231.3
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 261990103,
-       "bg_queue_minutes": 1260.9
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639466641,
+       "bg_queue_minutes": 1.2
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 250260688,
-       "bg_queue_minutes": 1299.9
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 16.0
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 250260688,
-       "bg_queue_minutes": 1339.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 38.6
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 261883510,
-       "bg_queue_minutes": 1378.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639360048,
+       "bg_queue_minutes": 53.0
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 454595408,
-       "bg_queue_minutes": 1407.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 832071946,
+       "bg_queue_minutes": 50.9
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 521367756,
-       "bg_queue_minutes": 1425.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 898844294,
+       "bg_queue_minutes": 37.4
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 441494589,
-       "bg_queue_minutes": 1444.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 818971127,
+       "bg_queue_minutes": 24.8
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 304749677,
-       "bg_queue_minutes": 1473.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682226215,
+       "bg_queue_minutes": 22.2
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 250260688,
-       "bg_queue_minutes": 1511.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 615632891,
+       "bg_queue_minutes": 28.8
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 304663480,
-       "bg_queue_minutes": 1549.2
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682140018,
+       "bg_queue_minutes": 35.4
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 438547901,
-       "bg_queue_minutes": 1578.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 816024439,
+       "bg_queue_minutes": 32.7
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 511501507,
-       "bg_queue_minutes": 1597.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 888978045,
+       "bg_queue_minutes": 20.6
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 462557949,
-       "bg_queue_minutes": 1616.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 840034487,
+       "bg_queue_minutes": 7.5
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 352648044,
-       "bg_queue_minutes": 1642.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730124582,
+       "bg_queue_minutes": 1.9
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 297258008,
-       "bg_queue_minutes": 1675.6
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 674734546,
+       "bg_queue_minutes": 4.0
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 352754637,
-       "bg_queue_minutes": 1709.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730231175,
+       "bg_queue_minutes": 5.9
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 468098729,
-       "bg_queue_minutes": 1734.8
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 845575267,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 555827748,
-       "bg_queue_minutes": 1751.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 389294404,
-       "bg_capacity_tps": 250260688,
-       "bg_served_tps": 588148965,
-       "bg_queue_minutes": 1763.3
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       }
      ]
     },
-    "ok": false
+    "ok": true
    },
    {
-    "lost_site": "nordics",
-    "live_shortfall_pct": 15.447555309423082,
+    "lost_site": "leo_p3",
+    "live_shortfall_pct": 0.0,
     "streams": {
      "agent_bg": {
-      "max_wait_min": 861,
+      "max_wait_min": 57,
       "allowance_min": 228,
-      "meets_deadline": false
+      "meets_deadline": true
      },
      "agent_bg_sub": {
-      "max_wait_min": 853,
+      "max_wait_min": 55,
       "allowance_min": 228,
-      "meets_deadline": false
+      "meets_deadline": true
      }
     },
     "hourly": {
@@ -7429,406 +7429,406 @@
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 756958131,
-       "bg_queue_minutes": 573.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 757044328,
-       "bg_queue_minutes": 570.2
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 755376329,
-       "bg_queue_minutes": 567.0
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 729974673,
-       "bg_queue_minutes": 564.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 624416864,
-       "bg_queue_minutes": 567.3
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 426270779,
-       "bg_queue_minutes": 583.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632320134,
+       "bg_queue_minutes": 1.5
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 314527640,
-       "bg_queue_minutes": 614.3
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 16.8
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 314527640,
-       "bg_queue_minutes": 648.0
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 40.0
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 426164187,
-       "bg_queue_minutes": 679.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632213541,
+       "bg_queue_minutes": 55.1
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 618876084,
-       "bg_queue_minutes": 694.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 824925439,
+       "bg_queue_minutes": 53.5
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 685648432,
-       "bg_queue_minutes": 699.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 891697787,
+       "bg_queue_minutes": 40.6
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 605775265,
-       "bg_queue_minutes": 704.3
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 811824620,
+       "bg_queue_minutes": 28.6
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 469030354,
-       "bg_queue_minutes": 719.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 675079709,
+       "bg_queue_minutes": 26.6
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 402437029,
-       "bg_queue_minutes": 744.0
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 608486384,
+       "bg_queue_minutes": 33.8
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 468944157,
-       "bg_queue_minutes": 768.4
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 674993512,
+       "bg_queue_minutes": 41.0
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 602828578,
-       "bg_queue_minutes": 783.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 808877933,
+       "bg_queue_minutes": 38.9
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 675782183,
-       "bg_queue_minutes": 789.2
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 881831538,
+       "bg_queue_minutes": 27.4
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 626838625,
-       "bg_queue_minutes": 794.0
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 832887980,
+       "bg_queue_minutes": 14.9
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 516928720,
-       "bg_queue_minutes": 806.3
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 722978075,
+       "bg_queue_minutes": 9.9
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 461538684,
-       "bg_queue_minutes": 826.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 667588039,
+       "bg_queue_minutes": 12.6
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 517035313,
-       "bg_queue_minutes": 845.9
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 723084668,
+       "bg_queue_minutes": 15.1
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 632379405,
-       "bg_queue_minutes": 857.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 838428760,
+       "bg_queue_minutes": 9.8
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 720108424,
-       "bg_queue_minutes": 860.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 489308129,
-       "bg_capacity_tps": 314527640,
-       "bg_served_tps": 752429642,
-       "bg_queue_minutes": 858.9
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       }
      ],
      "agent_bg_sub": [
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 758533091,
-       "bg_queue_minutes": 567.9
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 758619288,
-       "bg_queue_minutes": 564.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 756951289,
-       "bg_queue_minutes": 561.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 731549633,
-       "bg_queue_minutes": 558.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 625991824,
-       "bg_queue_minutes": 561.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 427845740,
-       "bg_queue_minutes": 576.7
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639466641,
+       "bg_queue_minutes": 1.2
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 315374812,
-       "bg_queue_minutes": 607.9
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 16.0
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 315374812,
-       "bg_queue_minutes": 641.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 38.6
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 427739147,
-       "bg_queue_minutes": 672.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639360048,
+       "bg_queue_minutes": 53.0
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 620451044,
-       "bg_queue_minutes": 688.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 832071946,
+       "bg_queue_minutes": 50.9
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 687223392,
-       "bg_queue_minutes": 692.2
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 898844294,
+       "bg_queue_minutes": 37.4
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 607350225,
-       "bg_queue_minutes": 697.3
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 818971127,
+       "bg_queue_minutes": 24.8
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 470605314,
-       "bg_queue_minutes": 712.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682226215,
+       "bg_queue_minutes": 22.2
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 404011990,
-       "bg_queue_minutes": 736.8
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 615632891,
+       "bg_queue_minutes": 28.8
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 470519117,
-       "bg_queue_minutes": 761.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682140018,
+       "bg_queue_minutes": 35.4
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 604403538,
-       "bg_queue_minutes": 776.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 816024439,
+       "bg_queue_minutes": 32.7
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 677357143,
-       "bg_queue_minutes": 781.6
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 888978045,
+       "bg_queue_minutes": 20.6
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 628413585,
-       "bg_queue_minutes": 786.2
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 840034487,
+       "bg_queue_minutes": 7.5
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 518503680,
-       "bg_queue_minutes": 798.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730124582,
+       "bg_queue_minutes": 1.9
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 463113644,
-       "bg_queue_minutes": 818.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 674734546,
+       "bg_queue_minutes": 4.0
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 518610273,
-       "bg_queue_minutes": 837.7
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730231175,
+       "bg_queue_minutes": 5.9
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 633954365,
-       "bg_queue_minutes": 849.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 845575267,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 721683384,
-       "bg_queue_minutes": 852.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 490035917,
-       "bg_capacity_tps": 315374812,
-       "bg_served_tps": 754004602,
-       "bg_queue_minutes": 850.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       }
      ]
     },
-    "ok": false
+    "ok": true
    },
    {
-    "lost_site": "west_texas",
-    "live_shortfall_pct": 27.33430656934306,
+    "lost_site": "leo_p4",
+    "live_shortfall_pct": 0.0,
     "streams": {
      "agent_bg": {
-      "max_wait_min": 1473,
+      "max_wait_min": 57,
       "allowance_min": 228,
-      "meets_deadline": false
+      "meets_deadline": true
      },
      "agent_bg_sub": {
-      "max_wait_min": 1487,
+      "max_wait_min": 55,
       "allowance_min": 228,
-      "meets_deadline": false
+      "meets_deadline": true
      }
     },
     "hourly": {
@@ -7836,392 +7836,2020 @@
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 646709045,
-       "bg_queue_minutes": 981.9
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 646795242,
-       "bg_queue_minutes": 987.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 645127243,
-       "bg_queue_minutes": 993.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 619725587,
-       "bg_queue_minutes": 1000.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 514167778,
-       "bg_queue_minutes": 1012.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 316021693,
-       "bg_queue_minutes": 1037.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632320134,
+       "bg_queue_minutes": 1.5
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 271334081,
-       "bg_queue_minutes": 1074.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 16.8
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 271334081,
-       "bg_queue_minutes": 1111.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 40.0
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 315915100,
-       "bg_queue_minutes": 1148.7
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632213541,
+       "bg_queue_minutes": 55.1
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 508626998,
-       "bg_queue_minutes": 1173.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 824925439,
+       "bg_queue_minutes": 53.5
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 575399346,
-       "bg_queue_minutes": 1187.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 891697787,
+       "bg_queue_minutes": 40.6
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 495526179,
-       "bg_queue_minutes": 1201.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 811824620,
+       "bg_queue_minutes": 28.6
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 358781268,
-       "bg_queue_minutes": 1226.0
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 675079709,
+       "bg_queue_minutes": 26.6
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 292187943,
-       "bg_queue_minutes": 1259.7
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 608486384,
+       "bg_queue_minutes": 33.8
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 358695071,
-       "bg_queue_minutes": 1293.3
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 674993512,
+       "bg_queue_minutes": 41.0
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 492579492,
-       "bg_queue_minutes": 1317.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 808877933,
+       "bg_queue_minutes": 38.9
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 565533097,
-       "bg_queue_minutes": 1332.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 881831538,
+       "bg_queue_minutes": 27.4
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 516589539,
-       "bg_queue_minutes": 1346.6
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 832887980,
+       "bg_queue_minutes": 14.9
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 406679634,
-       "bg_queue_minutes": 1368.0
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 722978075,
+       "bg_queue_minutes": 9.9
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 351289598,
-       "bg_queue_minutes": 1397.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 667588039,
+       "bg_queue_minutes": 12.6
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 406786227,
-       "bg_queue_minutes": 1426.1
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 723084668,
+       "bg_queue_minutes": 15.1
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 522130319,
-       "bg_queue_minutes": 1447.2
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 838428760,
+       "bg_queue_minutes": 9.8
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 609859338,
-       "bg_queue_minutes": 1459.5
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 422252601,
-       "bg_capacity_tps": 271334081,
-       "bg_served_tps": 642180556,
-       "bg_queue_minutes": 1466.8
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       }
      ],
      "agent_bg_sub": [
       {
        "utc_hour": 0,
        "live_tps": 46877638,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 644216481,
-       "bg_queue_minutes": 991.2
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 1,
        "live_tps": 46791441,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 644302678,
-       "bg_queue_minutes": 997.3
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 2,
        "live_tps": 48459439,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 642634679,
-       "bg_queue_minutes": 1003.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 3,
        "live_tps": 73861095,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 617233023,
-       "bg_queue_minutes": 1010.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 4,
        "live_tps": 179418904,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 511675214,
-       "bg_queue_minutes": 1022.6
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 5,
        "live_tps": 377564989,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 313529129,
-       "bg_queue_minutes": 1047.8
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639466641,
+       "bg_queue_minutes": 1.2
       },
       {
        "utc_hour": 6,
        "live_tps": 551977417,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 270575059,
-       "bg_queue_minutes": 1084.9
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 16.0
       },
       {
        "utc_hour": 7,
        "live_tps": 551977417,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 270575059,
-       "bg_queue_minutes": 1122.3
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 38.6
       },
       {
        "utc_hour": 8,
        "live_tps": 377671582,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 313422536,
-       "bg_queue_minutes": 1159.2
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639360048,
+       "bg_queue_minutes": 53.0
       },
       {
        "utc_hour": 9,
        "live_tps": 184959685,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 506134434,
-       "bg_queue_minutes": 1184.3
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 832071946,
+       "bg_queue_minutes": 50.9
       },
       {
        "utc_hour": 10,
        "live_tps": 118187336,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 572906782,
-       "bg_queue_minutes": 1198.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 898844294,
+       "bg_queue_minutes": 37.4
       },
       {
        "utc_hour": 11,
        "live_tps": 198060503,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 493033615,
-       "bg_queue_minutes": 1212.7
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 818971127,
+       "bg_queue_minutes": 24.8
       },
       {
        "utc_hour": 12,
        "live_tps": 334805415,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 356288703,
-       "bg_queue_minutes": 1237.4
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682226215,
+       "bg_queue_minutes": 22.2
       },
       {
        "utc_hour": 13,
        "live_tps": 401398739,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 289695379,
-       "bg_queue_minutes": 1271.3
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 615632891,
+       "bg_queue_minutes": 28.8
       },
       {
        "utc_hour": 14,
        "live_tps": 334891612,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 356202506,
-       "bg_queue_minutes": 1305.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682140018,
+       "bg_queue_minutes": 35.4
       },
       {
        "utc_hour": 15,
        "live_tps": 201007191,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 490086927,
-       "bg_queue_minutes": 1329.6
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 816024439,
+       "bg_queue_minutes": 32.7
       },
       {
        "utc_hour": 16,
        "live_tps": 128053586,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 563040533,
-       "bg_queue_minutes": 1344.8
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 888978045,
+       "bg_queue_minutes": 20.6
       },
       {
        "utc_hour": 17,
        "live_tps": 176997143,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 514096975,
-       "bg_queue_minutes": 1359.0
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 840034487,
+       "bg_queue_minutes": 7.5
       },
       {
        "utc_hour": 18,
        "live_tps": 286907048,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 404187070,
-       "bg_queue_minutes": 1380.7
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730124582,
+       "bg_queue_minutes": 1.9
       },
       {
        "utc_hour": 19,
        "live_tps": 342297084,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 348797034,
-       "bg_queue_minutes": 1409.9
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 674734546,
+       "bg_queue_minutes": 4.0
       },
       {
        "utc_hour": 20,
        "live_tps": 286800455,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 404293663,
-       "bg_queue_minutes": 1439.1
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730231175,
+       "bg_queue_minutes": 5.9
       },
       {
        "utc_hour": 21,
        "live_tps": 171456363,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 519637755,
-       "bg_queue_minutes": 1460.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 845575267,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 22,
        "live_tps": 83727344,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 607366774,
-       "bg_queue_minutes": 1472.9
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       },
       {
        "utc_hour": 23,
        "live_tps": 51406127,
-       "live_capacity_tps": 420519059,
-       "bg_capacity_tps": 270575059,
-       "bg_served_tps": 639687991,
-       "bg_queue_minutes": 1480.5
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
       }
      ]
     },
-    "ok": false
+    "ok": true
+   },
+   {
+    "lost_site": "leo_p5",
+    "live_shortfall_pct": 0.0,
+    "streams": {
+     "agent_bg": {
+      "max_wait_min": 57,
+      "allowance_min": 228,
+      "meets_deadline": true
+     },
+     "agent_bg_sub": {
+      "max_wait_min": 55,
+      "allowance_min": 228,
+      "meets_deadline": true
+     }
+    },
+    "hourly": {
+     "agent_bg": [
+      {
+       "utc_hour": 0,
+       "live_tps": 46877638,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 1,
+       "live_tps": 46791441,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 2,
+       "live_tps": 48459439,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 3,
+       "live_tps": 73861095,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 4,
+       "live_tps": 179418904,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 5,
+       "live_tps": 377564989,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632320134,
+       "bg_queue_minutes": 1.5
+      },
+      {
+       "utc_hour": 6,
+       "live_tps": 551977417,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 16.8
+      },
+      {
+       "utc_hour": 7,
+       "live_tps": 551977417,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 40.0
+      },
+      {
+       "utc_hour": 8,
+       "live_tps": 377671582,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632213541,
+       "bg_queue_minutes": 55.1
+      },
+      {
+       "utc_hour": 9,
+       "live_tps": 184959685,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 824925439,
+       "bg_queue_minutes": 53.5
+      },
+      {
+       "utc_hour": 10,
+       "live_tps": 118187336,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 891697787,
+       "bg_queue_minutes": 40.6
+      },
+      {
+       "utc_hour": 11,
+       "live_tps": 198060503,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 811824620,
+       "bg_queue_minutes": 28.6
+      },
+      {
+       "utc_hour": 12,
+       "live_tps": 334805415,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 675079709,
+       "bg_queue_minutes": 26.6
+      },
+      {
+       "utc_hour": 13,
+       "live_tps": 401398739,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 608486384,
+       "bg_queue_minutes": 33.8
+      },
+      {
+       "utc_hour": 14,
+       "live_tps": 334891612,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 674993512,
+       "bg_queue_minutes": 41.0
+      },
+      {
+       "utc_hour": 15,
+       "live_tps": 201007191,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 808877933,
+       "bg_queue_minutes": 38.9
+      },
+      {
+       "utc_hour": 16,
+       "live_tps": 128053586,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 881831538,
+       "bg_queue_minutes": 27.4
+      },
+      {
+       "utc_hour": 17,
+       "live_tps": 176997143,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 832887980,
+       "bg_queue_minutes": 14.9
+      },
+      {
+       "utc_hour": 18,
+       "live_tps": 286907048,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 722978075,
+       "bg_queue_minutes": 9.9
+      },
+      {
+       "utc_hour": 19,
+       "live_tps": 342297084,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 667588039,
+       "bg_queue_minutes": 12.6
+      },
+      {
+       "utc_hour": 20,
+       "live_tps": 286800455,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 723084668,
+       "bg_queue_minutes": 15.1
+      },
+      {
+       "utc_hour": 21,
+       "live_tps": 171456363,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 838428760,
+       "bg_queue_minutes": 9.8
+      },
+      {
+       "utc_hour": 22,
+       "live_tps": 83727344,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 23,
+       "live_tps": 51406127,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      }
+     ],
+     "agent_bg_sub": [
+      {
+       "utc_hour": 0,
+       "live_tps": 46877638,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 1,
+       "live_tps": 46791441,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 2,
+       "live_tps": 48459439,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 3,
+       "live_tps": 73861095,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 4,
+       "live_tps": 179418904,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 5,
+       "live_tps": 377564989,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639466641,
+       "bg_queue_minutes": 1.2
+      },
+      {
+       "utc_hour": 6,
+       "live_tps": 551977417,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 16.0
+      },
+      {
+       "utc_hour": 7,
+       "live_tps": 551977417,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 38.6
+      },
+      {
+       "utc_hour": 8,
+       "live_tps": 377671582,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639360048,
+       "bg_queue_minutes": 53.0
+      },
+      {
+       "utc_hour": 9,
+       "live_tps": 184959685,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 832071946,
+       "bg_queue_minutes": 50.9
+      },
+      {
+       "utc_hour": 10,
+       "live_tps": 118187336,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 898844294,
+       "bg_queue_minutes": 37.4
+      },
+      {
+       "utc_hour": 11,
+       "live_tps": 198060503,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 818971127,
+       "bg_queue_minutes": 24.8
+      },
+      {
+       "utc_hour": 12,
+       "live_tps": 334805415,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682226215,
+       "bg_queue_minutes": 22.2
+      },
+      {
+       "utc_hour": 13,
+       "live_tps": 401398739,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 615632891,
+       "bg_queue_minutes": 28.8
+      },
+      {
+       "utc_hour": 14,
+       "live_tps": 334891612,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682140018,
+       "bg_queue_minutes": 35.4
+      },
+      {
+       "utc_hour": 15,
+       "live_tps": 201007191,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 816024439,
+       "bg_queue_minutes": 32.7
+      },
+      {
+       "utc_hour": 16,
+       "live_tps": 128053586,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 888978045,
+       "bg_queue_minutes": 20.6
+      },
+      {
+       "utc_hour": 17,
+       "live_tps": 176997143,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 840034487,
+       "bg_queue_minutes": 7.5
+      },
+      {
+       "utc_hour": 18,
+       "live_tps": 286907048,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730124582,
+       "bg_queue_minutes": 1.9
+      },
+      {
+       "utc_hour": 19,
+       "live_tps": 342297084,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 674734546,
+       "bg_queue_minutes": 4.0
+      },
+      {
+       "utc_hour": 20,
+       "live_tps": 286800455,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730231175,
+       "bg_queue_minutes": 5.9
+      },
+      {
+       "utc_hour": 21,
+       "live_tps": 171456363,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 845575267,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 22,
+       "live_tps": 83727344,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 23,
+       "live_tps": 51406127,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      }
+     ]
+    },
+    "ok": true
+   },
+   {
+    "lost_site": "leo_p6",
+    "live_shortfall_pct": 0.0,
+    "streams": {
+     "agent_bg": {
+      "max_wait_min": 57,
+      "allowance_min": 228,
+      "meets_deadline": true
+     },
+     "agent_bg_sub": {
+      "max_wait_min": 55,
+      "allowance_min": 228,
+      "meets_deadline": true
+     }
+    },
+    "hourly": {
+     "agent_bg": [
+      {
+       "utc_hour": 0,
+       "live_tps": 46877638,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 1,
+       "live_tps": 46791441,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 2,
+       "live_tps": 48459439,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 3,
+       "live_tps": 73861095,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 4,
+       "live_tps": 179418904,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 5,
+       "live_tps": 377564989,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632320134,
+       "bg_queue_minutes": 1.5
+      },
+      {
+       "utc_hour": 6,
+       "live_tps": 551977417,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 16.8
+      },
+      {
+       "utc_hour": 7,
+       "live_tps": 551977417,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 40.0
+      },
+      {
+       "utc_hour": 8,
+       "live_tps": 377671582,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632213541,
+       "bg_queue_minutes": 55.1
+      },
+      {
+       "utc_hour": 9,
+       "live_tps": 184959685,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 824925439,
+       "bg_queue_minutes": 53.5
+      },
+      {
+       "utc_hour": 10,
+       "live_tps": 118187336,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 891697787,
+       "bg_queue_minutes": 40.6
+      },
+      {
+       "utc_hour": 11,
+       "live_tps": 198060503,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 811824620,
+       "bg_queue_minutes": 28.6
+      },
+      {
+       "utc_hour": 12,
+       "live_tps": 334805415,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 675079709,
+       "bg_queue_minutes": 26.6
+      },
+      {
+       "utc_hour": 13,
+       "live_tps": 401398739,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 608486384,
+       "bg_queue_minutes": 33.8
+      },
+      {
+       "utc_hour": 14,
+       "live_tps": 334891612,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 674993512,
+       "bg_queue_minutes": 41.0
+      },
+      {
+       "utc_hour": 15,
+       "live_tps": 201007191,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 808877933,
+       "bg_queue_minutes": 38.9
+      },
+      {
+       "utc_hour": 16,
+       "live_tps": 128053586,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 881831538,
+       "bg_queue_minutes": 27.4
+      },
+      {
+       "utc_hour": 17,
+       "live_tps": 176997143,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 832887980,
+       "bg_queue_minutes": 14.9
+      },
+      {
+       "utc_hour": 18,
+       "live_tps": 286907048,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 722978075,
+       "bg_queue_minutes": 9.9
+      },
+      {
+       "utc_hour": 19,
+       "live_tps": 342297084,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 667588039,
+       "bg_queue_minutes": 12.6
+      },
+      {
+       "utc_hour": 20,
+       "live_tps": 286800455,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 723084668,
+       "bg_queue_minutes": 15.1
+      },
+      {
+       "utc_hour": 21,
+       "live_tps": 171456363,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 838428760,
+       "bg_queue_minutes": 9.8
+      },
+      {
+       "utc_hour": 22,
+       "live_tps": 83727344,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 23,
+       "live_tps": 51406127,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      }
+     ],
+     "agent_bg_sub": [
+      {
+       "utc_hour": 0,
+       "live_tps": 46877638,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 1,
+       "live_tps": 46791441,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 2,
+       "live_tps": 48459439,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 3,
+       "live_tps": 73861095,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 4,
+       "live_tps": 179418904,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 5,
+       "live_tps": 377564989,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639466641,
+       "bg_queue_minutes": 1.2
+      },
+      {
+       "utc_hour": 6,
+       "live_tps": 551977417,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 16.0
+      },
+      {
+       "utc_hour": 7,
+       "live_tps": 551977417,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 38.6
+      },
+      {
+       "utc_hour": 8,
+       "live_tps": 377671582,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639360048,
+       "bg_queue_minutes": 53.0
+      },
+      {
+       "utc_hour": 9,
+       "live_tps": 184959685,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 832071946,
+       "bg_queue_minutes": 50.9
+      },
+      {
+       "utc_hour": 10,
+       "live_tps": 118187336,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 898844294,
+       "bg_queue_minutes": 37.4
+      },
+      {
+       "utc_hour": 11,
+       "live_tps": 198060503,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 818971127,
+       "bg_queue_minutes": 24.8
+      },
+      {
+       "utc_hour": 12,
+       "live_tps": 334805415,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682226215,
+       "bg_queue_minutes": 22.2
+      },
+      {
+       "utc_hour": 13,
+       "live_tps": 401398739,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 615632891,
+       "bg_queue_minutes": 28.8
+      },
+      {
+       "utc_hour": 14,
+       "live_tps": 334891612,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682140018,
+       "bg_queue_minutes": 35.4
+      },
+      {
+       "utc_hour": 15,
+       "live_tps": 201007191,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 816024439,
+       "bg_queue_minutes": 32.7
+      },
+      {
+       "utc_hour": 16,
+       "live_tps": 128053586,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 888978045,
+       "bg_queue_minutes": 20.6
+      },
+      {
+       "utc_hour": 17,
+       "live_tps": 176997143,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 840034487,
+       "bg_queue_minutes": 7.5
+      },
+      {
+       "utc_hour": 18,
+       "live_tps": 286907048,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730124582,
+       "bg_queue_minutes": 1.9
+      },
+      {
+       "utc_hour": 19,
+       "live_tps": 342297084,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 674734546,
+       "bg_queue_minutes": 4.0
+      },
+      {
+       "utc_hour": 20,
+       "live_tps": 286800455,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730231175,
+       "bg_queue_minutes": 5.9
+      },
+      {
+       "utc_hour": 21,
+       "live_tps": 171456363,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 845575267,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 22,
+       "live_tps": 83727344,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 23,
+       "live_tps": 51406127,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      }
+     ]
+    },
+    "ok": true
+   },
+   {
+    "lost_site": "leo_p7",
+    "live_shortfall_pct": 0.0,
+    "streams": {
+     "agent_bg": {
+      "max_wait_min": 57,
+      "allowance_min": 228,
+      "meets_deadline": true
+     },
+     "agent_bg_sub": {
+      "max_wait_min": 55,
+      "allowance_min": 228,
+      "meets_deadline": true
+     }
+    },
+    "hourly": {
+     "agent_bg": [
+      {
+       "utc_hour": 0,
+       "live_tps": 46877638,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 1,
+       "live_tps": 46791441,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 2,
+       "live_tps": 48459439,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 3,
+       "live_tps": 73861095,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 4,
+       "live_tps": 179418904,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 5,
+       "live_tps": 377564989,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632320134,
+       "bg_queue_minutes": 1.5
+      },
+      {
+       "utc_hour": 6,
+       "live_tps": 551977417,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 16.8
+      },
+      {
+       "utc_hour": 7,
+       "live_tps": 551977417,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 40.0
+      },
+      {
+       "utc_hour": 8,
+       "live_tps": 377671582,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632213541,
+       "bg_queue_minutes": 55.1
+      },
+      {
+       "utc_hour": 9,
+       "live_tps": 184959685,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 824925439,
+       "bg_queue_minutes": 53.5
+      },
+      {
+       "utc_hour": 10,
+       "live_tps": 118187336,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 891697787,
+       "bg_queue_minutes": 40.6
+      },
+      {
+       "utc_hour": 11,
+       "live_tps": 198060503,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 811824620,
+       "bg_queue_minutes": 28.6
+      },
+      {
+       "utc_hour": 12,
+       "live_tps": 334805415,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 675079709,
+       "bg_queue_minutes": 26.6
+      },
+      {
+       "utc_hour": 13,
+       "live_tps": 401398739,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 608486384,
+       "bg_queue_minutes": 33.8
+      },
+      {
+       "utc_hour": 14,
+       "live_tps": 334891612,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 674993512,
+       "bg_queue_minutes": 41.0
+      },
+      {
+       "utc_hour": 15,
+       "live_tps": 201007191,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 808877933,
+       "bg_queue_minutes": 38.9
+      },
+      {
+       "utc_hour": 16,
+       "live_tps": 128053586,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 881831538,
+       "bg_queue_minutes": 27.4
+      },
+      {
+       "utc_hour": 17,
+       "live_tps": 176997143,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 832887980,
+       "bg_queue_minutes": 14.9
+      },
+      {
+       "utc_hour": 18,
+       "live_tps": 286907048,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 722978075,
+       "bg_queue_minutes": 9.9
+      },
+      {
+       "utc_hour": 19,
+       "live_tps": 342297084,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 667588039,
+       "bg_queue_minutes": 12.6
+      },
+      {
+       "utc_hour": 20,
+       "live_tps": 286800455,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 723084668,
+       "bg_queue_minutes": 15.1
+      },
+      {
+       "utc_hour": 21,
+       "live_tps": 171456363,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 838428760,
+       "bg_queue_minutes": 9.8
+      },
+      {
+       "utc_hour": 22,
+       "live_tps": 83727344,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 23,
+       "live_tps": 51406127,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      }
+     ],
+     "agent_bg_sub": [
+      {
+       "utc_hour": 0,
+       "live_tps": 46877638,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 1,
+       "live_tps": 46791441,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 2,
+       "live_tps": 48459439,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 3,
+       "live_tps": 73861095,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 4,
+       "live_tps": 179418904,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 5,
+       "live_tps": 377564989,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639466641,
+       "bg_queue_minutes": 1.2
+      },
+      {
+       "utc_hour": 6,
+       "live_tps": 551977417,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 16.0
+      },
+      {
+       "utc_hour": 7,
+       "live_tps": 551977417,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 38.6
+      },
+      {
+       "utc_hour": 8,
+       "live_tps": 377671582,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639360048,
+       "bg_queue_minutes": 53.0
+      },
+      {
+       "utc_hour": 9,
+       "live_tps": 184959685,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 832071946,
+       "bg_queue_minutes": 50.9
+      },
+      {
+       "utc_hour": 10,
+       "live_tps": 118187336,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 898844294,
+       "bg_queue_minutes": 37.4
+      },
+      {
+       "utc_hour": 11,
+       "live_tps": 198060503,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 818971127,
+       "bg_queue_minutes": 24.8
+      },
+      {
+       "utc_hour": 12,
+       "live_tps": 334805415,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682226215,
+       "bg_queue_minutes": 22.2
+      },
+      {
+       "utc_hour": 13,
+       "live_tps": 401398739,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 615632891,
+       "bg_queue_minutes": 28.8
+      },
+      {
+       "utc_hour": 14,
+       "live_tps": 334891612,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682140018,
+       "bg_queue_minutes": 35.4
+      },
+      {
+       "utc_hour": 15,
+       "live_tps": 201007191,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 816024439,
+       "bg_queue_minutes": 32.7
+      },
+      {
+       "utc_hour": 16,
+       "live_tps": 128053586,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 888978045,
+       "bg_queue_minutes": 20.6
+      },
+      {
+       "utc_hour": 17,
+       "live_tps": 176997143,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 840034487,
+       "bg_queue_minutes": 7.5
+      },
+      {
+       "utc_hour": 18,
+       "live_tps": 286907048,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730124582,
+       "bg_queue_minutes": 1.9
+      },
+      {
+       "utc_hour": 19,
+       "live_tps": 342297084,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 674734546,
+       "bg_queue_minutes": 4.0
+      },
+      {
+       "utc_hour": 20,
+       "live_tps": 286800455,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730231175,
+       "bg_queue_minutes": 5.9
+      },
+      {
+       "utc_hour": 21,
+       "live_tps": 171456363,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 845575267,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 22,
+       "live_tps": 83727344,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 23,
+       "live_tps": 51406127,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      }
+     ]
+    },
+    "ok": true
+   },
+   {
+    "lost_site": "leo_p8",
+    "live_shortfall_pct": 0.0,
+    "streams": {
+     "agent_bg": {
+      "max_wait_min": 57,
+      "allowance_min": 228,
+      "meets_deadline": true
+     },
+     "agent_bg_sub": {
+      "max_wait_min": 55,
+      "allowance_min": 228,
+      "meets_deadline": true
+     }
+    },
+    "hourly": {
+     "agent_bg": [
+      {
+       "utc_hour": 0,
+       "live_tps": 46877638,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 1,
+       "live_tps": 46791441,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 2,
+       "live_tps": 48459439,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 3,
+       "live_tps": 73861095,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 4,
+       "live_tps": 179418904,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 5,
+       "live_tps": 377564989,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632320134,
+       "bg_queue_minutes": 1.5
+      },
+      {
+       "utc_hour": 6,
+       "live_tps": 551977417,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 16.8
+      },
+      {
+       "utc_hour": 7,
+       "live_tps": 551977417,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 457907706,
+       "bg_queue_minutes": 40.0
+      },
+      {
+       "utc_hour": 8,
+       "live_tps": 377671582,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 632213541,
+       "bg_queue_minutes": 55.1
+      },
+      {
+       "utc_hour": 9,
+       "live_tps": 184959685,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 824925439,
+       "bg_queue_minutes": 53.5
+      },
+      {
+       "utc_hour": 10,
+       "live_tps": 118187336,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 891697787,
+       "bg_queue_minutes": 40.6
+      },
+      {
+       "utc_hour": 11,
+       "live_tps": 198060503,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 811824620,
+       "bg_queue_minutes": 28.6
+      },
+      {
+       "utc_hour": 12,
+       "live_tps": 334805415,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 675079709,
+       "bg_queue_minutes": 26.6
+      },
+      {
+       "utc_hour": 13,
+       "live_tps": 401398739,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 608486384,
+       "bg_queue_minutes": 33.8
+      },
+      {
+       "utc_hour": 14,
+       "live_tps": 334891612,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 674993512,
+       "bg_queue_minutes": 41.0
+      },
+      {
+       "utc_hour": 15,
+       "live_tps": 201007191,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 808877933,
+       "bg_queue_minutes": 38.9
+      },
+      {
+       "utc_hour": 16,
+       "live_tps": 128053586,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 881831538,
+       "bg_queue_minutes": 27.4
+      },
+      {
+       "utc_hour": 17,
+       "live_tps": 176997143,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 832887980,
+       "bg_queue_minutes": 14.9
+      },
+      {
+       "utc_hour": 18,
+       "live_tps": 286907048,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 722978075,
+       "bg_queue_minutes": 9.9
+      },
+      {
+       "utc_hour": 19,
+       "live_tps": 342297084,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 667588039,
+       "bg_queue_minutes": 12.6
+      },
+      {
+       "utc_hour": 20,
+       "live_tps": 286800455,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 723084668,
+       "bg_queue_minutes": 15.1
+      },
+      {
+       "utc_hour": 21,
+       "live_tps": 171456363,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 838428760,
+       "bg_queue_minutes": 9.8
+      },
+      {
+       "utc_hour": 22,
+       "live_tps": 83727344,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 23,
+       "live_tps": 51406127,
+       "live_capacity_tps": 615635562,
+       "bg_capacity_tps": 394249562,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      }
+     ],
+     "agent_bg_sub": [
+      {
+       "utc_hour": 0,
+       "live_tps": 46877638,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 1,
+       "live_tps": 46791441,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 2,
+       "live_tps": 48459439,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 3,
+       "live_tps": 73861095,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 4,
+       "live_tps": 179418904,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 5,
+       "live_tps": 377564989,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639466641,
+       "bg_queue_minutes": 1.2
+      },
+      {
+       "utc_hour": 6,
+       "live_tps": 551977417,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 16.0
+      },
+      {
+       "utc_hour": 7,
+       "live_tps": 551977417,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 465054213,
+       "bg_queue_minutes": 38.6
+      },
+      {
+       "utc_hour": 8,
+       "live_tps": 377671582,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 639360048,
+       "bg_queue_minutes": 53.0
+      },
+      {
+       "utc_hour": 9,
+       "live_tps": 184959685,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 832071946,
+       "bg_queue_minutes": 50.9
+      },
+      {
+       "utc_hour": 10,
+       "live_tps": 118187336,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 898844294,
+       "bg_queue_minutes": 37.4
+      },
+      {
+       "utc_hour": 11,
+       "live_tps": 198060503,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 818971127,
+       "bg_queue_minutes": 24.8
+      },
+      {
+       "utc_hour": 12,
+       "live_tps": 334805415,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682226215,
+       "bg_queue_minutes": 22.2
+      },
+      {
+       "utc_hour": 13,
+       "live_tps": 401398739,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 615632891,
+       "bg_queue_minutes": 28.8
+      },
+      {
+       "utc_hour": 14,
+       "live_tps": 334891612,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 682140018,
+       "bg_queue_minutes": 35.4
+      },
+      {
+       "utc_hour": 15,
+       "live_tps": 201007191,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 816024439,
+       "bg_queue_minutes": 32.7
+      },
+      {
+       "utc_hour": 16,
+       "live_tps": 128053586,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 888978045,
+       "bg_queue_minutes": 20.6
+      },
+      {
+       "utc_hour": 17,
+       "live_tps": 176997143,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 840034487,
+       "bg_queue_minutes": 7.5
+      },
+      {
+       "utc_hour": 18,
+       "live_tps": 286907048,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730124582,
+       "bg_queue_minutes": 1.9
+      },
+      {
+       "utc_hour": 19,
+       "live_tps": 342297084,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 674734546,
+       "bg_queue_minutes": 4.0
+      },
+      {
+       "utc_hour": 20,
+       "live_tps": 286800455,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 730231175,
+       "bg_queue_minutes": 5.9
+      },
+      {
+       "utc_hour": 21,
+       "live_tps": 171456363,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 845575267,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 22,
+       "live_tps": 83727344,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      },
+      {
+       "utc_hour": 23,
+       "live_tps": 51406127,
+       "live_capacity_tps": 616382806,
+       "bg_capacity_tps": 400648824,
+       "bg_served_tps": 717592593,
+       "bg_queue_minutes": 0.0
+      }
+     ]
+    },
+    "ok": true
    }
   ]
  }

@@ -87,7 +87,13 @@ def light_satellite():
     C.SPACE_HW_USD_PER_MW = C.SPACE_HW_USD_PER_MW * row["power_factor"]
 
 
-def run(pct, design_path, light=False):
+def space_only():
+    for s in C.SITES.values():
+        if s["kind"] == "earth":
+            s["cap_mw"] = 0
+
+
+def run(pct, design_path, light=False, orbit_only=False):
     design = json.loads(design_path.read_text())
     rows = []
     saved_kg = C.SPACE_KG_PER_MW
@@ -95,6 +101,8 @@ def run(pct, design_path, light=False):
         def apply(fn=fn):
             if light:
                 light_satellite()
+            if orbit_only:
+                space_only()
             fn()
         with patched(apply):
             asbuilt = S.evaluate(design)
@@ -126,11 +134,13 @@ def main():
     ap.add_argument("--pct", type=float, default=25)
     ap.add_argument("--design")
     ap.add_argument("--light", action="store_true", help="use the 10.7 t/MW what-if satellite")
+    ap.add_argument("--orbit-only", action="store_true", help="no Earth sites (Design 2)")
     a = ap.parse_args()
-    design = Path(a.design or ROOT / "designs" / ("whatif_resilient_light.json" if a.light else "final_resilient.json"))
+    default = ("whatif_all_orbit_light.json" if a.orbit_only else "whatif_resilient_light.json") if a.light else "final_resilient.json"
+    design = Path(a.design or ROOT / "designs" / default)
     print(f"\nStress test: each assumption {a.pct:.0f}% worse ({design.name}, budget $30B)")
-    rows = run(a.pct, design, a.light)
-    tag = f"stress_{int(a.pct)}" + ("_light" if a.light else "")
+    rows = run(a.pct, design, a.light, a.orbit_only)
+    tag = f"stress_{int(a.pct)}" + ("_light" if a.light else "") + ("_orbit_only" if a.orbit_only else "")
     (ROOT / "designs" / f"{tag}.json").write_text(json.dumps(rows, indent=1) + "\n")
     print(f"\nwrote designs/{tag}.json")
 
