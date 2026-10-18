@@ -19,6 +19,8 @@ All three user groups together are 4.45 billion people: chat users, agent develo
 office workers. **Earth runs out of power first.** If we stay on Earth, the grid is full when
 only 58% of them are served.
 
+**Presenting?** See [`DEMO.md`](DEMO.md) for the 5-minute script, and run `python3 twin/prove.py` to show every check live (about 6 seconds).
+
 ## 🛰️ The digital twin
 
 **Plain-language explainer for anyone:** [`explained.html`](https://madhanj05.github.io/Orbital_DataCenter/explained.html): the two designs, the tests and the simulation in simple words and diagrams.

@@ -146,6 +146,7 @@ def check(path):
         print(f"  {slide:<8} {rule:<58} {limit:<18} {value:<26} {'PASS' if ok else 'FAIL'}")
     fails = [x for x in rows if not x[4]]
     print(f"  -> {len(rows) - len(fails)} of {len(rows)} pass" + (f", scorer says {'VALID' if r['valid'] else 'INVALID'}"))
+    check.rows = rows                     # for twin/prove.py
     return not fails and r["valid"]
 
 
