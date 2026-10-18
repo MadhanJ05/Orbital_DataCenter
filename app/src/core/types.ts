@@ -67,6 +67,7 @@ export interface Results {
     wetKgPerSat: number
     totalT: number
     kgPerKw: number
+    dryKgPerKw: number // = dry t per MW of IT, comparable to the deck's 18 t/MW
     launches: number
   }
   propulsion: {

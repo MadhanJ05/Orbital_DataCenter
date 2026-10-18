@@ -68,3 +68,8 @@ export function runPower(i: PowerInputs, orbit: OrbitModel, itWPerSat: number): 
   )
   return { itW, busW, loadW, batteryWh, arrayW, arrayM2, arrayKg, batteryKg, availability, batteryLifeYr }
 }
+
+/** Array specific power that makes arrays + batteries weigh `kg` (used to reproduce a published mass split). */
+export function solarWPerKgFor(kg: number, p: PowerModel) {
+  return p.arrayW / (kg - p.batteryKg)
+}

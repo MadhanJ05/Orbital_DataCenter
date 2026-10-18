@@ -10,7 +10,7 @@ export function massStage(_i: Inputs, r: Results): Stage {
     metrics: [
       { label: 'Mass to orbit', value: `${fmt(r.mass.totalT)} t` },
       { label: 'Launches', value: `${r.mass.launches}` },
-      { label: 'Mass per kW of IT', value: `${fmt(r.mass.kgPerKw)} kg` },
+      { label: 'Dry mass per MW of IT', value: `${fmt(r.mass.dryKgPerKw)} t (deck: 18)` },
       { label: 'Launch bill', value: usdM(r.econ.capexBreakdownM.find((c) => c.name === 'Launch')?.usd ?? 0) },
     ],
     status: { tone: 'neutral', text: `${r.mass.launches} launch${r.mass.launches === 1 ? '' : 'es'}` },

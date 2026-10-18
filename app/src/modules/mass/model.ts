@@ -17,6 +17,19 @@ export const massDefaults: MassInputs = {
   launchPayloadT: 100,
 }
 
+/** Dry tonnes per MW of IT, one line per subsystem (shared/assumptions.json mass_t_per_mw). */
+export interface MassSplit {
+  compute: number
+  solar: number
+  radiators: number
+  structure: number
+}
+
+/** Structure fraction that makes structure + fixed bus weigh `kg`, given everything else (`otherKg`, bus included). */
+export function structurePctFor(kg: number, otherKg: number, busFixedKg: number) {
+  return (kg - busFixedKg) / otherKg * 100
+}
+
 const BUS_AREA_M2 = 10 // projected area of the bus body
 
 export interface MassModel {

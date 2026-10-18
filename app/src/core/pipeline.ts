@@ -98,6 +98,7 @@ export function simulate(i: Inputs): Results {
       wetKgPerSat: mass.wetKg,
       totalT: mass.totalKg / 1000,
       kgPerKw: mass.wetKg / (power.itW / 1000),
+      dryKgPerKw: mass.dryKg / (power.itW / 1000),
       launches: mass.launches,
     },
     propulsion: {

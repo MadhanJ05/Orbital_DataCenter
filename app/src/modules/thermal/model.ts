@@ -39,3 +39,8 @@ export function runThermal(i: ThermalInputs, loadW: number): ThermalModel {
   const radiatorKg = radiatorM2 * i.radiatorKgPerM2
   return { fluxWm2, radiatorM2, radiatorKg, warnings }
 }
+
+/** Radiator areal mass that makes the radiator weigh `kg` (used to reproduce a published mass split). */
+export function radiatorKgPerM2For(kg: number, t: ThermalModel) {
+  return kg / t.radiatorM2
+}
