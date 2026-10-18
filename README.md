@@ -141,6 +141,7 @@ python3 twin/score.py designs/whatif_all_orbit_light.json  # check Design 2
 python3 twin/simulate.py designs/final_resilient.json designs/whatif_all_orbit_light.json   # a full day, every outage
 python3 twin/stress.py --light --orbit-only                # Design 2 with every guess 25% worse
 python3 twin/test_calibration.py                           # our model matches the organizers' numbers
+python3 twin/check_rules.py                                # every deck rule, both designs, PASS/FAIL
 ```
 
 Technical details, assumptions and the design file format are in [`twin/README.md`](twin/README.md).

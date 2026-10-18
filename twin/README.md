@@ -29,6 +29,7 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | `twin/build.py` | Greedy planner: best chip per stream, cheapest sites up to their grid caps, the rest in LEO. |
 | `twin/orbit_mass.py` | The 18-tonne what-if: one orbital MW broken into compute, solar, radiators and structure, with physical levers (chip temperature vs leakage, two cooling loops, solar W/kg, radiator kg/m², stripped racks, structure share, launch price). It re-optimizes the whole fleet at each step and writes `designs/whatif_ladder.json`. |
 | `twin/simulate.py` | Minute-by-minute day. Builds global demand curves from three regions in their own time zones, serves live work first, queues background work into what's left, and checks every background task against its 4 h deadline, on a normal day and with each site or plane lost. Writes `designs/sim_24h.json`. |
+| `twin/check_rules.py` | Rule-by-rule check against the deck for Design 1 and Design 2 (or any design). Each line gives the slide, the limit, the design's value and PASS/FAIL. It recomputes from the pools instead of trusting the scorer. |
 | `twin/stress.py` | Makes each ASSUMED/CALIB number 25% worse (`--pct`), one at a time and then all together. Re-scores the final design as built and re-optimizes from scratch. `--light` uses the 10.7 t/MW satellite; `--orbit-only` removes Earth sites (Design 2). Writes `designs/stress_25*.json`. |
 | `twin/optimize.py` | Coordinate search over every lever. Keeps a change only if the design stays at 100% served, stays valid, and gets cheaper. |
 | `twin/test_calibration.py` | Checks against the deck: ~960 chat and ~117 agent sessions per GPU, per-user peak tokens, 972 W/m² radiators, $3.6M/MW launch, orbit break-even with the Nordics at $95/kg and West Texas at $170/kg, Moon and Mars latency rules. |
@@ -80,6 +81,14 @@ The Case A/B/C rows predate the model fixes below. Re-run `build.py` to refresh 
 Earth prices, carbon and grid caps barely move the cost. The two that matter are about chip
 performance (prefill FLOPS, speculative-decoding acceptance). They change how many chips
 everyone needs, wherever the chips sit.
+
+## Deck interpretations (where the slides leave room)
+
+- **Workloads:** the Kimi K3 / Qwen3.5 / gpt-oss set (slides 9-14, named on the Track 1 Challenge slide). The Sage/Titan slides later in the deck are an alternate version and are not used.
+- **500 MW** is counted as facility power: IT plus cooling, at nameplate. That's the strict reading.
+- **Virginia and the Midwest** use the midpoint of the deck's cold and desert PUE columns.
+- **Air cards in orbit** are radiator-cooled like everything else in space. If that is disallowed and GPUs do the prefill, Design 1 costs $29.70B and Design 2 $29.14B: both still valid.
+- **Chip memory** is filled to 100% by weights and caches, with no reserve for fragmentation.
 
 ## Model fixes from the code review
 
