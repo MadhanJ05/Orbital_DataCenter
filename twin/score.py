@@ -172,7 +172,7 @@ def demand(cases, serving):
 
 
 def valley_shift(d_out, d_in, serving):
-    """Night shift: background agents (4 h deadline) run in the off-peak capacity of
+    """Off-peak shift: background agents (4 h deadline) run in the off-peak capacity of
     the interactive pools of the same model, so their own pools only cover what
     does not fit there. Interactive pools sized for peak P with daily average a
     have P - a of spare capacity on average; background work b beyond that still
@@ -268,7 +268,7 @@ def _evaluate(design):
     raw_out = dict(d_out)
     d_out, d_in, moved_out, moved_in = valley_shift(d_out, d_in, serving)
     if serving["bg_fill_valleys"] and C.STREAMS["agent_bg"]["task_deadline"] < C.PEAK_WINDOW_H * 3600:
-        errors.append("night shift needs the background deadline to outlast the peak window")
+        errors.append("off-peak shift needs the background deadline to outlast the peak window")
 
     # ---- build pools
     pools = []

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Minute-by-minute day of the fleet: does night shift really work?
+"""Minute-by-minute day of the fleet: does off-peak shift really work?
 
     python3 twin/simulate.py                       # final designs, normal day + every outage
     python3 twin/simulate.py designs/x.json        # any design
@@ -130,7 +130,7 @@ def run(path, outages=True):
 
 
 def print_rows(name, r, rows):
-    print(f"\n=== {name}  (${r['cost_usd'] / 1e9:.2f}B, night shift {'on' if r['serving']['bg_fill_valleys'] else 'off'})")
+    print(f"\n=== {name}  (${r['cost_usd'] / 1e9:.2f}B, off-peak shift {'on' if r['serving']['bg_fill_valleys'] else 'off'})")
     print(f"  {'scenario':<22} {'live short':>10} {'bg wait (max)':>14} {'sub wait (max)':>15} {'allowed':>8}  result")
     for row in rows:
         bg = row["streams"].get("agent_bg", {})

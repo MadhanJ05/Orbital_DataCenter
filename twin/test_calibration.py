@@ -80,7 +80,7 @@ def test_context_link_caps_sessions():          # a slow tier link must cut the 
     assert slow < fast / 10, (slow, fast)
 
 
-def test_night_shift_needs_interactive_spare(): # shrink live-agent racks -> background suffers too
+def test_offpeak_shift_needs_interactive_spare(): # shrink live-agent racks -> background suffers too
     import json
     from pathlib import Path
     d = json.loads((Path(__file__).resolve().parent.parent / "designs" / "final_resilient.json").read_text())

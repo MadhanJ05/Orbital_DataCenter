@@ -64,8 +64,9 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 
 ## The five tricks that made it fit
 
-1. **🌙 Night shift.** Background agents have 4 hours to finish their work. They run in the quiet
-   hours of the racks that serve live agents, so we don't buy separate racks for them.
+1. **🕑 Off-peak shift.** Background agents have 4 hours to finish their work. They run in the quiet
+   hours of the racks that serve live agents, so we don't buy separate racks for them. "Quiet"
+   means quiet for the whole world: demand worldwide is below average 13 hours a day.
    This one trick saves about $4.9B. We checked it with a minute-by-minute simulation of a full
    day: the longest any background job waits is 50 minutes in Design 1 and 32 minutes in
    Design 2 (under 1.5 hours even with a site down), well inside the 4-hour deadline.
@@ -142,6 +143,12 @@ Gemini prompt in 2025.
   cheaper where it's available.
 - **"What if a solar storm hits every satellite at once?"** That's Design 2's worst case, and why
   Design 1 is our entry: it keeps 435 MW on Earth, which fails for different reasons.
+- **"Someone is always awake somewhere. Are there really quiet hours worldwide?"** Yes. Our
+  simulation adds up the Americas, Europe/Africa and Asia, each busy in its own afternoon. Most
+  people live in Asia and almost nobody over the Pacific, so world demand is below average for
+  13 of 24 hours, matching the organizers' figure that the busiest hour is 2.5x the average. Even
+  if demand were perfectly flat, Design 1 would still cost $29.13B and fit: with no peaks, you
+  don't buy extra racks for the peak in the first place.
 - **"What if demand is 5% higher than the organizers say?"** On a normal day the spare we keep
   for outages absorbs it: at the busiest hour there is at least 9% spare (Design 1) and 16%
   (Design 2). Only a 5% surge *during* an outage would fall short. Guaranteeing that too would

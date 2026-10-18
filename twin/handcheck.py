@@ -108,7 +108,7 @@ show("Nordics chat pool: electricity", mwh * 25, pools["chat-decode-nordics"]["c
 show("Nordics chat pool: carbon", mwh * 25 / 1000 * 100, pools["chat-decode-nordics"]["cost"]["carbon"], "$")
 show("LEO chat pool: launch", it_mw * 18_000 * 200, pools["chat-decode-leo_p1"]["cost"]["launch"], "$")
 
-# ---------------------------------------------------------------- 6. night shift
+# ---------------------------------------------------------------- 6. off-peak shift
 int_out = (users["B"] * int_tasks["B"] + users["C"] * int_tasks["C"]) * (1 - sub_share) * steps * agent_out / 86400 * peak_int * margin
 bg_out = (users["B"] * bg_tasks["B"] + users["C"] * bg_tasks["C"]) * (1 - sub_share) * steps * agent_out / 86400 * margin
 spare = int_out - int_out / peak_int                         # interactive peak minus its average
@@ -116,7 +116,7 @@ show("background work left for its own racks", bg_out - min(bg_out, spare), r["d
 int_cap = sum(p["cap"] for p in r["pools"] if p["stream"] == "agent_int" and p["phase"] == "decode")
 biggest = max(p["cap"] for p in r["pools"] if p["stream"] == "agent_int" and p["phase"] == "decode")
 left_spare = int_cap - biggest - int_out / peak_int
-show("after an outage: spare / night-shift work (>= 1, hand only)", left_spare / min(bg_out, spare), None, "x")
+show("after an outage: spare / off-peak work (>= 1, hand only)", left_spare / min(bg_out, spare), None, "x")
 
 # ---------------------------------------------------------------- 7. the total
 show("total = sum of every pool's bill (consistency)", sum(p["cost_usd"] for p in r["pools"]), r["cost_usd"], "$")
