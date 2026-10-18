@@ -40,11 +40,13 @@ def check(path):
     charged = r["cost_breakdown"]["launch"] / mass if mass else 0      # price actually billed
     add("s9" if want == 200 else "what-if", "launch price used for orbit", f"${want}/kg",
         f"${charged:.0f}/kg" if mass else "-", not mass or abs(charged - want) < 0.01)
-    orbit_mw = sum(p["it_mw"] for p in r["pools"] if p["space"])
-    kg_mw = mass / orbit_mw if orbit_mw else 0
     expect = (r.get("satellite") or {}).get("kg_per_mw", C.SPACE_KG_PER_MW)
-    add("s14" if not r.get("satellite") else "what-if", "satellite mass per MW", f"{expect / 1000:.1f} t/MW",
-        f"{kg_mw / 1000:.2f} t/MW" if orbit_mw else "-", not orbit_mw or abs(kg_mw - expect) < 1)
+    orbit_mw = sum(p["it_mw"] for p in r["pools"] if p["space"]) + sum(
+        v["it_mw"] for s, v in r["sandbox"].get("by_site", {}).items() if C.SITES[s]["kind"] == "space")
+    batt_kg = r["cost_breakdown"]["battery"] / C.ECLIPSE_BATTERY["usd_per_kwh"] * C.ECLIPSE_BATTERY["kg_per_kwh"]
+    add("s14" if not r.get("satellite") else "what-if", "orbit mass = MW x t/MW + eclipse batteries",
+        f"{expect / 1000:.1f} t/MW + {batt_kg / 1000:,.0f} t", f"{mass / 1000:,.0f} t",
+        not orbit_mw or abs(mass - orbit_mw * expect - batt_kg) < 1)
     launch = r["cost_breakdown"]["launch"]
     add("s14", "launch bill = tonnes x $/kg", f"{mass / 1000:,.0f} t x ${want}", f"${launch / 1e9:.2f}B",
         abs(launch - mass * want) < 1e3)
@@ -96,6 +98,15 @@ def check(path):
             heads.append(cap / d_out[s] - 1)
     add("s21", "demand bursts: spare above the peak hour (live)", "> 0%", f"min {min(heads):.0%}", min(heads) > 0)
 
+    # ---- eclipses: worst eclipse day per plane group, alone and with every single outage
+    import simulate as M
+    _, _, sim_rows = M.run(path, outages=True, eclipse=True)
+    ecl = [x for x in sim_rows if x.get("eclipse")]
+    if ecl:
+        ok_ecl = sum(x["ok"] for x in ecl)
+        add("eclipse", f"worst eclipse day, alone and with any one outage ({design.get('eclipse_battery') or 'no'} batteries)",
+            f"{len(ecl)} days OK", f"{ok_ecl} OK", ok_ecl == len(ecl))
+
     # ---- network (DECK s21): user text between Earth and each orbital plane at the busiest hour.
     # Cached context stays with the model; background agents run tools next to it, so only
     # interactive work sends its new input up.
@@ -115,7 +126,8 @@ def check(path):
     # ---- energy per task (DECK s21 asks for joules per task)
     j = r["joules_per_request"]
     _, _, reqs = S.demand(r["cases"], sv)
-    total_kwh = sum(p["it_mw"] * p["load"] * p["pue"] * C.HOURS * 1000 for p in r["pools"])
+    total_kwh = sum(p["it_mw"] * p["load"] * p["pue"] * C.HOURS * 1000 for p in r["pools"]) + sum(
+        v["mwh"] * 1000 for v in r["sandbox"].get("by_site", {}).values())
     booked = sum(j[x] * reqs[x] * C.HOURS * 3600 for x in j) / 3.6e6
     add("s21", "energy split across workloads adds up to the total", "100%", f"{booked / total_kwh:.2%}", abs(booked / total_kwh - 1) < 1e-6)
     steps = C.STREAMS["agent_int"]["steps"]

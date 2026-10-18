@@ -386,7 +386,9 @@ def _evaluate(design):
 
     # ---- power, energy, money
     totals = dict(chips=0.0, context_memory=0.0, facility=0.0, energy=0.0, carbon=0.0,
-                  water=0.0, launch=0.0, space_hw=0.0)
+                  water=0.0, launch=0.0, space_hw=0.0, battery=0.0)
+    batt = design.get("eclipse_battery", C.ECLIPSE_BATTERY_DEFAULT)   # None, "live" or "all"
+    battery_on = lambda p: p["space"] and (batt == "all" or (batt == "live" and p["stream"] in C.LIVE_STREAMS))
     site_mw, site_it_mw = {}, {}
     co2_t = water_l = launch_kg = 0.0
     energy_by_stream = {s: 0.0 for s in C.STREAMS}   # kWh over 5 years
@@ -410,6 +412,11 @@ def _evaluate(design):
         if p["space"]:
             kg = it_mw * C.SPACE_KG_PER_MW
             cost.update(launch=kg * st["launch_usd_per_kg"], space_hw=it_mw * C.SPACE_HW_USD_PER_MW)
+            if battery_on(p):                    # live racks ride through eclipses on batteries
+                kwh = it_mw * 1000 * C.ECLIPSE_BATTERY["min"] / 60
+                kg += kwh * C.ECLIPSE_BATTERY["kg_per_kwh"]
+                cost["launch"] = kg * st["launch_usd_per_kg"]
+                cost["battery"] = kwh * C.ECLIPSE_BATTERY["usd_per_kwh"]
             launch_kg += kg
         else:
             t = mwh * st["g_co2_kwh"] / 1000
@@ -430,6 +437,62 @@ def _evaluate(design):
             energy_by_stream[bg] += mwh * 1000 * moved_share
         p.update(it_mw=it_mw, facility_mw=it_mw * pue, pue=pue, load=load, cost=cost,
                  cost_usd=sum(cost.values()), ctx_gb=ctx_gb)
+    # ---- tool sandboxes for background agents, as racks per site.
+    # Concurrent tasks = task arrivals x task wall time (Little's law), sized for the busiest
+    # off-peak hour and for losing the site that hosts the most background work.
+    sandbox = dict(racks=0, mw=0.0, usd=0.0, by_site={})
+    bg_tasks_s = sum(C.CASES[c]["users"] * C.CASES[c]["agent_bg"] for c in cases) / 86400 * margin
+    hosts = [p for p in pools if p["phase"] == "decode" and p["slo_ok"] and p.get("task_s")
+             and (p["stream"] in ("agent_bg", "agent_bg_sub")
+                  or (serving["bg_fill_valleys"] and p["stream"] in ("agent_int", "agent_int_sub")))]
+    # background work's share by host pool: own pools carry what is left after the off-peak
+    # shift, interactive pools carry the moved part; wall time is weighted the same way
+    weight = {}
+    for p in hosts:
+        if p["stream"] in ("agent_bg", "agent_bg_sub"):
+            w = d_out[p["stream"]] * p["cap"] / max(sum(q["cap"] for q in hosts if q["stream"] == p["stream"]), 1e-9)
+        else:
+            w = moved_out.get(p["stream"], 0.0) * p["cap"] / max(sum(q["cap"] for q in hosts if q["stream"] == p["stream"]), 1e-9)
+        weight[id(p)] = w
+    wsum = sum(weight.values())
+    task_s = sum(p["task_s"] * weight[id(p)] for p in hosts) / wsum if wsum else 0.0
+    if bg_tasks_s > 0 and task_s > 0:
+        share = {}
+        for p in hosts:
+            share[p["site"]] = share.get(p["site"], 0.0) + weight[id(p)]
+        total = sum(share.values())
+        share = {k: v / total for k, v in share.items()}
+        lose = max(share.values()) if serving["resilience"] == "all" and len(share) > 1 else 0.0
+        need = bg_tasks_s * task_s * C.SANDBOX_PEAK / (1 - lose) / C.SANDBOX["slots"]   # racks, whole fleet
+        busy = bg_tasks_s / margin * task_s / C.SANDBOX["slots"] / need if need else 0.0  # average occupancy
+        for site, f in share.items():
+            racks = math.ceil(need * f)
+            it_mw = racks * C.SANDBOX["kw"] / 1000
+            st = C.SITES[site]
+            pue = 1.0 if st["kind"] == "space" else site_pue("direct_liquid", site)
+            load = C.IDLE_POWER_FRACTION + (1 - C.IDLE_POWER_FRACTION) * busy
+            mwh = it_mw * load * pue * C.HOURS
+            cost = dict(chips=racks * C.SANDBOX["usd"])
+            if st["kind"] == "space":
+                kg = it_mw * C.SPACE_KG_PER_MW
+                cost.update(launch=kg * st["launch_usd_per_kg"], space_hw=it_mw * C.SPACE_HW_USD_PER_MW)
+                launch_kg += kg
+            else:
+                t = mwh * st["g_co2_kwh"] / 1000
+                cost.update(facility=it_mw * (C.FACILITY_USD_PER_MW + C.COOLING["direct_liquid"]["capex_per_mw"]),
+                            energy=mwh * st["usd_per_mwh"], carbon=t * C.CARBON_USD_PER_T)
+                co2_t += t
+            for k, v in cost.items():
+                totals[k] += v
+            site_mw[site] = site_mw.get(site, 0.0) + it_mw * pue
+            site_it_mw[site] = site_it_mw.get(site, 0.0) + it_mw
+            energy_by_stream["agent_bg"] += mwh * 1000 * (1 - serving["subagent_share"])
+            energy_by_stream["agent_bg_sub"] += mwh * 1000 * serving["subagent_share"]
+            sandbox["by_site"][site] = dict(racks=racks, it_mw=it_mw, mwh=mwh, cost_usd=sum(cost.values()))
+            sandbox["racks"] += racks
+            sandbox["mw"] += it_mw
+            sandbox["usd"] += sum(cost.values())
+        sandbox.update(concurrent_tasks=bg_tasks_s / margin * task_s, task_s=task_s)
     total_usd = sum(totals.values())
 
     # ---- hard limits
@@ -491,7 +554,7 @@ def _evaluate(design):
                         served_fraction=worst_users / target if target else 0.0,
                         live_served_by_outage={s: min(f[x] for x in C.LIVE_STREAMS if d_out[x] > 0)
                                                for s, f in outage.items()} if any(d_out[x] > 0 for x in C.LIVE_STREAMS) else {}),
-        demand_out_tps=d_out, demand_in_tps=d_in, pools=pools,
+        demand_out_tps=d_out, demand_in_tps=d_in, pools=pools, sandbox=sandbox,
     )
 
 

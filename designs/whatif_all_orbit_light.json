@@ -661,7 +661,7 @@
       "phase": "decode",
       "site": "leo_p1",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 2
     },
@@ -671,7 +671,7 @@
       "phase": "decode",
       "site": "leo_p2",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 2
     },
@@ -681,7 +681,7 @@
       "phase": "decode",
       "site": "leo_p3",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 2
     },
@@ -691,7 +691,7 @@
       "phase": "decode",
       "site": "leo_p4",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 2
     },
@@ -701,7 +701,7 @@
       "phase": "decode",
       "site": "leo_p5",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 2
     },
@@ -711,7 +711,7 @@
       "phase": "decode",
       "site": "leo_p6",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 2
     },
@@ -721,7 +721,7 @@
       "phase": "decode",
       "site": "leo_p7",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 2
     },
@@ -731,7 +731,7 @@
       "phase": "decode",
       "site": "leo_p8",
       "chip": "lpu",
-      "chips_per_replica": 96,
+      "chips_per_replica": 48,
       "cooling": "radiators",
       "racks": 2
     },
@@ -741,7 +741,7 @@
       "phase": "prefill",
       "site": "leo_p1",
       "chip": "air",
-      "chips_per_replica": 1,
+      "chips_per_replica": 2,
       "cooling": "radiators",
       "racks": 37
     },
@@ -751,7 +751,7 @@
       "phase": "prefill",
       "site": "leo_p2",
       "chip": "air",
-      "chips_per_replica": 1,
+      "chips_per_replica": 2,
       "cooling": "radiators",
       "racks": 37
     },
@@ -761,7 +761,7 @@
       "phase": "prefill",
       "site": "leo_p3",
       "chip": "air",
-      "chips_per_replica": 1,
+      "chips_per_replica": 2,
       "cooling": "radiators",
       "racks": 37
     },
@@ -771,7 +771,7 @@
       "phase": "prefill",
       "site": "leo_p4",
       "chip": "air",
-      "chips_per_replica": 1,
+      "chips_per_replica": 2,
       "cooling": "radiators",
       "racks": 37
     },
@@ -781,7 +781,7 @@
       "phase": "prefill",
       "site": "leo_p5",
       "chip": "air",
-      "chips_per_replica": 1,
+      "chips_per_replica": 2,
       "cooling": "radiators",
       "racks": 37
     },
@@ -791,7 +791,7 @@
       "phase": "prefill",
       "site": "leo_p6",
       "chip": "air",
-      "chips_per_replica": 1,
+      "chips_per_replica": 2,
       "cooling": "radiators",
       "racks": 37
     },
@@ -801,7 +801,7 @@
       "phase": "prefill",
       "site": "leo_p7",
       "chip": "air",
-      "chips_per_replica": 1,
+      "chips_per_replica": 2,
       "cooling": "radiators",
       "racks": 37
     },
@@ -811,14 +811,15 @@
       "phase": "prefill",
       "site": "leo_p8",
       "chip": "air",
-      "chips_per_replica": 1,
+      "chips_per_replica": 2,
       "cooling": "radiators",
       "racks": 37
     }
   ],
   "satellite": {
-    "kg_per_mw": 10738,
-    "hw_factor": 0.919,
-    "note": "what-if satellite: thin-film solar, carbon-fiber radiators, space-stripped racks (twin/orbit_mass.py)"
-  }
+    "kg_per_mw": 10983,
+    "hw_factor": 0.921,
+    "note": "what-if satellite: thin-film solar, carbon-fiber radiators, space-stripped racks, 5% power overhead (twin/orbit_mass.py)"
+  },
+  "eclipse_battery": "all"
 }

@@ -106,7 +106,8 @@ mwh = it_mw * load * 1.07 * 5 * 8760                         # DECK s14: PUE 1.0
 show("Nordics chat pool: building", it_mw * 8e6, pools["chat-decode-nordics"]["cost"]["facility"], "$")
 show("Nordics chat pool: electricity", mwh * 25, pools["chat-decode-nordics"]["cost"]["energy"], "$")
 show("Nordics chat pool: carbon", mwh * 25 / 1000 * 100, pools["chat-decode-nordics"]["cost"]["carbon"], "$")
-show("LEO chat pool: launch", it_mw * 18_000 * 200, pools["chat-decode-leo_p1"]["cost"]["launch"], "$")
+battery_kg = it_mw * 1000 * (21 * 1.2 / 60) * 4                # live racks carry 25 min of battery at 250 Wh/kg
+show("LEO chat pool: launch (incl. eclipse battery)", (it_mw * 18_000 + battery_kg) * 200, pools["chat-decode-leo_p1"]["cost"]["launch"], "$")
 
 # ---------------------------------------------------------------- 6. off-peak shift
 int_out = (users["B"] * int_tasks["B"] + users["C"] * int_tasks["C"]) * (1 - sub_share) * steps * agent_out / 86400 * peak_int * margin
@@ -119,7 +120,7 @@ left_spare = int_cap - biggest - int_out / peak_int
 show("after an outage: spare / off-peak work (>= 1, hand only)", left_spare / min(bg_out, spare), None, "x")
 
 # ---------------------------------------------------------------- 7. the total
-show("total = sum of every pool's bill (consistency)", sum(p["cost_usd"] for p in r["pools"]), r["cost_usd"], "$")
+show("total = pools + tool sandboxes (consistency)", sum(p["cost_usd"] for p in r["pools"]) + r["sandbox"]["usd"], r["cost_usd"], "$")
 
 print(f"\nHand check of Design 1 ({len(rows)} quantities): by hand vs scorer")
 print(f"  {'quantity':<55} {'by hand':>16} {'scorer':>16}  diff")
