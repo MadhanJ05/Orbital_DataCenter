@@ -106,6 +106,8 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
 .legend i { display: inline-block; width: 1.1em; height: 0.75em; border-radius: 2px; margin-right: 0.5em; vertical-align: -0.02em; }
 .hook-stats { display: flex; gap: calc(var(--u) * 3.6); flex-wrap: wrap; }
 .hook-stats div { display: grid; gap: calc(var(--u) * 0.5); max-width: calc(var(--u) * 17); }
+.orbit-tag { position: fixed; left: 0; top: 0; opacity: 0; pointer-events: none; font: 500 11px/1 var(--mono); color: var(--ink); letter-spacing: .04em; background: rgba(8,13,24,.72); border: 1px solid rgba(242,181,68,.6); border-radius: 999px; padding: 6px 10px; white-space: nowrap; backdrop-filter: blur(4px); transition: opacity .4s; }
+.orbit-tag b { color: var(--sun); font-weight: 500; }
 .credit-img { position: fixed; right: calc(16px + env(safe-area-inset-right, 0px)); top: calc(10px + env(safe-area-inset-top, 0px)); font: 400 10px/1 var(--mono); color: var(--faint); }
 
 .progress { position: fixed; left: 0; top: 0; height: 2px; background: var(--sun); width: 0; transition: width .35s ease; z-index: 3; }
@@ -119,7 +121,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
 @media (max-width: 760px), (max-height: 420px) and (max-width: 900px) {
   :root { --u: 10.5px; }
   body { overflow-x: hidden; overflow-y: auto; font-size: 15.5px; }
-  #globe, .shade, .nav, .progress, .credit-img, .fallback-planet { display: none !important; }
+  #globe, .shade, .nav, .progress, .credit-img, .fallback-planet, .orbit-tag { display: none !important; }
   .viewport { position: static; display: block; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   .stage { width: auto; aspect-ratio: auto; overflow: visible; }
   .slide { position: relative; inset: auto; opacity: 1; visibility: visible; transform: none; padding: 44px 0 56px; border-bottom: 1px solid var(--hair); }
@@ -136,6 +138,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
 <div class="shade" id="shade"></div>
 <div class="progress" id="progress"></div>
 <span class="credit-img">Earth: NASA Blue Marble, Black Marble</span>
+<div class="orbit-tag" id="orbitTag" aria-hidden="true"><b>Our orbit</b> · dawn-dusk SSO · 650 km · 98°</div>
 <div class="viewport"><div class="stage" id="stage">
 
 <!-- 1 · hook -->
@@ -149,6 +152,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
       <div><span class="big">8×</span><span class="sm">more sunlight per solar panel each year than on the ground <a class="ref" data-k="suncatcher"></a></span></div>
       <div><span class="big">0 L</span><span class="sm">of cooling water: in space, heat leaves as light</span></div>
     </div>
+    <p class="sm" style="color:var(--ink)"><span class="tag" style="color:var(--sun);border-color:var(--sun-dim)">Our orbit</span>&nbsp; dawn-dusk sun-synchronous, ~650 km, 98° tilt · 12 rings of 8 MW satellites</p>
   </div>
   <div class="foot">58%: Earth-only run of our model, designs/A+B+C-earth-only.json · 500 MW cap: organizers' slide 9</div>
 </section>
@@ -318,26 +322,25 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
 
 <!-- 9 · orbits -->
 <section class="slide" data-earth="orbit">
-  <div class="head half"><span class="eyebrow">Our orbits</span><h2>12 rings riding the line between day and night</h2></div>
+  <div class="head half"><span class="eyebrow">Where we operate</span><h2>A dawn-dusk sun-synchronous orbit, 650 km up</h2></div>
   <div class="body center half">
-    <p class="muted">Dawn-dusk sun-synchronous orbits at about 650 km: each ring follows the day/night line and turns about 1° a day to stay facing the Sun <a class="ref" data-k="suncatcher"></a></p>
-    <div class="tbl"><table>
-      <thead><tr><th>Planes</th><th>Cross the equator</th><th>Eclipse season</th><th class="r">Design 1</th><th class="r">Design 2</th></tr></thead>
-      <tbody>
-        <tr><td>1, 3, 5 … 11</td><td>06:00 local</td><td>June</td><td class="r">7 sats</td><td class="r">10 sats</td></tr>
-        <tr><td>2, 4, 6 … 12</td><td>18:00 local</td><td>December</td><td class="r">7 sats</td><td class="r">10 sats</td></tr>
-      </tbody>
-    </table></div>
     <ul class="kv">
-      <li><span>Power per plane</span><span>50.3 MW · 75.5 MW</span></li>
-      <li><span>Satellites per plane</span><span>power ÷ 8 MW, rounded up</span></li>
-      <li><span>One lap · spacing</span><span>98 min · 6,300 km · 4,400 km</span></li>
-      <li><span>Longest eclipse · season</span><span>19.6 min · ~95 days <a class="ref" data-k="hinode"></a></span></li>
+      <li><span>Orbit type</span><span>low Earth orbit, dawn-dusk SSO</span></li>
+      <li><span>Height · tilt</span><span>~650 km · 98°, over both poles</span></li>
+      <li><span>Crosses the equator at</span><span>06:00 or 18:00 local time</span></li>
+      <li><span>One lap</span><span>98 min · 7.5 km/s · 14.7 a day</span></li>
+      <li><span>Eclipses</span><span>~95 days a year, ≤19.6 min a lap <a class="ref" data-k="hinode"></a></span></li>
       <li><span>Radiation over 5 years</span><span>0.75 krad <a class="ref" data-k="suncatcher"></a></span></li>
     </ul>
-    <p class="sm">Half the rings fly at dawn and half at dusk, so their eclipse seasons never overlap. Losing a whole ring leaves 11.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Planes</th><th>Crosses equator</th><th>Eclipses</th><th class="r">Design 1</th><th class="r">Design 2</th></tr></thead>
+      <tbody>
+        <tr><td>1, 3 … 11</td><td>06:00, dawn</td><td>June</td><td class="r">7 sats · 50 MW</td><td class="r">10 sats · 75 MW</td></tr>
+        <tr><td>2, 4 … 12</td><td>18:00, dusk</td><td>December</td><td class="r">7 sats · 50 MW</td><td class="r">10 sats · 75 MW</td></tr>
+      </tbody>
+    </table></div>
   </div>
-  <div class="foot">Lap, tilt (98°) and eclipse length from orbital mechanics <a class="ref" data-k="turyshev"></a> · the ring on the right is drawn along the real day/night line</div>
+  <div class="foot">Same orbit family as Google's Suncatcher <a class="ref" data-k="suncatcher"></a> · lap, tilt and eclipse length from orbital mechanics <a class="ref" data-k="turyshev"></a> · each ring turns ~1° a day to keep facing the Sun · rings behind: solid = dawn, dashed = dusk</div>
 </section>
 
 <!-- 10 · the lighter satellite -->
@@ -564,7 +567,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
   // ---------------------------------------------------------------- the Earth: NASA imagery, same shaders as twin3d.html
   var reading = window.matchMedia("(max-width: 760px), (max-height: 420px) and (max-width: 900px)");
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var MODES = { hero: [0.95, -0.72, 3.0, 1.0, 0.8, 0.0], corner: [0.98, -1.02, 4.4, 0.55, 0.35, 0.55], orbit: [0.64, -0.08, 4.5, 1.0, 1.0, 0.25], dim: [1.0, -1.1, 4.8, 0.32, 0.22, 0.75] };
+  var MODES = { hero: [0.55, -0.1, 4.6, 1.0, 1.0, 0.0, 1], corner: [0.92, -0.95, 4.3, 0.6, 0.75, 0.55, 0], orbit: [0.55, -0.06, 4.6, 1.0, 1.0, 0.25, 1], dim: [0.98, -1.05, 4.6, 0.38, 0.5, 0.75, 0] };
   var setEarth = function () {};
   (function () {
     var cv = document.getElementById("globe");
@@ -575,7 +578,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
     renderer.setClearColor(0x04070d, 1);
     var scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(32, 16 / 9, 0.1, 200);
     camera.position.set(0, 0, 6);
-    var SUN = new THREE.Vector3(-1.0, 0.42, 0.72).normalize();
+    var SUN = new THREE.Vector3(-1.0, 0.3, 0.12).normalize();
 
     // stars
     var sp = [], rnd = (function () { var s = 11; return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; })();
@@ -619,18 +622,60 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
     holder.add(globe);
     holder.add(new THREE.Mesh(new THREE.SphereGeometry(1.035, 96, 64), atmoMat));
 
-    // a dawn-dusk ring: its plane is perpendicular to the Sun, so it rides the day/night line
-    var ringR = 1.102, ring = new THREE.Group(), pts = [];
-    for (var a = 0; a <= 256; a++) { var t = a / 256 * Math.PI * 2; pts.push(new THREE.Vector3(Math.cos(t) * ringR, Math.sin(t) * ringR, 0)); }
-    var ringMat = new THREE.LineBasicMaterial({ color: 0xf2b544, transparent: true, opacity: 0.6 });
-    ring.add(new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), ringMat));
-    var satGeo = new THREE.BufferGeometry(), NSAT = 10, satPos = new Float32Array(NSAT * 3);
+    // 12 dawn-dusk planes: each plane's normal points at the Sun (06:00 planes) or away from it (18:00 planes),
+    // so every ring rides the day/night line. They fan out a few degrees in local time and step up in height,
+    // as in the 3D twin. 7 satellites per plane (Design 1); the rings stay fixed to the Sun while Earth turns below.
+    var PLANES = [], NPER = 7, Y = new THREE.Vector3(0, 1, 0);
+    var glow = (function () { var c = document.createElement("canvas"); c.width = c.height = 64; var x = c.getContext("2d");
+      var g = x.createRadialGradient(32, 32, 0, 32, 32, 32); g.addColorStop(0, "rgba(255,255,255,1)"); g.addColorStop(0.25, "rgba(255,220,150,0.9)"); g.addColorStop(1, "rgba(255,200,100,0)");
+      x.fillStyle = g; x.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+    var rings = new THREE.Group(); holder.add(rings);
+    var lineMats = [];
+    for (var p = 0; p < 12; p++) {
+      var dusk = p % 2 === 1, n = SUN.clone().applyAxisAngle(Y, (p - 5.5) * 0.022);
+      var u = new THREE.Vector3().crossVectors(n, Y).normalize(), v = new THREE.Vector3().crossVectors(n, u).normalize();
+      var R = 1.086 + p * 0.0028, pts = [];
+      for (var a = 0; a <= 256; a++) { var t = a / 256 * Math.PI * 2; pts.push(u.clone().multiplyScalar(Math.cos(t) * R).addScaledVector(v, Math.sin(t) * R)); }
+      var lg = new THREE.BufferGeometry().setFromPoints(pts), lm;
+      if (dusk) { lm = new THREE.LineDashedMaterial({ color: 0xf2b544, dashSize: 0.025, gapSize: 0.018, transparent: true, opacity: 0.4 }); }
+      else { lm = new THREE.LineBasicMaterial({ color: 0xf2b544, transparent: true, opacity: 0.4 }); }
+      var line = new THREE.Line(lg, lm); if (dusk) line.computeLineDistances();
+      rings.add(line); lineMats.push(lm);
+      PLANES.push({ u: u, v: v, R: R, dir: dusk ? -1 : 1, off: p * 0.37 });
+    }
+    var NSAT = PLANES.length * NPER, satPos = new Float32Array(NSAT * 3), satGeo = new THREE.BufferGeometry();
     satGeo.setAttribute("position", new THREE.BufferAttribute(satPos, 3));
-    var satMat = new THREE.PointsMaterial({ color: 0xffd27a, size: 0.05, sizeAttenuation: true, transparent: true, opacity: 0.95 });
-    ring.add(new THREE.Points(satGeo, satMat));
-    ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), SUN);
-    ring.rotateZ(0.35);
-    holder.add(ring);
+    var satMat = new THREE.PointsMaterial({ map: glow, color: 0xffd27a, size: 0.075, sizeAttenuation: true, transparent: true, opacity: 1, depthWrite: false, blending: THREE.AdditiveBlending });
+    rings.add(new THREE.Points(satGeo, satMat));
+    var ringMat = { set opacity(o) { lineMats.forEach(function (m) { m.opacity = 0.42 * o; }); } };
+    var tag = document.getElementById("orbitTag"), tagPt = new THREE.Vector3(), best = new THREE.Vector3();
+    function satellites(now) {
+      var ph = reduce ? 0 : now / 1000 * 0.07, k = 0;
+      PLANES.forEach(function (P) {
+        for (var s = 0; s < NPER; s++, k++) {
+          var an = P.dir * ph + P.off + s / NPER * Math.PI * 2, c = Math.cos(an) * P.R, d = Math.sin(an) * P.R;
+          satPos[k * 3] = P.u.x * c + P.v.x * d; satPos[k * 3 + 1] = P.u.y * c + P.v.y * d; satPos[k * 3 + 2] = P.u.z * c + P.v.z * d;
+        }
+      });
+      satGeo.attributes.position.needsUpdate = true;
+    }
+    function placeTag(alpha) {
+      if (!tag) return;
+      if (alpha < 0.02) { tag.style.opacity = "0"; return; }
+      var P = PLANES[0], bz = -1e9;            // the point of plane 1 nearest the viewer, where the ring crosses Earth's face
+      for (var a = 0; a < 96; a++) {
+        var t = a / 96 * Math.PI * 2;
+        tagPt.copy(P.u).multiplyScalar(Math.cos(t) * P.R).addScaledVector(P.v, Math.sin(t) * P.R).add(holder.position);
+        var sy = tagPt.clone().project(camera).y;
+        if (sy > 0.3 && sy < 0.62 && tagPt.z > bz) { bz = tagPt.z; best.copy(tagPt); }
+      }
+      if (bz === -1e9) { tag.style.opacity = "0"; return; }
+      var q = best.clone().project(camera);
+      var px = (q.x + 1) / 2 * innerWidth, py = (1 - q.y) / 2 * innerHeight, w = tag.offsetWidth;
+      px = Math.min(px + 14, innerWidth - 16 - w);
+      tag.style.transform = "translate(" + px.toFixed(1) + "px," + (py - 12).toFixed(1) + "px)";
+      tag.style.opacity = String(alpha);
+    }
 
     var cur = MODES.hero.slice(), target = MODES.hero.slice(), tmp = new THREE.Vector3();
     setEarth = function (m, jump) { target = (MODES[m] || MODES.dim).slice(); if (jump || reduce) cur = target.slice(); };
@@ -638,7 +683,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
       tmp.set(cur[0], cur[1], 0.5).unproject(camera).sub(camera.position).normalize();
       holder.position.copy(camera.position).addScaledVector(tmp, cur[2]);
       earthMat.uniforms.dim.value = cur[3]; atmoMat.uniforms.dim.value = cur[3];
-      ringMat.opacity = 0.65 * cur[4]; satMat.opacity = 0.95 * cur[4];
+      ringMat.opacity = cur[4]; satMat.opacity = Math.min(1, 0.4 + cur[4]);
       document.getElementById("shade").style.opacity = String(0.55 + cur[5] * 0.45);
     }
     function size() { var w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
@@ -646,12 +691,11 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
     var t0 = performance.now();
     function frame(now) {
       var dt = Math.min(0.05, (now - t0) / 1000); t0 = now;
-      for (var i = 0; i < 6; i++) cur[i] += (target[i] - cur[i]) * Math.min(1, dt * 2.6);
+      for (var i = 0; i < 7; i++) cur[i] += (target[i] - cur[i]) * Math.min(1, dt * 2.6);
       if (!reduce) { globe.rotation.y += dt * 0.025; earthMat.uniforms.cloudShift.value += dt * 0.0012; }
-      var ph = now / 1000 * (reduce ? 0 : 0.06);
-      for (var s = 0; s < NSAT; s++) { var an = ph + s / NSAT * Math.PI * 2; satPos[s * 3] = Math.cos(an) * ringR; satPos[s * 3 + 1] = Math.sin(an) * ringR; satPos[s * 3 + 2] = 0; }
-      satGeo.attributes.position.needsUpdate = true;
+      satellites(now);
       place();
+      placeTag(cur[6]);
       renderer.render(scene, camera);
       if (!document.hidden) requestAnimationFrame(frame);
     }
