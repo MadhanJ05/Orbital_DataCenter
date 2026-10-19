@@ -11,7 +11,7 @@ interface Props {
 /** Every module's input sections, in module order. */
 export function InputPanel({ inputs, onChange }: Props) {
   const sections = MODULES.flatMap((m) => m.sections)
-  const [open, setOpen] = useState<Record<string, boolean>>({ workload: true, compute: true, fleet: true })
+  const [open, setOpen] = useState<Record<string, boolean>>({ workload: true, model: true, serving: true })
 
   return (
     <div className="inputs">

@@ -1,7 +1,7 @@
 import type { ModuleDef, OverlayProps, Stage } from '../../core/module'
 import type { Inputs, Results } from '../../core/types'
 import { fmt } from '../../core/format'
-import { CHIPS, MODELS } from '../../modules/compute/presets'
+import { CHIPS, MODELS, REQUESTS, type RequestType } from '../../modules/compute/presets'
 import { BUS, C } from './kit'
 
 function inputsStage(i: Inputs, r: Results): Stage {
@@ -12,11 +12,16 @@ function inputsStage(i: Inputs, r: Results): Stage {
     id: 'inputs',
     title: 'Your inputs',
     what: `${training ? 'Training' : 'Serving'} ${model && model.id !== 'custom' ? model.label : `a ${fmt(i.activeParamsB)}B-parameter model`} on ${fmt(r.compute.activeChips)} ${chip && chip.id !== 'custom' ? chip.label : 'custom accelerators'} across ${i.satellites} satellite${i.satellites === 1 ? '' : 's'}.`,
-    metrics: [
+    metrics: training ? [
       { label: 'Active parameters', value: `${fmt(i.activeParamsB)}B` },
-      { label: training ? 'Training tokens' : 'Ground-link bytes/token', value: training ? `${fmt(i.trainTokensT)}T` : `${i.ioBytesPerToken} B` },
+      { label: 'Training tokens', value: `${fmt(i.trainTokensT)}T` },
       { label: 'Accelerators', value: `${fmt(r.compute.activeChips)} + ${fmt(r.compute.provisionedChips - r.compute.activeChips)} spares` },
       { label: 'Orbit', value: i.orbitType === 'geo' ? 'GEO 35,786 km' : `${i.orbitType === 'sso' ? 'Dawn-dusk SSO' : 'LEO'} ${i.altitudeKm} km` },
+    ] : [
+      { label: 'Request', value: REQUESTS[i.workload as RequestType].label },
+      { label: 'Reads / writes', value: `${fmt(i.ctxTokens)} (${fmt(i.cachedTokens)} cached) / ${fmt(i.outTokens)}` },
+      { label: 'Service target', value: `TTFT ${i.ttftSloS} s, ${i.tokPerSecSlo} tok/s${i.taskDeadlineMin > 0 ? `, task ${i.taskDeadlineMin} min` : ''}` },
+      { label: 'Accelerators', value: `${fmt(r.compute.activeChips)} + ${fmt(r.compute.provisionedChips - r.compute.activeChips)} spares` },
     ],
     status: { tone: 'neutral', text: 'Design loaded' },
   }
@@ -33,7 +38,7 @@ function InputCard({ p, inputs }: OverlayProps) {
     <g transform={`translate(${x} ${y}) scale(${s})`} opacity={u < 1 ? 1 : Math.max(0, 1 - (p - 0.55) * 4)}>
       <rect width="170" height="64" rx="8" fill="#1a1a19" stroke={C.data} />
       <text x="12" y="22" className="sc-label strong">{fmt(inputs.activeParamsB)}B-param model</text>
-      <text x="12" y="40" className="sc-label">{inputs.workload === 'training' ? `Training · ${fmt(inputs.trainTokensT)}T tokens` : 'Inference · live requests'}</text>
+      <text x="12" y="40" className="sc-label">{inputs.workload === 'training' ? `Training · ${fmt(inputs.trainTokensT)}T tokens` : `${REQUESTS[inputs.workload as RequestType].label} · ${fmt(inputs.ctxTokens)} in`}</text>
       <text x="12" y="56" className="sc-label">{inputs.satellites} sats × {inputs.chipsPerSat} chips</text>
     </g>
   )

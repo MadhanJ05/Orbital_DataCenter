@@ -13,24 +13,45 @@
   "compute": {
    "activeChips": 2592,
    "provisionedChips": 2997,
-   "peakEflops": 129.6,
-   "effectiveEflopsBol": 37.7136,
-   "tokensPerSec": 181315384.6153846,
-   "trainDays": 19.150179834919555,
-   "trainFlops": 6.24e+25
+   "peakEflops": 648,
+   "effectiveEflopsBol": 314.28,
+   "tokensPerSec": 15969934.46511949,
+   "trainDays": 2.2980215801903467,
+   "trainFlops": 6.24e+25,
+   "serving": {
+    "feasible": true,
+    "issues": [],
+    "bound": "bandwidth",
+    "sessionsPerChip": 118,
+    "ratePerUser": 100.05479499513844,
+    "ttftS": 0.06196206881298338,
+    "taskMin": 17.41229842597287,
+    "sloTtftOk": true,
+    "sloRateOk": true,
+    "sloTaskOk": true,
+    "chipSecPerReq": 0.05510254296421846,
+    "tokensPerChipHr": 22866458.28338988,
+    "weightsGB": 1400,
+    "replicaMemGB": 2850,
+    "kvPerSessionGB": 3.8045,
+    "altShare": 0,
+    "altModel": null,
+    "tasksPerHour": 1437294.1018607542,
+    "usersAtPeak": 1149835.2814886034
+   }
   },
   "power": {
-   "itMw": 6.7392,
-   "loadKwPerSat": 87.36,
-   "arrayKwPerSat": 133.5502113949872,
-   "arrayM2PerSat": 374.67175634503644,
-   "batteryKwhPerSat": 71.49840644497465,
-   "totalArrayM2": 30348.41226394795
+   "itMw": 14.256,
+   "loadKwPerSat": 184.8,
+   "arrayKwPerSat": 282.5100625663191,
+   "arrayM2PerSat": 792.5748691914232,
+   "batteryKwhPerSat": 151.24662901821563,
+   "totalArrayM2": 64198.564404505276
   },
   "thermal": {
    "radiatorFluxWm2": 971.3333650878001,
-   "radiatorM2PerSat": 98.93204892772705,
-   "totalRadiatorM2": 8013.495963145891
+   "radiatorM2PerSat": 209.27933427019184,
+   "totalRadiatorM2": 16951.62607588554
   },
   "mass": {
    "breakdownKgPerSat": [
@@ -40,15 +61,15 @@
     },
     {
      "name": "Solar arrays",
-     "kg": 667.7510569749361
+     "kg": 1412.5503128315956
     },
     {
      "name": "Radiators",
-     "kg": 395.7281957109082
+     "kg": 837.1173370807674
     },
     {
      "name": "Batteries",
-     "kg": 238.32802148324885
+     "kg": 504.1554300607188
     },
     {
      "name": "Bus avionics/comms",
@@ -56,31 +77,31 @@
     },
     {
      "name": "Structure",
-     "kg": 295.771091125364
+     "kg": 513.5734619959622
     },
     {
      "name": "Propellant",
-     "kg": 94.48243188726906
+     "kg": 164.0581892487102
     }
    ],
-   "dryKgPerSat": 2267.5783652944574,
-   "wetKgPerSat": 2362.0607971817262,
-   "totalT": 191.32692457171984,
-   "kgPerKw": 28.390153812280364,
-   "dryKgPerKw": 27.25454765978915,
-   "launches": 2
+   "dryKgPerSat": 3937.396541969044,
+   "wetKgPerSat": 4101.454731217754,
+   "totalT": 332.217833228638,
+   "kgPerKw": 23.303720063737238,
+   "dryKgPerKw": 22.37157126118775,
+   "launches": 4
   },
   "propulsion": {
-   "dragDvMsYr": 14.926952948686083,
-   "stationKeepingDvMsYr": 16.926952948686083,
+   "dragDvMsYr": 17.796506182844404,
+   "stationKeepingDvMsYr": 19.796506182844404,
    "deorbitDvMs": 111.2859782343444,
-   "stationLifeYr": 28.900921630240415,
-   "passiveDecayYr": 2.419971085656329
+   "stationLifeYr": 24.711660536983374,
+   "passiveDecayYr": 2.029768886187034
   },
   "comms": {
-   "requiredGbps": 58.020923076923076,
+   "requiredGbps": 5.110379028838237,
    "availableGbps": 7695,
-   "utilizationPct": 0.7540080971659918
+   "utilizationPct": 0.06641168328574706
   },
   "life": {
    "usefulLifeYr": 8.25,
@@ -113,8 +134,8 @@
     },
     {
      "name": "Propellant (station-keeping)",
-     "years": 25,
-     "note": "16.9 m/s/yr, 111 m/s deorbit reserve"
+     "years": 24.711660536983374,
+     "note": "19.8 m/s/yr, 111 m/s deorbit reserve"
     }
    ],
    "capacityAtMissionEndPct": 80.48388632123712,
@@ -124,49 +145,49 @@
    "capexBreakdownM": [
     {
      "name": "Compute hardware",
-     "usd": 239.76
+     "usd": 495.338166
     },
     {
      "name": "Launch",
-     "usd": 38.26538491434397
+     "usd": 66.44356664572761
     },
     {
      "name": "Bus, radiators, structure",
-     "usd": 120.46716335060707
+     "usd": 200.55893208782263
     },
     {
      "name": "Solar arrays",
-     "usd": 108.17567122993964
+     "usd": 228.83315067871848
     },
     {
      "name": "Batteries",
-     "usd": 2.8956854610214733
+     "usd": 6.125488475237733
     },
     {
      "name": "Insurance",
-     "usd": 25.478195247795604
+     "usd": 49.86496519437532
     },
     {
      "name": "Ground segment",
      "usd": 50
     }
    ],
-   "capexM": 585.0421002037077,
+   "capexM": 1097.1642690818817,
    "opexMYr": 23.1,
-   "lcocPerChipHr": 7.2503225894846075,
-   "costPerMTokens": 0.028790895353432575,
-   "trainRunCostM": 8.637268606029771,
-   "npvM": 38.046516903344276,
-   "paybackYr": 4.166666666666667,
+   "lcocPerChipHr": 12.630149154022616,
+   "costPerMTokens": 0.5523439177809671,
+   "trainRunCostM": 1.8055470955578723,
+   "npvM": -474.07565197482955,
+   "paybackYr": null,
    "revenueM": 949.8044874443968,
-   "orbitalLcoePerKWh": 0.5158119080580117,
-   "capexPerKwIt": 86811.80261807154
+   "orbitalLcoePerKWh": 0.5158119080580118,
+   "capexPerKwIt": 76961.57891988508
   },
   "terrestrial": {
-   "capexM": 288.2304,
-   "opexMYr": 17.5154213376,
-   "lcocPerChipHr": 3.7587051893829853,
-   "costPerMTokens": 0.014477975544290016,
+   "capexM": 599.472576,
+   "opexMYr": 36.621538560000005,
+   "lcocPerChipHr": 7.826134335758868,
+   "costPerMTokens": 0.34225389165071296,
    "lcoePerKWh": 0.108
   },
   "series": [
@@ -177,7 +198,7 @@
     "powerPct": 120,
     "thermalPct": 110.00000000000001,
     "availabilityPct": 100,
-    "cumCashM": -572.9167099557077,
+    "cumCashM": -1085.0388788338819,
     "limiter": "Accelerator failures"
    },
    {
@@ -187,7 +208,7 @@
     "powerPct": 119.54744637055627,
     "thermalPct": 109.80699261415829,
     "availabilityPct": 100,
-    "cumCashM": -536.5405392117076,
+    "cumCashM": -1048.6627080898818,
     "limiter": "Accelerator failures"
    },
    {
@@ -197,7 +218,7 @@
     "powerPct": 119.09659944767526,
     "thermalPct": 109.61432388150737,
     "availabilityPct": 100,
-    "cumCashM": -500.1643684677075,
+    "cumCashM": -1012.2865373458817,
     "limiter": "Accelerator failures"
    },
    {
@@ -207,7 +228,7 @@
     "powerPct": 118.64745279488815,
     "thermalPct": 109.42199320784216,
     "availabilityPct": 100,
-    "cumCashM": -463.7881977237074,
+    "cumCashM": -975.9103666018816,
     "limiter": "Accelerator failures"
    },
    {
@@ -217,7 +238,7 @@
     "powerPct": 118.19999999999999,
     "thermalPct": 109.23,
     "availabilityPct": 100,
-    "cumCashM": -427.4120269797074,
+    "cumCashM": -939.5341958578815,
     "limiter": "Accelerator failures"
    },
    {
@@ -227,7 +248,7 @@
     "powerPct": 117.75423467499793,
     "thermalPct": 109.0383436658592,
     "availabilityPct": 100,
-    "cumCashM": -391.0358562357073,
+    "cumCashM": -903.1580251138814,
     "limiter": "Accelerator failures"
    },
    {
@@ -237,7 +258,7 @@
     "powerPct": 117.31015045596014,
     "thermalPct": 108.84702361433685,
     "availabilityPct": 100,
-    "cumCashM": -354.6596854917072,
+    "cumCashM": -866.7818543698814,
     "limiter": "Accelerator failures"
    },
    {
@@ -247,7 +268,7 @@
     "powerPct": 116.86774100296485,
     "thermalPct": 108.65603925538724,
     "availabilityPct": 100,
-    "cumCashM": -318.2835147477071,
+    "cumCashM": -830.4056836258814,
     "limiter": "Accelerator failures"
    },
    {
@@ -257,7 +278,7 @@
     "powerPct": 116.42699999999999,
     "thermalPct": 108.46539000000001,
     "availabilityPct": 100,
-    "cumCashM": -281.90734400370707,
+    "cumCashM": -794.0295128818813,
     "limiter": "Accelerator failures"
    },
    {
@@ -267,7 +288,7 @@
     "powerPct": 115.98792115487298,
     "thermalPct": 108.2750752601982,
     "availabilityPct": 100,
-    "cumCashM": -245.53117325970703,
+    "cumCashM": -757.6533421378812,
     "limiter": "Accelerator failures"
    },
    {
@@ -277,7 +298,7 @@
     "powerPct": 115.55049819912071,
     "thermalPct": 108.08509444903649,
     "availabilityPct": 100,
-    "cumCashM": -209.304823980023,
+    "cumCashM": -721.4269928581971,
     "limiter": "Accelerator failures"
    },
    {
@@ -287,7 +308,7 @@
     "powerPct": 115.11472488792035,
     "thermalPct": 107.89544698059954,
     "availabilityPct": 100,
-    "cumCashM": -173.6846140975454,
+    "cumCashM": -685.8067829757196,
     "limiter": "Accelerator failures"
    },
    {
@@ -297,7 +318,7 @@
     "powerPct": 114.68059499999997,
     "thermalPct": 107.70613227000001,
     "availabilityPct": 100,
-    "cumCashM": -138.6932666797055,
+    "cumCashM": -650.8154355578797,
     "limiter": "Accelerator failures"
    },
    {
@@ -307,7 +328,7 @@
     "powerPct": 114.24810233754987,
     "thermalPct": 107.51714973337678,
     "availabilityPct": 100,
-    "cumCashM": -104.32122825399878,
+    "cumCashM": -616.4433971321729,
     "limiter": "Accelerator failures"
    },
    {
@@ -317,7 +338,7 @@
     "powerPct": 113.8172407261339,
     "thermalPct": 107.32849878789324,
     "availabilityPct": 100,
-    "cumCashM": -70.55909048114468,
+    "cumCashM": -582.6812593593188,
     "limiter": "Accelerator failures"
    },
    {
@@ -327,7 +348,7 @@
     "powerPct": 113.38800401460156,
     "thermalPct": 107.14017885173537,
     "availabilityPct": 100,
-    "cumCashM": -37.39758795027015,
+    "cumCashM": -549.5197568284444,
     "limiter": "Accelerator failures"
    },
    {
@@ -337,7 +358,7 @@
     "powerPct": 112.96038607499999,
     "thermalPct": 106.95218934411001,
     "availabilityPct": 100,
-    "cumCashM": -4.827596007588157,
+    "cumCashM": -516.9497648857625,
     "limiter": "Accelerator failures"
    },
    {
@@ -347,7 +368,7 @@
     "powerPct": 112.53438080248661,
     "thermalPct": 106.76452968524315,
     "availabilityPct": 100,
-    "cumCashM": 27.159871381937876,
+    "cumCashM": -484.96229749623643,
     "limiter": "Accelerator failures"
    },
    {
@@ -357,7 +378,7 @@
     "powerPct": 112.10998211524188,
     "thermalPct": 106.57719929637797,
     "availabilityPct": 100,
-    "cumCashM": 58.57366374044467,
+    "cumCashM": -453.54850513772965,
     "limiter": "Accelerator failures"
    },
    {
@@ -367,7 +388,7 @@
     "powerPct": 111.68718395438253,
     "thermalPct": 106.39019759977319,
     "availabilityPct": 100,
-    "cumCashM": 89.42249615102838,
+    "cumCashM": -422.6996727271459,
     "limiter": "Accelerator failures"
    },
    {
@@ -377,7 +398,7 @@
     "powerPct": 111.265980283875,
     "thermalPct": 106.20352401870123,
     "availabilityPct": 100,
-    "cumCashM": 119.71495130009839,
+    "cumCashM": -392.40721757807586,
     "limiter": "Accelerator failures"
    },
    {
@@ -387,7 +408,7 @@
     "powerPct": 110.84636509044931,
     "thermalPct": 106.01717797744645,
     "availabilityPct": 100,
-    "cumCashM": 149.45948148870445,
+    "cumCashM": -362.6626873894698,
     "limiter": "Accelerator failures"
    },
    {
@@ -397,7 +418,7 @@
     "powerPct": 110.42833238351324,
     "thermalPct": 105.83115890130333,
     "availabilityPct": 100,
-    "cumCashM": 178.6644106133083,
+    "cumCashM": -333.457758264866,
     "limiter": "Accelerator failures"
    },
    {
@@ -407,7 +428,7 @@
     "powerPct": 110.01187619506678,
     "thermalPct": 105.64546621657477,
     "availabilityPct": 100,
-    "cumCashM": 207.33793611646408,
+    "cumCashM": -304.78423276171014,
     "limiter": "Accelerator failures"
    },
    {
@@ -417,7 +438,7 @@
     "powerPct": 109.59699057961687,
     "thermalPct": 105.46009935057032,
     "availabilityPct": 100,
-    "cumCashM": 226.16238724068955,
+    "cumCashM": -285.95978163748475,
     "limiter": "Accelerator failures"
    },
    {
@@ -1162,23 +1183,2433 @@
    },
    {
     "year": 24.75,
-    "capacityPct": 22.335260802213632,
+    "capacityPct": 0,
     "chipsPct": 23.227133485183476,
     "powerPct": 82.55206679862394,
     "thermalPct": 92.44567235680016,
     "availabilityPct": 96.16021200576142,
     "cumCashM": "NaN",
-    "limiter": "Accelerator failures"
+    "limiter": "Propellant (deorbit)"
    },
    {
     "year": 25,
-    "capacityPct": 21.950846359841133,
+    "capacityPct": 0,
     "chipsPct": 22.827368931472357,
     "powerPct": 82.24073981989228,
     "thermalPct": 92.28346601540048,
     "availabilityPct": 96.16021200576142,
     "cumCashM": "NaN",
+    "limiter": "Propellant (deorbit)"
+   }
+  ],
+  "warnings": []
+ },
+ "chat": {
+  "orbit": {
+   "periodMin": 97.57941039957801,
+   "eclipseFracAvg": 0.038397879942385714,
+   "worstEclipseMin": 19.64241935301502,
+   "eclipseCyclesYr": 1284.7293346966346,
+   "eclipseDaysPerYr": 87.0577298630137,
+   "inclinationDeg": 97.95744012197835,
+   "rttMs": 24.336333237575978,
+   "velocityKms": 7.534759614599093
+  },
+  "compute": {
+   "activeChips": 2592,
+   "provisionedChips": 2997,
+   "peakEflops": 648,
+   "effectiveEflopsBol": 314.28,
+   "tokensPerSec": 95650206.20881787,
+   "trainDays": 0.3756381429157297,
+   "trainFlops": 1.02e+25,
+   "serving": {
+    "feasible": true,
+    "issues": [],
+    "bound": "bandwidth",
+    "sessionsPerChip": 951,
+    "ratePerUser": 60.04704213461244,
+    "ttftS": 0.04772668732624265,
+    "taskMin": 0.9722560073684005,
+    "sloTtftOk": true,
+    "sloRateOk": true,
+    "sloTaskOk": true,
+    "chipSecPerReq": 0.06440015389566539,
+    "tokensPerChipHr": 136956194.45707026,
+    "weightsGB": 198.5,
+    "replicaMemGB": 2850,
+    "kvPerSessionGB": 1.08025,
+    "altShare": 0,
+    "altModel": null,
+    "tasksPerHour": 98383069.24335553,
+    "usersAtPeak": 39353227.69734221
+   }
+  },
+  "power": {
+   "itMw": 14.256,
+   "loadKwPerSat": 184.8,
+   "arrayKwPerSat": 282.5100625663191,
+   "arrayM2PerSat": 792.5748691914232,
+   "batteryKwhPerSat": 151.24662901821563,
+   "totalArrayM2": 64198.564404505276
+  },
+  "thermal": {
+   "radiatorFluxWm2": 971.3333650878001,
+   "radiatorM2PerSat": 209.27933427019184,
+   "totalRadiatorM2": 16951.62607588554
+  },
+  "mass": {
+   "breakdownKgPerSat": [
+    {
+     "name": "Compute nodes",
+     "kg": 370
+    },
+    {
+     "name": "Solar arrays",
+     "kg": 1412.5503128315956
+    },
+    {
+     "name": "Radiators",
+     "kg": 837.1173370807674
+    },
+    {
+     "name": "Batteries",
+     "kg": 504.1554300607188
+    },
+    {
+     "name": "Bus avionics/comms",
+     "kg": 300
+    },
+    {
+     "name": "Structure",
+     "kg": 513.5734619959622
+    },
+    {
+     "name": "Propellant",
+     "kg": 164.0581892487102
+    }
+   ],
+   "dryKgPerSat": 3937.396541969044,
+   "wetKgPerSat": 4101.454731217754,
+   "totalT": 332.217833228638,
+   "kgPerKw": 23.303720063737238,
+   "dryKgPerKw": 22.37157126118775,
+   "launches": 4
+  },
+  "propulsion": {
+   "dragDvMsYr": 17.796506182844404,
+   "stationKeepingDvMsYr": 19.796506182844404,
+   "deorbitDvMs": 111.2859782343444,
+   "stationLifeYr": 24.711660536983374,
+   "passiveDecayYr": 2.029768886187034
+  },
+  "comms": {
+   "requiredGbps": 30.608065986821718,
+   "availableGbps": 7695,
+   "utilizationPct": 0.3977656398547332
+  },
+  "life": {
+   "usefulLifeYr": 8.25,
+   "limiter": "Accelerator failures",
+   "subsystems": [
+    {
+     "name": "Accelerators (random failures, no repair)",
+     "years": 8.25,
+     "note": "15% cold spares, AFR 6.0%/yr in orbit"
+    },
+    {
+     "name": "Radiation dose (TID)",
+     "years": 25,
+     "note": "150 rad/yr; derate 5%/krad above 2 krad, hard failures past 15 krad"
+    },
+    {
+     "name": "Solar arrays",
+     "years": 25,
+     "note": "1.5%/yr degradation, 20% margin"
+    },
+    {
+     "name": "Radiators",
+     "years": 25,
+     "note": "0.7%/yr coating/MMOD loss"
+    },
+    {
+     "name": "Batteries",
+     "years": 12,
+     "note": "1285 cycles/yr"
+    },
+    {
+     "name": "Propellant (station-keeping)",
+     "years": 24.711660536983374,
+     "note": "19.8 m/s/yr, 111 m/s deorbit reserve"
+    }
+   ],
+   "capacityAtMissionEndPct": 80.48388632123712,
+   "avgCapacityPct": 93.8887017331142
+  },
+  "econ": {
+   "capexBreakdownM": [
+    {
+     "name": "Compute hardware",
+     "usd": 495.338166
+    },
+    {
+     "name": "Launch",
+     "usd": 66.44356664572761
+    },
+    {
+     "name": "Bus, radiators, structure",
+     "usd": 200.55893208782263
+    },
+    {
+     "name": "Solar arrays",
+     "usd": 228.83315067871848
+    },
+    {
+     "name": "Batteries",
+     "usd": 6.125488475237733
+    },
+    {
+     "name": "Insurance",
+     "usd": 49.86496519437532
+    },
+    {
+     "name": "Ground segment",
+     "usd": 50
+    }
+   ],
+   "capexM": 1097.1642690818817,
+   "opexMYr": 23.1,
+   "lcocPerChipHr": 12.630149154022616,
+   "costPerMTokens": 0.09222035705717284,
+   "trainRunCostM": 0.29513750600465216,
+   "npvM": -474.07565197482955,
+   "paybackYr": null,
+   "revenueM": 949.8044874443968,
+   "orbitalLcoePerKWh": 0.5158119080580118,
+   "capexPerKwIt": 76961.57891988508
+  },
+  "terrestrial": {
+   "capexM": 599.472576,
+   "opexMYr": 36.621538560000005,
+   "lcocPerChipHr": 7.826134335758868,
+   "costPerMTokens": 0.057143339640705455,
+   "lcoePerKWh": 0.108
+  },
+  "series": [
+   {
+    "year": 0,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 120,
+    "thermalPct": 110.00000000000001,
+    "availabilityPct": 100,
+    "cumCashM": -1085.0388788338819,
     "limiter": "Accelerator failures"
+   },
+   {
+    "year": 0.25,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 119.54744637055627,
+    "thermalPct": 109.80699261415829,
+    "availabilityPct": 100,
+    "cumCashM": -1048.6627080898818,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 0.5,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 119.09659944767526,
+    "thermalPct": 109.61432388150737,
+    "availabilityPct": 100,
+    "cumCashM": -1012.2865373458817,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 0.75,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 118.64745279488815,
+    "thermalPct": 109.42199320784216,
+    "availabilityPct": 100,
+    "cumCashM": -975.9103666018816,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 1,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 118.19999999999999,
+    "thermalPct": 109.23,
+    "availabilityPct": 100,
+    "cumCashM": -939.5341958578815,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 1.25,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 117.75423467499793,
+    "thermalPct": 109.0383436658592,
+    "availabilityPct": 100,
+    "cumCashM": -903.1580251138814,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 1.5,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 117.31015045596014,
+    "thermalPct": 108.84702361433685,
+    "availabilityPct": 100,
+    "cumCashM": -866.7818543698814,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 1.75,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 116.86774100296485,
+    "thermalPct": 108.65603925538724,
+    "availabilityPct": 100,
+    "cumCashM": -830.4056836258814,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 2,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 116.42699999999999,
+    "thermalPct": 108.46539000000001,
+    "availabilityPct": 100,
+    "cumCashM": -794.0295128818813,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 2.25,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 115.98792115487298,
+    "thermalPct": 108.2750752601982,
+    "availabilityPct": 100,
+    "cumCashM": -757.6533421378812,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 2.5,
+    "capacityPct": 99.2130657077795,
+    "chipsPct": 99.2130657077795,
+    "powerPct": 115.55049819912071,
+    "thermalPct": 108.08509444903649,
+    "availabilityPct": 100,
+    "cumCashM": -721.4269928581971,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 2.75,
+    "capacityPct": 97.70585332252077,
+    "chipsPct": 97.70585332252077,
+    "powerPct": 115.11472488792035,
+    "thermalPct": 107.89544698059954,
+    "availabilityPct": 100,
+    "cumCashM": -685.8067829757196,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 3,
+    "capacityPct": 96.22153801395318,
+    "chipsPct": 96.22153801395318,
+    "powerPct": 114.68059499999997,
+    "thermalPct": 107.70613227000001,
+    "availabilityPct": 100,
+    "cumCashM": -650.8154355578797,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 3.25,
+    "capacityPct": 94.75977193719032,
+    "chipsPct": 94.75977193719032,
+    "powerPct": 114.24810233754987,
+    "thermalPct": 107.51714973337678,
+    "availabilityPct": 100,
+    "cumCashM": -616.4433971321729,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 3.5,
+    "capacityPct": 93.3202125316913,
+    "chipsPct": 93.3202125316913,
+    "powerPct": 113.8172407261339,
+    "thermalPct": 107.32849878789324,
+    "availabilityPct": 100,
+    "cumCashM": -582.6812593593188,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 3.75,
+    "capacityPct": 91.90252244098264,
+    "chipsPct": 91.90252244098264,
+    "powerPct": 113.38800401460156,
+    "thermalPct": 107.14017885173537,
+    "availabilityPct": 100,
+    "cumCashM": -549.5197568284444,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 4,
+    "capacityPct": 90.50636943359997,
+    "chipsPct": 90.50636943359997,
+    "powerPct": 112.96038607499999,
+    "thermalPct": 106.95218934411001,
+    "availabilityPct": 100,
+    "cumCashM": -516.9497648857625,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 4.25,
+    "capacityPct": 89.13142632523044,
+    "chipsPct": 89.13142632523044,
+    "powerPct": 112.53438080248661,
+    "thermalPct": 106.76452968524315,
+    "availabilityPct": 100,
+    "cumCashM": -484.96229749623643,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 4.5,
+    "capacityPct": 87.77737090203802,
+    "chipsPct": 87.77737090203802,
+    "powerPct": 112.10998211524188,
+    "thermalPct": 106.57719929637797,
+    "availabilityPct": 100,
+    "cumCashM": -453.54850513772965,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 4.75,
+    "capacityPct": 86.44388584515372,
+    "chipsPct": 86.44388584515372,
+    "powerPct": 111.68718395438253,
+    "thermalPct": 106.39019759977319,
+    "availabilityPct": 100,
+    "cumCashM": -422.6996727271459,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 5,
+    "capacityPct": 85.13065865631286,
+    "chipsPct": 85.13065865631286,
+    "powerPct": 111.265980283875,
+    "thermalPct": 106.20352401870123,
+    "availabilityPct": 100,
+    "cumCashM": -392.40721757807586,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 5.25,
+    "capacityPct": 83.837381584622,
+    "chipsPct": 83.837381584622,
+    "powerPct": 110.84636509044931,
+    "thermalPct": 106.01717797744645,
+    "availabilityPct": 100,
+    "cumCashM": -362.6626873894698,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 5.5,
+    "capacityPct": 82.56375155443841,
+    "chipsPct": 82.56375155443841,
+    "powerPct": 110.42833238351324,
+    "thermalPct": 105.83115890130333,
+    "availabilityPct": 100,
+    "cumCashM": -333.457758264866,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 5.75,
+    "capacityPct": 81.30947009434519,
+    "chipsPct": 81.30947009434519,
+    "powerPct": 110.01187619506678,
+    "thermalPct": 105.64546621657477,
+    "availabilityPct": 100,
+    "cumCashM": -304.78423276171014,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 6,
+    "capacityPct": 80.07424326720552,
+    "chipsPct": 80.07424326720552,
+    "powerPct": 109.59699057961687,
+    "thermalPct": 105.46009935057032,
+    "availabilityPct": 100,
+    "cumCashM": -285.95978163748475,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 6.25,
+    "capacityPct": 78.85778160127906,
+    "chipsPct": 78.85778160127906,
+    "powerPct": 109.18366961409258,
+    "thermalPct": 105.27505773160432,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 6.5,
+    "capacityPct": 77.6598000223855,
+    "chipsPct": 77.6598000223855,
+    "powerPct": 108.77190739776057,
+    "thermalPct": 105.09034078899421,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 6.75,
+    "capacityPct": 76.4800177870979,
+    "chipsPct": 76.4800177870979,
+    "powerPct": 108.36169805214078,
+    "thermalPct": 104.90594795305877,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 7,
+    "capacityPct": 75.3181584169516,
+    "chipsPct": 75.3181584169516,
+    "powerPct": 107.95303572092261,
+    "thermalPct": 104.72187865511633,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 7.25,
+    "capacityPct": 74.17394963365214,
+    "chipsPct": 74.17394963365214,
+    "powerPct": 107.54591456988116,
+    "thermalPct": 104.53813232748308,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 7.5,
+    "capacityPct": 73.04712329526761,
+    "chipsPct": 73.04712329526761,
+    "powerPct": 107.14032878679414,
+    "thermalPct": 104.35470840347124,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 7.75,
+    "capacityPct": 71.9374153333906,
+    "chipsPct": 71.9374153333906,
+    "powerPct": 106.73627258135865,
+    "thermalPct": 104.17160631738736,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 8,
+    "capacityPct": 70.84456569125432,
+    "chipsPct": 70.84456569125432,
+    "powerPct": 106.33374018510877,
+    "thermalPct": 103.98882550453052,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 8.25,
+    "capacityPct": 69.76831826278924,
+    "chipsPct": 69.76831826278924,
+    "powerPct": 105.93272585133295,
+    "thermalPct": 103.8063654011907,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 8.5,
+    "capacityPct": 68.70842083260524,
+    "chipsPct": 68.70842083260524,
+    "powerPct": 105.53322385499224,
+    "thermalPct": 103.62422544464695,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 8.75,
+    "capacityPct": 67.66462501688586,
+    "chipsPct": 67.66462501688586,
+    "powerPct": 105.13522849263828,
+    "thermalPct": 103.44240507316565,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 9,
+    "capacityPct": 66.6366862051801,
+    "chipsPct": 66.6366862051801,
+    "powerPct": 104.73873408233214,
+    "thermalPct": 103.26090372599882,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 9.25,
+    "capacityPct": 65.62436350307884,
+    "chipsPct": 65.62436350307884,
+    "powerPct": 104.34373496356298,
+    "thermalPct": 103.07972084338238,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 9.5,
+    "capacityPct": 64.62741967576189,
+    "chipsPct": 64.62741967576189,
+    "powerPct": 103.95022549716735,
+    "thermalPct": 102.89885586653442,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 9.75,
+    "capacityPct": 63.64562109240266,
+    "chipsPct": 63.64562109240266,
+    "powerPct": 103.5582000652487,
+    "thermalPct": 102.71830823765346,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 10,
+    "capacityPct": 62.678737671417586,
+    "chipsPct": 62.678737671417586,
+    "powerPct": 103.16765307109716,
+    "thermalPct": 102.5380773999168,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 10.25,
+    "capacityPct": 61.72654282654708,
+    "chipsPct": 61.72654282654708,
+    "powerPct": 102.77857893910954,
+    "thermalPct": 102.35816279747868,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 10.5,
+    "capacityPct": 60.788813413755825,
+    "chipsPct": 60.788813413755825,
+    "powerPct": 102.39097211470983,
+    "thermalPct": 102.17856387546868,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 10.75,
+    "capacityPct": 59.86532967893952,
+    "chipsPct": 59.86532967893952,
+    "powerPct": 102.00482706427,
+    "thermalPct": 101.9992800799899,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 11,
+    "capacityPct": 58.955875206426214,
+    "chipsPct": 58.955875206426214,
+    "powerPct": 101.6201382750307,
+    "thermalPct": 101.82031085811738,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 11.25,
+    "capacityPct": 58.06023686825995,
+    "chipsPct": 58.06023686825995,
+    "powerPct": 101.23690025502287,
+    "thermalPct": 101.64165565789634,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 11.5,
+    "capacityPct": 57.17820477425485,
+    "chipsPct": 57.17820477425485,
+    "powerPct": 100.85510753298918,
+    "thermalPct": 101.46331392834038,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 11.75,
+    "capacityPct": 56.309572222807944,
+    "chipsPct": 56.309572222807944,
+    "powerPct": 100.47475465830593,
+    "thermalPct": 101.28528511942999,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 12,
+    "capacityPct": 53.324814409367384,
+    "chipsPct": 55.45413565245929,
+    "powerPct": 100.09583620090523,
+    "thermalPct": 101.10756868211057,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 12.25,
+    "capacityPct": 52.51472130171009,
+    "chipsPct": 54.61169459418795,
+    "powerPct": 99.71834675119753,
+    "thermalPct": 100.93016406829108,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 12.5,
+    "capacityPct": 51.716934863102516,
+    "chipsPct": 53.78205162443267,
+    "powerPct": 99.34228091999434,
+    "thermalPct": 100.75307073084203,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 12.75,
+    "capacityPct": 50.93126813466095,
+    "chipsPct": 52.96501231882622,
+    "powerPct": 98.96763333843134,
+    "thermalPct": 100.57628812359395,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 13,
+    "capacityPct": 50.15753699771981,
+    "chipsPct": 52.16038520663269,
+    "powerPct": 98.59439865789165,
+    "thermalPct": 100.3998157013358,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 13.25,
+    "capacityPct": 49.39556013068395,
+    "chipsPct": 51.36798172587683,
+    "powerPct": 98.22257154992955,
+    "thermalPct": 100.223652919813,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 13.5,
+    "capacityPct": 48.584352517828286,
+    "chipsPct": 50.524381658931205,
+    "powerPct": 97.85214670619443,
+    "thermalPct": 100.0477992357261,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 13.75,
+    "capacityPct": 47.75645090833267,
+    "chipsPct": 49.663420984836584,
+    "powerPct": 97.48311883835486,
+    "thermalPct": 99.8722541067288,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 14,
+    "capacityPct": 46.942491086279645,
+    "chipsPct": 48.81695880981116,
+    "powerPct": 97.11548267802327,
+    "thermalPct": 99.69701699142645,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 14.25,
+    "capacityPct": 46.14224052238885,
+    "chipsPct": 47.984753319412654,
+    "powerPct": 96.74923297668062,
+    "thermalPct": 99.52208734937433,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 14.5,
+    "capacityPct": 45.35547053481524,
+    "chipsPct": 47.16656670026661,
+    "powerPct": 96.38436450560151,
+    "thermalPct": 99.34746464107602,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 14.75,
+    "capacityPct": 44.581956225915775,
+    "chipsPct": 46.36216507430812,
+    "powerPct": 96.02087205577955,
+    "thermalPct": 99.17314832798169,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 15,
+    "capacityPct": 43.82147642004946,
+    "chipsPct": 45.57131843409819,
+    "powerPct": 95.65875043785293,
+    "thermalPct": 98.99913787248646,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 15.25,
+    "capacityPct": 43.073813602393955,
+    "chipsPct": 44.79380057919713,
+    "powerPct": 95.29799448203042,
+    "thermalPct": 98.82543273792872,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 15.5,
+    "capacityPct": 42.338753858762054,
+    "chipsPct": 44.02938905357793,
+    "powerPct": 94.93859903801749,
+    "thermalPct": 98.65203238858848,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 15.75,
+    "capacityPct": 41.616086816401996,
+    "chipsPct": 43.2778650840626,
+    "powerPct": 94.58055897494285,
+    "thermalPct": 98.47893628968583,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 16,
+    "capacityPct": 40.9056055857653,
+    "chipsPct": 42.53901351976475,
+    "powerPct": 94.22386918128512,
+    "thermalPct": 98.30614390737905,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 16.25,
+    "capacityPct": 40.2071067032268,
+    "chipsPct": 41.812622772522374,
+    "powerPct": 93.86852456479996,
+    "thermalPct": 98.13365470876323,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 16.5,
+    "capacityPct": 39.52039007474089,
+    "chipsPct": 41.098484758304224,
+    "powerPct": 93.51452005244722,
+    "thermalPct": 97.96146816186838,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 16.75,
+    "capacityPct": 38.8452589204193,
+    "chipsPct": 40.39639483957449,
+    "powerPct": 93.1618505903187,
+    "thermalPct": 97.78958373565803,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 17,
+    "capacityPct": 38.181519720014926,
+    "chipsPct": 39.70615176859976,
+    "powerPct": 92.81051114356586,
+    "thermalPct": 97.6180009000274,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 17.25,
+    "capacityPct": 37.52898215929725,
+    "chipsPct": 39.027557631683166,
+    "powerPct": 92.46049669632795,
+    "thermalPct": 97.44671912580188,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 17.5,
+    "capacityPct": 36.88745907730484,
+    "chipsPct": 38.360417794310536,
+    "powerPct": 92.11180225166052,
+    "thermalPct": 97.2757378847353,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 17.75,
+    "capacityPct": 36.256766414460444,
+    "chipsPct": 37.704540847193776,
+    "powerPct": 91.76442283146392,
+    "thermalPct": 97.10505664950841,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 18,
+    "capacityPct": 35.636723161534874,
+    "chipsPct": 37.05973855319673,
+    "powerPct": 91.41835347641236,
+    "thermalPct": 96.93467489372722,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 18.25,
+    "capacityPct": 35.02715130944583,
+    "chipsPct": 36.42582579512946,
+    "powerPct": 91.07358924588304,
+    "thermalPct": 96.76459209192126,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 18.5,
+    "capacityPct": 34.42787579987786,
+    "chipsPct": 35.80262052439643,
+    "powerPct": 90.7301252178856,
+    "thermalPct": 96.59480771954215,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 18.75,
+    "capacityPct": 33.83872447671051,
+    "chipsPct": 35.189943710485025,
+    "powerPct": 90.38795648899196,
+    "thermalPct": 96.42532125296187,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 19,
+    "capacityPct": 33.25952803824094,
+    "chipsPct": 34.58761929128047,
+    "powerPct": 90.04707817426618,
+    "thermalPct": 96.25613216947112,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 19.25,
+    "capacityPct": 32.69011999018865,
+    "chipsPct": 33.99547412419393,
+    "powerPct": 89.70748540719478,
+    "thermalPct": 96.08723994727781,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 19.5,
+    "capacityPct": 32.1303365994692,
+    "chipsPct": 33.41333793809035,
+    "powerPct": 89.36917333961732,
+    "thermalPct": 95.91864406550535,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 19.75,
+    "capacityPct": 31.5800168487245,
+    "chipsPct": 32.84104328600314,
+    "powerPct": 89.03213714165707,
+    "thermalPct": 95.75034400419112,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 20,
+    "capacityPct": 31.039002391597435,
+    "chipsPct": 32.278425498622795,
+    "powerPct": 88.69637200165216,
+    "thermalPct": 95.58233924428482,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 20.25,
+    "capacityPct": 30.507137508738687,
+    "chipsPct": 31.72532263854707,
+    "powerPct": 88.36187312608686,
+    "thermalPct": 95.41462926764686,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 20.5,
+    "capacityPct": 29.984269064533574,
+    "chipsPct": 31.18157545527985,
+    "powerPct": 88.02863573952307,
+    "thermalPct": 95.24721355704682,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 20.75,
+    "capacityPct": 29.47024646453767,
+    "chipsPct": 30.647027340967135,
+    "powerPct": 87.69665508453222,
+    "thermalPct": 95.08009159616178,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 21,
+    "capacityPct": 28.964921613609157,
+    "chipsPct": 30.12152428685757,
+    "powerPct": 87.3659264216274,
+    "thermalPct": 94.91326286957484,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 21.25,
+    "capacityPct": 28.468148874726957,
+    "chipsPct": 29.60491484047611,
+    "powerPct": 87.03644502919556,
+    "thermalPct": 94.74672686277333,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 21.5,
+    "capacityPct": 27.979785028483157,
+    "chipsPct": 29.097050063498976,
+    "powerPct": 86.70820620343021,
+    "thermalPct": 94.5804830621475,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 21.75,
+    "capacityPct": 27.499689233239,
+    "chipsPct": 28.597783490318594,
+    "powerPct": 86.38120525826423,
+    "thermalPct": 94.41453095498863,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 22,
+    "capacityPct": 27.027722985933426,
+    "chipsPct": 28.106971087287185,
+    "powerPct": 86.05543752530299,
+    "thermalPct": 94.2488700294878,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 22.25,
+    "capacityPct": 26.563750083533705,
+    "chipsPct": 27.624471212628087,
+    "powerPct": 85.73089835375761,
+    "thermalPct": 94.08349977473392,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 22.5,
+    "capacityPct": 26.107636585117554,
+    "chipsPct": 27.15014457700376,
+    "powerPct": 85.40758311037877,
+    "thermalPct": 93.91841968071245,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 22.75,
+    "capacityPct": 25.659250774576535,
+    "chipsPct": 26.68385420472988,
+    "powerPct": 85.08548717939028,
+    "thermalPct": 93.75362923830373,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 23,
+    "capacityPct": 25.218463123930597,
+    "chipsPct": 26.225465395624997,
+    "powerPct": 84.76460596242345,
+    "thermalPct": 93.58912793928138,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 23.25,
+    "capacityPct": 24.785146257243756,
+    "chipsPct": 25.77484568748534,
+    "powerPct": 84.44493487845128,
+    "thermalPct": 93.42491527631078,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 23.5,
+    "capacityPct": 24.359174915131142,
+    "chipsPct": 25.331864819174555,
+    "powerPct": 84.12646936372307,
+    "thermalPct": 93.26099074294746,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 23.75,
+    "capacityPct": 23.940425919847854,
+    "chipsPct": 24.896394694318545,
+    "powerPct": 83.80920487169942,
+    "thermalPct": 93.0973538336356,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 24,
+    "capacityPct": 23.52877814094991,
+    "chipsPct": 24.468309345595234,
+    "powerPct": 83.49313687298708,
+    "thermalPct": 92.93400404370641,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 24.25,
+    "capacityPct": 23.124112461518315,
+    "chipsPct": 24.04748489960987,
+    "powerPct": 83.17826085527447,
+    "thermalPct": 92.77094086937662,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 24.5,
+    "capacityPct": 22.726311744936673,
+    "chipsPct": 23.63379954234609,
+    "powerPct": 82.86457232326723,
+    "thermalPct": 92.60816380774682,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 24.75,
+    "capacityPct": 0,
+    "chipsPct": 23.227133485183476,
+    "powerPct": 82.55206679862394,
+    "thermalPct": 92.44567235680016,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Propellant (deorbit)"
+   },
+   {
+    "year": 25,
+    "capacityPct": 0,
+    "chipsPct": 22.827368931472357,
+    "powerPct": 82.24073981989228,
+    "thermalPct": 92.28346601540048,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Propellant (deorbit)"
+   }
+  ],
+  "warnings": []
+ },
+ "background": {
+  "orbit": {
+   "periodMin": 97.57941039957801,
+   "eclipseFracAvg": 0.038397879942385714,
+   "worstEclipseMin": 19.64241935301502,
+   "eclipseCyclesYr": 1284.7293346966346,
+   "eclipseDaysPerYr": 87.0577298630137,
+   "inclinationDeg": 97.95744012197835,
+   "rttMs": 24.336333237575978,
+   "velocityKms": 7.534759614599093
+  },
+  "compute": {
+   "activeChips": 2592,
+   "provisionedChips": 2997,
+   "peakEflops": 648,
+   "effectiveEflopsBol": 314.28,
+   "tokensPerSec": 17384130.638469614,
+   "trainDays": 2.2980215801903467,
+   "trainFlops": 6.24e+25,
+   "serving": {
+    "feasible": true,
+    "issues": [],
+    "bound": "memory",
+    "sessionsPerChip": 169,
+    "ratePerUser": 78.13063124083085,
+    "ttftS": 0.04043028951807407,
+    "taskMin": 19.253292015357435,
+    "sloTtftOk": true,
+    "sloRateOk": true,
+    "sloTaskOk": true,
+    "chipSecPerReq": 0.05061996014069692,
+    "tokensPerChipHr": 24891366.893570468,
+    "weightsGB": 1400,
+    "replicaMemGB": 2850,
+    "kvPerSessionGB": 3.8045,
+    "altShare": 0,
+    "altModel": null,
+    "tasksPerHour": 1564571.7574622652,
+    "usersAtPeak": 1251657.4059698123
+   }
+  },
+  "power": {
+   "itMw": 14.256,
+   "loadKwPerSat": 184.8,
+   "arrayKwPerSat": 282.5100625663191,
+   "arrayM2PerSat": 792.5748691914232,
+   "batteryKwhPerSat": 151.24662901821563,
+   "totalArrayM2": 64198.564404505276
+  },
+  "thermal": {
+   "radiatorFluxWm2": 971.3333650878001,
+   "radiatorM2PerSat": 209.27933427019184,
+   "totalRadiatorM2": 16951.62607588554
+  },
+  "mass": {
+   "breakdownKgPerSat": [
+    {
+     "name": "Compute nodes",
+     "kg": 370
+    },
+    {
+     "name": "Solar arrays",
+     "kg": 1412.5503128315956
+    },
+    {
+     "name": "Radiators",
+     "kg": 837.1173370807674
+    },
+    {
+     "name": "Batteries",
+     "kg": 504.1554300607188
+    },
+    {
+     "name": "Bus avionics/comms",
+     "kg": 300
+    },
+    {
+     "name": "Structure",
+     "kg": 513.5734619959622
+    },
+    {
+     "name": "Propellant",
+     "kg": 164.0581892487102
+    }
+   ],
+   "dryKgPerSat": 3937.396541969044,
+   "wetKgPerSat": 4101.454731217754,
+   "totalT": 332.217833228638,
+   "kgPerKw": 23.303720063737238,
+   "dryKgPerKw": 22.37157126118775,
+   "launches": 4
+  },
+  "propulsion": {
+   "dragDvMsYr": 17.796506182844404,
+   "stationKeepingDvMsYr": 19.796506182844404,
+   "deorbitDvMs": 111.2859782343444,
+   "stationLifeYr": 24.711660536983374,
+   "passiveDecayYr": 2.029768886187034
+  },
+  "comms": {
+   "requiredGbps": 5.562921804310276,
+   "availableGbps": 7695,
+   "utilizationPct": 0.0722926810176774
+  },
+  "life": {
+   "usefulLifeYr": 8.25,
+   "limiter": "Accelerator failures",
+   "subsystems": [
+    {
+     "name": "Accelerators (random failures, no repair)",
+     "years": 8.25,
+     "note": "15% cold spares, AFR 6.0%/yr in orbit"
+    },
+    {
+     "name": "Radiation dose (TID)",
+     "years": 25,
+     "note": "150 rad/yr; derate 5%/krad above 2 krad, hard failures past 15 krad"
+    },
+    {
+     "name": "Solar arrays",
+     "years": 25,
+     "note": "1.5%/yr degradation, 20% margin"
+    },
+    {
+     "name": "Radiators",
+     "years": 25,
+     "note": "0.7%/yr coating/MMOD loss"
+    },
+    {
+     "name": "Batteries",
+     "years": 12,
+     "note": "1285 cycles/yr"
+    },
+    {
+     "name": "Propellant (station-keeping)",
+     "years": 24.711660536983374,
+     "note": "19.8 m/s/yr, 111 m/s deorbit reserve"
+    }
+   ],
+   "capacityAtMissionEndPct": 80.48388632123712,
+   "avgCapacityPct": 93.8887017331142
+  },
+  "econ": {
+   "capexBreakdownM": [
+    {
+     "name": "Compute hardware",
+     "usd": 495.338166
+    },
+    {
+     "name": "Launch",
+     "usd": 66.44356664572761
+    },
+    {
+     "name": "Bus, radiators, structure",
+     "usd": 200.55893208782263
+    },
+    {
+     "name": "Solar arrays",
+     "usd": 228.83315067871848
+    },
+    {
+     "name": "Batteries",
+     "usd": 6.125488475237733
+    },
+    {
+     "name": "Insurance",
+     "usd": 49.86496519437532
+    },
+    {
+     "name": "Ground segment",
+     "usd": 50
+    }
+   ],
+   "capexM": 1097.1642690818817,
+   "opexMYr": 23.1,
+   "lcocPerChipHr": 12.630149154022616,
+   "costPerMTokens": 0.5074108307521284,
+   "trainRunCostM": 1.8055470955578723,
+   "npvM": -474.07565197482955,
+   "paybackYr": null,
+   "revenueM": 949.8044874443968,
+   "orbitalLcoePerKWh": 0.5158119080580118,
+   "capexPerKwIt": 76961.57891988508
+  },
+  "terrestrial": {
+   "capexM": 599.472576,
+   "opexMYr": 36.621538560000005,
+   "lcocPerChipHr": 7.826134335758868,
+   "costPerMTokens": 0.31441159375543926,
+   "lcoePerKWh": 0.108
+  },
+  "series": [
+   {
+    "year": 0,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 120,
+    "thermalPct": 110.00000000000001,
+    "availabilityPct": 100,
+    "cumCashM": -1085.0388788338819,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 0.25,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 119.54744637055627,
+    "thermalPct": 109.80699261415829,
+    "availabilityPct": 100,
+    "cumCashM": -1048.6627080898818,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 0.5,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 119.09659944767526,
+    "thermalPct": 109.61432388150737,
+    "availabilityPct": 100,
+    "cumCashM": -1012.2865373458817,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 0.75,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 118.64745279488815,
+    "thermalPct": 109.42199320784216,
+    "availabilityPct": 100,
+    "cumCashM": -975.9103666018816,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 1,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 118.19999999999999,
+    "thermalPct": 109.23,
+    "availabilityPct": 100,
+    "cumCashM": -939.5341958578815,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 1.25,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 117.75423467499793,
+    "thermalPct": 109.0383436658592,
+    "availabilityPct": 100,
+    "cumCashM": -903.1580251138814,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 1.5,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 117.31015045596014,
+    "thermalPct": 108.84702361433685,
+    "availabilityPct": 100,
+    "cumCashM": -866.7818543698814,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 1.75,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 116.86774100296485,
+    "thermalPct": 108.65603925538724,
+    "availabilityPct": 100,
+    "cumCashM": -830.4056836258814,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 2,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 116.42699999999999,
+    "thermalPct": 108.46539000000001,
+    "availabilityPct": 100,
+    "cumCashM": -794.0295128818813,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 2.25,
+    "capacityPct": 100,
+    "chipsPct": 100,
+    "powerPct": 115.98792115487298,
+    "thermalPct": 108.2750752601982,
+    "availabilityPct": 100,
+    "cumCashM": -757.6533421378812,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 2.5,
+    "capacityPct": 99.2130657077795,
+    "chipsPct": 99.2130657077795,
+    "powerPct": 115.55049819912071,
+    "thermalPct": 108.08509444903649,
+    "availabilityPct": 100,
+    "cumCashM": -721.4269928581971,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 2.75,
+    "capacityPct": 97.70585332252077,
+    "chipsPct": 97.70585332252077,
+    "powerPct": 115.11472488792035,
+    "thermalPct": 107.89544698059954,
+    "availabilityPct": 100,
+    "cumCashM": -685.8067829757196,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 3,
+    "capacityPct": 96.22153801395318,
+    "chipsPct": 96.22153801395318,
+    "powerPct": 114.68059499999997,
+    "thermalPct": 107.70613227000001,
+    "availabilityPct": 100,
+    "cumCashM": -650.8154355578797,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 3.25,
+    "capacityPct": 94.75977193719032,
+    "chipsPct": 94.75977193719032,
+    "powerPct": 114.24810233754987,
+    "thermalPct": 107.51714973337678,
+    "availabilityPct": 100,
+    "cumCashM": -616.4433971321729,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 3.5,
+    "capacityPct": 93.3202125316913,
+    "chipsPct": 93.3202125316913,
+    "powerPct": 113.8172407261339,
+    "thermalPct": 107.32849878789324,
+    "availabilityPct": 100,
+    "cumCashM": -582.6812593593188,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 3.75,
+    "capacityPct": 91.90252244098264,
+    "chipsPct": 91.90252244098264,
+    "powerPct": 113.38800401460156,
+    "thermalPct": 107.14017885173537,
+    "availabilityPct": 100,
+    "cumCashM": -549.5197568284444,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 4,
+    "capacityPct": 90.50636943359997,
+    "chipsPct": 90.50636943359997,
+    "powerPct": 112.96038607499999,
+    "thermalPct": 106.95218934411001,
+    "availabilityPct": 100,
+    "cumCashM": -516.9497648857625,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 4.25,
+    "capacityPct": 89.13142632523044,
+    "chipsPct": 89.13142632523044,
+    "powerPct": 112.53438080248661,
+    "thermalPct": 106.76452968524315,
+    "availabilityPct": 100,
+    "cumCashM": -484.96229749623643,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 4.5,
+    "capacityPct": 87.77737090203802,
+    "chipsPct": 87.77737090203802,
+    "powerPct": 112.10998211524188,
+    "thermalPct": 106.57719929637797,
+    "availabilityPct": 100,
+    "cumCashM": -453.54850513772965,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 4.75,
+    "capacityPct": 86.44388584515372,
+    "chipsPct": 86.44388584515372,
+    "powerPct": 111.68718395438253,
+    "thermalPct": 106.39019759977319,
+    "availabilityPct": 100,
+    "cumCashM": -422.6996727271459,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 5,
+    "capacityPct": 85.13065865631286,
+    "chipsPct": 85.13065865631286,
+    "powerPct": 111.265980283875,
+    "thermalPct": 106.20352401870123,
+    "availabilityPct": 100,
+    "cumCashM": -392.40721757807586,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 5.25,
+    "capacityPct": 83.837381584622,
+    "chipsPct": 83.837381584622,
+    "powerPct": 110.84636509044931,
+    "thermalPct": 106.01717797744645,
+    "availabilityPct": 100,
+    "cumCashM": -362.6626873894698,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 5.5,
+    "capacityPct": 82.56375155443841,
+    "chipsPct": 82.56375155443841,
+    "powerPct": 110.42833238351324,
+    "thermalPct": 105.83115890130333,
+    "availabilityPct": 100,
+    "cumCashM": -333.457758264866,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 5.75,
+    "capacityPct": 81.30947009434519,
+    "chipsPct": 81.30947009434519,
+    "powerPct": 110.01187619506678,
+    "thermalPct": 105.64546621657477,
+    "availabilityPct": 100,
+    "cumCashM": -304.78423276171014,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 6,
+    "capacityPct": 80.07424326720552,
+    "chipsPct": 80.07424326720552,
+    "powerPct": 109.59699057961687,
+    "thermalPct": 105.46009935057032,
+    "availabilityPct": 100,
+    "cumCashM": -285.95978163748475,
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 6.25,
+    "capacityPct": 78.85778160127906,
+    "chipsPct": 78.85778160127906,
+    "powerPct": 109.18366961409258,
+    "thermalPct": 105.27505773160432,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 6.5,
+    "capacityPct": 77.6598000223855,
+    "chipsPct": 77.6598000223855,
+    "powerPct": 108.77190739776057,
+    "thermalPct": 105.09034078899421,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 6.75,
+    "capacityPct": 76.4800177870979,
+    "chipsPct": 76.4800177870979,
+    "powerPct": 108.36169805214078,
+    "thermalPct": 104.90594795305877,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 7,
+    "capacityPct": 75.3181584169516,
+    "chipsPct": 75.3181584169516,
+    "powerPct": 107.95303572092261,
+    "thermalPct": 104.72187865511633,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 7.25,
+    "capacityPct": 74.17394963365214,
+    "chipsPct": 74.17394963365214,
+    "powerPct": 107.54591456988116,
+    "thermalPct": 104.53813232748308,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 7.5,
+    "capacityPct": 73.04712329526761,
+    "chipsPct": 73.04712329526761,
+    "powerPct": 107.14032878679414,
+    "thermalPct": 104.35470840347124,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 7.75,
+    "capacityPct": 71.9374153333906,
+    "chipsPct": 71.9374153333906,
+    "powerPct": 106.73627258135865,
+    "thermalPct": 104.17160631738736,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 8,
+    "capacityPct": 70.84456569125432,
+    "chipsPct": 70.84456569125432,
+    "powerPct": 106.33374018510877,
+    "thermalPct": 103.98882550453052,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 8.25,
+    "capacityPct": 69.76831826278924,
+    "chipsPct": 69.76831826278924,
+    "powerPct": 105.93272585133295,
+    "thermalPct": 103.8063654011907,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 8.5,
+    "capacityPct": 68.70842083260524,
+    "chipsPct": 68.70842083260524,
+    "powerPct": 105.53322385499224,
+    "thermalPct": 103.62422544464695,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 8.75,
+    "capacityPct": 67.66462501688586,
+    "chipsPct": 67.66462501688586,
+    "powerPct": 105.13522849263828,
+    "thermalPct": 103.44240507316565,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 9,
+    "capacityPct": 66.6366862051801,
+    "chipsPct": 66.6366862051801,
+    "powerPct": 104.73873408233214,
+    "thermalPct": 103.26090372599882,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 9.25,
+    "capacityPct": 65.62436350307884,
+    "chipsPct": 65.62436350307884,
+    "powerPct": 104.34373496356298,
+    "thermalPct": 103.07972084338238,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 9.5,
+    "capacityPct": 64.62741967576189,
+    "chipsPct": 64.62741967576189,
+    "powerPct": 103.95022549716735,
+    "thermalPct": 102.89885586653442,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 9.75,
+    "capacityPct": 63.64562109240266,
+    "chipsPct": 63.64562109240266,
+    "powerPct": 103.5582000652487,
+    "thermalPct": 102.71830823765346,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 10,
+    "capacityPct": 62.678737671417586,
+    "chipsPct": 62.678737671417586,
+    "powerPct": 103.16765307109716,
+    "thermalPct": 102.5380773999168,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 10.25,
+    "capacityPct": 61.72654282654708,
+    "chipsPct": 61.72654282654708,
+    "powerPct": 102.77857893910954,
+    "thermalPct": 102.35816279747868,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 10.5,
+    "capacityPct": 60.788813413755825,
+    "chipsPct": 60.788813413755825,
+    "powerPct": 102.39097211470983,
+    "thermalPct": 102.17856387546868,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 10.75,
+    "capacityPct": 59.86532967893952,
+    "chipsPct": 59.86532967893952,
+    "powerPct": 102.00482706427,
+    "thermalPct": 101.9992800799899,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 11,
+    "capacityPct": 58.955875206426214,
+    "chipsPct": 58.955875206426214,
+    "powerPct": 101.6201382750307,
+    "thermalPct": 101.82031085811738,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 11.25,
+    "capacityPct": 58.06023686825995,
+    "chipsPct": 58.06023686825995,
+    "powerPct": 101.23690025502287,
+    "thermalPct": 101.64165565789634,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 11.5,
+    "capacityPct": 57.17820477425485,
+    "chipsPct": 57.17820477425485,
+    "powerPct": 100.85510753298918,
+    "thermalPct": 101.46331392834038,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 11.75,
+    "capacityPct": 56.309572222807944,
+    "chipsPct": 56.309572222807944,
+    "powerPct": 100.47475465830593,
+    "thermalPct": 101.28528511942999,
+    "availabilityPct": 100,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 12,
+    "capacityPct": 53.324814409367384,
+    "chipsPct": 55.45413565245929,
+    "powerPct": 100.09583620090523,
+    "thermalPct": 101.10756868211057,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 12.25,
+    "capacityPct": 52.51472130171009,
+    "chipsPct": 54.61169459418795,
+    "powerPct": 99.71834675119753,
+    "thermalPct": 100.93016406829108,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 12.5,
+    "capacityPct": 51.716934863102516,
+    "chipsPct": 53.78205162443267,
+    "powerPct": 99.34228091999434,
+    "thermalPct": 100.75307073084203,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 12.75,
+    "capacityPct": 50.93126813466095,
+    "chipsPct": 52.96501231882622,
+    "powerPct": 98.96763333843134,
+    "thermalPct": 100.57628812359395,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 13,
+    "capacityPct": 50.15753699771981,
+    "chipsPct": 52.16038520663269,
+    "powerPct": 98.59439865789165,
+    "thermalPct": 100.3998157013358,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 13.25,
+    "capacityPct": 49.39556013068395,
+    "chipsPct": 51.36798172587683,
+    "powerPct": 98.22257154992955,
+    "thermalPct": 100.223652919813,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 13.5,
+    "capacityPct": 48.584352517828286,
+    "chipsPct": 50.524381658931205,
+    "powerPct": 97.85214670619443,
+    "thermalPct": 100.0477992357261,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 13.75,
+    "capacityPct": 47.75645090833267,
+    "chipsPct": 49.663420984836584,
+    "powerPct": 97.48311883835486,
+    "thermalPct": 99.8722541067288,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 14,
+    "capacityPct": 46.942491086279645,
+    "chipsPct": 48.81695880981116,
+    "powerPct": 97.11548267802327,
+    "thermalPct": 99.69701699142645,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 14.25,
+    "capacityPct": 46.14224052238885,
+    "chipsPct": 47.984753319412654,
+    "powerPct": 96.74923297668062,
+    "thermalPct": 99.52208734937433,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 14.5,
+    "capacityPct": 45.35547053481524,
+    "chipsPct": 47.16656670026661,
+    "powerPct": 96.38436450560151,
+    "thermalPct": 99.34746464107602,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 14.75,
+    "capacityPct": 44.581956225915775,
+    "chipsPct": 46.36216507430812,
+    "powerPct": 96.02087205577955,
+    "thermalPct": 99.17314832798169,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 15,
+    "capacityPct": 43.82147642004946,
+    "chipsPct": 45.57131843409819,
+    "powerPct": 95.65875043785293,
+    "thermalPct": 98.99913787248646,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 15.25,
+    "capacityPct": 43.073813602393955,
+    "chipsPct": 44.79380057919713,
+    "powerPct": 95.29799448203042,
+    "thermalPct": 98.82543273792872,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 15.5,
+    "capacityPct": 42.338753858762054,
+    "chipsPct": 44.02938905357793,
+    "powerPct": 94.93859903801749,
+    "thermalPct": 98.65203238858848,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 15.75,
+    "capacityPct": 41.616086816401996,
+    "chipsPct": 43.2778650840626,
+    "powerPct": 94.58055897494285,
+    "thermalPct": 98.47893628968583,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 16,
+    "capacityPct": 40.9056055857653,
+    "chipsPct": 42.53901351976475,
+    "powerPct": 94.22386918128512,
+    "thermalPct": 98.30614390737905,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 16.25,
+    "capacityPct": 40.2071067032268,
+    "chipsPct": 41.812622772522374,
+    "powerPct": 93.86852456479996,
+    "thermalPct": 98.13365470876323,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 16.5,
+    "capacityPct": 39.52039007474089,
+    "chipsPct": 41.098484758304224,
+    "powerPct": 93.51452005244722,
+    "thermalPct": 97.96146816186838,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 16.75,
+    "capacityPct": 38.8452589204193,
+    "chipsPct": 40.39639483957449,
+    "powerPct": 93.1618505903187,
+    "thermalPct": 97.78958373565803,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 17,
+    "capacityPct": 38.181519720014926,
+    "chipsPct": 39.70615176859976,
+    "powerPct": 92.81051114356586,
+    "thermalPct": 97.6180009000274,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 17.25,
+    "capacityPct": 37.52898215929725,
+    "chipsPct": 39.027557631683166,
+    "powerPct": 92.46049669632795,
+    "thermalPct": 97.44671912580188,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 17.5,
+    "capacityPct": 36.88745907730484,
+    "chipsPct": 38.360417794310536,
+    "powerPct": 92.11180225166052,
+    "thermalPct": 97.2757378847353,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 17.75,
+    "capacityPct": 36.256766414460444,
+    "chipsPct": 37.704540847193776,
+    "powerPct": 91.76442283146392,
+    "thermalPct": 97.10505664950841,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 18,
+    "capacityPct": 35.636723161534874,
+    "chipsPct": 37.05973855319673,
+    "powerPct": 91.41835347641236,
+    "thermalPct": 96.93467489372722,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 18.25,
+    "capacityPct": 35.02715130944583,
+    "chipsPct": 36.42582579512946,
+    "powerPct": 91.07358924588304,
+    "thermalPct": 96.76459209192126,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 18.5,
+    "capacityPct": 34.42787579987786,
+    "chipsPct": 35.80262052439643,
+    "powerPct": 90.7301252178856,
+    "thermalPct": 96.59480771954215,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 18.75,
+    "capacityPct": 33.83872447671051,
+    "chipsPct": 35.189943710485025,
+    "powerPct": 90.38795648899196,
+    "thermalPct": 96.42532125296187,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 19,
+    "capacityPct": 33.25952803824094,
+    "chipsPct": 34.58761929128047,
+    "powerPct": 90.04707817426618,
+    "thermalPct": 96.25613216947112,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 19.25,
+    "capacityPct": 32.69011999018865,
+    "chipsPct": 33.99547412419393,
+    "powerPct": 89.70748540719478,
+    "thermalPct": 96.08723994727781,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 19.5,
+    "capacityPct": 32.1303365994692,
+    "chipsPct": 33.41333793809035,
+    "powerPct": 89.36917333961732,
+    "thermalPct": 95.91864406550535,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 19.75,
+    "capacityPct": 31.5800168487245,
+    "chipsPct": 32.84104328600314,
+    "powerPct": 89.03213714165707,
+    "thermalPct": 95.75034400419112,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 20,
+    "capacityPct": 31.039002391597435,
+    "chipsPct": 32.278425498622795,
+    "powerPct": 88.69637200165216,
+    "thermalPct": 95.58233924428482,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 20.25,
+    "capacityPct": 30.507137508738687,
+    "chipsPct": 31.72532263854707,
+    "powerPct": 88.36187312608686,
+    "thermalPct": 95.41462926764686,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 20.5,
+    "capacityPct": 29.984269064533574,
+    "chipsPct": 31.18157545527985,
+    "powerPct": 88.02863573952307,
+    "thermalPct": 95.24721355704682,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 20.75,
+    "capacityPct": 29.47024646453767,
+    "chipsPct": 30.647027340967135,
+    "powerPct": 87.69665508453222,
+    "thermalPct": 95.08009159616178,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 21,
+    "capacityPct": 28.964921613609157,
+    "chipsPct": 30.12152428685757,
+    "powerPct": 87.3659264216274,
+    "thermalPct": 94.91326286957484,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 21.25,
+    "capacityPct": 28.468148874726957,
+    "chipsPct": 29.60491484047611,
+    "powerPct": 87.03644502919556,
+    "thermalPct": 94.74672686277333,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 21.5,
+    "capacityPct": 27.979785028483157,
+    "chipsPct": 29.097050063498976,
+    "powerPct": 86.70820620343021,
+    "thermalPct": 94.5804830621475,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 21.75,
+    "capacityPct": 27.499689233239,
+    "chipsPct": 28.597783490318594,
+    "powerPct": 86.38120525826423,
+    "thermalPct": 94.41453095498863,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 22,
+    "capacityPct": 27.027722985933426,
+    "chipsPct": 28.106971087287185,
+    "powerPct": 86.05543752530299,
+    "thermalPct": 94.2488700294878,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 22.25,
+    "capacityPct": 26.563750083533705,
+    "chipsPct": 27.624471212628087,
+    "powerPct": 85.73089835375761,
+    "thermalPct": 94.08349977473392,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 22.5,
+    "capacityPct": 26.107636585117554,
+    "chipsPct": 27.15014457700376,
+    "powerPct": 85.40758311037877,
+    "thermalPct": 93.91841968071245,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 22.75,
+    "capacityPct": 25.659250774576535,
+    "chipsPct": 26.68385420472988,
+    "powerPct": 85.08548717939028,
+    "thermalPct": 93.75362923830373,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 23,
+    "capacityPct": 25.218463123930597,
+    "chipsPct": 26.225465395624997,
+    "powerPct": 84.76460596242345,
+    "thermalPct": 93.58912793928138,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 23.25,
+    "capacityPct": 24.785146257243756,
+    "chipsPct": 25.77484568748534,
+    "powerPct": 84.44493487845128,
+    "thermalPct": 93.42491527631078,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 23.5,
+    "capacityPct": 24.359174915131142,
+    "chipsPct": 25.331864819174555,
+    "powerPct": 84.12646936372307,
+    "thermalPct": 93.26099074294746,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 23.75,
+    "capacityPct": 23.940425919847854,
+    "chipsPct": 24.896394694318545,
+    "powerPct": 83.80920487169942,
+    "thermalPct": 93.0973538336356,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 24,
+    "capacityPct": 23.52877814094991,
+    "chipsPct": 24.468309345595234,
+    "powerPct": 83.49313687298708,
+    "thermalPct": 92.93400404370641,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 24.25,
+    "capacityPct": 23.124112461518315,
+    "chipsPct": 24.04748489960987,
+    "powerPct": 83.17826085527447,
+    "thermalPct": 92.77094086937662,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 24.5,
+    "capacityPct": 22.726311744936673,
+    "chipsPct": 23.63379954234609,
+    "powerPct": 82.86457232326723,
+    "thermalPct": 92.60816380774682,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Accelerator failures"
+   },
+   {
+    "year": 24.75,
+    "capacityPct": 0,
+    "chipsPct": 23.227133485183476,
+    "powerPct": 82.55206679862394,
+    "thermalPct": 92.44567235680016,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Propellant (deorbit)"
+   },
+   {
+    "year": 25,
+    "capacityPct": 0,
+    "chipsPct": 22.827368931472357,
+    "powerPct": 82.24073981989228,
+    "thermalPct": 92.28346601540048,
+    "availabilityPct": 96.16021200576142,
+    "cumCashM": "NaN",
+    "limiter": "Propellant (deorbit)"
    }
   ],
   "warnings": []
@@ -1197,42 +3628,63 @@
   "compute": {
    "activeChips": 2592,
    "provisionedChips": 2984,
-   "peakEflops": 129.6,
-   "effectiveEflopsBol": 36.26547771500484,
-   "tokensPerSec": 174353258.2452156,
-   "trainDays": 19.914868567232542,
-   "trainFlops": 6.24e+25
+   "peakEflops": 648,
+   "effectiveEflopsBol": 302.212314291707,
+   "tokensPerSec": 15356722.838840067,
+   "trainDays": 2.389784228067905,
+   "trainFlops": 6.24e+25,
+   "serving": {
+    "feasible": true,
+    "issues": [],
+    "bound": "bandwidth",
+    "sessionsPerChip": 118,
+    "ratePerUser": 100.05479499513844,
+    "ttftS": 0.06196206881298338,
+    "taskMin": 17.41229842597287,
+    "sloTtftOk": true,
+    "sloRateOk": true,
+    "sloTaskOk": true,
+    "chipSecPerReq": 0.05510254296421846,
+    "tokensPerChipHr": 22866458.28338988,
+    "weightsGB": 1400,
+    "replicaMemGB": 2850,
+    "kvPerSessionGB": 3.8045,
+    "altShare": 0,
+    "altModel": null,
+    "tasksPerHour": 1382105.055495606,
+    "usersAtPeak": 1105684.0443964847
+   }
   },
   "power": {
-   "itMw": 6.7392,
-   "loadKwPerSat": 884.52,
-   "arrayKwPerSat": 1075.2702804940118,
-   "arrayM2PerSat": 3016.643705241137,
-   "batteryKwhPerSat": 105.3,
-   "totalArrayM2": 24133.149641929096
+   "itMw": 14.256,
+   "loadKwPerSat": 1871.1,
+   "arrayKwPerSat": 2274.6102087373324,
+   "arrayM2PerSat": 6381.361684163943,
+   "batteryKwhPerSat": 222.75,
+   "totalArrayM2": 51050.893473311546
   },
   "thermal": {
    "radiatorFluxWm2": 971.3333650878001,
-   "radiatorM2PerSat": 1001.6869953932364,
-   "totalRadiatorM2": 8013.495963145891
+   "radiatorM2PerSat": 2118.9532594856923,
+   "totalRadiatorM2": 16951.62607588554
   },
   "mass": {
    "breakdownKgPerSat": [
     {
      "name": "Compute nodes",
-     "kg": 4212
+     "kg": 8910
     },
     {
      "name": "Solar arrays",
-     "kg": 3861
+     "kg": 8167.5
     },
     {
      "name": "Radiators",
-     "kg": 3369.6
+     "kg": 7128
     },
     {
      "name": "Batteries",
-     "kg": 351
+     "kg": 742.5
     },
     {
      "name": "Bus avionics/comms",
@@ -1240,31 +3692,31 @@
     },
     {
      "name": "Structure",
-     "kg": 3069.6
+     "kg": 6828
     },
     {
      "name": "Propellant",
-     "kg": 631.8000000000001
+     "kg": 1336.5
     }
    ],
-   "dryKgPerSat": 15163.2,
-   "wetKgPerSat": 15795,
-   "totalT": 126.36,
+   "dryKgPerSat": 32076,
+   "wetKgPerSat": 33412.5,
+   "totalT": 267.3,
    "kgPerKw": 18.75,
    "dryKgPerKw": 18,
-   "launches": 2
+   "launches": 3
   },
   "propulsion": {
-   "dragDvMsYr": 18.262742130199292,
-   "stationKeepingDvMsYr": 20.262742130199292,
+   "dragDvMsYr": 18.215051900922347,
+   "stationKeepingDvMsYr": 20.215051900922347,
    "deorbitDvMs": 111.2859782343444,
-   "stationLifeYr": 24.143057117607007,
-   "passiveDecayYr": 1.9779502045883932
+   "stationLifeYr": 24.20001407893619,
+   "passiveDecayYr": 1.9831288282491053
   },
   "comms": {
-   "requiredGbps": 55.793042638469,
+   "requiredGbps": 4.9141513084288215,
    "availableGbps": 760,
-   "utilizationPct": 7.341189820851183
+   "utilizationPct": 0.6465988563722134
   },
   "life": {
    "usefulLifeYr": 7.5,
@@ -1297,8 +3749,8 @@
     },
     {
      "name": "Propellant (station-keeping)",
-     "years": 24.143057117607007,
-     "note": "20.3 m/s/yr, 111 m/s deorbit reserve"
+     "years": 24.20001407893619,
+     "note": "20.2 m/s/yr, 111 m/s deorbit reserve"
     }
    ],
    "capacityAtMissionEndPct": 77.05776828143519,
@@ -1308,49 +3760,49 @@
    "capexBreakdownM": [
     {
      "name": "Compute hardware",
-     "usd": 238.72
+     "usd": 493.189552
     },
     {
      "name": "Launch",
-     "usd": 25.272
+     "usd": 53.46
     },
     {
      "name": "Bus, radiators, structure",
-     "usd": 80.8704
+     "usd": 171.072
     },
     {
      "name": "Solar arrays",
-     "usd": 86.02162243952094
+     "usd": 181.9688166989866
     },
     {
      "name": "Batteries",
-     "usd": 0.4212
+     "usd": 0.891
     },
     {
      "name": "Insurance",
-     "usd": 21.565261121976047
+     "usd": 45.02906843494932
     },
     {
      "name": "Ground segment",
      "usd": 50
     }
    ],
-   "capexM": 502.870483561497,
+   "capexM": 995.6104371339358,
    "opexMYr": 15.8,
-   "lcocPerChipHr": 6.293092862049645,
-   "costPerMTokens": 0.024989754015011953,
-   "trainRunCostM": 7.496926204503585,
-   "npvM": 123.933896911412,
-   "paybackYr": 3.5,
+   "lcocPerChipHr": 11.687923306489603,
+   "costPerMTokens": 0.5111383302843917,
+   "trainRunCostM": 1.670850891924287,
+   "npvM": -368.8060566610272,
+   "paybackYr": null,
    "revenueM": 911.0442716594454,
-   "orbitalLcoePerKWh": 0.4147368790151817,
-   "capexPerKwIt": 74618.72085136174
+   "orbitalLcoePerKWh": 0.41473687901518175,
+   "capexPerKwIt": 69837.99362611784
   },
   "terrestrial": {
-   "capexM": 288.2304,
-   "opexMYr": 17.5154213376,
-   "lcocPerChipHr": 3.7587051893829853,
-   "costPerMTokens": 0.014477975544290016,
+   "capexM": 599.472576,
+   "opexMYr": 36.621538560000005,
+   "lcocPerChipHr": 7.826134335758868,
+   "costPerMTokens": 0.34225389165071296,
    "lcoePerKWh": 0.108
   },
   "series": [
@@ -1361,7 +3813,7 @@
     "powerPct": 120,
     "thermalPct": 110.00000000000001,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -490.67626517804996,
+    "cumCashM": -983.4162187504888,
     "limiter": "Accelerator failures"
    },
    {
@@ -1371,7 +3823,7 @@
     "powerPct": 119.54744637055627,
     "thermalPct": 109.80699261415829,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -454.093610027709,
+    "cumCashM": -946.8335636001481,
     "limiter": "Accelerator failures"
    },
    {
@@ -1381,7 +3833,7 @@
     "powerPct": 119.09659944767526,
     "thermalPct": 109.61432388150737,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -417.510954877368,
+    "cumCashM": -910.2509084498073,
     "limiter": "Accelerator failures"
    },
    {
@@ -1391,7 +3843,7 @@
     "powerPct": 118.64745279488815,
     "thermalPct": 109.42199320784216,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -380.9282997270271,
+    "cumCashM": -873.6682532994665,
     "limiter": "Accelerator failures"
    },
    {
@@ -1401,7 +3853,7 @@
     "powerPct": 118.19999999999999,
     "thermalPct": 109.23,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -344.3456445766861,
+    "cumCashM": -837.0855981491256,
     "limiter": "Accelerator failures"
    },
    {
@@ -1411,7 +3863,7 @@
     "powerPct": 117.75423467499793,
     "thermalPct": 109.0383436658592,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -307.7629894263451,
+    "cumCashM": -800.5029429987849,
     "limiter": "Accelerator failures"
    },
    {
@@ -1421,7 +3873,7 @@
     "powerPct": 117.31015045596014,
     "thermalPct": 108.84702361433685,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -271.18033427600415,
+    "cumCashM": -763.9202878484441,
     "limiter": "Accelerator failures"
    },
    {
@@ -1431,7 +3883,7 @@
     "powerPct": 116.86774100296485,
     "thermalPct": 108.65603925538724,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -234.59767912566326,
+    "cumCashM": -727.3376326981033,
     "limiter": "Accelerator failures"
    },
    {
@@ -1441,7 +3893,7 @@
     "powerPct": 116.42699999999999,
     "thermalPct": 108.46539000000001,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -198.01502397532238,
+    "cumCashM": -690.7549775477626,
     "limiter": "Accelerator failures"
    },
    {
@@ -1451,7 +3903,7 @@
     "powerPct": 115.98792115487298,
     "thermalPct": 108.2750752601982,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -161.4323688249815,
+    "cumCashM": -654.1723223974217,
     "limiter": "Accelerator failures"
    },
    {
@@ -1461,7 +3913,7 @@
     "powerPct": 115.55049819912071,
     "thermalPct": 108.08509444903649,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -125.13793105429248,
+    "cumCashM": -617.8778846267327,
     "limiter": "Accelerator failures"
    },
    {
@@ -1471,7 +3923,7 @@
     "powerPct": 115.11472488792035,
     "thermalPct": 107.89544698059954,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -89.45487359539037,
+    "cumCashM": -582.1948271678307,
     "limiter": "Accelerator failures"
    },
    {
@@ -1481,7 +3933,7 @@
     "powerPct": 114.68059499999997,
     "thermalPct": 107.70613227000001,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -54.37390855890844,
+    "cumCashM": -547.1138621313487,
     "limiter": "Accelerator failures"
    },
    {
@@ -1491,7 +3943,7 @@
     "powerPct": 114.24810233754987,
     "thermalPct": 107.51714973337678,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -19.88588915405187,
+    "cumCashM": -512.6258427264921,
     "limiter": "Accelerator failures"
    },
    {
@@ -1501,7 +3953,7 @@
     "powerPct": 113.8172407261339,
     "thermalPct": 107.32849878789324,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 14.018192454925533,
+    "cumCashM": -478.7217611175147,
     "limiter": "Accelerator failures"
    },
    {
@@ -1511,7 +3963,7 @@
     "powerPct": 113.38800401460156,
     "thermalPct": 107.14017885173537,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 47.347207259680864,
+    "cumCashM": -445.3927463127593,
     "limiter": "Accelerator failures"
    },
    {
@@ -1521,7 +3973,7 @@
     "powerPct": 112.96038607499999,
     "thermalPct": 106.95218934411001,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 80.10989148667272,
+    "cumCashM": -412.6300620857674,
     "limiter": "Accelerator failures"
    },
    {
@@ -1531,7 +3983,7 @@
     "powerPct": 112.53438080248661,
     "thermalPct": 106.76452968524315,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 112.31484864446996,
+    "cumCashM": -380.42510492797015,
     "limiter": "Accelerator failures"
    },
    {
@@ -1541,7 +3993,7 @@
     "powerPct": 112.10998211524188,
     "thermalPct": 106.57719929637797,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 143.97055153995828,
+    "cumCashM": -348.76940203248176,
     "limiter": "Accelerator failures"
    },
    {
@@ -1551,7 +4003,7 @@
     "powerPct": 111.68718395438253,
     "thermalPct": 106.39019759977319,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 175.0853442639175,
+    "cumCashM": -317.65460930852265,
     "limiter": "Accelerator failures"
    },
    {
@@ -1561,7 +4013,7 @@
     "powerPct": 111.265980283875,
     "thermalPct": 106.20352401870123,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 205.66744414643438,
+    "cumCashM": -287.0725094260058,
     "limiter": "Accelerator failures"
    },
    {
@@ -1571,7 +4023,7 @@
     "powerPct": 110.84636509044931,
     "thermalPct": 106.01717797744645,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 235.72494368260953,
+    "cumCashM": -257.0150098898306,
     "limiter": "Accelerator failures"
    },
    {
@@ -1581,7 +4033,7 @@
     "powerPct": 110.42833238351324,
     "thermalPct": 105.83115890130333,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 265.26581242900977,
+    "cumCashM": -227.47414114343036,
     "limiter": "Accelerator failures"
    },
    {
@@ -1591,7 +4043,7 @@
     "powerPct": 110.01187619506678,
     "thermalPct": 105.64546621657477,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 294.2978988713098,
+    "cumCashM": -198.44205470113033,
     "limiter": "Accelerator failures"
    },
    {
@@ -1601,7 +4053,7 @@
     "powerPct": 109.59699057961687,
     "thermalPct": 105.46009935057032,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 313.3737880979494,
+    "cumCashM": -179.3661654744908,
     "limiter": "Accelerator failures"
    },
    {
@@ -2381,42 +4833,63 @@
   "compute": {
    "activeChips": 2592,
    "provisionedChips": 2984,
-   "peakEflops": 129.6,
-   "effectiveEflopsBol": 36.26547771500484,
-   "tokensPerSec": 174353258.2452156,
-   "trainDays": 19.914868567232542,
-   "trainFlops": 6.24e+25
+   "peakEflops": 648,
+   "effectiveEflopsBol": 302.212314291707,
+   "tokensPerSec": 15356722.838840067,
+   "trainDays": 2.389784228067905,
+   "trainFlops": 6.24e+25,
+   "serving": {
+    "feasible": true,
+    "issues": [],
+    "bound": "bandwidth",
+    "sessionsPerChip": 118,
+    "ratePerUser": 100.05479499513844,
+    "ttftS": 0.06196206881298338,
+    "taskMin": 17.41229842597287,
+    "sloTtftOk": true,
+    "sloRateOk": true,
+    "sloTaskOk": true,
+    "chipSecPerReq": 0.05510254296421846,
+    "tokensPerChipHr": 22866458.28338988,
+    "weightsGB": 1400,
+    "replicaMemGB": 2850,
+    "kvPerSessionGB": 3.8045,
+    "altShare": 0,
+    "altModel": null,
+    "tasksPerHour": 1382105.055495606,
+    "usersAtPeak": 1105684.0443964847
+   }
   },
   "power": {
-   "itMw": 6.7392,
-   "loadKwPerSat": 884.52,
-   "arrayKwPerSat": 1075.2702804940118,
-   "arrayM2PerSat": 3016.643705241137,
-   "batteryKwhPerSat": 105.3,
-   "totalArrayM2": 24133.149641929096
+   "itMw": 14.256,
+   "loadKwPerSat": 1871.1,
+   "arrayKwPerSat": 2274.6102087373324,
+   "arrayM2PerSat": 6381.361684163943,
+   "batteryKwhPerSat": 222.75,
+   "totalArrayM2": 51050.893473311546
   },
   "thermal": {
    "radiatorFluxWm2": 971.3333650878001,
-   "radiatorM2PerSat": 1001.6869953932364,
-   "totalRadiatorM2": 8013.495963145891
+   "radiatorM2PerSat": 2118.9532594856923,
+   "totalRadiatorM2": 16951.62607588554
   },
   "mass": {
    "breakdownKgPerSat": [
     {
      "name": "Compute nodes",
-     "kg": 2948.4
+     "kg": 6237.000000000001
     },
     {
      "name": "Solar arrays",
-     "kg": 1197.3311999999999
+     "kg": 2532.816
     },
     {
      "name": "Radiators",
-     "kg": 2538.9936
+     "kg": 5370.948
     },
     {
      "name": "Batteries",
-     "kg": 351
+     "kg": 742.5
     },
     {
      "name": "Bus avionics/comms",
@@ -2424,31 +4897,31 @@
     },
     {
      "name": "Structure",
-     "kg": 1709.9664000000002
+     "kg": 3951.8520000000003
     },
     {
      "name": "Propellant",
-     "kg": 376.9038000000001
+     "kg": 797.2965000000002
     }
    ],
-   "dryKgPerSat": 9045.691200000001,
-   "wetKgPerSat": 9422.595000000001,
-   "totalT": 75.38076000000001,
+   "dryKgPerSat": 19135.116,
+   "wetKgPerSat": 19932.412500000002,
+   "totalT": 159.4593,
    "kgPerKw": 11.185416666666669,
    "dryKgPerKw": 10.738000000000001,
-   "launches": 1
+   "launches": 2
   },
   "propulsion": {
-   "dragDvMsYr": 30.613648569900096,
-   "stationKeepingDvMsYr": 32.61364856990009,
+   "dragDvMsYr": 30.533705924436788,
+   "stationKeepingDvMsYr": 32.53370592443679,
    "deorbitDvMs": 111.2859782343444,
-   "stationLifeYr": 14.999994237389465,
-   "passiveDecayYr": 1.1799571831594537
+   "stationLifeYr": 15.036852602804595,
+   "passiveDecayYr": 1.183046519874383
   },
   "comms": {
-   "requiredGbps": 55.793042638469,
+   "requiredGbps": 4.9141513084288215,
    "availableGbps": 760,
-   "utilizationPct": 7.341189820851183
+   "utilizationPct": 0.6465988563722134
   },
   "life": {
    "usefulLifeYr": 7.5,
@@ -2481,8 +4954,8 @@
     },
     {
      "name": "Propellant (station-keeping)",
-     "years": 14.999994237389465,
-     "note": "32.6 m/s/yr, 111 m/s deorbit reserve"
+     "years": 15.036852602804595,
+     "note": "32.5 m/s/yr, 111 m/s deorbit reserve"
     }
    ],
    "capacityAtMissionEndPct": 77.05776828143519,
@@ -2492,49 +4965,49 @@
    "capexBreakdownM": [
     {
      "name": "Compute hardware",
-     "usd": 238.72
+     "usd": 493.189552
     },
     {
      "name": "Launch",
-     "usd": 15.076152000000002
+     "usd": 31.891860000000005
     },
     {
      "name": "Bus, radiators, structure",
-     "usd": 54.58752
+     "usd": 115.47360000000002
     },
     {
      "name": "Solar arrays",
-     "usd": 86.02162243952094
+     "usd": 181.9688166989866
     },
     {
      "name": "Batteries",
-     "usd": 0.4212
+     "usd": 0.891
     },
     {
      "name": "Insurance",
-     "usd": 19.741324721976046
+     "usd": 41.17074143494932
     },
     {
      "name": "Ground segment",
      "usd": 50
     }
    ],
-   "capexM": 464.56781916149697,
+   "capexM": 914.5855701339358,
    "opexMYr": 15.8,
-   "lcocPerChipHr": 5.87373092780798,
-   "costPerMTokens": 0.02332447562016151,
-   "trainRunCostM": 6.9973426860484516,
-   "npvM": 162.23656131141192,
-   "paybackYr": 3.25,
+   "lcocPerChipHr": 10.800811522516849,
+   "costPerMTokens": 0.4723430007681829,
+   "trainRunCostM": 1.544033537239522,
+   "npvM": -287.7811896610272,
+   "paybackYr": null,
    "revenueM": 911.0442716594454,
-   "orbitalLcoePerKWh": 0.36831870234965963,
-   "capexPerKwIt": 68935.15835136174
+   "orbitalLcoePerKWh": 0.36831870234965974,
+   "capexPerKwIt": 64154.43112611783
   },
   "terrestrial": {
-   "capexM": 288.2304,
-   "opexMYr": 17.5154213376,
-   "lcocPerChipHr": 3.7587051893829853,
-   "costPerMTokens": 0.014477975544290016,
+   "capexM": 599.472576,
+   "opexMYr": 36.621538560000005,
+   "lcocPerChipHr": 7.826134335758868,
+   "costPerMTokens": 0.34225389165071296,
    "lcoePerKWh": 0.108
   },
   "series": [
@@ -2545,7 +5018,7 @@
     "powerPct": 120,
     "thermalPct": 110.00000000000001,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -452.37360077805,
+    "cumCashM": -902.3913517504889,
     "limiter": "Accelerator failures"
    },
    {
@@ -2555,7 +5028,7 @@
     "powerPct": 119.54744637055627,
     "thermalPct": 109.80699261415829,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -415.79094562770905,
+    "cumCashM": -865.8086966001481,
     "limiter": "Accelerator failures"
    },
    {
@@ -2565,7 +5038,7 @@
     "powerPct": 119.09659944767526,
     "thermalPct": 109.61432388150737,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -379.20829047736805,
+    "cumCashM": -829.2260414498073,
     "limiter": "Accelerator failures"
    },
    {
@@ -2575,7 +5048,7 @@
     "powerPct": 118.64745279488815,
     "thermalPct": 109.42199320784216,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -342.62563532702706,
+    "cumCashM": -792.6433862994664,
     "limiter": "Accelerator failures"
    },
    {
@@ -2585,7 +5058,7 @@
     "powerPct": 118.19999999999999,
     "thermalPct": 109.23,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -306.0429801766861,
+    "cumCashM": -756.0607311491257,
     "limiter": "Accelerator failures"
    },
    {
@@ -2595,7 +5068,7 @@
     "powerPct": 117.75423467499793,
     "thermalPct": 109.0383436658592,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -269.4603250263451,
+    "cumCashM": -719.4780759987849,
     "limiter": "Accelerator failures"
    },
    {
@@ -2605,7 +5078,7 @@
     "powerPct": 117.31015045596014,
     "thermalPct": 108.84702361433685,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -232.87766987600426,
+    "cumCashM": -682.8954208484441,
     "limiter": "Accelerator failures"
    },
    {
@@ -2615,7 +5088,7 @@
     "powerPct": 116.86774100296485,
     "thermalPct": 108.65603925538724,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -196.29501472566335,
+    "cumCashM": -646.3127656981034,
     "limiter": "Accelerator failures"
    },
    {
@@ -2625,7 +5098,7 @@
     "powerPct": 116.42699999999999,
     "thermalPct": 108.46539000000001,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -159.71235957532247,
+    "cumCashM": -609.7301105477625,
     "limiter": "Accelerator failures"
    },
    {
@@ -2635,7 +5108,7 @@
     "powerPct": 115.98792115487298,
     "thermalPct": 108.2750752601982,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -123.1297044249816,
+    "cumCashM": -573.1474553974217,
     "limiter": "Accelerator failures"
    },
    {
@@ -2645,7 +5118,7 @@
     "powerPct": 115.55049819912071,
     "thermalPct": 108.08509444903649,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -86.83526665429258,
+    "cumCashM": -536.8530176267327,
     "limiter": "Accelerator failures"
    },
    {
@@ -2655,7 +5128,7 @@
     "powerPct": 115.11472488792035,
     "thermalPct": 107.89544698059954,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -51.15220919539047,
+    "cumCashM": -501.1699601678306,
     "limiter": "Accelerator failures"
    },
    {
@@ -2665,7 +5138,7 @@
     "powerPct": 114.68059499999997,
     "thermalPct": 107.70613227000001,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": -16.071244158908545,
+    "cumCashM": -466.08899513134867,
     "limiter": "Accelerator failures"
    },
    {
@@ -2675,7 +5148,7 @@
     "powerPct": 114.24810233754987,
     "thermalPct": 107.51714973337678,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 18.416775245948024,
+    "cumCashM": -431.60097572649204,
     "limiter": "Accelerator failures"
    },
    {
@@ -2685,7 +5158,7 @@
     "powerPct": 113.8172407261339,
     "thermalPct": 107.32849878789324,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 52.320856854925424,
+    "cumCashM": -397.6968941175146,
     "limiter": "Accelerator failures"
    },
    {
@@ -2695,7 +5168,7 @@
     "powerPct": 113.38800401460156,
     "thermalPct": 107.14017885173537,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 85.64987165968076,
+    "cumCashM": -364.3678793127592,
     "limiter": "Accelerator failures"
    },
    {
@@ -2705,7 +5178,7 @@
     "powerPct": 112.96038607499999,
     "thermalPct": 106.95218934411001,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 118.41255588667264,
+    "cumCashM": -331.6051950857673,
     "limiter": "Accelerator failures"
    },
    {
@@ -2715,7 +5188,7 @@
     "powerPct": 112.53438080248661,
     "thermalPct": 106.76452968524315,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 150.61751304446983,
+    "cumCashM": -299.4002379279701,
     "limiter": "Accelerator failures"
    },
    {
@@ -2725,7 +5198,7 @@
     "powerPct": 112.10998211524188,
     "thermalPct": 106.57719929637797,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 182.27321593995813,
+    "cumCashM": -267.74453503248174,
     "limiter": "Accelerator failures"
    },
    {
@@ -2735,7 +5208,7 @@
     "powerPct": 111.68718395438253,
     "thermalPct": 106.39019759977319,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 213.38800866391736,
+    "cumCashM": -236.6297423085225,
     "limiter": "Accelerator failures"
    },
    {
@@ -2745,7 +5218,7 @@
     "powerPct": 111.265980283875,
     "thermalPct": 106.20352401870123,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 243.97010854643423,
+    "cumCashM": -206.04764242600567,
     "limiter": "Accelerator failures"
    },
    {
@@ -2755,7 +5228,7 @@
     "powerPct": 110.84636509044931,
     "thermalPct": 106.01717797744645,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 274.0276080826094,
+    "cumCashM": -175.9901428898305,
     "limiter": "Accelerator failures"
    },
    {
@@ -2765,7 +5238,7 @@
     "powerPct": 110.42833238351324,
     "thermalPct": 105.83115890130333,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 303.5684768290096,
+    "cumCashM": -146.44927414343024,
     "limiter": "Accelerator failures"
    },
    {
@@ -2775,7 +5248,7 @@
     "powerPct": 110.01187619506678,
     "thermalPct": 105.64546621657477,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 332.6005632713097,
+    "cumCashM": -117.41718770113022,
     "limiter": "Accelerator failures"
    },
    {
@@ -2785,7 +5258,7 @@
     "powerPct": 109.59699057961687,
     "thermalPct": 105.46009935057032,
     "availabilityPct": 96.16021200576142,
-    "cumCashM": 351.67645249794924,
+    "cumCashM": -98.34129847449067,
     "limiter": "Accelerator failures"
    },
    {
@@ -3140,13 +5613,13 @@
    },
    {
     "year": 15,
-    "capacityPct": 0,
+    "capacityPct": 43.63139327241495,
     "chipsPct": 45.37364504749717,
     "powerPct": 95.65875043785293,
     "thermalPct": 98.99913787248646,
     "availabilityPct": 96.16021200576142,
     "cumCashM": "NaN",
-    "limiter": "Propellant (deorbit)"
+    "limiter": "Accelerator failures"
    },
    {
     "year": 15.25,
@@ -3569,7 +6042,8 @@
    "effectiveEflopsBol": 50.2848,
    "tokensPerSec": 4190400,
    "trainDays": 276.20451684980134,
-   "trainFlops": 1.2e+27
+   "trainFlops": 1.2e+27,
+   "serving": null
   },
   "power": {
    "itMw": 6.7392,
@@ -4749,24 +7223,45 @@
   "compute": {
    "activeChips": 2592,
    "provisionedChips": 3159,
-   "peakEflops": 129.6,
-   "effectiveEflopsBol": 37.7136,
-   "tokensPerSec": 181315384.6153846,
-   "trainDays": 19.150179834919555,
-   "trainFlops": 6.24e+25
+   "peakEflops": 648,
+   "effectiveEflopsBol": 314.28,
+   "tokensPerSec": 15969934.46511949,
+   "trainDays": 2.2980215801903467,
+   "trainFlops": 6.24e+25,
+   "serving": {
+    "feasible": true,
+    "issues": [],
+    "bound": "bandwidth",
+    "sessionsPerChip": 118,
+    "ratePerUser": 100.05479499513844,
+    "ttftS": 0.06196206881298338,
+    "taskMin": 17.41229842597287,
+    "sloTtftOk": true,
+    "sloRateOk": true,
+    "sloTaskOk": true,
+    "chipSecPerReq": 0.05510254296421846,
+    "tokensPerChipHr": 22866458.28338988,
+    "weightsGB": 1400,
+    "replicaMemGB": 2850,
+    "kvPerSessionGB": 3.8045,
+    "altShare": 0,
+    "altModel": null,
+    "tasksPerHour": 1437294.1018607542,
+    "usersAtPeak": 1149835.2814886034
+   }
   },
   "power": {
-   "itMw": 6.7392,
-   "loadKwPerSat": 87.36,
-   "arrayKwPerSat": 133.5502113949872,
-   "arrayM2PerSat": 374.67175634503644,
-   "batteryKwhPerSat": 71.49840644497465,
-   "totalArrayM2": 30348.41226394795
+   "itMw": 14.256,
+   "loadKwPerSat": 184.8,
+   "arrayKwPerSat": 282.5100625663191,
+   "arrayM2PerSat": 792.5748691914232,
+   "batteryKwhPerSat": 151.24662901821563,
+   "totalArrayM2": 64198.564404505276
   },
   "thermal": {
    "radiatorFluxWm2": 971.3333650878001,
-   "radiatorM2PerSat": 98.93204892772705,
-   "totalRadiatorM2": 8013.495963145891
+   "radiatorM2PerSat": 209.27933427019184,
+   "totalRadiatorM2": 16951.62607588554
   },
   "mass": {
    "breakdownKgPerSat": [
@@ -4776,15 +7271,15 @@
     },
     {
      "name": "Solar arrays",
-     "kg": 667.7510569749361
+     "kg": 1412.5503128315956
     },
     {
      "name": "Radiators",
-     "kg": 395.7281957109082
+     "kg": 837.1173370807674
     },
     {
      "name": "Batteries",
-     "kg": 238.32802148324885
+     "kg": 504.1554300607188
     },
     {
      "name": "Bus avionics/comms",
@@ -4792,31 +7287,31 @@
     },
     {
      "name": "Structure",
-     "kg": 287.071091125364
+     "kg": 504.87346199596226
     },
     {
      "name": "Propellant",
-     "kg": 91.70326522060239
+     "kg": 161.27902258204352
     }
    ],
-   "dryKgPerSat": 2200.878365294457,
-   "wetKgPerSat": 2292.5816305150597,
-   "totalT": 185.69911207171984,
-   "kgPerKw": 27.555067674459853,
-   "dryKgPerKw": 26.452864967481457,
-   "launches": 2
+   "dryKgPerSat": 3870.696541969044,
+   "wetKgPerSat": 4031.9755645510877,
+   "totalT": 326.5900207286381,
+   "kgPerKw": 22.908952071313,
+   "dryKgPerKw": 21.992593988460477,
+   "launches": 4
   },
   "propulsion": {
-   "dragDvMsYr": 15.379330407330487,
-   "stationKeepingDvMsYr": 17.379330407330485,
+   "dragDvMsYr": 18.103176300102387,
+   "stationKeepingDvMsYr": 20.103176300102387,
    "deorbitDvMs": 111.2859782343444,
-   "stationLifeYr": 28.148641469086943,
-   "passiveDecayYr": 2.348788508734749
+   "stationLifeYr": 24.334688872337804,
+   "passiveDecayYr": 1.9953843421702995
   },
   "comms": {
-   "requiredGbps": 58.020923076923076,
+   "requiredGbps": 5.110379028838237,
    "availableGbps": 7695,
-   "utilizationPct": 0.7540080971659918
+   "utilizationPct": 0.06641168328574706
   },
   "life": {
    "usefulLifeYr": 14,
@@ -4849,8 +7344,8 @@
     },
     {
      "name": "Propellant (station-keeping)",
-     "years": 25,
-     "note": "17.4 m/s/yr, 111 m/s deorbit reserve"
+     "years": 24.334688872337804,
+     "note": "20.1 m/s/yr, 111 m/s deorbit reserve"
     }
    ],
    "capacityAtMissionEndPct": 91.25278004209729,
@@ -4860,49 +7355,49 @@
    "capexBreakdownM": [
     {
      "name": "Compute hardware",
-     "usd": 252.72
+     "usd": 522.113202
     },
     {
      "name": "Launch",
-     "usd": 18.569911207171984
+     "usd": 32.65900207286381
     },
     {
      "name": "Bus, radiators, structure",
-     "usd": 63.68539378699043
+     "usd": 106.40100378017209
     },
     {
      "name": "Solar arrays",
-     "usd": 54.08783561496982
+     "usd": 114.41657533935924
     },
     {
      "name": "Batteries",
-     "usd": 2.8956854610214733
+     "usd": 6.125488475237733
     },
     {
      "name": "Insurance",
-     "usd": 19.59794130350769
+     "usd": 39.08576358338165
     },
     {
      "name": "Ground segment",
      "usd": 30
     }
    ],
-   "capexM": 441.55676737366144,
+   "capexM": 850.8010352510146,
    "opexMYr": 23.1,
-   "lcocPerChipHr": 4.690371502590067,
-   "costPerMTokens": 0.018625377482602786,
-   "trainRunCostM": 5.587613244780836,
-   "npvM": 359.8880201565582,
-   "paybackYr": 3.0833333333333335,
+   "lcocPerChipHr": 8.05589335876239,
+   "costPerMTokens": 0.35230175390187835,
+   "trainRunCostM": 1.151632865032699,
+   "npvM": -49.356247720795515,
+   "paybackYr": 5.916666666666667,
    "revenueM": 1329.4731281192182,
-   "orbitalLcoePerKWh": 0.19049050509957144,
-   "capexPerKwIt": 65520.650429377594
+   "orbitalLcoePerKWh": 0.19049050509957152,
+   "capexPerKwIt": 59680.20729875243
   },
   "terrestrial": {
-   "capexM": 288.2304,
-   "opexMYr": 16.8933413376,
-   "lcocPerChipHr": 3.7307679364530655,
-   "costPerMTokens": 0.014370365384856254,
+   "capexM": 599.472576,
+   "opexMYr": 35.336336832,
+   "lcocPerChipHr": 7.768416669636978,
+   "costPerMTokens": 0.33972977246239877,
    "lcoePerKWh": 0.108
   },
   "series": [
@@ -4913,7 +7408,7 @@
     "powerPct": 120,
     "thermalPct": 110.00000000000001,
     "availabilityPct": 100,
-    "cumCashM": -429.4313771256614,
+    "cumCashM": -838.6756450030146,
     "limiter": "Accelerator failures"
    },
    {
@@ -4923,7 +7418,7 @@
     "powerPct": 119.54744637055627,
     "thermalPct": 109.80699261415829,
     "availabilityPct": 100,
-    "cumCashM": -393.0552063816614,
+    "cumCashM": -802.2994742590145,
     "limiter": "Accelerator failures"
    },
    {
@@ -4933,7 +7428,7 @@
     "powerPct": 119.09659944767526,
     "thermalPct": 109.61432388150737,
     "availabilityPct": 100,
-    "cumCashM": -356.6790356376613,
+    "cumCashM": -765.9233035150144,
     "limiter": "Accelerator failures"
    },
    {
@@ -4943,7 +7438,7 @@
     "powerPct": 118.64745279488815,
     "thermalPct": 109.42199320784216,
     "availabilityPct": 100,
-    "cumCashM": -320.3028648936612,
+    "cumCashM": -729.5471327710143,
     "limiter": "Accelerator failures"
    },
    {
@@ -4953,7 +7448,7 @@
     "powerPct": 118.19999999999999,
     "thermalPct": 109.23,
     "availabilityPct": 100,
-    "cumCashM": -283.9266941496611,
+    "cumCashM": -693.1709620270143,
     "limiter": "Accelerator failures"
    },
    {
@@ -4963,7 +7458,7 @@
     "powerPct": 117.75423467499793,
     "thermalPct": 109.0383436658592,
     "availabilityPct": 100,
-    "cumCashM": -247.5505234056611,
+    "cumCashM": -656.7947912830142,
     "limiter": "Accelerator failures"
    },
    {
@@ -4973,7 +7468,7 @@
     "powerPct": 117.31015045596014,
     "thermalPct": 108.84702361433685,
     "availabilityPct": 100,
-    "cumCashM": -211.17435266166112,
+    "cumCashM": -620.4186205390141,
     "limiter": "Accelerator failures"
    },
    {
@@ -4983,7 +7478,7 @@
     "powerPct": 116.86774100296485,
     "thermalPct": 108.65603925538724,
     "availabilityPct": 100,
-    "cumCashM": -174.79818191766114,
+    "cumCashM": -584.042449795014,
     "limiter": "Accelerator failures"
    },
    {
@@ -4993,7 +7488,7 @@
     "powerPct": 116.42699999999999,
     "thermalPct": 108.46539000000001,
     "availabilityPct": 100,
-    "cumCashM": -138.42201117366113,
+    "cumCashM": -547.6662790510139,
     "limiter": "Accelerator failures"
    },
    {
@@ -5003,7 +7498,7 @@
     "powerPct": 115.98792115487298,
     "thermalPct": 108.2750752601982,
     "availabilityPct": 100,
-    "cumCashM": -102.04584042966115,
+    "cumCashM": -511.2901083070139,
     "limiter": "Accelerator failures"
    },
    {
@@ -5013,7 +7508,7 @@
     "powerPct": 115.55049819912071,
     "thermalPct": 108.08509444903649,
     "availabilityPct": 100,
-    "cumCashM": -65.66966968566116,
+    "cumCashM": -474.9139375630138,
     "limiter": "Accelerator failures"
    },
    {
@@ -5023,7 +7518,7 @@
     "powerPct": 115.11472488792035,
     "thermalPct": 107.89544698059954,
     "availabilityPct": 100,
-    "cumCashM": -29.293498941661177,
+    "cumCashM": -438.5377668190137,
     "limiter": "Accelerator failures"
    },
    {
@@ -5033,7 +7528,7 @@
     "powerPct": 114.68059499999997,
     "thermalPct": 107.70613227000001,
     "availabilityPct": 100,
-    "cumCashM": 7.082671802338823,
+    "cumCashM": -402.1615960750136,
     "limiter": "Accelerator failures"
    },
    {
@@ -5043,7 +7538,7 @@
     "powerPct": 114.24810233754987,
     "thermalPct": 107.51714973337678,
     "availabilityPct": 100,
-    "cumCashM": 43.45884254633883,
+    "cumCashM": -365.7854253310136,
     "limiter": "Accelerator failures"
    },
    {
@@ -5053,7 +7548,7 @@
     "powerPct": 113.8172407261339,
     "thermalPct": 107.32849878789324,
     "availabilityPct": 100,
-    "cumCashM": 79.83501329033881,
+    "cumCashM": -329.4092545870135,
     "limiter": "Accelerator failures"
    },
    {
@@ -5063,7 +7558,7 @@
     "powerPct": 113.38800401460156,
     "thermalPct": 107.14017885173537,
     "availabilityPct": 100,
-    "cumCashM": 116.2111840343388,
+    "cumCashM": -293.0330838430134,
     "limiter": "Accelerator failures"
    },
    {
@@ -5073,7 +7568,7 @@
     "powerPct": 112.96038607499999,
     "thermalPct": 106.95218934411001,
     "availabilityPct": 100,
-    "cumCashM": 152.58735477833878,
+    "cumCashM": -256.65691309901337,
     "limiter": "Accelerator failures"
    },
    {
@@ -5083,7 +7578,7 @@
     "powerPct": 112.53438080248661,
     "thermalPct": 106.76452968524315,
     "availabilityPct": 100,
-    "cumCashM": 188.96352552233878,
+    "cumCashM": -220.28074235501336,
     "limiter": "Accelerator failures"
    },
    {
@@ -5093,7 +7588,7 @@
     "powerPct": 112.10998211524188,
     "thermalPct": 106.57719929637797,
     "availabilityPct": 100,
-    "cumCashM": 225.33969626633876,
+    "cumCashM": -183.90457161101338,
     "limiter": "Accelerator failures"
    },
    {
@@ -5103,7 +7598,7 @@
     "powerPct": 111.68718395438253,
     "thermalPct": 106.39019759977319,
     "availabilityPct": 100,
-    "cumCashM": 261.71586701033874,
+    "cumCashM": -147.5284008670134,
     "limiter": "Accelerator failures"
    },
    {
@@ -5113,7 +7608,7 @@
     "powerPct": 111.265980283875,
     "thermalPct": 106.20352401870123,
     "availabilityPct": 100,
-    "cumCashM": 298.0920377543388,
+    "cumCashM": -111.15223012301341,
     "limiter": "Accelerator failures"
    },
    {
@@ -5123,7 +7618,7 @@
     "powerPct": 110.84636509044931,
     "thermalPct": 106.01717797744645,
     "availabilityPct": 100,
-    "cumCashM": 334.46820849833887,
+    "cumCashM": -74.77605937901342,
     "limiter": "Accelerator failures"
    },
    {
@@ -5133,7 +7628,7 @@
     "powerPct": 110.42833238351324,
     "thermalPct": 105.83115890130333,
     "availabilityPct": 100,
-    "cumCashM": 370.7971841484156,
+    "cumCashM": -38.44708372893675,
     "limiter": "Accelerator failures"
    },
    {
@@ -5143,7 +7638,7 @@
     "powerPct": 110.01187619506678,
     "thermalPct": 105.64546621657477,
     "availabilityPct": 100,
-    "cumCashM": 406.78342615614037,
+    "cumCashM": -2.4608417212119233,
     "limiter": "Accelerator failures"
    },
    {
@@ -5153,7 +7648,7 @@
     "powerPct": 109.59699057961687,
     "thermalPct": 105.46009935057032,
     "availabilityPct": 100,
-    "cumCashM": 442.38980206954307,
+    "cumCashM": 33.14553419219072,
     "limiter": "Accelerator failures"
    },
    {
@@ -5163,7 +7658,7 @@
     "powerPct": 109.18366961409258,
     "thermalPct": 105.27505773160432,
     "availabilityPct": 100,
-    "cumCashM": 477.61976720371183,
+    "cumCashM": 68.3754993263595,
     "limiter": "Accelerator failures"
    },
    {
@@ -5173,7 +7668,7 @@
     "powerPct": 108.77190739776057,
     "thermalPct": 105.09034078899421,
     "availabilityPct": 100,
-    "cumCashM": 512.476745443706,
+    "cumCashM": 103.2324775663537,
     "limiter": "Accelerator failures"
    },
    {
@@ -5183,7 +7678,7 @@
     "powerPct": 108.36169805214078,
     "thermalPct": 104.90594795305877,
     "availabilityPct": 100,
-    "cumCashM": 546.9641295304478,
+    "cumCashM": 137.71986165309556,
     "limiter": "Accelerator failures"
    },
    {
@@ -5193,7 +7688,7 @@
     "powerPct": 107.95303572092261,
     "thermalPct": 104.72187865511633,
     "availabilityPct": 100,
-    "cumCashM": 581.085281344014,
+    "cumCashM": 171.84101346666176,
     "limiter": "Accelerator failures"
    },
    {
@@ -5203,7 +7698,7 @@
     "powerPct": 107.54591456988116,
     "thermalPct": 104.53813232748308,
     "availabilityPct": 100,
-    "cumCashM": 614.84353218435,
+    "cumCashM": 205.59926430699775,
     "limiter": "Accelerator failures"
    },
    {
@@ -5213,7 +7708,7 @@
     "powerPct": 107.14032878679414,
     "thermalPct": 104.35470840347124,
     "availabilityPct": 100,
-    "cumCashM": 648.2421830494314,
+    "cumCashM": 238.9979151720792,
     "limiter": "Accelerator failures"
    },
    {
@@ -5223,7 +7718,7 @@
     "powerPct": 106.73627258135865,
     "thermalPct": 104.17160631738736,
     "availabilityPct": 100,
-    "cumCashM": 681.2845049108948,
+    "cumCashM": 272.04023703354267,
     "limiter": "Accelerator failures"
    },
    {
@@ -5233,7 +7728,7 @@
     "powerPct": 106.33374018510877,
     "thermalPct": 103.98882550453052,
     "availabilityPct": 100,
-    "cumCashM": 703.1163607455561,
+    "cumCashM": 293.87209286820394,
     "limiter": "Accelerator failures"
    },
    {
@@ -5888,33 +8383,33 @@
    },
    {
     "year": 24.5,
-    "capacityPct": 43.854384087081996,
+    "capacityPct": 0,
     "chipsPct": 45.605540142168635,
     "powerPct": 82.86457232326723,
     "thermalPct": 92.60816380774682,
     "availabilityPct": 96.16021200576142,
     "cumCashM": "NaN",
-    "limiter": "Accelerator failures"
+    "limiter": "Propellant (deorbit)"
    },
    {
     "year": 24.75,
-    "capacityPct": 43.36655185266927,
+    "capacityPct": 0,
     "chipsPct": 45.09822820489514,
     "powerPct": 82.55206679862394,
     "thermalPct": 92.44567235680016,
     "availabilityPct": 96.16021200576142,
     "cumCashM": "NaN",
-    "limiter": "Accelerator failures"
+    "limiter": "Propellant (deorbit)"
    },
    {
     "year": 25,
-    "capacityPct": 42.88396589747586,
+    "capacityPct": 0,
     "chipsPct": 44.59637203681131,
     "powerPct": 82.24073981989228,
     "thermalPct": 92.28346601540048,
     "availabilityPct": 96.16021200576142,
     "cumCashM": "NaN",
-    "limiter": "Accelerator failures"
+    "limiter": "Propellant (deorbit)"
    }
   ],
   "warnings": []
@@ -5934,10 +8429,31 @@
    "activeChips": 8,
    "provisionedChips": 8,
    "peakEflops": 0.01584,
-   "effectiveEflopsBol": 0.00460944,
-   "tokensPerSec": 32924.57142857143,
-   "trainDays": 105459.90643356049,
-   "trainFlops": 4.2e+25
+   "effectiveEflopsBol": 0.0076824,
+   "tokensPerSec": 5242.891688327558,
+   "trainDays": 4610.104481238502,
+   "trainFlops": 3.06e+24,
+   "serving": {
+    "feasible": true,
+    "issues": [],
+    "bound": "memory",
+    "sessionsPerChip": 14.5,
+    "ratePerUser": 70.91713578909734,
+    "ttftS": 0.27887910949463934,
+    "taskMin": 0.8272042359748679,
+    "sloTtftOk": true,
+    "sloRateOk": true,
+    "sloTaskOk": true,
+    "chipSecPerReq": 3.6262431364598116,
+    "tokensPerChipHr": 2432269.339945774,
+    "weightsGB": 117,
+    "replicaMemGB": 152,
+    "kvPerSessionGB": 1.1855,
+    "altShare": 0,
+    "altModel": null,
+    "tasksPerHour": 5392.688593708345,
+    "usersAtPeak": 2157.075437483338
+   }
   },
   "power": {
    "itMw": 0.00728,
@@ -5998,9 +8514,9 @@
    "passiveDecayYr": 0.8707873307246535
   },
   "comms": {
-   "requiredGbps": 0.010535862857142857,
+   "requiredGbps": 0.0016777253402648186,
    "availableGbps": 9.5,
-   "utilizationPct": 0.11090381954887217
+   "utilizationPct": 0.017660266739629667
   },
   "life": {
    "usefulLifeYr": 5.833333333333333,
@@ -6074,8 +8590,8 @@
    "capexM": 8.676926603090841,
    "opexMYr": 3,
    "lcocPerChipHr": 101.3018309379656,
-   "costPerMTokens": 6.837300231850378,
-   "trainRunCostM": 2051.1900695551135,
+   "costPerMTokens": 41.649100810613376,
+   "trainRunCostM": 89.66630875483783,
    "npvM": -16.19708994120654,
    "paybackYr": null,
    "revenueM": 0.31773253295724924,
@@ -6086,7 +8602,7 @@
    "capexM": 0.40736,
    "opexMYr": 0.02295297984,
    "lcocPerChipHr": 1.6949450204252776,
-   "costPerMTokens": 0.11096721981834028,
+   "costPerMTokens": 0.6968574543076983,
    "lcoePerKWh": 0.108
   },
   "series": [
@@ -7117,24 +9633,45 @@
   "compute": {
    "activeChips": 3200,
    "provisionedChips": 3800,
-   "peakEflops": 160,
-   "effectiveEflopsBol": 46.56,
-   "tokensPerSec": 223846153.84615386,
-   "trainDays": 15.51164566628484,
-   "trainFlops": 6.24e+25
+   "peakEflops": 800,
+   "effectiveEflopsBol": 388,
+   "tokensPerSec": 19715968.475456167,
+   "trainDays": 1.861397479954181,
+   "trainFlops": 6.24e+25,
+   "serving": {
+    "feasible": true,
+    "issues": [],
+    "bound": "bandwidth",
+    "sessionsPerChip": 118,
+    "ratePerUser": 100.05479499513844,
+    "ttftS": 0.06129494062258708,
+    "taskMin": 17.411408921719005,
+    "sloTtftOk": true,
+    "sloRateOk": true,
+    "sloTaskOk": true,
+    "chipSecPerReq": 0.05510254296421846,
+    "tokensPerChipHr": 22866458.28338988,
+    "weightsGB": 1400,
+    "replicaMemGB": 2850,
+    "kvPerSessionGB": 3.8045,
+    "altShare": 0,
+    "altModel": null,
+    "tasksPerHour": 1774437.1627910552,
+    "usersAtPeak": 1419549.730232844
+   }
   },
   "power": {
-   "itMw": 8.32,
-   "loadKwPerSat": 43.68,
-   "arrayKwPerSat": 86.19928771527218,
-   "arrayM2PerSat": 241.82993187822382,
-   "batteryKwhPerSat": 64.70013866373226,
-   "totalArrayM2": 48365.98637564477
+   "itMw": 17.6,
+   "loadKwPerSat": 92.4,
+   "arrayKwPerSat": 182.34464708999886,
+   "arrayM2PerSat": 511.5633174347043,
+   "batteryKwhPerSat": 136.8656779425106,
+   "totalArrayM2": 102312.66348694086
   },
   "thermal": {
    "radiatorFluxWm2": 971.3333650878001,
-   "radiatorM2PerSat": 49.466024463863526,
-   "totalRadiatorM2": 9893.204892772705
+   "radiatorM2PerSat": 104.63966713509592,
+   "totalRadiatorM2": 20927.933427019183
   },
   "mass": {
    "breakdownKgPerSat": [
@@ -7144,15 +9681,15 @@
     },
     {
      "name": "Solar arrays",
-     "kg": 430.9964385763609
+     "kg": 911.7232354499943
     },
     {
      "name": "Radiators",
-     "kg": 197.8640978554541
+     "kg": 418.5586685403837
     },
     {
      "name": "Batteries",
-     "kg": 215.66712887910754
+     "kg": 456.21892647503523
     },
     {
      "name": "Bus avionics/comms",
@@ -7160,31 +9697,31 @@
     },
     {
      "name": "Structure",
-     "kg": 200.17914979663837
+     "kg": 341.47512456981195
     },
     {
      "name": "Propellant",
-     "kg": 63.946117296148365
+     "kg": 109.08233145980105
     }
    ],
-   "dryKgPerSat": 1534.7068151075607,
-   "wetKgPerSat": 1598.652932403709,
-   "totalT": 319.7305864807418,
-   "kgPerKw": 38.42915702893531,
-   "dryKgPerKw": 36.8919907477779,
-   "launches": 4
+   "dryKgPerSat": 2617.975955035225,
+   "wetKgPerSat": 2727.058286495026,
+   "totalT": 545.4116572990052,
+   "kgPerKw": 30.98929871017075,
+   "dryKgPerKw": 29.74972676176392,
+   "launches": 6
   },
   "propulsion": {
-   "dragDvMsYr": 61.95292718980509,
-   "stationKeepingDvMsYr": 63.95292718980509,
+   "dragDvMsYr": 74.22390888742041,
+   "stationKeepingDvMsYr": 76.22390888742041,
    "deorbitDvMs": 84.53146742344674,
-   "stationLifeYr": 8.067794143156773,
-   "passiveDecayYr": 0.5453302860536499
+   "stationLifeYr": 6.768992287993188,
+   "passiveDecayYr": 0.455174188650192
   },
   "comms": {
-   "requiredGbps": 71.63076923076923,
+   "requiredGbps": 6.309109912145973,
    "availableGbps": 19000,
-   "utilizationPct": 0.37700404858299597
+   "utilizationPct": 0.033205841642873546
   },
   "life": {
    "usefulLifeYr": 5.916666666666667,
@@ -7217,8 +9754,8 @@
     },
     {
      "name": "Propellant (station-keeping)",
-     "years": 8.067794143156773,
-     "note": "64.0 m/s/yr, 85 m/s deorbit reserve"
+     "years": 6.768992287993188,
+     "note": "76.2 m/s/yr, 85 m/s deorbit reserve"
     }
    ],
    "capacityAtMissionEndPct": 57.22633600544904,
@@ -7228,49 +9765,49 @@
    "capexBreakdownM": [
     {
      "name": "Compute hardware",
-     "usd": 304
+     "usd": 628.0564
     },
     {
      "name": "Launch",
-     "usd": 63.94611729614836
+     "usd": 109.08233145980104
     },
     {
      "name": "Bus, radiators, structure",
-     "usd": 209.41297429562778
+     "usd": 318.0101379330587
     },
     {
      "name": "Solar arrays",
-     "usd": 172.39857543054435
+     "usd": 364.68929417999766
     },
     {
      "name": "Batteries",
-     "usd": 6.470013866373226
+     "usd": 13.686567794251058
     },
     {
      "name": "Insurance",
-     "usd": 37.81138404443469
+     "usd": 71.6762365683554
     },
     {
      "name": "Ground segment",
      "usd": 50
     }
    ],
-   "capexM": 844.0390649331284,
+   "capexM": 1555.2009679354637,
    "opexMYr": 35,
-   "lcocPerChipHr": 8.454869043061523,
-   "costPerMTokens": 0.03357412678420765,
-   "trainRunCostM": 10.072238035262295,
-   "npvM": -95.5138314424684,
-   "paybackYr": 5.083333333333333,
+   "lcocPerChipHr": 14.447636704948039,
+   "costPerMTokens": 0.6318266049728721,
+   "trainRunCostM": 2.065366621738276,
+   "npvM": -806.6757344448047,
+   "paybackYr": null,
    "revenueM": 1185.0871187589858,
-   "orbitalLcoePerKWh": 0.6238833554751968,
-   "capexPerKwIt": 101447.00299677024
+   "orbitalLcoePerKWh": 0.6238833554751967,
+   "capexPerKwIt": 88363.69135996953
   },
   "terrestrial": {
-   "capexM": 355.84,
-   "opexMYr": 21.62397696,
-   "lcocPerChipHr": 3.758705189382985,
-   "costPerMTokens": 0.014477975544290016,
+   "capexM": 740.0896,
+   "opexMYr": 45.211776,
+   "lcocPerChipHr": 7.826134335758868,
+   "costPerMTokens": 0.34225389165071296,
    "lcoePerKWh": 0.108
   },
   "series": [
@@ -7281,7 +9818,7 @@
     "powerPct": 120,
     "thermalPct": 110.00000000000001,
     "availabilityPct": 100,
-    "cumCashM": -829.6095707997952,
+    "cumCashM": -1540.7714738021302,
     "limiter": "Accelerator failures"
    },
    {
@@ -7291,7 +9828,7 @@
     "powerPct": 119.54744637055627,
     "thermalPct": 109.80699261415829,
     "availabilityPct": 100,
-    "cumCashM": -786.3210883997951,
+    "cumCashM": -1497.48299140213,
     "limiter": "Accelerator failures"
    },
    {
@@ -7301,7 +9838,7 @@
     "powerPct": 119.09659944767526,
     "thermalPct": 109.6143238815074,
     "availabilityPct": 100,
-    "cumCashM": -743.0326059997952,
+    "cumCashM": -1454.1945090021295,
     "limiter": "Accelerator failures"
    },
    {
@@ -7311,7 +9848,7 @@
     "powerPct": 118.64745279488815,
     "thermalPct": 109.42199320784214,
     "availabilityPct": 100,
-    "cumCashM": -699.7441235997952,
+    "cumCashM": -1410.9060266021293,
     "limiter": "Accelerator failures"
    },
    {
@@ -7321,7 +9858,7 @@
     "powerPct": 118.19999999999999,
     "thermalPct": 109.23000000000003,
     "availabilityPct": 100,
-    "cumCashM": -656.4556411997952,
+    "cumCashM": -1367.6175442021288,
     "limiter": "Accelerator failures"
    },
    {
@@ -7331,7 +9868,7 @@
     "powerPct": 117.75423467499793,
     "thermalPct": 109.0383436658592,
     "availabilityPct": 100,
-    "cumCashM": -613.1671587997953,
+    "cumCashM": -1324.3290618021285,
     "limiter": "Accelerator failures"
    },
    {
@@ -7341,7 +9878,7 @@
     "powerPct": 117.31015045596011,
     "thermalPct": 108.84702361433685,
     "availabilityPct": 100,
-    "cumCashM": -569.8786763997953,
+    "cumCashM": -1281.0405794021283,
     "limiter": "Accelerator failures"
    },
    {
@@ -7351,7 +9888,7 @@
     "powerPct": 116.86774100296482,
     "thermalPct": 108.65603925538724,
     "availabilityPct": 100,
-    "cumCashM": -526.5901939997954,
+    "cumCashM": -1237.7520970021278,
     "limiter": "Accelerator failures"
    },
    {
@@ -7361,7 +9898,7 @@
     "powerPct": 116.42699999999999,
     "thermalPct": 108.46539000000001,
     "availabilityPct": 100,
-    "cumCashM": -483.30171159979534,
+    "cumCashM": -1194.4636146021276,
     "limiter": "Accelerator failures"
    },
    {
@@ -7371,7 +9908,7 @@
     "powerPct": 115.98792115487298,
     "thermalPct": 108.27507526019818,
     "availabilityPct": 100,
-    "cumCashM": -440.0132291997954,
+    "cumCashM": -1151.1751322021273,
     "limiter": "Accelerator failures"
    },
    {
@@ -7381,7 +9918,7 @@
     "powerPct": 115.55049819912071,
     "thermalPct": 108.08509444903649,
     "availabilityPct": 100,
-    "cumCashM": -396.7247467997954,
+    "cumCashM": -1107.8866498021268,
     "limiter": "Accelerator failures"
    },
    {
@@ -7391,7 +9928,7 @@
     "powerPct": 115.11472488792036,
     "thermalPct": 107.89544698059954,
     "availabilityPct": 100,
-    "cumCashM": -353.4362643997954,
+    "cumCashM": -1064.5981674021266,
     "limiter": "Accelerator failures"
    },
    {
@@ -7401,7 +9938,7 @@
     "powerPct": 114.68059500000001,
     "thermalPct": 107.70613227000001,
     "availabilityPct": 100,
-    "cumCashM": -310.4972019414065,
+    "cumCashM": -1021.6591049437377,
     "limiter": "Accelerator failures"
    },
    {
@@ -7411,7 +9948,7 @@
     "powerPct": 114.24810233754987,
     "thermalPct": 107.51714973337678,
     "availabilityPct": 100,
-    "cumCashM": -268.34338278301954,
+    "cumCashM": -979.5052857853509,
     "limiter": "Accelerator failures"
    },
    {
@@ -7421,7 +9958,7 @@
     "powerPct": 113.8172407261339,
     "thermalPct": 107.32849878789324,
     "availabilityPct": 100,
-    "cumCashM": -226.96287776572038,
+    "cumCashM": -938.1247807680519,
     "limiter": "Accelerator failures"
    },
    {
@@ -7431,7 +9968,7 @@
     "powerPct": 113.38800401460153,
     "thermalPct": 107.14017885173534,
     "availabilityPct": 100,
-    "cumCashM": -186.34393895446803,
+    "cumCashM": -897.5058419567995,
     "limiter": "Accelerator failures"
    },
    {
@@ -7441,7 +9978,7 @@
     "powerPct": 112.96038607499999,
     "thermalPct": 106.95218934411001,
     "availabilityPct": 100,
-    "cumCashM": -146.47499688500136,
+    "cumCashM": -857.6368998873329,
     "limiter": "Accelerator failures"
    },
    {
@@ -7451,7 +9988,7 @@
     "powerPct": 112.53438080248661,
     "thermalPct": 106.76452968524315,
     "availabilityPct": 100,
-    "cumCashM": -107.34465785256928,
+    "cumCashM": -818.5065608549008,
     "limiter": "Accelerator failures"
    },
    {
@@ -7461,7 +9998,7 @@
     "powerPct": 112.10998211524188,
     "thermalPct": 106.57719929637798,
     "availabilityPct": 100,
-    "cumCashM": -68.94170124184994,
+    "cumCashM": -780.1036042441815,
     "limiter": "Accelerator failures"
    },
    {
@@ -7471,7 +10008,7 @@
     "powerPct": 111.68718395438253,
     "thermalPct": 106.39019759977319,
     "availabilityPct": 100,
-    "cumCashM": -31.25507689743282,
+    "cumCashM": -742.4169798997644,
     "limiter": "Accelerator failures"
    },
    {
@@ -7481,7 +10018,7 @@
     "powerPct": 111.265980283875,
     "thermalPct": 106.20352401870123,
     "availabilityPct": 100,
-    "cumCashM": 5.7260974657523835,
+    "cumCashM": -705.4358055365792,
     "limiter": "Accelerator failures"
    },
    {
@@ -7491,7 +10028,7 @@
     "powerPct": 110.84636509044931,
     "thermalPct": 106.01717797744644,
     "availabilityPct": 100,
-    "cumCashM": 42.012538812666975,
+    "cumCashM": -669.1493641896647,
     "limiter": "Accelerator failures"
    },
    {
@@ -7501,7 +10038,7 @@
     "powerPct": 110.42833238351326,
     "thermalPct": 105.83115890130333,
     "availabilityPct": 100,
-    "cumCashM": 77.61480129965216,
+    "cumCashM": -633.5471017026795,
     "limiter": "Accelerator failures"
    },
    {
@@ -7511,7 +10048,7 @@
     "powerPct": 110.01187619506678,
     "thermalPct": 105.64546621657477,
     "availabilityPct": 100,
-    "cumCashM": 112.54327874776429,
+    "cumCashM": -598.6186242545674,
     "limiter": "Accelerator failures"
    },
    {
@@ -7521,7 +10058,7 @@
     "powerPct": 109.59699057961684,
     "thermalPct": 105.46009935057032,
     "availabilityPct": 69.23172120737478,
-    "cumCashM": 131.0480538258567,
+    "cumCashM": -580.1138491764749,
     "limiter": "Accelerator failures"
    },
    {
@@ -7556,53 +10093,53 @@
    },
    {
     "year": 7,
-    "capacityPct": 53.55335630385424,
+    "capacityPct": 0,
     "chipsPct": 77.35378432011247,
     "powerPct": 107.95303572092261,
     "thermalPct": 104.72187865511636,
     "availabilityPct": 69.23172120737478,
     "cumCashM": "NaN",
-    "limiter": "Accelerator failures"
+    "limiter": "Propellant (deorbit)"
    },
    {
     "year": 7.25,
-    "capacityPct": 52.739791262621836,
+    "capacityPct": 0,
     "chipsPct": 76.17865097510219,
     "powerPct": 107.54591456988119,
     "thermalPct": 104.53813232748308,
     "availabilityPct": 69.23172120737478,
     "cumCashM": "NaN",
-    "limiter": "Accelerator failures"
+    "limiter": "Propellant (deorbit)"
    },
    {
     "year": 7.5,
-    "capacityPct": 51.938585634916365,
+    "capacityPct": 0,
     "chipsPct": 75.02136987081539,
     "powerPct": 107.14032878679416,
     "thermalPct": 104.35470840347125,
     "availabilityPct": 69.23172120737478,
     "cumCashM": "NaN",
-    "limiter": "Accelerator failures"
+    "limiter": "Propellant (deorbit)"
    },
    {
     "year": 7.75,
-    "capacityPct": 51.14955166057733,
+    "capacityPct": 0,
     "chipsPct": 73.88166980186061,
     "powerPct": 106.73627258135868,
     "thermalPct": 104.17160631738736,
     "availabilityPct": 69.23172120737478,
     "cumCashM": "NaN",
-    "limiter": "Accelerator failures"
+    "limiter": "Propellant (deorbit)"
    },
    {
     "year": 8,
-    "capacityPct": 50.37250443183506,
+    "capacityPct": 0,
     "chipsPct": 72.75928368290984,
     "powerPct": 106.33374018510877,
     "thermalPct": 103.98882550453052,
     "availabilityPct": 69.23172120737478,
     "cumCashM": "NaN",
-    "limiter": "Accelerator failures"
+    "limiter": "Propellant (deorbit)"
    },
    {
     "year": 8.25,
@@ -8303,24 +10840,45 @@
   "compute": {
    "activeChips": 2592,
    "provisionedChips": 2997,
-   "peakEflops": 129.6,
-   "effectiveEflopsBol": 37.7136,
-   "tokensPerSec": 181315384.6153846,
-   "trainDays": 19.150179834919555,
-   "trainFlops": 6.24e+25
+   "peakEflops": 648,
+   "effectiveEflopsBol": 314.28,
+   "tokensPerSec": 15969934.46511949,
+   "trainDays": 2.2980215801903467,
+   "trainFlops": 6.24e+25,
+   "serving": {
+    "feasible": true,
+    "issues": [],
+    "bound": "bandwidth",
+    "sessionsPerChip": 118,
+    "ratePerUser": 100.05479499513844,
+    "ttftS": 0.2863642297906288,
+    "taskMin": 17.711501307276396,
+    "sloTtftOk": true,
+    "sloRateOk": true,
+    "sloTaskOk": true,
+    "chipSecPerReq": 0.05510254296421846,
+    "tokensPerChipHr": 22866458.28338988,
+    "weightsGB": 1400,
+    "replicaMemGB": 2850,
+    "kvPerSessionGB": 3.8045,
+    "altShare": 0,
+    "altModel": null,
+    "tasksPerHour": 1437294.1018607542,
+    "usersAtPeak": 1149835.2814886034
+   }
   },
   "power": {
-   "itMw": 6.7392,
-   "loadKwPerSat": 87.36,
-   "arrayKwPerSat": 110.84815605641379,
-   "arrayM2PerSat": 310.9817115484111,
-   "batteryKwhPerSat": 262.08,
-   "totalArrayM2": 25189.5186354213
+   "itMw": 14.256,
+   "loadKwPerSat": 184.8,
+   "arrayKwPerSat": 234.48648396549072,
+   "arrayM2PerSat": 657.845928275485,
+   "batteryKwhPerSat": 554.4,
+   "totalArrayM2": 53285.52019031429
   },
   "thermal": {
    "radiatorFluxWm2": 1047.1240376017201,
-   "radiatorM2PerSat": 91.77136284646221,
-   "totalRadiatorM2": 7433.480390563439
+   "radiatorM2PerSat": 194.13172909828546,
+   "totalRadiatorM2": 15724.670056961122
   },
   "mass": {
    "breakdownKgPerSat": [
@@ -8330,15 +10888,15 @@
     },
     {
      "name": "Solar arrays",
-     "kg": 554.240780282069
+     "kg": 1172.4324198274535
     },
     {
      "name": "Radiators",
-     "kg": 367.08545138584884
+     "kg": 776.5269163931418
     },
     {
      "name": "Batteries",
-     "kg": 873.6
+     "kg": 1848
     },
     {
      "name": "Bus avionics/comms",
@@ -8346,19 +10904,19 @@
     },
     {
      "name": "Structure",
-     "kg": 399.7389347501877
+     "kg": 700.0439004330893
     },
     {
      "name": "Propellant",
-     "kg": 540.8232646620186
+     "kg": 947.1182182330031
     }
    ],
-   "dryKgPerSat": 3064.6651664181054,
-   "wetKgPerSat": 3605.488431080124,
-   "totalT": 292.04456291749,
-   "kgPerKw": 43.3351974889438,
-   "dryKgPerKw": 36.83491786560223,
-   "launches": 3
+   "dryKgPerSat": 5367.003236653684,
+   "wetKgPerSat": 6314.121454886687,
+   "totalT": 511.4438378458217,
+   "kgPerKw": 35.875690084583454,
+   "dryKgPerKw": 30.494336571895932,
+   "launches": 6
   },
   "propulsion": {
    "dragDvMsYr": 0,
@@ -8368,9 +10926,9 @@
    "passiveDecayYr": "Infinity"
   },
   "comms": {
-   "requiredGbps": 58.020923076923076,
+   "requiredGbps": 5.110379028838237,
    "availableGbps": 7695,
-   "utilizationPct": 0.7540080971659918
+   "utilizationPct": 0.06641168328574706
   },
   "life": {
    "usefulLifeYr": 4.25,
@@ -8414,49 +10972,49 @@
    "capexBreakdownM": [
     {
      "name": "Compute hardware",
-     "usd": 239.76
+     "usd": 495.338166
     },
     {
      "name": "Launch",
-     "usd": 175.226737750494
+     "usd": 306.866302707493
     },
     {
      "name": "Bus, radiators, structure",
-     "usd": 153.91916291552846
+     "usd": 240.1533542443871
     },
     {
      "name": "Solar arrays",
-     "usd": 89.78700640569517
+     "usd": 189.93405201204746
     },
     {
      "name": "Batteries",
-     "usd": 10.614239999999999
+     "usd": 22.4532
     },
     {
      "name": "Insurance",
-     "usd": 33.46535735358589
+     "usd": 62.737253748196395
     },
     {
      "name": "Ground segment",
      "usd": 50
     }
    ],
-   "capexM": 752.7725044253035,
+   "capexM": 1367.4823287121242,
    "opexMYr": 23.1,
-   "lcocPerChipHr": 10.066571359036548,
-   "costPerMTokens": 0.03997416652691107,
-   "trainRunCostM": 11.99224995807332,
-   "npvM": -205.94923929805506,
+   "lcocPerChipHr": 17.2794659565256,
+   "costPerMTokens": 0.7556686629112714,
+   "trainRunCostM": 2.470191696877886,
+   "npvM": -820.6590635848754,
    "paybackYr": null,
    "revenueM": 833.3527923839207,
-   "orbitalLcoePerKWh": 0.7574785106178569,
-   "capexPerKwIt": 111700.57342493226
+   "orbitalLcoePerKWh": 0.7574785106178571,
+   "capexPerKwIt": 95923.28343940264
   },
   "terrestrial": {
-   "capexM": 288.2304,
-   "opexMYr": 17.5154213376,
-   "lcocPerChipHr": 3.7587051893829853,
-   "costPerMTokens": 0.014477975544290016,
+   "capexM": 599.472576,
+   "opexMYr": 36.621538560000005,
+   "lcocPerChipHr": 7.826134335758868,
+   "costPerMTokens": 0.34225389165071296,
    "lcoePerKWh": 0.108
   },
   "series": [
@@ -8467,7 +11025,7 @@
     "powerPct": 120,
     "thermalPct": 110.00000000000001,
     "availabilityPct": 100,
-    "cumCashM": -740.6471141773035,
+    "cumCashM": -1355.3569384641241,
     "limiter": "Accelerator failures"
    },
    {
@@ -8477,7 +11035,7 @@
     "powerPct": 119.54744637055627,
     "thermalPct": 109.80699261415829,
     "availabilityPct": 100,
-    "cumCashM": -704.2709434333034,
+    "cumCashM": -1318.9807677201245,
     "limiter": "Accelerator failures"
    },
    {
@@ -8487,7 +11045,7 @@
     "powerPct": 119.09659944767526,
     "thermalPct": 109.61432388150737,
     "availabilityPct": 100,
-    "cumCashM": -667.8947726893033,
+    "cumCashM": -1282.6045969761249,
     "limiter": "Accelerator failures"
    },
    {
@@ -8497,7 +11055,7 @@
     "powerPct": 118.64745279488815,
     "thermalPct": 109.42199320784216,
     "availabilityPct": 100,
-    "cumCashM": -631.5186019453032,
+    "cumCashM": -1246.228426232125,
     "limiter": "Accelerator failures"
    },
    {
@@ -8507,7 +11065,7 @@
     "powerPct": 118.19999999999999,
     "thermalPct": 109.23,
     "availabilityPct": 100,
-    "cumCashM": -595.1424312013031,
+    "cumCashM": -1209.8522554881254,
     "limiter": "Accelerator failures"
    },
    {
@@ -8517,7 +11075,7 @@
     "powerPct": 117.75423467499793,
     "thermalPct": 109.0383436658592,
     "availabilityPct": 100,
-    "cumCashM": -558.766260457303,
+    "cumCashM": -1173.4760847441255,
     "limiter": "Accelerator failures"
    },
    {
@@ -8527,7 +11085,7 @@
     "powerPct": 117.31015045596014,
     "thermalPct": 108.84702361433685,
     "availabilityPct": 100,
-    "cumCashM": -522.3900897133029,
+    "cumCashM": -1137.0999140001259,
     "limiter": "Accelerator failures"
    },
    {
@@ -8537,7 +11095,7 @@
     "powerPct": 116.86774100296485,
     "thermalPct": 108.65603925538724,
     "availabilityPct": 100,
-    "cumCashM": -486.0139189693029,
+    "cumCashM": -1100.7237432561262,
     "limiter": "Accelerator failures"
    },
    {
@@ -8547,7 +11105,7 @@
     "powerPct": 116.42699999999999,
     "thermalPct": 108.46539000000001,
     "availabilityPct": 100,
-    "cumCashM": -450.3435456466499,
+    "cumCashM": -1065.053369933473,
     "limiter": "Accelerator failures"
    },
    {
@@ -8557,7 +11115,7 @@
     "powerPct": 115.98792115487298,
     "thermalPct": 108.2750752601982,
     "availabilityPct": 100,
-    "cumCashM": -416.103087861259,
+    "cumCashM": -1030.8129121480822,
     "limiter": "Accelerator failures"
    },
    {
@@ -8567,7 +11125,7 @@
     "powerPct": 115.55049819912071,
     "thermalPct": 108.08509444903649,
     "availabilityPct": 100,
-    "cumCashM": -383.2586650460916,
+    "cumCashM": -997.9684893329149,
     "limiter": "Accelerator failures"
    },
    {
@@ -8577,7 +11135,7 @@
     "powerPct": 115.11472488792035,
     "thermalPct": 107.89544698059954,
     "availabilityPct": 100,
-    "cumCashM": -351.7770960332692,
+    "cumCashM": -966.4869203200925,
     "limiter": "Accelerator failures"
    },
    {
@@ -8587,7 +11145,7 @@
     "powerPct": 114.68059499999997,
     "thermalPct": 107.70613227000001,
     "availabilityPct": 100,
-    "cumCashM": -321.6258856231785,
+    "cumCashM": -936.3357099100019,
     "limiter": "Accelerator failures"
    },
    {
@@ -8597,7 +11155,7 @@
     "powerPct": 114.24810233754987,
     "thermalPct": 107.51714973337678,
     "availabilityPct": 100,
-    "cumCashM": -292.7732114002406,
+    "cumCashM": -907.483035687064,
     "limiter": "Accelerator failures"
    },
    {
@@ -8607,7 +11165,7 @@
     "powerPct": 113.8172407261339,
     "thermalPct": 107.32849878789324,
     "availabilityPct": 100,
-    "cumCashM": -265.18791079094837,
+    "cumCashM": -879.8977350777718,
     "limiter": "Accelerator failures"
    },
    {
@@ -8617,7 +11175,7 @@
     "powerPct": 113.38800401460156,
     "thermalPct": 107.14017885173537,
     "availabilityPct": 100,
-    "cumCashM": -238.83946835985438,
+    "cumCashM": -853.5492926466777,
     "limiter": "Accelerator failures"
    },
    {
@@ -8627,7 +11185,7 @@
     "powerPct": 112.96038607499999,
     "thermalPct": 106.95218934411001,
     "availabilityPct": 100,
-    "cumCashM": -213.69800333926594,
+    "cumCashM": -828.4078276260893,
     "limiter": "Accelerator failures"
    },
    {
@@ -8637,7 +11195,7 @@
     "powerPct": 112.53438080248661,
     "thermalPct": 106.76452968524315,
     "availabilityPct": 100,
-    "cumCashM": -189.73425738847922,
+    "cumCashM": -804.4440816753026,
     "limiter": "Accelerator failures"
    },
    {
@@ -8647,7 +11205,7 @@
     "powerPct": 112.10998211524188,
     "thermalPct": 106.57719929637797,
     "availabilityPct": 100,
-    "cumCashM": -166.9195825784554,
+    "cumCashM": -781.6294068652787,
     "limiter": "Accelerator failures"
    },
    {
@@ -8657,7 +11215,7 @@
     "powerPct": 111.68718395438253,
     "thermalPct": 106.39019759977319,
     "availabilityPct": 100,
-    "cumCashM": -145.22592959791453,
+    "cumCashM": -759.9357538847379,
     "limiter": "Accelerator failures"
    },
    {
@@ -8667,7 +11225,7 @@
     "powerPct": 111.265980283875,
     "thermalPct": 106.20352401870123,
     "availabilityPct": 100,
-    "cumCashM": -124.62583617689302,
+    "cumCashM": -739.3356604637164,
     "limiter": "Accelerator failures"
    },
    {
@@ -8677,7 +11235,7 @@
     "powerPct": 110.84636509044931,
     "thermalPct": 106.01717797744645,
     "availabilityPct": 100,
-    "cumCashM": -105.09241572387874,
+    "cumCashM": -719.8022400107021,
     "limiter": "Accelerator failures"
    },
    {
@@ -8687,7 +11245,7 @@
     "powerPct": 110.42833238351324,
     "thermalPct": 105.83115890130333,
     "availabilityPct": 100,
-    "cumCashM": -86.59934617270657,
+    "cumCashM": -701.30917045953,
     "limiter": "Accelerator failures"
    },
    {
@@ -8697,7 +11255,7 @@
     "powerPct": 110.01187619506678,
     "thermalPct": 105.64546621657477,
     "availabilityPct": 100,
-    "cumCashM": -69.12085903546357,
+    "cumCashM": -683.8306833222869,
     "limiter": "Accelerator failures"
    },
    {
@@ -8707,7 +11265,7 @@
     "powerPct": 109.59699057961687,
     "thermalPct": 105.46009935057032,
     "availabilityPct": 100,
-    "cumCashM": -58.01971204138227,
+    "cumCashM": -672.7295363282055,
     "limiter": "Accelerator failures"
    },
    {
