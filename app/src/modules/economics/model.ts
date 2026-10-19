@@ -23,7 +23,7 @@ export interface EconomicsInputs {
 }
 
 export const economicsDefaults: EconomicsInputs = {
-  serverCostMult: 1.6,
+  serverCostMult: 1, // deck chips are priced per rack slot; vendor chips set 1.6 via the chip preset
   busCostPerKg: 1500,
   launchCostPerKg: assumptions.launch_usd_per_kg.value,
   insurancePct: 5,
@@ -134,7 +134,8 @@ export function runEconomics(i: EconomicsInputs, d: EconomicsDeps): EconomicsMod
     tPvHours += (d.N * HRS_YR * i.terrestrialUptimePct / 100) / disc
   }
   const tLcoc = tPvCost / tPvHours
-  const tTokensPerChipHr = (d.chipPflops * 1e15 * d.mfu * 3600) / ((d.training ? 6 : 2) * d.P)
+  // Same chips on the ground: inference uses the same serving throughput; training the FLOPS formula
+  const tTokensPerChipHr = d.training ? (d.chipPflops * 1e15 * d.mfu * 3600) / (6 * d.P) : d.tokensPerChipHr
 
   return {
     econ: {

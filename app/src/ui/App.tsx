@@ -8,6 +8,7 @@ import { FieldRow, InputPanel } from './InputPanel'
 import { Walkthrough, StatusChip, type PlayerHandle } from './walkthrough/Walkthrough'
 import { buildSteps } from './walkthrough/steps'
 import { Details } from './details/Details'
+import { WorkloadPanel } from './WorkloadPanel'
 
 function readHash(): Inputs {
   try {
@@ -26,7 +27,7 @@ function writeHash(i: Inputs) {
   history.replaceState(null, '', url)
 }
 
-const QUICK_KEYS: (keyof Inputs)[] = ['modelId', 'workload', 'chipId', 'orbitType', 'satellites', 'chipsPerSat', 'launchCostPerKg']
+const QUICK_KEYS: (keyof Inputs)[] = ['chipId', 'chipsPerReplica', 'orbitType', 'satellites', 'chipsPerSat', 'launchCostPerKg']
 const ALL_FIELDS: Field[] = MODULES.flatMap((m) => m.sections.flatMap((s) => s.fields))
 const QUICK_FIELDS = QUICK_KEYS.map((k) => ALL_FIELDS.find((f) => f.key === k)!)
 
@@ -70,7 +71,7 @@ export default function App() {
           <span className="logo" aria-hidden>◐</span>
           <div>
             <h1>Orbital Data Center Twin</h1>
-            <p className="sub">Pick a model and workload, then watch it run through every part of the satellite.</p>
+            <p className="sub">Pick a request type, model and service targets, then watch them run through every part of the satellite.</p>
           </div>
         </div>
         <div className="top-actions">
@@ -105,6 +106,8 @@ export default function App() {
             ))}
           </div>
         </section>
+
+        <WorkloadPanel inputs={inputs} onChange={update} />
 
         {r.warnings.length > 0 && (
           <div className="warnings" role="status">

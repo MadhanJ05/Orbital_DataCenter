@@ -17,8 +17,40 @@ export function Details({ inputs, r }: { inputs: Inputs; r: Results }) {
   const sensFmt = sensMetric === 'npv' ? (v: number) => usdM(v) : (v: number) => (v >= 0 ? '+' : '') + usd(v, 2)
   const ground = r.terrestrial
 
+  const sv = r.compute.serving
+  const ok = (b: boolean) => (b ? '✓ meets' : '✗ misses')
   return (
     <div className="details">
+      {sv && (
+        <section className="card wide">
+          <div className="card-head">
+            <h2>Workload & service targets</h2>
+            <p>Memory-aware serving (same method as the Python fleet twin): writing speed is capped by memory bandwidth at the per-user target, sessions by KV-cache memory, plus prefill time. {sv.feasible ? '' : <b>Infeasible: {sv.issues.join(' ')}</b>}</p>
+          </div>
+          <div className="two">
+            <table className="kv">
+              <tbody>
+                <Row k={`First token (target ${inputs.ttftSloS} s)`} v={sv.feasible ? `${sv.ttftS.toFixed(2)} s · ${ok(sv.sloTtftOk)}` : '—'} warn={sv.feasible && !sv.sloTtftOk} />
+                <Row k={`Writing speed (target ${inputs.tokPerSecSlo} tok/s)`} v={sv.feasible ? `${sv.ratePerUser.toFixed(0)} tok/s · ${ok(sv.sloRateOk)}` : '—'} warn={sv.feasible && !sv.sloRateOk} />
+                <Row k={`Whole task (${inputs.stepsPerTask} steps${inputs.taskDeadlineMin > 0 ? `, deadline ${inputs.taskDeadlineMin} min` : ''})`} v={sv.feasible ? `${sv.taskMin.toFixed(1)} min${inputs.taskDeadlineMin > 0 ? ` · ${ok(sv.sloTaskOk)}` : ''}` : '—'} warn={sv.feasible && !sv.sloTaskOk} />
+                <Row k="Users served at peak" v={sv.feasible ? fmt(sv.usersAtPeak) : '0'} />
+                <Row k="Tasks per hour (fleet)" v={fmt(sv.tasksPerHour)} />
+                <Row k="Output tokens/s (fleet)" v={fmt(r.compute.tokensPerSec)} />
+              </tbody>
+            </table>
+            <table className="kv">
+              <tbody>
+                <Row k="Users per chip" v={`${fmt(sv.sessionsPerChip)} (${sv.bound})`} warn={!sv.feasible} />
+                <Row k={`Weights vs usable memory (${inputs.chipsPerReplica} chip${inputs.chipsPerReplica > 1 ? 's' : ''})`} v={`${fmt(sv.weightsGB)} / ${fmt(sv.replicaMemGB)} GB`} warn={sv.weightsGB > sv.replicaMemGB} />
+                <Row k="KV cache per session" v={`${sv.kvPerSessionGB.toFixed(2)} GB`} />
+                <Row k="Output tokens per chip-hour" v={fmt(sv.tokensPerChipHr)} />
+                <Row k="Routed / sub-agent share" v={sv.altModel ? `${(sv.altShare * 100).toFixed(0)}% on ${sv.altModel}` : 'none'} />
+                <Row k="Cost per M output tokens (orbit / ground)" v={`${usd(r.econ.costPerMTokens, 3)} / ${usd(r.terrestrial.costPerMTokens, 3)}`} />
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
       <section className="card wide">
         <div className="card-head">
           <h2>Lifetime: how the data center ages</h2>

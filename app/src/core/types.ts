@@ -9,6 +9,7 @@ import type { EconomicsInputs } from '../modules/economics/model'
 
 export type { OrbitType } from '../modules/orbit/model'
 export type { Workload } from '../modules/compute/model'
+import type { ServingResult } from '../modules/compute/serving'
 
 /** Every input of the twin: the union of each module's own inputs (defined in modules/<name>/model.ts). */
 export type Inputs = OrbitInputs & ComputeInputs & PowerInputs & ThermalInputs & MassInputs & CommsInputs & LifetimeInputs & EconomicsInputs
@@ -49,6 +50,7 @@ export interface Results {
     tokensPerSec: number
     trainDays: number
     trainFlops: number
+    serving: (ServingResult & { tasksPerHour: number; usersAtPeak: number }) | null
   }
   power: {
     itMw: number

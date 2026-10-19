@@ -24,7 +24,7 @@ export function simulate(i: Inputs): Results {
     arrayKg: power.arrayKg, batteryKg: power.batteryKg, radiatorKg: thermal.radiatorKg,
     arrayM2: power.arrayM2, radiatorM2: thermal.radiatorM2, satellites: i.satellites,
   })
-  const tp = throughput(i, compute, power.availability)
+  const tp = throughput(i, compute, power.availability, orbit.rttMs / 1000)
   const comms = runComms(i, tp.tokensPerSec, i.satellites)
   const life = runLifetime(i, {
     N: compute.N, provisioned: compute.provisioned, sparesPct: i.sparesPct,
@@ -42,7 +42,7 @@ export function simulate(i: Inputs): Results {
     batteryWh: power.batteryWh, batteryKg: power.batteryKg, radiatorKg: thermal.radiatorKg,
     structureKg: mass.structureKg, busFixedKg: i.busFixedKg, totalKg: mass.totalKg,
     seu: compute.seu, mfu: compute.mfu, P: compute.P, training: i.workload === 'training',
-    tokensPerChipHr: compute.tokensPerChipHr, flopsPerChipEff: compute.flopsPerChipEff, trainFlops: compute.trainFlops,
+    tokensPerChipHr: tp.tokensPerChipHr, flopsPerChipEff: compute.flopsPerChipEff, trainFlops: compute.trainFlops,
     commsCap: comms.cap, afrPct: i.afrPct, missionLifeYr: i.missionLifeYr, months: life.months,
   })
 
@@ -72,6 +72,14 @@ export function simulate(i: Inputs): Results {
       tokensPerSec: tp.tokensPerSec * comms.cap,
       trainDays: tp.trainDays / comms.cap,
       trainFlops: compute.trainFlops,
+      serving: tp.serving && (() => {
+        const tasksPerSec = (tp.tokensPerSec * comms.cap) / i.outTokens / i.stepsPerTask
+        return {
+          ...tp.serving,
+          tasksPerHour: tasksPerSec * 3600,
+          usersAtPeak: (tasksPerSec * 86400) / (i.tasksPerUserDay * i.peakFactor),
+        }
+      })(),
     },
     power: {
       itMw: (power.itW * i.satellites) / 1e6,
@@ -121,6 +129,11 @@ export function simulate(i: Inputs): Results {
     econ: ec.econ,
     terrestrial: ec.terrestrial,
     series,
-    warnings: [...thermal.warnings, ...mass.warnings, ...comms.warnings, ...life.warnings],
+    warnings: [
+      ...(tp.serving ? tp.serving.issues : []),
+      ...(tp.serving && tp.serving.feasible && !tp.serving.sloTtftOk ? [`First token takes ${tp.serving.ttftS.toFixed(2)} s, over the ${i.ttftSloS} s target.`] : []),
+      ...(tp.serving && tp.serving.feasible && !tp.serving.sloTaskOk ? [`A task takes ${tp.serving.taskMin.toFixed(0)} min, over the ${i.taskDeadlineMin} min deadline.`] : []),
+      ...thermal.warnings, ...mass.warnings, ...comms.warnings, ...life.warnings,
+    ],
   }
 }

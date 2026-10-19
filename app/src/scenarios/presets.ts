@@ -8,6 +8,7 @@ import { massDefaults, structurePctFor, type MassSplit } from '../modules/mass/m
 import { commsDefaults } from '../modules/comms/model'
 import { lifetimeDefaults } from '../modules/lifetime/model'
 import { economicsDefaults } from '../modules/economics/model'
+import { chipPatch, modelPatch, workloadPatch } from '../modules/compute/presets'
 
 /** Baseline design = every module's defaults. Change a default in its module's model.ts. */
 export const BASELINE: Inputs = {
@@ -57,9 +58,21 @@ export interface Scenario {
 export const SCENARIOS: Scenario[] = [
   {
     id: 'baseline',
-    label: '2035 SSO inference cluster',
-    blurb: '81-satellite dawn-dusk cluster at 650 km serving Kimi-K3. Inference goes to orbit first: each model copy works alone and a dead chip just moves users elsewhere.',
+    label: '2035 SSO cluster: interactive agents',
+    blurb: "81-satellite dawn-dusk cluster at 650 km on the deck's 2035 GPU, serving Kimi K3 interactive agent steps (256k context, 2 s first token, 100 tok/s, 80 steps in 25 min).",
     inputs: BASELINE,
+  },
+  {
+    id: 'chat',
+    label: 'Chat prompts (Qwen3.5-397B)',
+    blurb: 'Same cluster serving chat: 64k context (56k cached), 3,500 tokens out, first token in 0.6 s, 60 tok/s.',
+    inputs: { ...BASELINE, ...workloadPatch('chat') },
+  },
+  {
+    id: 'background',
+    label: 'Background agents (Kimi K3)',
+    blurb: 'Same cluster running background agent steps: 10 s first token, 30 tok/s, 80 steps within 4 hours, sandbox next door (no user round trip).',
+    inputs: { ...BASELINE, ...workloadPatch('agent_bg') },
   },
   {
     id: 'deck',
@@ -79,10 +92,8 @@ export const SCENARIOS: Scenario[] = [
     blurb: 'Same 81 satellites training a 2T-active frontier model as one machine (Suncatcher-style). Harder: tight links, radiation errors, petabytes uplinked.',
     inputs: {
       ...BASELINE,
-      workload: 'training',
-      modelId: 'frontier',
-      activeParamsB: 2000,
-      mfuPct: 40,
+      ...chipPatch('gen2035'),
+      ...workloadPatch('training'),
       ioBytesPerToken: 4,
     },
   },
@@ -106,17 +117,17 @@ export const SCENARIOS: Scenario[] = [
   {
     id: 'demo',
     label: 'Near-term demo (1 sat, 2027)',
-    blurb: 'Single satellite with 8 H100-class GPUs; proves thermal and radiation design.',
+    blurb: 'Single satellite with 8 H100s serving gpt-oss-120b chat (FP8, two chips per copy); proves thermal and radiation design.',
     inputs: {
       ...BASELINE,
       altitudeKm: 550,
       satellites: 1,
       chipsPerSat: 8,
-      chipId: 'h100',
-      chipTdpW: 700,
-      chipPflops: 1.98,
-      chipPriceUsd: 25000,
-      pricePerChipHr: 2,
+      ...chipPatch('h100'),
+      ...workloadPatch('chat'),
+      ...modelPatch('gptoss'),
+      weightBits: 8, // H100 has no FP4: 117 GB of FP8 weights need two chips
+      chipsPerReplica: 2,
       sparesPct: 0,
       serverKgPerChip: 15,
       busFixedKg: 150,
@@ -129,10 +140,6 @@ export const SCENARIOS: Scenario[] = [
       opexFixedMYr: 3,
       opexPerSatMYr: 0,
       missionLifeYr: 3,
-      workload: 'inference',
-      modelId: 'dense70',
-      activeParamsB: 70,
-      mfuPct: 30,
       ioBytesPerToken: 40,
       linkGbpsPerSat: 10,
     },
@@ -146,10 +153,6 @@ export const SCENARIOS: Scenario[] = [
       orbitType: 'leo',
       altitudeKm: 550,
       doseRateRadYr: 60,
-      workload: 'inference',
-      modelId: 'kimi',
-      activeParamsB: 104,
-      mfuPct: 30,
       ioBytesPerToken: 40,
       satellites: 200,
       chipsPerSat: 16,
