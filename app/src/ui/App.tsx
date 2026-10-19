@@ -8,6 +8,7 @@ import { FieldRow, InputPanel } from './InputPanel'
 import { Walkthrough, StatusChip, type PlayerHandle } from './walkthrough/Walkthrough'
 import { buildSteps } from './walkthrough/steps'
 import { Details } from './details/Details'
+import { WorkloadPanel } from './WorkloadPanel'
 
 function readHash(): Inputs {
   try {
@@ -26,7 +27,7 @@ function writeHash(i: Inputs) {
   history.replaceState(null, '', url)
 }
 
-const QUICK_KEYS: (keyof Inputs)[] = ['workload', 'modelId', 'chipId', 'ttftSloS', 'tokPerSecSlo', 'orbitType', 'satellites', 'chipsPerSat']
+const QUICK_KEYS: (keyof Inputs)[] = ['chipId', 'chipsPerReplica', 'orbitType', 'satellites', 'chipsPerSat', 'launchCostPerKg']
 const ALL_FIELDS: Field[] = MODULES.flatMap((m) => m.sections.flatMap((s) => s.fields))
 const QUICK_FIELDS = QUICK_KEYS.map((k) => ALL_FIELDS.find((f) => f.key === k)!)
 
@@ -105,6 +106,8 @@ export default function App() {
             ))}
           </div>
         </section>
+
+        <WorkloadPanel inputs={inputs} onChange={update} />
 
         {r.warnings.length > 0 && (
           <div className="warnings" role="status">
