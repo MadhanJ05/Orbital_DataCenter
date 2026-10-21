@@ -9,11 +9,12 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 data = (ROOT / "designs" / "twin.json").read_text().replace("</", "<\\/")
+engine = (HERE / "twin3d_engine.js").read_text()   # live engine for twin3d.html (twin/check_twin3d.js tests it)
 import base64
 images = {f"__EARTH_{k.upper()}__": "data:image/jpeg;base64," + base64.b64encode((HERE / "assets" / f"earth_{k}.jpg").read_bytes()).decode()
           for k in ("day", "night", "clouds")}   # NASA imagery, public domain (twin/assets/README.md)
 for template, out in (("twin_page.html", "twin.html"), ("twin3d_page.html", "twin3d.html")):
-    page = (HERE / template).read_text().replace("__TWIN_DATA__", data)
+    page = (HERE / template).read_text().replace("__TWIN_DATA__", data).replace("__ENGINE_JS__", engine)
     for k, v in images.items():
         page = page.replace(k, v)
     (ROOT / out).write_text(page)

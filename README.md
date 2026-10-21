@@ -25,15 +25,15 @@ only 58% of them are served.
 
 **The presentation:** [`explained.html`](https://madhanj05.github.io/Orbital_DataCenter/explained.html) is our 15-slide deck, and [`briefing.html`](https://madhanj05.github.io/Orbital_DataCenter/briefing.html) tells the same story as one dashboard. Every estimate on them is checked against a cited source. Both are built from [`present/`](present/): edit `present/deck_page.html`, `present/briefing_page.html` or `present/sources.py` and push; the site rebuilds them (`python3 present/build.py` builds them locally).
 
-**[`twin3d.html`](https://madhanj05.github.io/Orbital_DataCenter/twin3d.html)** is the twin in 3D, seen from space, with two views:
+**[`twin3d.html`](https://madhanj05.github.io/Orbital_DataCenter/twin3d.html)** is a live digital twin of our planned fleet, placed in the real world right now:
+- **Real time, real Sun, real orbits.** It opens at the current date and time. The Sun and Earth's rotation come from standard astronomy formulas, and each of the 84 (Design 1) or 120 (Design 2) satellites flies its own circular orbit at 650 km, sun-synchronous at 97.99°, crossing the equator at 06:00 or 18:00 local time. Shadow, eclipse seasons and ground-station contact all follow from that geometry, not from a drawing.
+- **The fleet model runs in the page.** `twin/twin3d_engine.js` is `twin/simulate.py`'s minute-by-minute model in JavaScript: demand follows the real hour in the Americas, Europe and Asia, live users are served first, and background jobs queue for spare capacity. It starts two days back so the queue is where it would be now. On every load the page re-runs all 96 days the Python twin simulated and checks it gets the same answers (`node twin/check_twin3d.js` does the same check from the command line, and the site build runs it).
+- **Every satellite and Earth site has its own state.** Click one to see where it is, whether it's in Earth's shadow and for how long, its power, how busy its racks are, its battery, radiator and chip temperature, and which of the 16 ground stations it's talking to, or how many hops it relays along its ring to reach one.
+- **Break it live.** Switch off any site or plane and the rest of the fleet picks up its users at once; the panel shows live users served and how long background jobs are waiting against their deadline.
+- **Time controls.** Pause, real time, ×10, ×60 or ×600; jump to 21 June or 21 December, when each half of the fleet is in eclipse season. It opens at ×10 so you can see the satellites move (one lap in about 10 minutes); add `#live` to the link to open in real time.
+- **Our placement choices**, which the model doesn't fix: each group's six planes fan out by 4 minutes of local time, and the 16 ground stations sit at existing optical, observatory and polar ground-station sites, linking above 20° of elevation.
 - **One satellite** (`#satellite`): a single satellite drawn to scale. Sliders change its size, chip temperature, cooling loops, solar W/kg, radiator kg/m², rack weight, structure, batteries and launch price; the wings, radiator and battery resize live, and it shows tonnes per MW, launches, and cost per MW against the Nordics. It runs the same physics as `twin/orbit_mass.py` and checks itself against Python's answers on every load.
-- **Realistic rendering:** Earth uses NASA's Blue Marble (day), Black Marble (city lights at night) and cloud imagery (public domain, `twin/assets/`). It adds an atmosphere glow, sunlight glinting off the oceans, the Sun with a lens flare, and a starfield with the Milky Way. It opens on the whole fleet; add `#satellite` to the link to open straight on the one-satellite view.
-- **Whole fleet:**
-- Earth turns with real UTC time, under real sunlight.
-- Our six Earth sites glow with the power they draw.
-- Twelve dawn-dusk orbital planes of satellites circle the planet; one dot is an 8 MW satellite.
-- On a June or December eclipse day, that half of the planes tilts into Earth's shadow, and you can watch satellites switch to batteries or pause.
-- Switch off any site or plane. Camera views: overview, from the Sun, ride along with a satellite, Earth sites.
+- **Rendering:** Earth uses NASA's Blue Marble (day), Black Marble (city lights at night) and cloud imagery (public domain, `twin/assets/`), with an atmosphere glow, sunlight glinting off the oceans, the Sun with a lens flare, and a starfield.
 
 **[`twin.html`](https://madhanj05.github.io/Orbital_DataCenter/twin.html)** (build it locally and it opens straight in a browser, no server needed) is the same twin as flat charts and tables:
 - **Pick a design and a day** (normal, or the worst eclipse day).

@@ -155,7 +155,7 @@ LIVE_STREAMS = ("chat", "chat_easy", "agent_int", "agent_int_sub")   # users wai
 # Eclipses (geometry-derived in app/ orbit module and agents-in-orbit/model.py): a dawn-dusk plane
 # at 575-650 km is shadowed up to 21 min of a 96 min orbit on ~95 days a year. Satellites are spread
 # around the orbit, so on those days a steady 22% of the plane is dark. Odd planes fly at 06:00
-# local time (eclipse season in June), even planes at 18:00 (December), so only half the planes
+# local time (eclipse season around December), even planes at 18:00 (around June), so only half the planes
 # are ever in season together.
 ECLIPSE_DARK_SHARE = 21.0 / 96.0
 ECLIPSE_SEASON_DAYS = 95

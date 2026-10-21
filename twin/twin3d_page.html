@@ -70,27 +70,29 @@ svg .ax { font: 10px var(--mono); fill: var(--muted); }
 .split { display: flex; height: 14px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--panel-solid); }
 .split i { display: block; height: 100%; }
 a { color: var(--sun); }
+.clockbox { position: absolute; left: 10px; top: 10px; display: flex; gap: 8px; align-items: center; background: rgba(4, 6, 13, .72); border: 1px solid var(--line); border-radius: 8px; padding: 5px 9px; font-size: .8rem; pointer-events: none; }
+.tag.gs { transform: translate(-50%, 45%); color: #8ff5e6; border-color: rgba(143, 245, 230, .5); }
+.chip.live { border-color: var(--good); color: #5fd35f; }
+.pill.warn { color: var(--sun); }
+.btn.mini { padding: 2px 7px; font-size: .72rem; margin-left: 4px; }
+#cardActions:empty { display: none; }
 </style>
 
 <main>
   <header style="display:grid;gap:6px">
-    <span class="eyebrow">Sundai Hack 145 · Track 1 · digital twin, view from space</span>
+    <span class="eyebrow">Sundai Hack 145 · Track 1 · live digital twin of our planned fleet</span>
     <h1>Orbital Fleet Twin 3D</h1>
-    <p class="muted" id="intro">Our two fleets for 4.45 billion AI users in 2035, drawn from the same numbers as the Python twin. Start with the whole fleet, then zoom into one satellite and tweak it. Drag to look around, scroll to zoom, double-click to reset.</p>
+    <p class="muted" id="intro">Our planned fleet, placed in the real world right now: today's Sun and Earth, every satellite on its own dawn-dusk orbit, and the Python twin's fleet model running in this page. Click any satellite or Earth site to see its state now, or switch one off and watch the rest of the fleet take its users. Drag to look around, scroll to zoom, double-click to reset.</p>
   </header>
 
   <section class="bar" aria-label="Controls">
     <div class="seg" role="group" aria-label="View" id="viewSeg"></div>
     <div class="seg" role="group" aria-label="Design" id="designSeg"></div>
     <span id="fleetCtl" style="display:contents">
-    <div class="seg" role="group" aria-label="Day" id="daySeg"></div>
+    <div class="seg" role="group" aria-label="Time speed" id="speedSeg"></div>
+    <div class="seg" role="group" aria-label="Jump to" id="jumpSeg"></div>
     <label class="ctl" for="lose">Switch off <select id="lose"></select></label>
     <div class="seg" role="group" aria-label="Camera" id="camSeg"></div>
-    <div class="time">
-      <button class="btn" id="play" type="button">Pause</button>
-      <input id="hour" type="range" min="0" max="23.99" step="0.01" value="7" aria-label="UTC time">
-      <span class="num" id="clock">07:00 UTC</span>
-    </div>
     </span>
     <span id="satCtl" style="display:contents">
       <div class="seg" role="group" aria-label="Light" id="lightSeg"></div>
@@ -100,8 +102,9 @@ a { color: var(--sun); }
 
   <section class="layout">
     <div class="stage" id="stage">
-      <canvas id="c" tabindex="0" aria-label="3D view of Earth, our Earth sites and eight orbital planes"></canvas>
+      <canvas id="c" tabindex="0" aria-label="3D view of Earth now, with our Earth sites, 12 dawn-dusk orbital planes and 16 ground stations"></canvas>
       <div class="tags" id="tags"></div>
+      <div class="clockbox" id="clockbox"><span class="num" id="clock"></span><span class="chip" id="status"></span></div>
       <div class="overlay" id="overlay"></div>
     </div>
     <aside class="side">
@@ -112,30 +115,36 @@ a { color: var(--sun); }
         <p id="selfcheck" class="muted" style="font-size:.75rem"></p>
       </div>
       <div class="panel" id="satOut" hidden></div>
-      <div class="panel" id="fleetK">
-        <h2 id="dname">Design</h2>
-        <div class="kpis" id="kpis"></div>
+      <div class="panel" id="nowPanel">
+        <h2>Fleet now</h2>
+        <dl class="card" id="now"></dl>
+        <p class="muted" style="font-size:.75rem" id="check">Checking this page's model against the Python twin…</p>
       </div>
-      <div class="panel" id="outage"></div>
       <div class="panel" id="cardPanel">
         <h2 id="cardTitle">Selected</h2>
         <dl class="card" id="card"></dl>
+        <div id="cardActions"></div>
         <p class="muted" style="font-size:.75rem">Click a satellite or an Earth site in the scene to select it.</p>
+      </div>
+      <div class="panel" id="fleetK">
+        <h2 id="dname">Design</h2>
+        <div class="kpis" id="kpis"></div>
       </div>
     </aside>
   </section>
 
   <section class="panel" id="stripPanel">
-    <h2>Power drawn through the day</h2>
-    <div class="legend"><span><i style="background:var(--earth)"></i>Earth sites</span><span><i style="background:var(--orbit)"></i>Orbital planes</span><span><i style="background:var(--sun)"></i>now</span></div>
-    <svg id="strip" viewBox="0 0 900 140" role="img" aria-label="Power drawn by Earth sites and orbit for each UTC hour"></svg>
+    <h2>Power through today (UTC), from the live model</h2>
+    <div class="legend"><span><i style="background:var(--earth)"></i>Earth sites</span><span><i style="background:var(--orbit)"></i>Orbital planes</span><span><i style="background:var(--sun)"></i>now</span><span>faded: rest of today, if nothing else changes</span></div>
+    <svg id="strip" viewBox="0 0 900 140" role="img" aria-label="Power drawn by Earth sites and orbit for each UTC hour of today"></svg>
   </section>
-  <p class="muted" style="font-size:.8rem">Scale: satellites and pins are drawn far larger than life so they can be seen; orbit altitudes are to scale. Continents are a rough sketch. Flat charts and every table: <a href="twin.html">twin.html</a>.</p>
+  <p class="muted" style="font-size:.8rem">How this twin works: positions come from real orbital mechanics (circular orbits at 650 km, sun-synchronous at 97.99°) and the real Sun for the date shown, and the fleet's load, background queue and power come from the Python twin's minute-by-minute model, run here from two days back (twin/twin3d_engine.js, checked by <code>node twin/check_twin3d.js</code>). Earth: NASA Blue Marble and Black Marble. Earth and orbits are to scale; satellites, sites and stations are drawn far larger than life. Our placement choices: each group's six planes fan out by 4 minutes of local time, and the 16 ground stations sit at existing optical, observatory and polar ground-station sites, linking above 20° of elevation. The model itself counts 12 planes at 650 km and 16 stations. Flat charts and every table: <a href="twin.html">twin.html</a>.</p>
 </main>
 <div class="tip" id="tip" hidden></div>
 
 <script id="twin-data" type="application/json">__TWIN_DATA__</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>__ENGINE_JS__</script>
 <script>
 (function () {
   var DATA = JSON.parse(document.getElementById("twin-data").textContent);
@@ -144,14 +153,14 @@ a { color: var(--sun); }
   var NAMES = { n_virginia: "N. Virginia", midwest: "Midwest", west_texas: "West Texas", nordics: "Nordics", iceland: "Iceland", gulf: "Gulf" };
   var nice = function (s) { return NAMES[s] || s.replace("leo_p", "Plane "); };
   var LATLON = { n_virginia: [38.9, -77.5], midwest: [41.6, -93.6], west_texas: [31.9, -102.1], nordics: [65.6, 22.1], iceland: [64.1, -21.9], gulf: [24.5, 54.4] };
-  var SAT_MW = 8;               // one dot = one 8 MW-class satellite (the app's presets)
   var R_EARTH = 6.371;          // scene unit = 1,000 km
   var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var S = { view: location.hash === "#satellite" ? "sat" : "fleet", d: 0, day: "normal", lose: "", cam: "overview", t: 7, playing: !REDUCED, sel: null, speed: 1, shade: false, spin: !REDUCED };
+  var E = window.TwinEngine;    // twin/twin3d_engine.js: real Sun, Earth, orbits, and simulate.py's fleet model
+  // the twin starts at the real time now, running x10 so the satellites visibly move (one lap in about 10 min); #live opens in real time
+  var S = { view: location.hash === "#satellite" ? "sat" : "fleet", d: 0, cam: "overview", speed: location.hash === "#live" || REDUCED ? 1 : 10,
+            ms: Date.now(), sel: null, shade: false, spin: !REDUCED };
   var D = function () { return DATA.designs[S.d]; };
   var site = function (n) { return D().sites.filter(function (x) { return x.site === n; })[0]; };
-  var dayKey = function () { return S.day === "jun" ? "eclipse" : S.day === "dec" ? "eclipse18" : "normal"; };
-  var eclLtan = function () { return S.day === "jun" ? "06:00" : S.day === "dec" ? "18:00" : null; };
 
   // ---------------------------------------------------------------- controls
   function seg(id, items, key, after) {
@@ -163,10 +172,7 @@ a { color: var(--sun); }
       box.appendChild(b);
     });
   }
-  $("play").onclick = function () { S.playing = !S.playing; ui(); };
-  $("hour").oninput = function () { S.t = +this.value; ui(); };
-  $("lose").onchange = function () { S.lose = this.value; if (S.lose) S.sel = S.lose; ui(); };
-
+  $("lose").onchange = function () { setLost(this.value); };
   if (!window.THREE) { $("stage").innerHTML = '<div class="fallback">3D needs WebGL and the three.js library, which did not load here. The flat twin is at <a href="twin.html">twin.html</a>.</div>'; return; }
   var canvas = $("c"), stage = $("stage");
   var renderer;
@@ -203,7 +209,7 @@ a { color: var(--sun); }
   var SUN_TEX = glowTexture([[0, "rgba(255,255,255,1)"], [0.08, "rgba(255,250,235,1)"], [0.2, "rgba(255,225,170,.55)"], [0.5, "rgba(255,190,120,.12)"], [1, "rgba(255,170,90,0)"]]);
   function addSun(target, pos, scale) { var sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: SUN_TEX, depthWrite: false, blending: THREE.AdditiveBlending }));
     sp.position.copy(pos); sp.scale.set(scale, scale, 1); target.add(sp); return sp; }
-  addSun(scene, new THREE.Vector3(300, 0, 0), 120);
+  var sunSprite = addSun(scene, new THREE.Vector3(300, 0, 0), 120);
 
   // ---------------------------------------------------------------- Earth (procedural texture: oceans, sketched continents, graticule)
   var LAND = [
@@ -283,18 +289,14 @@ a { color: var(--sun); }
   var earth = new THREE.Group(); scene.add(earth);
   var earthMat = earthMaterial(SUN.clone());
   earth.add(new THREE.Mesh(new THREE.SphereGeometry(R_EARTH, 128, 96), earthMat));
-  scene.add(atmosphere(R_EARTH, SUN.clone()));
+  var atmo = atmosphere(R_EARTH, SUN.clone()); scene.add(atmo);
   function local(lat, lon, r) {          // matches SphereGeometry's UV layout, so pins sit on the texture
     var phi = (lon + 180) / 360 * Math.PI * 2, th = (90 - lat) * Math.PI / 180;
     return new THREE.Vector3(-r * Math.cos(phi) * Math.sin(th), r * Math.cos(th), r * Math.sin(phi) * Math.sin(th));
   }
   // Earth's shadow is not drawn as a solid: satellites passing through it simply go dark
 
-  // ---------------------------------------------------------------- fleet objects (rebuilt when the design changes)
-  var fleet = new THREE.Group(); scene.add(fleet);
-  var planes = [], pins = [], tagEls = {}, pickables = [];
-  var tagsEl = $("tags");
-  function addTag(key, text) { var d = document.createElement("div"); d.className = "tag"; d.textContent = text; tagsEl.appendChild(d); tagEls[key] = d; return d; }
+  // ---------------------------------------------------------------- satellite look
   function cellTexture(cols, rows) { var c = document.createElement("canvas"); c.width = 512; c.height = 256; var x = c.getContext("2d");
     x.fillStyle = "#0b1a44"; x.fillRect(0, 0, 512, 256);
     for (var i = 0; i < cols; i++) for (var j = 0; j < rows; j++) { var w = 512 / cols, h = 256 / rows;
@@ -305,13 +307,13 @@ a { color: var(--sun); }
   var matBody = new THREE.MeshStandardMaterial({ color: 0xd9a63c, metalness: .55, roughness: .32, emissive: 0x2a1a04 });
   var matPanel = new THREE.MeshStandardMaterial({ map: CELLS, color: 0xffffff, metalness: .35, roughness: .22, side: THREE.DoubleSide });
   var matRad = new THREE.MeshStandardMaterial({ color: 0xe6eaf0, metalness: .1, roughness: .6, side: THREE.DoubleSide });
-  // satellite looks, made once: in sunlight, dark in Earth's shadow, in shadow on batteries, switched off
+  // satellite looks, made once: in sunlight, dark in Earth's shadow, in shadow on batteries, switched off, selected
   var matDark = new THREE.MeshStandardMaterial({ color: 0x2a2f40, metalness: .4, roughness: .5 });
   var matBatt = new THREE.MeshStandardMaterial({ color: 0x2f7a4a, metalness: .4, roughness: .5, emissive: 0x103a20 });
   var matOff = new THREE.MeshStandardMaterial({ color: 0x5a2020, metalness: .4, roughness: .5, emissive: 0x3a0808 });
+  var matSel = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: .3, roughness: .3, emissive: 0x806020 });
   var matPanelDark = new THREE.MeshStandardMaterial({ color: 0x0b1020, metalness: .5, roughness: .35, side: THREE.DoubleSide });
-
-  function satMesh() {                   // a small satellite: body, two arrays toward the Sun, a radiator edge-on
+  function satMesh() {                   // a small satellite: body, two arrays facing the Sun, a radiator edge-on
     var g = new THREE.Group();
     g.add(new THREE.Mesh(new THREE.BoxGeometry(.05, .05, .09), matBody));
     var a1 = new THREE.Mesh(new THREE.PlaneGeometry(.16, .07), matPanel); a1.position.set(0, .085, 0); a1.rotation.y = Math.PI / 2; g.add(a1);
@@ -319,45 +321,109 @@ a { color: var(--sun); }
     var rad = new THREE.Mesh(new THREE.PlaneGeometry(.11, .05), matRad); rad.position.set(0, 0, .085); rad.rotation.x = Math.PI / 2; g.add(rad);
     return g;
   }
-
   var SITE_TEX = glowTexture([[0, "rgba(255,255,255,1)"], [0.15, "rgba(200,225,255,.85)"], [0.45, "rgba(120,170,255,.25)"], [1, "rgba(80,140,255,0)"]]);
+  var STATION_TEX = glowTexture([[0, "rgba(255,255,255,1)"], [0.2, "rgba(150,255,235,.85)"], [0.5, "rgba(90,230,200,.2)"], [1, "rgba(60,200,180,0)"]]);
+
+  // engine coordinates (km, Earth-centred inertial) -> scene (1 unit = 1,000 km, +Y = north pole)
+  function toScene(p, out) { return (out || new THREE.Vector3()).set(p[0] / 1000, p[2] / 1000, -p[1] / 1000); }
+  function hm(h) { var m = Math.round(pymod(h, 24) * 60); return pad(Math.floor(m / 60) % 24) + ":" + pad(m % 60); }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function pymod(x, m) { var r = x % m; return r < 0 ? r + m : r; }
+  var DAYS_ = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  function clock(ms) { var d = new Date(ms); return DAYS_[d.getUTCDay()] + " " + d.getUTCDate() + " " + MONTHS[d.getUTCMonth()] + " " + d.getUTCFullYear() + " · " + pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes()) + ":" + pad(d.getUTCSeconds()) + " UTC"; }
+  function tok(x) { return x >= 1e9 ? fmt(x / 1e9, 2) + "B" : fmt(x / 1e6, 1) + "M"; }
+
+  // ---------------------------------------------------------------- fleet objects (rebuilt when the design changes)
+  var fleet = null, onEarth = null, live = null, planes = [], pins = [], stations = [], tagEls = {}, pickables = [];
+  var linkGeo, linkLines, selGeo, selLine, RING = 129;
+  var tagsEl = $("tags");
+  function addTag(key, text) { var d = document.createElement("div"); d.className = "tag"; d.textContent = text; d.hidden = true; tagsEl.appendChild(d); tagEls[key] = d; return d; }
   function build() {
-    scene.remove(fleet); fleet = new THREE.Group(); scene.add(fleet);
-    planes = []; pins = []; pickables = []; tagsEl.innerHTML = ""; tagEls = {};
-    var sitesE = D().sites.filter(function (s) { return s.kind === "earth"; });
-    sitesE.forEach(function (s) {
-      var ll = LATLON[s.site] || [0, 0];
-      var mat = new THREE.MeshBasicMaterial({ color: 0x9cc8ff });
+    if (fleet) scene.remove(fleet); if (onEarth) earth.remove(onEarth);
+    fleet = new THREE.Group(); scene.add(fleet); onEarth = new THREE.Group(); earth.add(onEarth);
+    planes = []; pins = []; stations = []; pickables = []; tagsEl.innerHTML = ""; tagEls = {};
+    live = E.Live(D());
+    D().sites.filter(function (s) { return s.kind === "earth"; }).forEach(function (s) {
+      var ll = LATLON[s.site] || [0, 0], mat = new THREE.MeshBasicMaterial({ color: 0x9cc8ff });
       var dot = new THREE.Mesh(new THREE.SphereGeometry(.05, 16, 12), mat); dot.position.copy(local(ll[0], ll[1], R_EARTH * 1.003));
       var glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: SITE_TEX, color: 0x7fb4ff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
       glow.position.copy(local(ll[0], ll[1], R_EARTH * 1.01)); glow.scale.set(.5, .5, 1);
-      earth.add(dot); earth.add(glow); dot.userData = { site: s.site }; pickables.push(dot);
+      onEarth.add(dot); onEarth.add(glow); dot.userData = { kind: "site", site: s.site }; pickables.push(dot);
       pins.push({ s: s, dot: dot, glow: glow, mat: mat }); addTag(s.site, nice(s.site));
     });
-    var orb = D().sites.filter(function (s) { return s.kind === "space"; });
-    orb.forEach(function (s, i) {
-      var morning = s.ltan === "06:00", k = Math.floor(i / 2);
-      var alt = 0.55 + 0.22 * i / Math.max(1, orb.length - 1), r = R_EARTH + alt;   // 550-770 km, drawn apart
-      var raan = (morning ? 1 : -1) * (0.03 + 0.15 * k / Math.max(1, Math.ceil(orb.length / 2) - 1));   // small spread so the planes can be told apart
-      var n = s.satellites || Math.max(4, Math.ceil(s.it_mw / SAT_MW));   // the model's count (twin/score.py comms)
-      var ringG = new THREE.Group(); fleet.add(ringG);
-      var pts = []; for (var u = 0; u <= 128; u++) { var a = u / 128 * Math.PI * 2; pts.push(new THREE.Vector3(0, r * Math.cos(a), r * Math.sin(a))); }
-      var ringMat = new THREE.LineDashedMaterial({ color: morning ? 0xd95926 : 0xf0a070, dashSize: morning ? 10 : .25, gapSize: morning ? 0 : .18, transparent: true, opacity: .32, blending: THREE.AdditiveBlending, depthWrite: false });
-      var ring = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), ringMat); ring.computeLineDistances(); ringG.add(ring);
-      var sats = [];
-      for (var j = 0; j < n; j++) { var m = satMesh(); m.traverse(function (o) { o.userData = { site: s.site }; }); ringG.add(m); sats.push({ m: m, u0: j / n * Math.PI * 2 }); pickables.push(m.children[0]); }
-      planes.push({ s: s, g: ringG, r: r, raan: raan, dir: morning ? 1 : -1, sats: sats, ring: ring, ringMat: ringMat, n: n });
-      addTag(s.site, nice(s.site) + " · " + s.ltan);
+    E.STATIONS.forEach(function (st, i) {
+      var spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: STATION_TEX, color: 0x8ff5e6, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+      spr.position.copy(local(st[1], st[2], R_EARTH * 1.004)); spr.scale.set(.2, .2, 1); onEarth.add(spr);
+      stations.push({ st: st, dot: spr, world: new THREE.Vector3() }); addTag("gs" + i, "ground station · " + st[0]).classList.add("gs");
     });
-    addTag("sun", "☀ to the Sun");
+    live.planes.forEach(function (pl) {
+      var s = site(pl.site), morning = pl.ltan === "06:00";
+      var geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(RING * 3), 3));
+      var mat = new THREE.LineDashedMaterial({ color: morning ? 0xd95926 : 0xf0a070, dashSize: morning ? 10 : .25, gapSize: morning ? 0 : .18, transparent: true, opacity: .32, blending: THREE.AdditiveBlending, depthWrite: false });
+      var ring = new THREE.Line(geo, mat); fleet.add(ring);
+      var sats = [];
+      for (var j = 0; j < pl.n; j++) { var m = satMesh(); m.traverse(function (o) { o.userData = { kind: "sat", site: pl.site, j: j }; }); fleet.add(m);
+        sats.push({ m: m, j: j, eci: {}, shadow: false, gs: null }); pickables.push(m.children[0]); }
+      planes.push({ pl: pl, s: s, ring: ring, ringMat: mat, sats: sats });
+      addTag(pl.site, nice(pl.site) + " · crosses the equator at " + hm(pl.ltanH));
+    });
+    linkGeo = new THREE.BufferGeometry(); linkGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(400 * 3), 3));
+    linkLines = new THREE.LineSegments(linkGeo, new THREE.LineBasicMaterial({ color: 0x6ff0dc, transparent: true, opacity: .3, blending: THREE.AdditiveBlending, depthWrite: false }));
+    fleet.add(linkLines);
+    selGeo = new THREE.BufferGeometry(); selGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(40 * 3), 3));
+    selLine = new THREE.Line(selGeo, new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: .85 })); fleet.add(selLine);
+    addTag("sun", "☀ to the Sun"); addTag("sel", "");
+    S.sel = planes.length ? { kind: "sat", site: planes[0].pl.site, j: 0 } : { kind: "site", site: pins[0].s.site };
+    events = []; warm();
+  }
+
+  // ---------------------------------------------------------------- the model, minute by minute (twin3d_engine.js = simulate.py)
+  var events = [], st = null, stMin = 0, snap = null, stripRows = null, stripKey = "";
+  function minuteOf(ms) { return Math.floor(ms / 60000); }
+  function lostNow() { return live.lostAt(events, stMin); }
+  function warm() {                       // run the model from two days back, so the background queue is where it would be now
+    var t = minuteOf(S.ms), r = live.run(events, t - 2 * 1440, t);
+    st = r.state; stMin = t; snap = live.snapshot(st, t, r.cap, r.dark, r.lost); stripKey = "";
+  }
+  function advance() {                    // then step it one minute at a time behind the twin's clock
+    var t = minuteOf(S.ms);
+    if (t < stMin || t - stMin > 2880) { warm(); return; }
+    while (stMin < t) {
+      stMin++;
+      var dark = E.darkShares(live.planes, stMin * 60000), lost = live.lostAt(events, stMin), cap = live.mdl.capacities(lost, live.lit(dark));
+      live.mdl.step(st, stMin, cap, false);
+      snap = live.snapshot(st, stMin, cap, dark, lost);
+    }
+  }
+  function setLost(name) {                 // takes effect this minute: capacity drops now, the queue feels it from the next step
+    events.push({ t: stMin, site: name || null });
+    var dark = E.darkShares(live.planes, stMin * 60000), lost = live.lostAt(events, stMin), cap = live.mdl.capacities(lost, live.lit(dark));
+    snap = live.snapshot(st, stMin, cap, dark, lost); stripKey = ""; ui();
+  }
+  function stripCompute() {               // today hour by hour: what happened so far, and the rest of today if nothing else changes
+    var day0 = Math.floor(stMin / 1440) * 1440, key = S.d + ":" + day0 + ":" + JSON.stringify(events);
+    if (key === stripKey) return; stripKey = key;
+    stripRows = { day0: day0, rows: live.run(events, day0 - 2 * 1440, day0 + 1439, day0).rows };
   }
 
   // ---------------------------------------------------------------- camera: drag to orbit, wheel to zoom, presets
-  var cam = { theta: 0.9, phi: 1.15, dist: 26, target: new THREE.Vector3() };
-  var HOME = { overview: { theta: 0.9, phi: 1.15, dist: 26 }, sun: { theta: 0.0, phi: 1.5, dist: 24 }, sites: { theta: 0.35, phi: 1.0, dist: 15 } };
-  function applyCamera(follow) {
-    if (S.cam === "ride" && follow) {
-      var p = follow.position.clone(), out = p.clone().normalize();
+  var cam = { theta: 0.9, phi: 1.15, dist: 24, target: new THREE.Vector3() };
+  var SUN3 = new THREE.Vector3(1, 0, 0);
+  function preset(mode) {
+    var th = Math.atan2(SUN3.z, SUN3.x), ph = Math.acos(Math.max(-1, Math.min(1, SUN3.y)));
+    if (mode === "overview") Object.assign(cam, { theta: th + 0.95, phi: 1.12, dist: 24 });
+    if (mode === "sun") Object.assign(cam, { theta: th, phi: ph, dist: 22 });
+    if (mode === "sites") {
+      var c = new THREE.Vector3(); pins.forEach(function (p) { c.add(p.dot.getWorldPosition(new THREE.Vector3())); });
+      if (!pins.length) c.copy(SUN3);
+      c.normalize(); Object.assign(cam, { theta: Math.atan2(c.z, c.x), phi: Math.acos(c.y), dist: 15 });
+    }
+  }
+  function selectedSat() { if (!S.sel || S.sel.kind !== "sat") return null; var p = planes.filter(function (x) { return x.pl.site === S.sel.site; })[0]; return p ? { p: p, s: p.sats[S.sel.j] } : null; }
+  function applyCamera() {
+    var ss = selectedSat() || (planes[0] && { p: planes[0], s: planes[0].sats[0] });
+    if (S.cam === "ride" && ss) {
+      var p = ss.s.m.position.clone(), out = p.clone().normalize();
       camera.position.copy(p).add(out.multiplyScalar(1.6)).add(new THREE.Vector3(0, 0.4, 0));
       camera.up.set(0, 1, 0); camera.lookAt(new THREE.Vector3(0, 0, 0)); return;
     }
@@ -368,75 +434,98 @@ a { color: var(--sun); }
   canvas.addEventListener("pointerdown", function (e) { canvas.setPointerCapture(e.pointerId); if (S.view === "sat") return; drag = { x: e.clientX, y: e.clientY }; moved = 0; });
   canvas.addEventListener("pointermove", function (e) {
     if (!drag) return; var dx = e.clientX - drag.x, dy = e.clientY - drag.y; moved += Math.abs(dx) + Math.abs(dy);
-    if (S.cam === "ride") { S.cam = "overview"; ui(); }
+    if (S.cam === "ride" && moved > 6) { S.cam = "free"; ui(); }
     cam.theta += dx * 0.006; cam.phi = Math.min(3.0, Math.max(0.15, cam.phi - dy * 0.006)); drag = { x: e.clientX, y: e.clientY };
   });
   canvas.addEventListener("pointerup", function (e) { if (drag && moved < 6) pick(e); drag = null; });
   canvas.addEventListener("pointercancel", function () { drag = null; });
-  canvas.addEventListener("wheel", function (e) { e.preventDefault(); if (S.view === "sat") return; cam.dist = Math.min(80, Math.max(9, cam.dist * Math.exp(e.deltaY * 0.0012))); }, { passive: false });
-  canvas.addEventListener("dblclick", function () { if (S.view === "sat") { satCam.theta = .75; satCam.phi = 1.2; satRebuild.sized = false; satRebuild(); return; } Object.assign(cam, HOME.overview); S.cam = "overview"; ui(); });
+  canvas.addEventListener("wheel", function (e) { e.preventDefault(); if (S.view === "sat") return; cam.dist = Math.min(80, Math.max(8.5, cam.dist * Math.exp(e.deltaY * 0.0012))); }, { passive: false });
+  canvas.addEventListener("dblclick", function () { if (S.view === "sat") { satCam.theta = .75; satCam.phi = 1.2; satRebuild.sized = false; satRebuild(); return; } S.cam = "overview"; preset("overview"); ui(); });
   canvas.addEventListener("keydown", function (e) {
     var step = { ArrowLeft: [-0.12, 0], ArrowRight: [0.12, 0], ArrowUp: [0, -0.12], ArrowDown: [0, 0.12] }[e.key];
     if (step) { e.preventDefault(); cam.theta += step[0]; cam.phi = Math.min(3, Math.max(.15, cam.phi + step[1])); }
-    if (e.key === "+" || e.key === "=") cam.dist = Math.max(9, cam.dist * .9);
+    if (e.key === "+" || e.key === "=") cam.dist = Math.max(8.5, cam.dist * .9);
     if (e.key === "-") cam.dist = Math.min(80, cam.dist * 1.1);
   });
   var ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
   function pick(e) {
     var rect = canvas.getBoundingClientRect();
     mouse.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
-    ray.setFromCamera(mouse, camera); ray.params.Points = { threshold: .2 };
+    ray.setFromCamera(mouse, camera);
     var hit = ray.intersectObjects(pickables, true)[0];
-    if (hit && hit.object.userData.site) { S.sel = hit.object.userData.site; ui(); }
+    if (hit && hit.object.userData.kind) { var u = hit.object.userData; S.sel = u.kind === "sat" ? { kind: "sat", site: u.site, j: u.j } : { kind: "site", site: u.site }; ui(); }
   }
 
-  // ---------------------------------------------------------------- per-frame state
-  function hourKey() { return Math.floor(S.t) % 24; }
-  function powerAt(name) { var p = D().days[dayKey()].power_mw[hourKey()]; return p ? (p[name] || 0) : 0; }
-  var shadowVec = new THREE.Vector3();
-  function inShadow(p) {                 // cylindrical shadow behind Earth, away from the Sun
-    var along = p.dot(SUN); if (along >= 0) return false;
-    shadowVec.copy(SUN).multiplyScalar(along); return p.distanceTo(shadowVec) < R_EARTH;
+  // ---------------------------------------------------------------- every frame: real Sun, real Earth, every satellite on its orbit
+  var count = { shadow: 0, batt: 0, linked: 0, total: 0 }, basis = new THREE.Matrix4(), vx = new THREE.Vector3(), vy = new THREE.Vector3(), vz = new THREE.Vector3();
+  function ringPoint(pl, u, O, out) {
+    var cO = Math.cos(O), sO = Math.sin(O), cu = Math.cos(u), su = Math.sin(u), ci = Math.cos(E.INC), si = Math.sin(E.INC);
+    return toScene([E.A * (cO * cu - sO * su * ci), E.A * (sO * cu + cO * su * ci), E.A * su * si], out);
   }
-  var dark = 0, onBatt = 0, total = 0;
-  function frame(dtHours) {
-    if (S.playing) { S.t = (S.t + dtHours) % 24; $("hour").value = S.t.toFixed(2); $("clock").textContent = clock(S.t); }
-    // Earth turns so the subsolar longitude faces the Sun
-    var sub = local(0, (12 - S.t) * 15, 1); earth.rotation.y = Math.atan2(sub.z, sub.x);
-    earthMat.uniforms.cloudShift.value = (S.t / 24) * 0.02;
-    var maxMW = 0; D().sites.forEach(function (s) { maxMW = Math.max(maxMW, s.it_mw); });
+  function frame(dt) {
+    if (S.speed) S.ms += dt * 1000 * S.speed;
+    advance();
+    var sun = E.sunEci(S.ms); SUN3.set(sun[0], sun[2], -sun[1]);
+    earthMat.uniforms.sunDir.value.copy(SUN3); atmo.material.uniforms.sunDir.value.copy(SUN3);
+    sunLight.position.copy(SUN3).multiplyScalar(100); sunSprite.position.copy(SUN3).multiplyScalar(300);
+    earth.rotation.y = E.gmst(S.ms);
+    earthMat.uniforms.cloudShift.value = (S.ms / 86400000 * 0.02) % 1;
+    earth.updateMatrixWorld(true);
+    stations.forEach(function (g) { g.dot.getWorldPosition(g.world); });
+    var lost = lostNow(), batt = D().eclipse_battery, maxMW = 0;
+    D().sites.forEach(function (s) { maxMW = Math.max(maxMW, s.facility_mw); });
     pins.forEach(function (p) {
-      var off = S.lose === p.s.site, mw = off ? 0 : powerAt(p.s.site), k = Math.sqrt(mw / maxMW);
+      var off = lost === p.s.site, mw = off || !snap ? 0 : (snap.power[p.s.site] || 0), k = Math.sqrt(mw / maxMW), sel = S.sel && S.sel.site === p.s.site;
       var sz = 0.35 + 1.4 * k; p.glow.scale.set(sz, sz, 1); p.glow.material.opacity = off ? .15 : .55 + .45 * k;
-      p.glow.material.color.set(off ? 0xd03b3b : 0x7fb4ff);
-      p.mat.color.set(off ? 0xd03b3b : (S.sel === p.s.site ? 0xffffff : 0x9cc8ff));
+      p.glow.material.color.set(off ? 0xd03b3b : 0x7fb4ff); p.mat.color.set(off ? 0xd03b3b : (sel && S.sel.kind === "site" ? 0xffffff : 0x9cc8ff));
     });
-    var ecl = eclLtan(), batt = D().eclipse_battery, sec = performance.now() / 1000;
-    dark = onBatt = total = 0;
-    planes.forEach(function (pl) {
-      var inSeason = ecl && pl.s.ltan === ecl, off = S.lose === pl.s.site;
-      // season tilt: the plane's angle to the Sun drops from ~80 to ~59 degrees, so its far side dips into shadow
-      pl.g.rotation.set(0, 0, 0);
-      pl.g.rotateY(pl.raan + (inSeason ? pl.dir * (31 * Math.PI / 180) : pl.dir * (6 * Math.PI / 180)));
-      pl.ringMat.color.set(off ? 0xd03b3b : (S.sel === pl.s.site ? 0xffffff : (pl.s.ltan === "06:00" ? 0xd95926 : 0xf0a070)));
-      pl.ringMat.opacity = off ? .2 : (S.sel === pl.s.site ? .7 : .32);
-      var omega = Math.PI * 2 / 1.6;    // one orbit = 96 min = 1.6 h of twin time
-      pl.sats.forEach(function (st) {
-        var a = st.u0 + pl.dir * omega * S.t;
-        st.m.position.set(0, pl.r * Math.cos(a), pl.r * Math.sin(a));
-        st.m.lookAt(0, 0, 0);
-        var world = st.m.getWorldPosition(new THREE.Vector3()), sh = inShadow(world);
-        total++; if (sh) { if (batt === "all" || batt === "live") onBatt++; else dark++; }
-        st.m.children[0].material = off ? matOff : (sh ? (batt ? matBatt : matDark) : matBody);
-        st.m.children[1].material = st.m.children[2].material = sh ? matPanelDark : matPanel;
-        st.m.visible = !off || Math.floor(sec * 2) % 2 === 0;
+    var pos = linkGeo.attributes.position.array, nl = 0, sec = performance.now() / 1000, tmp = new THREE.Vector3();
+    count = { shadow: 0, batt: 0, linked: 0, total: 0 };
+    planes.forEach(function (P) {
+      var O = E.raan(P.pl, S.ms), arr = P.ring.geometry.attributes.position.array, off = lost === P.pl.site, selP = S.sel && S.sel.site === P.pl.site;
+      for (var a = 0; a < RING; a++) { ringPoint(P.pl, a / (RING - 1) * Math.PI * 2, O, tmp); arr[a * 3] = tmp.x; arr[a * 3 + 1] = tmp.y; arr[a * 3 + 2] = tmp.z; }
+      P.ring.geometry.attributes.position.needsUpdate = true; P.ring.geometry.computeBoundingSphere(); P.ring.computeLineDistances();
+      P.ringMat.color.set(off ? 0xd03b3b : (selP ? 0xffffff : (P.pl.ltan === "06:00" ? 0xd95926 : 0xf0a070)));
+      P.ringMat.opacity = off ? .2 : (selP ? .6 : .3);
+      P.sats.forEach(function (s) {
+        E.satEci(P.pl, s.j, S.ms, s.eci);
+        toScene(s.eci.p, s.m.position);
+        vz.copy(s.m.position).negate().normalize(); toScene(s.eci.v, vy).normalize(); vx.crossVectors(vy, vz).normalize(); vy.crossVectors(vz, vx);
+        basis.makeBasis(vx, vy, vz); s.m.quaternion.setFromRotationMatrix(basis);
+        s.shadow = E.inShadow(s.eci.p, sun); s.gs = off ? null : E.bestStation(s.eci.p, S.ms);
+        count.total++; if (s.shadow) { count.shadow++; if (batt) count.batt++; }
+        if (s.gs) { count.linked++; if (nl < 198) { var g = stations[s.gs.i].world; pos.set([s.m.position.x, s.m.position.y, s.m.position.z, g.x, g.y, g.z], nl * 6); nl++; } }
+        var isSel = S.sel && S.sel.kind === "sat" && selP && S.sel.j === s.j;
+        s.m.children[0].material = off ? matOff : isSel ? matSel : (s.shadow ? (batt ? matBatt : matDark) : matBody);
+        s.m.children[1].material = s.m.children[2].material = s.shadow ? matPanelDark : matPanel;
+        s.m.visible = !off || Math.floor(sec * 2) % 2 === 0;
+        var k = isSel ? 1.8 : 1; s.m.scale.set(k, k, k);
       });
     });
-    var follow = planes[0] && planes[0].sats[0] ? planes[0].sats[0].m : null;
-    applyCamera(follow);
+    linkGeo.setDrawRange(0, nl * 2); linkGeo.attributes.position.needsUpdate = true; linkGeo.computeBoundingSphere();
+    relayPath();
+    applyCamera();
     placeTags();
     overlay();
-    flare(new THREE.Vector3(300, 0, 0), camera, R_EARTH);
+    flare(SUN3.clone().multiplyScalar(300), camera, R_EARTH);
+  }
+  // the selected satellite's way to the ground: straight down if it sees a station, else along its ring to one that does
+  var relay = null;
+  function relayPath() {
+    var ss = selectedSat(), arr = selGeo.attributes.position.array, n = 0; relay = null;
+    if (ss && lostNow() !== ss.p.pl.site) {
+      var sats = ss.p.sats, N = sats.length, path = [ss.s];
+      if (!ss.s.gs) {
+        for (var h = 1; h <= Math.floor(N / 2) && !relay; h++) [1, -1].forEach(function (dir) {
+          if (relay) return; var o = sats[(ss.s.j + dir * h + N) % N];
+          if (o.gs) { relay = { hops: h, via: o }; for (var k = 1; k <= h; k++) path.push(sats[(ss.s.j + dir * k + N) % N]); }
+        });
+      }
+      var end = path[path.length - 1];
+      path.forEach(function (s) { arr.set([s.m.position.x, s.m.position.y, s.m.position.z], n * 3); n++; });
+      if (end.gs) { var g = stations[end.gs.i].world; arr.set([g.x, g.y, g.z], n * 3); n++; }
+    }
+    selGeo.setDrawRange(0, n); selGeo.attributes.position.needsUpdate = true; selGeo.computeBoundingSphere();
   }
   // lens flare: a few soft ghosts along the line from the Sun through the centre of the view, hidden when Earth blocks the Sun
   var flareBox = document.createElement("div"); flareBox.style.cssText = "position:absolute;inset:0;pointer-events:none;overflow:hidden;mix-blend-mode:screen";
@@ -453,31 +542,43 @@ a { color: var(--sun); }
     ghostEls.forEach(function (el, i) { el.style.display = on ? "block" : "none"; var t = GHOSTS[i][0];
       el.style.left = (sx + (w / 2 - sx) * t * 2) + "px"; el.style.top = (sy + (h / 2 - sy) * t * 2) + "px"; });
   }
-  function clock(t) { var h = Math.floor(t), m = Math.floor((t - h) * 60); return (h < 10 ? "0" : "") + h + ":" + (m < 10 ? "0" : "") + m + " UTC"; }
 
   function placeTags() {
-    var w = canvas.clientWidth, h = canvas.clientHeight, v = new THREE.Vector3();
-    function put(key, pos, occludable) {
+    var w = canvas.clientWidth, h = canvas.clientHeight, v = new THREE.Vector3(), lost = lostNow();
+    function put(key, pos, occludable, text) {
       var el = tagEls[key]; if (!el) return;
+      if (text != null) el.textContent = text;
       v.copy(pos).project(camera);
       var behind = occludable && pos.clone().sub(camera.position).dot(pos.clone().normalize()) > 0 && pos.length() < R_EARTH * 1.1;
-      var vis = v.z < 1 && Math.abs(v.x) < 1.05 && Math.abs(v.y) < 1.05 && !behind;
-      var wanted = key === "sun" || key === S.sel || key === S.lose;
-      el.hidden = !vis || !wanted; el.style.left = ((v.x + 1) / 2 * w) + "px"; el.style.top = ((1 - v.y) / 2 * h) + "px";
-      el.classList.toggle("off", S.lose === key);
+      el.hidden = !(v.z < 1 && Math.abs(v.x) < 1.05 && Math.abs(v.y) < 1.05 && !behind);
+      el.style.left = ((v.x + 1) / 2 * w) + "px"; el.style.top = ((1 - v.y) / 2 * h) + "px";
+      el.classList.toggle("off", lost === key);
     }
-    pins.forEach(function (p) { put(p.s.site, p.dot.getWorldPosition(new THREE.Vector3()), true); });
-    planes.forEach(function (pl) { var s = pl.sats[0]; if (s) put(pl.s.site, s.m.getWorldPosition(new THREE.Vector3()).multiplyScalar(1.03), false); });
-    put("sun", new THREE.Vector3(60, 4, 0), false);
+    for (var k in tagEls) tagEls[k].hidden = true;
+    pins.forEach(function (p) { if (S.sel.site === p.s.site || lost === p.s.site) put(p.s.site, p.dot.getWorldPosition(new THREE.Vector3()), true); });
+    planes.forEach(function (P) { if (lost === P.pl.site) put(P.pl.site, P.sats[0].m.position.clone().multiplyScalar(1.03), false); });
+    var ss = selectedSat();
+    if (ss) {
+      put("sel", ss.s.m.position.clone().multiplyScalar(1.025), false, nice(ss.p.pl.site) + " · satellite " + (ss.s.j + 1));
+      var end = relay ? relay.via : ss.s; if (end.gs) put("gs" + end.gs.i, stations[end.gs.i].world, true);
+    }
+    put("sun", SUN3.clone().multiplyScalar(60), false);
   }
   function overlay() {
-    var o = $("overlay"), ecl = eclLtan(), batt = D().eclipse_battery;
-    var chips = ['<span class="chip">' + clock(S.t) + "</span>"];
-    if (ecl) chips.push('<span class="chip warn">' + (ecl === "06:00" ? "June" : "December") + " eclipse season: " + ecl + " planes</span>");
-    if (dark + onBatt) chips.push('<span class="chip">' + (dark + onBatt) + " of " + total + " satellites in Earth's shadow" +
+    var batt = D().eclipse_battery, chips = [];
+    if (count.shadow) chips.push('<span class="chip">' + count.shadow + " of " + count.total + " satellites in Earth's shadow" +
       (batt === "all" ? ", running on batteries" : batt === "live" ? ": live racks on batteries, background racks paused" : ", their racks paused") + "</span>");
-    if (batt) chips.push('<span class="chip">batteries: ' + (batt === "all" ? "every rack" : "live racks") + "</span>");
-    o.innerHTML = chips.join("");
+    else chips.push('<span class="chip">all ' + count.total + " satellites in sunlight</span>");
+    chips.push('<span class="chip">' + count.linked + " see a ground station · the rest relay along their ring</span>");
+    $("overlay").innerHTML = chips.join("");
+    var lag = (S.ms - Date.now()) / 60000, isLive = S.speed === 1 && Math.abs(lag) < 0.2;
+    $("clock").textContent = clock(S.ms);
+    var stEl = $("status"); stEl.className = "chip" + (isLive ? " live" : "");
+    stEl.textContent = isLive ? "● live" : S.speed === 0 ? "paused" + (Math.abs(lag) >= 1 ? " · " + ago(lag) : "") : "×" + S.speed + (Math.abs(lag) >= 1 ? " · " + ago(lag) : "");
+  }
+  function ago(lagMin) {
+    var a = Math.abs(lagMin), t = a < 90 ? Math.round(a) + " min" : a < 2880 ? fmt(a / 60, 1) + " h" : fmt(a / 1440, 0) + " days";
+    return t + (lagMin > 0 ? " ahead of now" : " behind now");
   }
 
   // ---------------------------------------------------------------- side panels
@@ -488,59 +589,116 @@ a { color: var(--sun); }
       [fmt(d.users_served / 1e9, 2) + "B", "users served of " + fmt(d.users_target / 1e9, 2) + "B"],
       ["$" + fmt(d.cost_busd, 2) + "B", "5 years <span class='pill " + (ok ? "ok'>✓ in $30B" : "bad'>✗ over $30B") + "</span>"],
       [fmt(d.earth_grid_mw) + " MW", "Earth grid, cap 500"],
-      [fmt(d.space_mass_t) + " t", "launched at $200/kg"],
-      [fmt(d.energy_per.chat_wh, 3) + " Wh", "per chat answer"],
-      [fmt(d.energy_per.agent_task_wh, 1) + " Wh", "per agent task"],
-      [fmt(d.latency_s.chat, 2) + " s", "chat first reply (≤ " + d.slo.chat_ttft_s + " s)"],
-      [fmt(d.latency_s.agent_int, 2) + " s", "agent first reply (≤ " + d.slo.agent_ttft_s + " s)"],
+      [fmt(d.comms.satellites) + " satellites", "12 planes, 650 km, " + fmt(E.INC * 180 / Math.PI, 1) + "°"],
+      [fmt(d.latency_s.chat, 2) + " s", "chat first word (≤ " + d.slo.chat_ttft_s + " s)"],
+      [fmt(d.latency_s.agent_int, 2) + " s", "agent first word (≤ " + d.slo.agent_ttft_s + " s)"],
     ];
     $("kpis").innerHTML = rows.map(function (r) { return "<div class='kpi'><b class='num'>" + r[0] + "</b><span>" + r[1] + "</span></div>"; }).join("");
   }
-  function outage() {
-    var ecl = eclLtan(), o = D().outages.filter(function (x) { return (x.lost || "") === S.lose && (x.eclipse || null) === ecl; })[0];
-    var what = (S.lose ? "Lose " + nice(S.lose) : "Nothing switched off") + (ecl ? ", " + (ecl === "06:00" ? "June" : "December") + " eclipse day" : ", normal day");
-    $("outage").innerHTML = "<h2>Failure test</h2><p style='font-size:.85rem'>" + what + "</p>" + (o ?
-      "<p><span class='pill " + (o.ok ? "ok'>✓ every user served" : "bad'>✗ " + (o.live_short_pct ? fmt(o.live_short_pct, 1) + "% of live users unserved" : "background jobs late")) + "</span></p>" +
-      "<p class='muted' style='font-size:.8rem'>Longest background wait " + fmt(o.bg_wait_min) + " of " + fmt(o.allowed_min) + " min allowed. From a full minute-by-minute simulated day.</p>" : "<p class='muted'>Not simulated.</p>");
+  function sumPower(kind) { var t = 0; if (snap) Object.keys(snap.power).forEach(function (k) { var s = site(k); if (s && s.kind === kind) t += snap.power[k]; }); return t; }
+  var CHECK = null;
+  function nowPanel() {
+    if (!snap) return;
+    var lost = lostNow(), allow = snap.allowance, late = snap.oldestWait > allow, short = snap.liveShort > 0;
+    var season = []; ["06:00", "18:00"].forEach(function (g) {
+      var worst = 0; live.planes.forEach(function (pl) { if (pl.ltan === g) worst = Math.max(worst, E.eclipseMinutes(E.beta(pl, S.ms, E.sunEci(S.ms)))); });
+      if (worst > 0) season.push(g + " planes, up to " + fmt(worst, 1) + " min a lap");
+    });
+    var rows = [
+      ["Live answers now", tok(snap.liveDemand) + " tokens/s of " + tok(snap.liveCap)],
+      ["Live users served", short ? "<span class='pill bad'>✗ " + fmt(100 * (1 - snap.liveShort), 1) + "%</span>" : "<span class='pill ok'>✓ 100%</span>"],
+      ["Background queue", fmt(snap.queueMin, 0) + " min of work"],
+      ["Oldest job waiting", "<span class='pill " + (late ? "bad'>✗ " : "ok'>✓ ") + fmt(snap.oldestWait) + " of " + fmt(allow) + " min</span>"],
+      ["Power now", (D().earth_grid_mw ? "Earth " + fmt(sumPower("earth")) + " MW · " : "") + "orbit " + fmt(sumPower("space")) + " MW"],
+      ["In Earth's shadow", count.shadow + " of " + count.total + " satellites"],
+      ["Ground links", count.linked + " satellites see a station"],
+      ["Eclipse season now", season.length ? season.join("; ") : "none: every ring is in full sunlight"],
+      ["Switched off", lost ? nice(lost) + " <button class='btn mini' type='button' id='restore'>switch back on</button>" : "nothing"],
+    ];
+    $("now").innerHTML = rows.map(function (r) { return "<dt>" + r[0] + "</dt><dd>" + r[1] + "</dd>"; }).join("");
+    if ($("restore")) $("restore").onclick = function () { setLost(""); };
+    if (CHECK) $("check").innerHTML = CHECK;
+  }
+  function planeUse(name, darkPools) {    // the plane's power at the meter (MW) and its racks' busy share, from the model's utilization now
+    var L = D().live, u = snap.u, mw = 0, busy = 0, it = 0;
+    L.pools.forEach(function (p) {
+      if (p.site !== name) return;
+      var on = live.mdl.onBattery(p.stream), lit = darkPools && !on ? 0 : 1, uu = u[p.stream] || 0;
+      mw += p.it_mw * lit * (L.idle + (1 - L.idle) * uu) * p.pue; busy += p.it_mw * lit * uu; it += p.it_mw * lit;
+    });
+    var sb = L.sandbox[name]; if (sb) { var us = Math.min(1, u._sandbox); mw += sb.it_mw * (L.idle + (1 - L.idle) * us) * sb.pue; busy += sb.it_mw * us; it += sb.it_mw; }
+    return { mw: mw, busy: it ? busy / it : 0 };
+  }
+  function shadowMinutes(P, j) {          // how long this satellite has been in Earth's shadow, stepping back 15 s at a time
+    var sun, e = {}, t = S.ms, n = 0;
+    while (n < 200) { t -= 15000; sun = E.sunEci(t); if (!E.inShadow(E.satEci(P.pl, j, t, e).p, sun)) break; n++; }
+    return (n + 0.5) * 0.25;
   }
   function card() {
-    var s = site(S.sel) || D().sites.filter(function (x) { return x.kind === "space"; })[0] || D().sites[0]; S.sel = s.site;
-    $("cardTitle").textContent = nice(s.site) + (s.kind === "space" ? " · orbital plane" : " · Earth site");
-    var rows = [["Power now", fmt(S.lose === s.site ? 0 : powerAt(s.site), 1) + " MW"], ["Computers", fmt(s.it_mw, 1) + " MW IT"],
-      ["Racks", Object.keys(s.racks).map(function (k) { return fmt(s.racks[k]) + " " + ({ lpu: "LPU", gpu: "GPU", air: "air", sandbox: "sandbox" }[k] || k); }).join(", ")],
-      ["Round trip", fmt(s.rtt_ms) + " ms"]];
-    if (s.kind === "space") {
-      rows.push(["Satellites", (s.satellites || Math.ceil(s.it_mw / SAT_MW)) + " × " + SAT_MW + " MW"], ["Orbit", "dawn-dusk, " + s.ltan + ", eclipses in " + s.eclipse_season],
-        ["Solar arrays", fmt(s.array_km2, 3) + " km²"], ["Radiators", fmt(s.radiator_km2, 3) + " km², " + fmt(s.radiator_c) + " °C"], ["Chips", fmt(s.chip_c) + " °C"],
-        ["Batteries", s.battery_mwh ? fmt(s.battery_mwh, 1) + " MWh" : "none"], ["Mass", fmt(s.mass_t) + " t"], ["Link to Earth", fmt(s.link_tbps, 2) + " of " + fmt(s.link_cap_tbps) + " Tbps"]);
+    if (!snap) return;
+    var L = D().live, lost = lostNow(), rows = [], actions = "", ss = selectedSat();
+    if (ss) {
+      var P = ss.p, s = P.s, sat = ss.s, n = P.pl.n, off = lost === P.pl.site, sun = E.sunEci(S.ms), ll = E.latLon(sat.eci.p, S.ms);
+      var b = E.beta(P.pl, S.ms, sun), lap = E.eclipseMinutes(b), over = D().satellite.overhead;
+      var use = planeUse(s.site, sat.shadow), mw = off ? 0 : use.mw / n, Qr = (mw * over) / (s.it_mw / n * over);
+      var Tf = s.radiator_c + 273.15, Ts = L.sink_k, Trad = Math.pow(Math.pow(Ts, 4) + (Math.pow(Tf, 4) - Math.pow(Ts, 4)) * Qr, 0.25), Tchip = Trad + L.chain_dt_k * Qr;
+      $("cardTitle").textContent = nice(s.site) + " · satellite " + (sat.j + 1) + " of " + n;
+      rows.push(["Orbit", "dawn-dusk, 650 km, " + fmt(E.INC * 180 / Math.PI, 2) + "°"], ["Crosses the equator", hm(P.pl.ltanH) + " local time, northbound"],
+        ["Over", fmt(Math.abs(ll[0]), 1) + "° " + (ll[0] >= 0 ? "N" : "S") + ", " + fmt(Math.abs(ll[1]), 1) + "° " + (ll[1] >= 0 ? "E" : "W")],
+        ["Speed", fmt(Math.sqrt(398600.4418 / E.A), 2) + " km/s, one lap " + fmt(E.PERIOD_MIN, 1) + " min"]);
+      if (off) rows.push(["State", "<span class='pill bad'>switched off</span>"]);
+      else {
+        rows.push(["Light", sat.shadow ? "<span class='pill warn'>in Earth's shadow " + fmt(shadowMinutes(P, sat.j), 1) + " min</span>" : "<span class='pill ok'>in sunlight</span>"]);
+        rows.push(["Power now", fmt(mw, 2) + " MW" + (sat.shadow ? (D().eclipse_battery === "live" ? " (live racks; background racks paused)" : D().eclipse_battery ? " (on batteries)" : " (racks paused)") : "")]);
+        rows.push(["Racks busy", fmt(use.busy * 100, 0) + "%"]);
+        rows.push(["Solar arrays", sat.shadow ? "dark" : fmt(mw * over, 2) + " of " + fmt(s.it_mw / n * D().satellite.power_factor * over, 2) + " MW"]);
+        var eSat = s.battery_mwh / n;
+        rows.push(["Battery", !eSat ? "none" : sat.shadow ? fmt(Math.max(0, 1 - mw * shadowMinutes(P, sat.j) / 60 / eSat) * 100, 0) + "% left of " + fmt(eSat, 2) + " MWh" : "full · " + fmt(eSat, 2) + " MWh"]);
+        rows.push(["Radiator · chips", fmt(Trad - 273.15, 0) + " · " + fmt(Tchip - 273.15, 0) + " °C"]);
+        var link = sat.gs ? E.STATIONS[sat.gs.i][0] + ", " + fmt(sat.gs.el * 180 / Math.PI, 0) + "° up, " + fmt(sat.gs.km) + " km"
+          : relay ? "relays " + relay.hops + " hop" + (relay.hops > 1 ? "s" : "") + " along the ring to " + E.STATIONS[relay.via.gs.i][0] : "no station in reach of this ring right now";
+        rows.push(["Link to Earth", link], ["Link capacity", fmt(L.ground_link_gbps * L.link_availability, 0) + " Gbps (100 Gbps × 95% clear sky)"]);
+      }
+      rows.push(["Shadow this lap", lap ? "up to " + fmt(lap, 1) + " min" : "none (Sun " + fmt(Math.abs(b) * 180 / Math.PI, 0) + "° off the ring)"], ["Eclipse season", "around " + s.eclipse_season]);
+      actions = "<button class='btn' type='button' id='toggle'>" + (off ? "Switch this plane back on" : "Switch off this whole plane") + "</button>";
     } else {
-      rows.push(["Power", "grid " + fmt(s.facility_mw, 1) + " of " + fmt(s.grid_cap_mw) + " MW"], ["Cooling", s.cooling.replace("_", " ") + ", PUE " + fmt(s.pue, 2)],
-        ["Electricity", "$" + s.usd_per_mwh + "/MWh · " + s.g_co2_kwh + " g/kWh"]);
+      var s2 = site(S.sel.site), off2 = lost === s2.site, ll2 = LATLON[s2.site] || [0, 0], use2 = planeUse(s2.site, false);
+      $("cardTitle").textContent = nice(s2.site) + " · Earth site";
+      var lt = pymod((S.ms / 3600000) + ll2[1] / 15, 24);
+      rows.push(["Local time", hm(lt) + " (solar)"], ["Power now", off2 ? "<span class='pill bad'>switched off</span>" : fmt(snap.power[s2.site] || 0, 1) + " of " + fmt(s2.facility_mw, 1) + " MW"],
+        ["Racks busy", off2 ? "–" : fmt(use2.busy * 100, 0) + "%"], ["Grid", fmt(s2.facility_mw, 1) + " MW nameplate, site limit " + fmt(s2.grid_cap_mw) + " MW"],
+        ["Cooling", s2.cooling.replace("_", " ") + ", PUE " + fmt(s2.pue, 2)], ["Electricity", "$" + s2.usd_per_mwh + "/MWh · " + s2.g_co2_kwh + " g CO₂/kWh"],
+        ["Round trip", fmt(s2.rtt_ms) + " ms"]);
+      actions = "<button class='btn' type='button' id='toggle'>" + (off2 ? "Switch this site back on" : "Switch off this site") + "</button>";
     }
-    rows.push(["5-year cost", "$" + fmt(s.cost_busd, 2) + "B"]);
+    var sx = site(S.sel.site);
+    rows.push(["Racks", Object.keys(sx.racks).map(function (k) { return fmt(sx.racks[k]) + " " + ({ lpu: "LPU", gpu: "GPU", air: "air", sandbox: "sandbox" }[k] || k); }).join(", ")], ["5-year cost", "$" + fmt(sx.cost_busd, 2) + "B for the " + (sx.kind === "space" ? "plane" : "site")]);
     $("card").innerHTML = rows.map(function (r) { return "<dt>" + r[0] + "</dt><dd>" + r[1] + "</dd>"; }).join("");
+    $("cardActions").innerHTML = actions;
+    $("toggle").onclick = function () { setLost(lost === S.sel.site ? "" : S.sel.site); };
   }
   var tip = $("tip");
   function strip() {
+    stripCompute();
     var svg = $("strip"); while (svg.firstChild) svg.removeChild(svg.firstChild);
     var NS = "http://www.w3.org/2000/svg", el = function (t, a, txt) { var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; };
-    var day = D().days[dayKey()], rows = [];
-    for (var h = 0; h < 24; h++) { var p = day.power_mw[h], e = 0, o = 0; Object.keys(p).forEach(function (k) { if (S.lose === k) return; site(k).kind === "earth" ? (e += p[k]) : (o += p[k]); }); rows.push([e, o]); }
+    var rows = stripRows.rows.map(function (r) { var e = 0, o = 0; Object.keys(r.power).forEach(function (k) { site(k).kind === "earth" ? (e += r.power[k]) : (o += r.power[k]); }); return [e, o, r]; });
     var max = Math.max.apply(null, rows.map(function (r) { return r[0] + r[1]; })), top = Math.ceil(max / 200) * 200;
     var L = 56, R = 892, T = 8, B = 112, bw = (R - L) / 24, y = function (v) { return B - v / top * (B - T); };
+    var nowH = (stMin - stripRows.day0) / 60 + (S.ms / 60000 - stMin) / 60;
     [0, top / 2, top].forEach(function (v) { el("line", { x1: L, x2: R, y1: y(v), y2: y(v), stroke: "#2a3352" }); el("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", class: "ax" }, fmt(v) + " MW"); });
     rows.forEach(function (r, h) {
-      var x = L + h * bw + 2;
-      if (r[0]) el("rect", { x: x, y: y(r[0]), width: bw - 4, height: Math.max(0, y(0) - y(r[0]) - 1), fill: "#3987e5", rx: 2 });
-      if (r[1]) el("rect", { x: x, y: y(r[0] + r[1]), width: bw - 4, height: Math.max(0, y(r[0]) - y(r[0] + r[1]) - 2), fill: "#d95926", rx: 2 });
+      var x = L + h * bw + 2, future = h > nowH;
+      if (r[0]) el("rect", { x: x, y: y(r[0]), width: bw - 4, height: Math.max(0, y(0) - y(r[0]) - 1), fill: "#3987e5", rx: 2, opacity: future ? .45 : 1 });
+      if (r[1]) el("rect", { x: x, y: y(r[0] + r[1]), width: bw - 4, height: Math.max(0, y(r[0]) - y(r[0] + r[1]) - 2), fill: "#d95926", rx: 2, opacity: future ? .45 : 1 });
       var hit = el("rect", { x: L + h * bw, y: T, width: bw, height: B - T, fill: "transparent" });
-      hit.addEventListener("mousemove", function (ev) { tip.innerHTML = "<b>" + (h < 10 ? "0" : "") + h + ":00 UTC</b><br>Earth " + fmt(r[0]) + " MW<br>Orbit " + fmt(r[1]) + " MW"; tip.hidden = false; tip.style.left = ev.clientX + 12 + "px"; tip.style.top = ev.clientY + 12 + "px"; });
+      hit.addEventListener("mousemove", function (ev) { tip.innerHTML = "<b>" + pad(h) + ":00 UTC</b>" + (future ? " (if nothing changes)" : "") + "<br>Earth " + fmt(r[0]) + " MW<br>Orbit " + fmt(r[1]) + " MW<br>Live users served " + (r[2].liveShort ? fmt(100 * (1 - r[2].liveShort), 1) + "%" : "100%"); tip.hidden = false; tip.style.left = ev.clientX + 12 + "px"; tip.style.top = ev.clientY + 12 + "px"; });
       hit.addEventListener("mouseleave", function () { tip.hidden = true; });
-      hit.addEventListener("click", function () { S.t = h + 0.5; S.playing = false; ui(); });
-      if (h % 3 === 0) el("text", { x: L + (h + .5) * bw, y: B + 16, "text-anchor": "middle", class: "ax" }, (h < 10 ? "0" : "") + h + ":00");
+      if (h % 3 === 0) el("text", { x: L + (h + .5) * bw, y: B + 16, "text-anchor": "middle", class: "ax" }, pad(h) + ":00");
     });
-    var cx = L + (S.t) * bw; el("line", { x1: cx, x2: cx, y1: T, y2: B, stroke: "#ffd27a", "stroke-width": 2 });
+    var cx = L + nowH * bw; el("line", { x1: cx, x2: cx, y1: T, y2: B, stroke: "#ffd27a", "stroke-width": 2 });
   }
+  function panels() { nowPanel(); card(); strip(); }
 
   // ================================================================ one satellite
   var SM = DATA.satellite_model, presetNames = Object.keys(SM.presets);
@@ -689,26 +847,36 @@ a { color: var(--sun); }
   }
 
   var lastBuilt = -1;
+  function jumps() {
+    var box = $("jumpSeg"), y = new Date(S.ms).getUTCFullYear(), now = Date.now();
+    box.innerHTML = "";
+    [["Now", function () { return Date.now(); }],
+     ["21 June", function () { var t = Date.UTC(y, 5, 21, 12); return t < now - 864e5 ? Date.UTC(y + 1, 5, 21, 12) : t; }],
+     ["21 December", function () { var t = Date.UTC(y, 11, 21, 12); return t < now - 864e5 ? Date.UTC(y + 1, 11, 21, 12) : t; }]].forEach(function (j) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = j[0];
+      b.onclick = function () { S.ms = j[1](); warm(); ui(); }; box.appendChild(b);
+    });
+  }
   function ui() {
-    if (lastBuilt !== S.d) { build(); lastBuilt = S.d; }
+    if (lastBuilt !== S.d) { lastBuilt = S.d; build(); if (S.cam === "free" || S.cam === "ride") S.cam = "overview"; frame(0); preset(S.cam); }
     seg("viewSeg", [{ label: "Whole fleet", value: "fleet" }, { label: "One satellite", value: "sat" }], "view", function () { if (S.view === "sat") satRebuild(); });
     seg("lightSeg", [{ label: "In sunlight", value: false }, { label: "In Earth's shadow", value: true }], "shade");
     var sat = S.view === "sat";
     $("fleetCtl").style.display = sat ? "none" : "contents"; $("satCtl").style.display = sat ? "contents" : "none";
     $("designSeg").style.display = sat ? "none" : "";
     ["satPanel", "satOut"].forEach(function (id) { $(id).hidden = !sat; });
-    ["fleetK", "outage", "cardPanel", "stripPanel"].forEach(function (id) { $(id).hidden = sat; });
+    ["fleetK", "nowPanel", "cardPanel", "stripPanel", "clockbox"].forEach(function (id) { $(id).hidden = sat; });
     for (var k in tagEls) if (sat) tagEls[k].hidden = true;
     for (var k2 in satTags) if (!sat) satTags[k2].hidden = true;
-    seg("designSeg", DATA.designs.map(function (d, i) { return { label: d.label.split(":")[0], value: i }; }), "d", function () { S.sel = null; S.lose = ""; });
-    seg("daySeg", [{ label: "Normal day", value: "normal" }, { label: "June eclipse", value: "jun" }, { label: "December eclipse", value: "dec" }], "day");
-    seg("camSeg", [{ label: "Overview", value: "overview" }, { label: "From the Sun", value: "sun" }, { label: "Ride a satellite", value: "ride" }, { label: "Earth sites", value: "sites" }], "cam",
-      function () { if (HOME[S.cam]) Object.assign(cam, HOME[S.cam]); });
-    var lose = $("lose"); lose.innerHTML = ['<option value="">nothing</option>'].concat(D().sites.map(function (s) { return '<option value="' + s.site + '">' + nice(s.site) + "</option>"; })).join("");
-    lose.value = S.lose;
-    $("play").textContent = S.playing ? "Pause" : "Play";
-    $("hour").value = S.t.toFixed(2); $("clock").textContent = clock(S.t);
-    kpis(); outage(); card(); strip();
+    seg("designSeg", DATA.designs.map(function (d, i) { return { label: d.label.split(":")[0], value: i }; }), "d");
+    seg("speedSeg", [{ label: "Pause", value: 0 }, { label: "×1 real time", value: 1 }, { label: "×10", value: 10 }, { label: "×60", value: 60 }, { label: "×600", value: 600 }], "speed");
+    jumps();
+    seg("camSeg", [{ label: "Overview", value: "overview" }, { label: "From the Sun", value: "sun" }, { label: "Ride the selected satellite", value: "ride" }]
+      .concat(pins.length ? [{ label: "Earth sites", value: "sites" }] : []), "cam", function () { preset(S.cam); });
+    var lose = $("lose"), lost = lostNow();
+    lose.innerHTML = ['<option value="">nothing</option>'].concat(D().sites.map(function (s) { return '<option value="' + s.site + '">' + nice(s.site) + "</option>"; })).join("");
+    lose.value = lost || "";
+    kpis(); panels();
   }
 
   function resize() {
@@ -719,12 +887,20 @@ a { color: var(--sun); }
   function resizeSat() { satCamera.aspect = camera.aspect; satCamera.updateProjectionMatrix(); }
   window.addEventListener("resize", resizeSat);
   sliders(); satRebuild(); ui(); resize(); resizeSat();
-  var last = performance.now(), lastHour = -1;
+  setTimeout(function () {                 // the self-check: re-run every day the Python twin stored and compare
+    var days = 0, bad = 0;
+    DATA.designs.forEach(function (d) { var r = E.check(d); days += d.outages.length; bad += r.mismatches.length; });
+    CHECK = bad ? "✗ This page's model disagrees with the Python twin on " + bad + " values. Rebuild the page."
+      : "✓ Same model as the Python twin (twin/simulate.py): on load this page re-ran all " + days + " simulated days and the hourly power for both designs, and matched every value.";
+    nowPanel();
+  }, 400);
+  var last = performance.now(), lastPanels = 0;
   (function loop(now) {
-    var dt = Math.min(0.1, ((now || performance.now()) - last) / 1000); last = now || performance.now();
+    now = now || performance.now();
+    var dt = Math.min(0.1, (now - last) / 1000); last = now;
     if (S.view === "sat") { satFrame(dt); renderer.render(satScene, satCamera); requestAnimationFrame(loop); return; }
-    frame(S.playing ? dt * 0.125 * S.speed : 0);      // 8 s of real time = 1 hour of twin time
-    if (hourKey() !== lastHour) { lastHour = hourKey(); card(); strip(); }
+    frame(dt);
+    if (now - lastPanels > 500) { lastPanels = now; panels(); }
     renderer.render(scene, camera);
     requestAnimationFrame(loop);
   })();

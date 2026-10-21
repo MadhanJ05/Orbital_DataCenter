@@ -109,6 +109,28 @@ def plane_traffic(result):
     return by_plane
 
 
+def live_inputs(design, result):
+    """What the 3D twin needs to run simulate.py's minute-by-minute model in the browser: demand per
+    stream, every pool's capacity and power, the battery rule and the sandbox racks. The page re-runs
+    every day in `outages` and `days` with these and checks it gets the same answers."""
+    raw_out, _, _ = S.demand(result["cases"], result["serving"])
+    streams = {}
+    for s, st in C.STREAMS.items():
+        streams[s] = dict(avg=raw_out[s] / st["peak"], peak=st["peak"], ratio=(st["ctx"] - st["cached"]) / st["out"],
+                          live=s in C.LIVE_STREAMS, deadline_s=st["task_deadline"],
+                          task_s=max([p.get("task_s") or 0 for p in result["pools"] if p["stream"] == s] or [0]))
+    pools = [dict(stream=p["stream"], phase=p["phase"], site=p["site"], cap=p["cap"], it_mw=p["it_mw"], pue=p["pue"], ok=p["slo_ok"])
+             for p in result["pools"]]
+    sandbox = {site: dict(it_mw=sb["it_mw"], pue=1.0 if C.SITES[site]["kind"] == "space" else S.site_pue("direct_liquid", site))
+               for site, sb in result["sandbox"].get("by_site", {}).items()}
+    return dict(streams=streams, pools=pools, sandbox=sandbox, valley_pairs=[list(x) for x in S.VALLEY_PAIRS],
+                bg_fill_valleys=result["serving"]["bg_fill_valleys"], battery=design.get("eclipse_battery", C.ECLIPSE_BATTERY_DEFAULT),
+                idle=C.IDLE_POWER_FRACTION, sandbox_peak=C.SANDBOX_PEAK, dark_share=C.ECLIPSE_DARK_SHARE,
+                regions=[list(r) for r in M.REGIONS], local_peak_hour=M.LOCAL_PEAK_HOUR, warmup_days=M.DAYS,
+                battery_min=C.ECLIPSE_BATTERY["min"], chain_dt_k=OM.BASE["chain_dt_k"], sink_k=C.RADIATOR["sink_k"],
+                sat_mw=C.COMMS["sat_mw"], ground_link_gbps=C.COMMS["ground_link_gbps"], link_availability=C.COMMS["link_availability"])
+
+
 def twin(path):
     design = json.loads(Path(path).read_text())
     r = S.evaluate(design)
@@ -137,7 +159,7 @@ def twin(path):
         else:
             batt_mw = sum(p["it_mw"] for p in pools if batt == "all" or (batt == "live" and p["stream"] in C.LIVE_STREAMS))
             row.update(power="solar", ltan=C.plane_ltan(site),
-                       eclipse_season="June" if C.plane_ltan(site) == "06:00" else "December",
+                       eclipse_season="December" if C.plane_ltan(site) == "06:00" else "June",   # real geometry: twin3d.html, PROBA2 (06:00, Nov-Jan)
                        array_km2=round(it * phys["array_m2_per_mw"] / 1e6, 3),
                        radiator_km2=round(it * phys["radiator_m2_per_mw"] / 1e6, 3),
                        radiator_c=round(phys["radiator_c"], 1), chip_c=round(phys["chip_c"], 1),
@@ -198,6 +220,7 @@ def twin(path):
         users_served=r["twin_users_served"], users_target=r["users_target"],
         earth_grid_mw=round(r["earth_grid_mw"], 1), space_mass_t=round(r["space_mass_t"], 0),
         eclipse_battery=batt, satellite=phys, sites=sites, days=days, outages=outages, energy_5yr=energy,
+        live=live_inputs(design, r),
         comms=dict(satellites=sum(r["comms"]["satellites"].values()), terminals=r["comms"]["terminals"],
                    ground_stations=C.COMMS["ground_stations"] if r["comms"]["satellites"] else 0,
                    cost_busd=round(r["comms"]["usd"] / 1e9, 3)),

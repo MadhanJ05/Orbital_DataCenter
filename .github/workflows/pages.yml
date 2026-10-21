@@ -35,6 +35,7 @@ jobs:
       - name: Build the fleet twins and the presentation (twin.html, twin3d.html, explained.html, briefing.html)
         working-directory: .
         run: |
+          node twin/check_twin3d.js
           python3 twin/build_twin_page.py
           python3 present/build.py
       - name: Assemble site (dashboard at root, app under /app/, fleet twins and presentation beside it)
