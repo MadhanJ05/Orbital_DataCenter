@@ -344,7 +344,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
     <svg id="ladder" style="max-height:calc(var(--u)*24)" viewBox="0 0 1000 330" role="img" aria-label="Cost per megawatt in orbit for each upgrade step, from 11.18 million dollars down to 9.07, against the Nordics at 9.29"></svg>
     <div class="grid g2">
       <div class="card"><span class="label">One 8 MW satellite · Design 1</span><p>144 t · 20,600 m² of solar wings · 8,600 m² of radiators · chips at 85 °C</p></div>
-      <div class="card" style="border-color:var(--sun-dim)"><span class="label" style="color:var(--sun)">One 8 MW satellite · Design 2</span><p>88 t · 18,900 m² of solar wings · 12,400 m² of radiators · chips at 58 °C</p></div>
+      <div class="card" style="border-color:var(--sun-dim)"><span class="label" style="color:var(--sun)">One 8 MW satellite · Design 2</span><p>88 t · 18,900 m² of solar wings · 12,400 m² of radiators · chips at 58 °C</p><p class="sm">With today's best flown arrays (~200 W/kg): 14.8 t per MW, and Design 2 costs $30.12B</p></div>
     </div>
   </div>
   <div class="foot">twin/orbit_mass.py, same physics as slide 14's 972 W/m² radiator · 500 W/kg arrays are a 2035 stretch: the best flown reach ~200 W/kg <a class="ref" data-k="nasasoa"></a> · radiators <a class="ref" data-k="techbriefs"></a></div>
@@ -435,7 +435,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
       <thead><tr><th>Input</th><th class="r">Ours</th><th>What the source says</th><th>Verdict</th><th>Source</th></tr></thead>
       <tbody></tbody>
     </table></div>
-    <div class="card" style="border-color:var(--sun-dim);padding:calc(var(--u)*1) calc(var(--u)*1.4)"><p class="sm" style="color:var(--ink);max-width:none">At today's electricity, carbon and building prices together, <b>Design 1 would cost about $31.2B, over budget</b>. Design 2 uses none of these inputs and stays at $29.44B. Rising Earth costs are one more reason for orbit.</p></div>
+    <div class="card" style="border-color:var(--sun-dim);padding:calc(var(--u)*1) calc(var(--u)*1.4)"><p class="sm" style="color:var(--ink);max-width:none">At today's electricity, carbon and building prices, <b>Design 1 would cost about $31.2B</b>. Design 2 avoids those, but with today's best flown solar arrays (~200 W/kg, not our 500) its satellite weighs 14.8 t per MW and <b>Design 2 would cost $30.12B</b>. Both go just over $30B.</p></div>
   </div>
   <div class="foot">Everything else comes from the organizers' slides: 19 inputs, each tagged with its slide number in twin/catalog.py</div>
 </section>

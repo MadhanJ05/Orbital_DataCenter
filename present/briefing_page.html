@@ -124,7 +124,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
 .panel.focus { position: fixed; z-index: 21; inset: calc(24px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
   font-size: clamp(15px, 1.45vw, 22px); overflow: auto; grid-column: auto; grid-row: auto; max-width: 1500px; margin: 0 auto; padding: 1.6em 1.9em; align-content: center; border-color: var(--sun-dim); }
 .panel.focus .globe { aspect-ratio: auto; height: 52vh; min-height: 300px; }
-.panel.focus { align-content: start; }
+.panel.focus { align-content: start; grid-auto-rows: max-content; }   /* scroll boxes (tables) keep their full height */
 .fnav { position: fixed; z-index: 22; left: 50%; transform: translateX(-50%); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 6px; align-items: center; background: rgba(11,18,32,.92); border: 1px solid var(--hair2); border-radius: 999px; padding: 5px; }
 .fnav button { all: unset; cursor: pointer; font: 500 12px/1 var(--mono); color: var(--ink); padding: 8px 12px; border-radius: 999px; }
 .fnav button:hover { background: var(--panel2); }
@@ -316,7 +316,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
       <svg id="ladder" viewBox="0 0 1000 330" role="img" aria-label="Cost per megawatt in orbit for each upgrade, from 11.18 million dollars to 9.07, against the Nordics at 9.29"></svg>
       <div class="row c2">
         <div class="tile"><span class="label">8 MW satellite · Design 1</span><span>144 t · 20,600 m² wings · chips 85 °C</span></div>
-        <div class="tile" style="border-color:var(--sun-dim)"><span class="label gold">8 MW satellite · Design 2</span><span>88 t · 18,900 m² wings · chips 58 °C</span></div>
+        <div class="tile" style="border-color:var(--sun-dim)"><span class="label gold">8 MW satellite · Design 2</span><span>88 t · 18,900 m² wings · chips 58 °C</span><span class="sm">At today's best flown arrays (~200 W/kg): 14.8 t/MW, $30.12B</span></div>
       </div>
       <p class="src">twin/orbit_mass.py · 500 W/kg arrays are a 2035 stretch; best flown ~200 W/kg <a class="ref" data-k="nasasoa"></a> · radiators <a class="ref" data-k="techbriefs"></a></p>
     </section>
@@ -399,7 +399,7 @@ svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--
         <thead><tr><th>Input</th><th class="r">Ours</th><th>What the source says</th><th>Verdict</th><th>Source</th></tr></thead>
         <tbody></tbody>
       </table></div>
-      <div class="tile" style="border-color:var(--sun-dim)"><span>At today's electricity, carbon and building prices together, <b>Design 1 would cost about $31.2B, over budget</b>. Design 2 uses none of these inputs and stays at $29.44B. <span class="pill warn" style="margin-left:.4em">risk · Design 1</span></span></div>
+      <div class="tile" style="border-color:var(--sun-dim)"><span>At today's electricity, carbon and building prices, <b>Design 1 would cost about $31.2B</b>. Design 2 avoids those, but with today's best flown solar arrays (~200 W/kg, not our 500) its satellite weighs 14.8 t per MW and <b>Design 2 would cost $30.12B</b>. Both go just over $30B. <span class="pill warn" style="margin-left:.4em">risk · both designs</span></span></div>
       <p class="src">Everything else comes from the organizers' slides: 19 inputs, each tagged with its slide number in twin/catalog.py</p>
     </section>
 
