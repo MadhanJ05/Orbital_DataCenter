@@ -2,145 +2,309 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 [hidden] { display: none !important; }
-/* Layout: a full-width space scene with the controls in a bar above it, live readouts in panels
-   beside it (stacked below on phones), and the hour-by-hour power strip under the scene.
-   Single dark look on purpose: it is a view from space. */
+/* Layout: the whole window is space and Earth; glass instruments float around the globe.
+   Identity and design top left, the clock top centre, view tools top right, the fleet's live state and
+   today's power down the left, the selected object on the right, time and camera in a dock at the bottom.
+   Below 1000 px the panels become one bottom sheet with tabs. Single dark look on purpose: it is space. */
 :root {
   color-scheme: dark;
-  --space: #04060d; --panel: rgba(14, 19, 34, 0.86); --panel-solid: #0e1322; --ink: #e9edf6; --muted: #9aa5bf;
-  --line: #2a3352; --earth: #3987e5; --orbit: #d95926; --bgwork: #199e70; --good: #0ca30c; --bad: #d03b3b; --sun: #ffd27a;
-  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
-  --body: "Atkinson Hyperlegible", "Verdana", "Segoe UI", sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --space: #02040a; --glass: rgba(10, 15, 29, .62); --glass-hi: rgba(18, 25, 44, .74); --edge: rgba(168, 188, 228, .14); --edge-hi: rgba(242, 181, 68, .5);
+  --ink: #eef2f8; --muted: #93a0b9; --faint: #5f6c88;
+  --sun: #f2b544; --earth: #3987e5; --orbit: #d95926; --link: #6ff0dc; --good: #5cc48a; --warn: #f2b544; --bad: #f07067; --on-sun: #05080f;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --pad: 16px; --top: calc(var(--pad) + env(safe-area-inset-top, 0px)); --left: max(var(--pad), env(safe-area-inset-left, 0px)); --right: max(var(--pad), env(safe-area-inset-right, 0px));
+  --bottom: calc(var(--pad) + env(safe-area-inset-bottom, 0px)); --dockh: 54px;
 }
-html, body { background: var(--space); color: var(--ink); }
-body { font: 14px/1.45 var(--body); margin: 0;
-  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-main { max-width: 1320px; margin: 0 auto; padding-block: 20px 48px; display: grid; gap: 14px; }
-h1, h2 { font-family: var(--display); margin: 0; line-height: 1.15; text-wrap: balance; }
-h1 { font-size: clamp(1.5rem, 3.4vw, 2.2rem); font-weight: 800; }
-h2 { font-size: 1rem; font-weight: 600; }
-p { margin: 0; max-width: 72ch; }
-.muted { color: var(--muted); }
+html, body { height: 100%; margin: 0; background: var(--space); color: var(--ink); overflow: hidden; }
+body { font: 400 13px/1.45 var(--display); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p { margin: 0; }
 .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
-.eyebrow { font: 500 .72rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--orbit); }
-.bar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; background: var(--panel-solid); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
-.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-.seg button { font: 600 .85rem var(--body); color: var(--ink); background: transparent; border: 0; padding: 7px 10px; cursor: pointer; }
-.seg button[aria-pressed="true"] { background: var(--ink); color: var(--panel-solid); }
-button:focus-visible, select:focus-visible, input:focus-visible, canvas:focus-visible { outline: 2px solid var(--sun); outline-offset: 2px; }
-label.ctl { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); font-size: .85rem; }
-select { font: .85rem var(--body); padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-solid); color: var(--ink); }
-.btn { font: 600 .85rem var(--body); border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
-.time { display: flex; gap: 8px; align-items: center; flex: 1 1 280px; }
-.time input { flex: 1; accent-color: var(--sun); }
-.layout { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 14px; }
-@media (max-width: 960px) { .layout { grid-template-columns: minmax(0, 1fr); } }
-.stage { align-self: start; position: relative; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--space); min-width: 0; }
-.stage canvas { display: block; width: 100%; touch-action: none; cursor: grab; }
+.eyebrow { font: 500 10px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sun); }
+.label { font: 500 10px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+button { font: inherit; color: inherit; }
+button:focus-visible, select:focus-visible, input:focus-visible, canvas:focus-visible, a:focus-visible { outline: 2px solid var(--sun); outline-offset: 2px; }
+a { color: var(--sun); }
+
+/* the scene */
+.stage { position: fixed; inset: 0; }
+.stage canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
 .stage canvas:active { cursor: grabbing; }
 .tags { position: absolute; inset: 0; pointer-events: none; }
-.tag { position: absolute; transform: translate(-50%, -130%); font: 500 .7rem var(--mono); color: var(--ink); background: rgba(4, 6, 13, .72); padding: 2px 6px; border-radius: 4px; white-space: nowrap; border: 1px solid var(--line); }
-.tag.off { color: var(--bad); border-color: var(--bad); }
-.overlay { position: absolute; left: 10px; bottom: 10px; display: flex; flex-wrap: wrap; gap: 6px; pointer-events: none; }
-.chip { font: 600 .75rem var(--body); padding: 4px 8px; border-radius: 999px; background: rgba(4, 6, 13, .8); border: 1px solid var(--line); }
-.chip.warn { border-color: var(--sun); color: var(--sun); }
-.side { display: grid; gap: 10px; align-content: start; }
-.panel { background: var(--panel-solid); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; gap: 8px; }
+.tag { position: absolute; transform: translate(-50%, -150%); font: 500 10.5px var(--mono); color: var(--ink); background: rgba(3, 6, 14, .72); padding: 3px 7px; border-radius: 999px; white-space: nowrap; border: 1px solid var(--edge); backdrop-filter: blur(6px); }
+.tag.off { color: var(--bad); border-color: rgba(240, 112, 103, .55); }
+.tag.gs { transform: translate(-50%, 50%); color: var(--link); border-color: rgba(111, 240, 220, .4); }
+
+/* glass */
+.glass { background: linear-gradient(180deg, var(--glass-hi), var(--glass)); border: 1px solid var(--edge); border-radius: 16px;
+  -webkit-backdrop-filter: blur(18px) saturate(150%); backdrop-filter: blur(18px) saturate(150%);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .06); }
+.col { position: fixed; top: var(--top); bottom: calc(var(--bottom) + var(--dockh) + 12px); display: flex; flex-direction: column; gap: 12px; overflow-y: auto; pointer-events: none; scrollbar-width: none; z-index: 2; }
+.col::-webkit-scrollbar { display: none; }
+.col > * { pointer-events: auto; flex: none; }
+.col.left { left: var(--left); width: 332px; }
+.col.right { right: var(--right); width: 352px; top: calc(var(--top) + 54px); }
+.panel { padding: 14px 16px 16px; display: grid; gap: 10px; }
+.panel > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.panel > header > div:first-child { display: grid; gap: 4px; min-width: 0; }
+.panel > header > .seg { flex: none; }
+.panel h2 { font: 650 15px/1.2 var(--display); font-stretch: 110%; letter-spacing: -.005em; }
+.sub { color: var(--muted); font-size: 11.5px; }
+
+/* identity + design */
+.brand { padding: 14px 16px; display: grid; gap: 10px; }
+.brand-top { display: flex; gap: 12px; align-items: center; }
+.orbmark { width: 30px; height: 30px; flex: none; }
+.brand h1 { font: 700 19px/1.1 var(--display); font-stretch: 116%; letter-spacing: -.01em; }
 .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.kpi b { font: 600 1.1rem/1.15 var(--display); display: block; }
-.kpi span { font-size: .75rem; color: var(--muted); }
-.pill { display: inline-flex; align-items: center; gap: 4px; font: 600 .72rem/1 var(--body); padding: 3px 7px; border-radius: 999px; border: 1px solid currentColor; }
-.pill.ok { color: var(--good); } .pill.bad { color: var(--bad); }
-dl.card { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: .82rem; }
-dl.card dt { color: var(--muted); } dl.card dd { margin: 0; font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
-.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .78rem; color: var(--muted); }
-.legend i { display: inline-block; width: 11px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+.kpi { display: grid; gap: 1px; padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, .035); border: 1px solid rgba(255, 255, 255, .05); min-width: 0; }
+.kpi b { font: 650 16px/1.1 var(--display); font-stretch: 108%; font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 11px; color: var(--muted); }
+.dline { font-size: 11.5px; color: var(--muted); }
+
+/* segmented controls */
+.seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .06); }
+.seg button { border: 0; background: transparent; color: var(--muted); font: 500 12px/1 var(--display); padding: 7px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.seg button:hover { color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--on-sun); }
+.seg.gold button[aria-pressed="true"] { background: var(--sun); }
+.btn { border: 1px solid var(--edge); background: rgba(255, 255, 255, .05); color: var(--ink); font: 550 12px/1 var(--display); padding: 9px 13px; border-radius: 999px; cursor: pointer; }
+.btn:hover { border-color: rgba(242, 181, 68, .55); }
+.btn.primary { background: var(--sun); color: var(--on-sun); border-color: var(--sun); }
+.btn.danger:hover { border-color: rgba(240, 112, 103, .7); color: #ffd2ce; }
+.btn.mini { padding: 3px 8px; font-size: 11px; margin-left: 6px; }
+.icon { width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--edge); background: rgba(255, 255, 255, .05); color: var(--ink); cursor: pointer; display: inline-grid; place-items: center; font: 600 13px var(--display); }
+.icon:hover { border-color: rgba(242, 181, 68, .55); }
+.icon[aria-pressed="true"] { background: var(--ink); color: var(--on-sun); }
+
+/* clock */
+.clockbox { position: fixed; top: var(--top); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 7px 8px 7px 14px; border-radius: 999px; z-index: 3; white-space: nowrap; }
+.clockbox .num { font-size: 13px; letter-spacing: .02em; }
+.status { font: 600 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.status.live { color: var(--good); }
+.status.live::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--good); margin-right: 7px; box-shadow: 0 0 0 0 rgba(92, 196, 138, .6); animation: pulse 2s infinite; vertical-align: 0; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(92, 196, 138, .55); } 70% { box-shadow: 0 0 0 8px rgba(92, 196, 138, 0); } 100% { box-shadow: 0 0 0 0 rgba(92, 196, 138, 0); } }
+.golive { border: 0; background: var(--sun); color: var(--on-sun); font: 650 11.5px/1 var(--display); padding: 7px 11px; border-radius: 999px; cursor: pointer; }
+
+/* toolbar */
+.toolbar { position: fixed; top: var(--top); right: var(--right); display: flex; gap: 8px; align-items: center; padding: 5px; border-radius: 999px; z-index: 3; }
+
+/* rows */
+dl.rows { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 7px 14px; margin: 0; font-size: 12.5px; align-items: baseline; }
+dl.rows dt { color: var(--muted); }
+dl.rows dd { margin: 0; text-align: right; font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+dl.rows dt.group { grid-column: 1 / -1; font: 500 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--faint); padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, .06); margin-top: 2px; }
+.pill { display: inline-flex; align-items: center; gap: 4px; font: 600 11px/1 var(--mono); padding: 4px 8px; border-radius: 999px; border: 1px solid currentColor; }
+.pill.ok { color: var(--good); } .pill.bad { color: var(--bad); } .pill.warn { color: var(--warn); }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.failure { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, .06); }
+select { font: 500 12px var(--display); padding: 7px 10px; border-radius: 999px; border: 1px solid var(--edge); background: rgba(5, 8, 16, .8); color: var(--ink); max-width: 190px; }
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 12px; font-size: 11px; color: var(--muted); margin: 0; padding: 8px 0 0; list-style: none; }
+.pane { display: grid; gap: 10px; }
+.seg.small button { padding: 5px 9px; font-size: 11.5px; }
+.mtitle { display: none; }
+.kpi .sh { display: none; }
+.key { border-top: 1px solid rgba(255, 255, 255, .06); padding-top: 9px; }
+.key summary { cursor: pointer; font: 500 10px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); list-style: none; }
+.key summary::-webkit-details-marker { display: none; }
+.key summary::after { content: " +"; color: var(--sun); } .key[open] summary::after { content: " −"; }
+.kpi b em { font-style: normal; color: var(--good); font-size: 12px; margin-left: 4px; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 7px; vertical-align: -1px; }
+.legend i.ring { border-radius: 0; height: 0; width: 14px; border-top: 2px solid var(--orbit); vertical-align: 3px; }
+.legend i.ring.dash { border-top-style: dashed; border-color: #f0a070; }
+.empty { color: var(--muted); font-size: 12.5px; line-height: 1.5; }
+
+/* power strip */
 svg { display: block; width: 100%; height: auto; }
-svg text { fill: var(--ink); font-family: var(--body); }
-svg .ax { font: 10px var(--mono); fill: var(--muted); }
-.tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--panel-solid); font-size: .78rem; padding: 5px 8px; border-radius: 6px; z-index: 30; max-width: 240px; }
-.fallback { padding: 40px 20px; text-align: center; color: var(--muted); }
-.sl { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; font-size: .8rem; color: var(--muted); }
+svg text { fill: var(--ink); font-family: var(--display); }
+svg .ax { font: 9.5px var(--mono); fill: var(--muted); }
+.keyline { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11px; color: var(--muted); }
+.keyline i { display: inline-block; width: 10px; height: 8px; border-radius: 2px; margin-right: 6px; }
+
+/* dock */
+.dock { position: fixed; left: 50%; bottom: var(--bottom); transform: translateX(-50%); display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 999px; z-index: 3; max-width: calc(100vw - 2 * var(--pad)); overflow-x: auto; scrollbar-width: none; }
+.dock::-webkit-scrollbar { display: none; }
+.dock-group { display: flex; align-items: center; gap: 8px; }
+.play { width: 40px; height: 40px; border-radius: 999px; border: 0; background: var(--sun); color: var(--on-sun); cursor: pointer; display: grid; place-items: center; flex: none; }
+.play svg { width: 14px; height: 14px; fill: currentColor; }
+.sep { width: 1px; height: 22px; background: rgba(255, 255, 255, .1); flex: none; }
+
+/* scene captions, hover label, hint, self-check */
+.overlay { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--bottom) + var(--dockh) + 14px); display: flex; gap: 6px; pointer-events: none; z-index: 2; }
+.chip { font: 500 11.5px var(--display); padding: 6px 11px; border-radius: 999px; background: rgba(3, 6, 14, .72); border: 1px solid var(--edge); backdrop-filter: blur(8px); white-space: nowrap; }
+.chip.warn { border-color: rgba(242, 181, 68, .6); color: var(--sun); }
+.hover { position: fixed; pointer-events: none; z-index: 6; transform: translate(14px, -50%); font: 500 11.5px/1.35 var(--display); padding: 7px 10px; border-radius: 10px; background: rgba(3, 6, 14, .86); border: 1px solid rgba(242, 181, 68, .45); white-space: nowrap; }
+.hover b { font-weight: 650; display: block; }
+.hover span { color: var(--muted); font-size: 11px; }
+.hint { position: fixed; left: 50%; top: calc(var(--top) + 56px); transform: translateX(-50%); padding: 9px 14px; border-radius: 999px; font-size: 12.5px; color: var(--ink); z-index: 3; transition: opacity .6s; white-space: nowrap; }
+.hint b { color: var(--sun); font-weight: 600; }
+.hint.gone { opacity: 0; pointer-events: none; }
+.verified { border: 1px solid rgba(92, 196, 138, .45); background: rgba(92, 196, 138, .08); color: var(--good); font: 600 11px/1 var(--mono); letter-spacing: .06em; padding: 9px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+.verified.bad { color: var(--bad); border-color: rgba(240, 112, 103, .5); background: rgba(240, 112, 103, .08); }
+.selfcheck-line { color: var(--good) !important; }
+
+/* help sheet */
+.modal { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; background: rgba(2, 4, 10, .55); padding: var(--top) var(--right) var(--bottom) var(--left); }
+.modal .sheet { width: min(720px, 100%); max-height: 100%; overflow-y: auto; padding: 22px 24px; display: grid; gap: 16px; }
+.modal h2 { font: 700 20px/1.15 var(--display); font-stretch: 114%; }
+.modal h3 { font: 600 13px/1.2 var(--display); color: var(--sun); letter-spacing: .02em; }
+.modal p, .modal li { color: #c8d0e0; font-size: 13px; line-height: 1.55; }
+.modal ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.keys { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 13px; }
+kbd { font: 500 11px var(--mono); padding: 3px 7px; border-radius: 6px; border: 1px solid var(--edge); background: rgba(255, 255, 255, .06); color: var(--ink); justify-self: start; }
+
+/* one-satellite view keeps its own controls */
+.sl { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; font-size: 12px; color: var(--muted); }
 .sl input { grid-column: 1 / -1; accent-color: var(--sun); width: 100%; }
 .sl output { font-family: var(--mono); color: var(--ink); }
-.split { display: flex; height: 14px; border-radius: 4px; overflow: hidden; gap: 2px; background: var(--panel-solid); }
+.split { display: flex; height: 12px; border-radius: 4px; overflow: hidden; gap: 2px; }
 .split i { display: block; height: 100%; }
-a { color: var(--sun); }
-.clockbox { position: absolute; left: 10px; top: 10px; display: flex; gap: 8px; align-items: center; background: rgba(4, 6, 13, .72); border: 1px solid var(--line); border-radius: 8px; padding: 5px 9px; font-size: .8rem; pointer-events: none; }
-.tag.gs { transform: translate(-50%, 45%); color: #8ff5e6; border-color: rgba(143, 245, 230, .5); }
-.chip.live { border-color: var(--good); color: #5fd35f; }
-.pill.warn { color: var(--sun); }
-.btn.mini { padding: 2px 7px; font-size: .72rem; margin-left: 4px; }
-#cardActions:empty { display: none; }
+#satOut .legend { grid-template-columns: 1fr 1fr; }
+#satOut .legend i { border-radius: 2px; }
+dl.card { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 0; font-size: 12.5px; }
+dl.card dt { color: var(--muted); } dl.card dd { margin: 0; font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+.tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--on-sun); font-size: 12px; padding: 6px 9px; border-radius: 8px; z-index: 30; max-width: 240px; }
+.fallback { position: fixed; inset: 0; display: grid; place-items: center; padding: 40px 20px; text-align: center; color: var(--muted); }
+.tabs { display: none; }
+
+/* hide everything but the scene (H) */
+body.clean .col, body.clean .dock, body.clean .overlay, body.clean .hint, body.clean .tabs { display: none !important; }
+
+/* tablets and phones: one bottom sheet with tabs */
+@media (max-width: 1000px) {
+  :root { --pad: 10px; }
+  .col { display: contents; }
+  .mtitle { display: block; position: fixed; top: calc(var(--top) + 11px); left: var(--left); font: 700 14px/1 var(--display); font-stretch: 114%; z-index: 3; text-shadow: 0 1px 8px #000; }
+  #hideBtn { display: none; }
+  .brand { position: fixed; top: calc(var(--top) + 52px); left: var(--left); right: var(--right); padding: 8px; gap: 8px; z-index: 3; border-radius: 14px; }
+  .brand-top { display: none; }
+  .brand .seg { justify-self: start; }
+  .kpi .lg { display: none; } .kpi .sh { display: inline; }
+  .brand .kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; } .kpi { padding: 6px 7px; } .kpi b { font-size: 13px; white-space: nowrap; } .kpi span { font-size: 10px; } .kpi b em { font-size: 10px; margin-left: 2px; }
+  .brand .dline { display: none; }
+  .clockbox { top: auto; bottom: calc(var(--bottom) + var(--dockh) + 8px + 46px + 8px); left: var(--left); transform: none; padding: 5px 6px 5px 10px; }
+  .clockbox .num { font-size: 11.5px; }
+  .panel { position: fixed; left: var(--left); right: var(--right); bottom: calc(var(--bottom) + var(--dockh) + 8px + 46px + 8px + 40px); max-height: 38vh; overflow-y: auto; z-index: 3; display: none; }
+  .panel.active { display: grid; }
+  .tabs { display: flex; position: fixed; left: var(--left); right: var(--right); bottom: calc(var(--bottom) + var(--dockh) + 8px); height: 46px; padding: 4px; gap: 4px; border-radius: 999px; z-index: 3; }
+  .tabs button { flex: 1; border: 0; background: transparent; color: var(--muted); font: 600 12.5px var(--display); border-radius: 999px; cursor: pointer; }
+  .tabs button[aria-pressed="true"] { background: var(--ink); color: var(--on-sun); }
+  .dock { left: var(--left); right: var(--right); transform: none; justify-content: flex-start; }
+  .hint, .verified { display: none; }
+  .overlay { display: none; }
+}
+@media (max-height: 780px) and (min-width: 1001px) {
+  .col { gap: 10px; } .panel { padding: 12px 14px 14px; gap: 8px; } dl.rows { gap: 5px 14px; } .brand .dline { display: none; } .brand { gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .status.live::before { animation: none; } .hint { transition: none; } }
 </style>
 
-<main>
-  <header style="display:grid;gap:6px">
-    <span class="eyebrow">Sundai Hack 145 · Track 1 · live digital twin of our planned fleet</span>
-    <h1>Orbital Fleet Twin 3D</h1>
-    <p class="muted" id="intro">Our planned fleet, placed in the real world right now: today's Sun and Earth, every satellite on its own dawn-dusk orbit, and the Python twin's fleet model running in this page. Click any satellite or Earth site to see its state now, or switch one off and watch the rest of the fleet take its users. Drag to look around, scroll to zoom, double-click to reset.</p>
-  </header>
+<span class="mtitle">Orbital Fleet Twin</span>
+<div class="stage" id="stage">
+  <canvas id="c" tabindex="0" aria-label="3D view of Earth now, with our Earth sites, 12 dawn-dusk orbital planes and 16 ground stations"></canvas>
+  <div class="tags" id="tags"></div>
+</div>
 
-  <section class="bar" aria-label="Controls">
-    <div class="seg" role="group" aria-label="View" id="viewSeg"></div>
-    <div class="seg" role="group" aria-label="Design" id="designSeg"></div>
-    <span id="fleetCtl" style="display:contents">
-    <div class="seg" role="group" aria-label="Time speed" id="speedSeg"></div>
-    <div class="seg" role="group" aria-label="Jump to" id="jumpSeg"></div>
-    <label class="ctl" for="lose">Switch off <select id="lose"></select></label>
-    <div class="seg" role="group" aria-label="Camera" id="camSeg"></div>
-    </span>
-    <span id="satCtl" style="display:contents">
-      <div class="seg" role="group" aria-label="Light" id="lightSeg"></div>
-      <button class="btn" id="spin" type="button">Stop turning</button>
-    </span>
-  </section>
-
-  <section class="layout">
-    <div class="stage" id="stage">
-      <canvas id="c" tabindex="0" aria-label="3D view of Earth now, with our Earth sites, 12 dawn-dusk orbital planes and 16 ground stations"></canvas>
-      <div class="tags" id="tags"></div>
-      <div class="clockbox" id="clockbox"><span class="num" id="clock"></span><span class="chip" id="status"></span></div>
-      <div class="overlay" id="overlay"></div>
+<div class="col left">
+  <section class="glass brand" id="fleetK">
+    <div class="brand-top">
+      <svg class="orbmark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="8" fill="#3987e5"/><ellipse cx="16" cy="16" rx="14" ry="5.5" transform="rotate(-28 16 16)" fill="none" stroke="#f2b544" stroke-width="1.6"/><circle cx="27.4" cy="10.2" r="2" fill="#f2b544"/></svg>
+      <div style="display:grid;gap:3px"><span class="eyebrow">Live twin · our planned fleet</span><h1>Orbital Fleet Twin</h1></div>
     </div>
-    <aside class="side">
-      <div class="panel" id="satPanel" hidden>
-        <h2>One satellite: tweak it</h2>
-        <label class="ctl" for="preset" style="display:grid;gap:4px">Start from <select id="preset"></select></label>
-        <div id="sliders" style="display:grid;gap:8px"></div>
-        <p id="selfcheck" class="muted" style="font-size:.75rem"></p>
-      </div>
-      <div class="panel" id="satOut" hidden></div>
-      <div class="panel" id="nowPanel">
-        <h2>Fleet now</h2>
-        <dl class="card" id="now"></dl>
-        <p class="muted" style="font-size:.75rem" id="check">Checking this page's model against the Python twin…</p>
-      </div>
-      <div class="panel" id="cardPanel">
-        <h2 id="cardTitle">Selected</h2>
-        <dl class="card" id="card"></dl>
-        <div id="cardActions"></div>
-        <p class="muted" style="font-size:.75rem">Click a satellite or an Earth site in the scene to select it.</p>
-      </div>
-      <div class="panel" id="fleetK">
-        <h2 id="dname">Design</h2>
-        <div class="kpis" id="kpis"></div>
-      </div>
-    </aside>
+    <div class="seg" role="group" aria-label="Design" id="designSeg"></div>
+    <div class="kpis" id="kpis"></div>
+    <p class="dline" id="dname"></p>
   </section>
+  <section class="glass panel" id="nowPanel" data-tab="fleet">
+    <header><div><span class="label">Right now</span><h2>The fleet</h2></div><div class="seg small" role="group" aria-label="Show" id="paneSeg"></div></header>
+    <div class="pane" id="paneStatus">
+      <dl class="rows" id="now"></dl>
+      <div class="failure"><label class="label" for="lose">Failure drill</label><select id="lose"></select></div>
+    </div>
+    <div class="pane" id="panePower" hidden>
+      <p class="sub">Power drawn through today (UTC), from the live model. Faded hours are the rest of today, if nothing else changes.</p>
+      <svg id="strip" viewBox="0 0 330 122" role="img" aria-label="Power drawn by Earth sites and orbit for each UTC hour of today"></svg>
+      <div class="keyline"><span><i style="background:var(--earth)"></i>Earth sites</span><span><i style="background:var(--orbit)"></i>orbit</span><span><i style="background:var(--sun);width:2px"></i>now</span></div>
+    </div>
+    <div class="pane" id="paneKey" hidden>
+      <ul class="legend" style="border:0;padding:0" aria-label="Legend">
+      <li><i style="background:#d9a63c"></i>satellite in sunlight</li><li><i style="background:#2f7a4a"></i>in shadow, on batteries</li>
+      <li><i style="background:#5a6075"></i>in shadow, paused</li><li><i style="background:#c0392b"></i>switched off</li>
+      <li><i class="ring"></i>06:00 plane</li><li><i class="ring dash"></i>18:00 plane</li>
+      <li><i style="background:#9cc8ff"></i>Earth data center</li><li><i style="background:var(--link)"></i>ground station, link</li>
+    </ul>
+      <p class="sub">Satellites, sites and stations are drawn far larger than life; Earth and the orbits are to scale.</p>
+    </div>
+  </section>
+  <section class="glass panel" id="satOut" data-tab="fleet" hidden></section>
+</div>
 
-  <section class="panel" id="stripPanel">
-    <h2>Power through today (UTC), from the live model</h2>
-    <div class="legend"><span><i style="background:var(--earth)"></i>Earth sites</span><span><i style="background:var(--orbit)"></i>Orbital planes</span><span><i style="background:var(--sun)"></i>now</span><span>faded: rest of today, if nothing else changes</span></div>
-    <svg id="strip" viewBox="0 0 900 140" role="img" aria-label="Power drawn by Earth sites and orbit for each UTC hour of today"></svg>
+<div class="col right">
+  <section class="glass panel" id="cardPanel" data-tab="selected">
+    <header><div><span class="label" id="cardKind">Selected</span><h2 id="cardTitle">Nothing selected</h2></div><button class="icon" id="closeSel" type="button" aria-label="Clear selection">×</button></header>
+    <dl class="rows" id="card"></dl>
+    <div class="actions" id="cardActions"></div>
   </section>
-  <p class="muted" style="font-size:.8rem">How this twin works: positions come from real orbital mechanics (circular orbits at 650 km, sun-synchronous at 97.99°) and the real Sun for the date shown, and the fleet's load, background queue and power come from the Python twin's minute-by-minute model, run here from two days back (twin/twin3d_engine.js, checked by <code>node twin/check_twin3d.js</code>). Earth: NASA Blue Marble and Black Marble. Earth and orbits are to scale; satellites, sites and stations are drawn far larger than life. Our placement choices: each group's six planes fan out by 4 minutes of local time, and the 16 ground stations sit at existing optical, observatory and polar ground-station sites, linking above 20° of elevation. The model itself counts 12 planes at 650 km and 16 stations. Flat charts and every table: <a href="twin.html">twin.html</a>.</p>
-</main>
+  <section class="glass panel" id="satPanel" data-tab="selected" hidden>
+    <header><div><span class="label">One satellite</span><h2>Tweak it</h2></div></header>
+    <label class="label" for="preset" style="display:grid;gap:6px">Start from <select id="preset" style="max-width:none"></select></label>
+    <div id="sliders" style="display:grid;gap:9px"></div>
+    <p id="selfcheck" class="sub"></p>
+  </section>
+</div>
+
+<div class="glass clockbox" id="clockbox"><span class="status" id="status"></span><span class="num" id="clock"></span><button class="golive" id="golive" type="button" hidden>Back to live</button></div>
+
+<nav class="glass toolbar" aria-label="View">
+  <div class="seg" role="group" aria-label="View" id="viewSeg"></div>
+  <button class="verified" id="check" type="button" title="Checking this page's model against the Python twin…">checking…</button>
+  <button class="icon" id="helpBtn" type="button" aria-label="Help and shortcuts" title="Help and shortcuts (?)">?</button>
+  <button class="icon" id="hideBtn" type="button" aria-label="Hide panels" aria-pressed="false" title="Hide panels (H)"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6 2.5v11" stroke="currentColor" stroke-width="1.4"/></svg></button>
+</nav>
+
+<div class="glass dock" id="dock" role="toolbar" aria-label="Time and camera">
+  <span class="dock-group" id="fleetCtl">
+    <button class="play" id="playBtn" type="button" aria-label="Pause"></button>
+    <div class="seg gold" role="group" aria-label="Speed" id="speedSeg"></div>
+    <span class="sep"></span>
+    <div class="seg" role="group" aria-label="Jump to" id="jumpSeg"></div>
+    <span class="sep"></span>
+    <div class="seg" role="group" aria-label="Camera" id="camSeg"></div>
+  </span>
+  <span class="dock-group" id="satCtl">
+    <div class="seg" role="group" aria-label="Light" id="lightSeg"></div>
+    <button class="btn" id="spin" type="button">Stop turning</button>
+  </span>
+</div>
+
+<nav class="glass tabs" id="tabs" aria-label="Panels"></nav>
+<div class="overlay" id="overlay"></div>
+<div class="glass hint" id="hint"><b>Drag</b> to turn · <b>scroll</b> to zoom · <b>click</b> any satellite or site</div>
+<div class="hover" id="hover" hidden></div>
 <div class="tip" id="tip" hidden></div>
+
+<div class="modal" id="help" hidden role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+  <div class="glass sheet">
+    <header style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div style="display:grid;gap:6px"><span class="eyebrow">How to use it</span><h2 id="helpTitle">A live twin of our planned fleet</h2></div><button class="icon" id="helpClose" type="button" aria-label="Close">×</button></header>
+    <p>This is our planned 2035 fleet placed in the real world right now: today's Sun and Earth, every satellite on its own dawn-dusk orbit, and the Python twin's fleet model running in this page.</p>
+    <ul>
+      <li><b>Look around:</b> drag to turn, scroll or pinch to zoom, double-click to reset the view.</li>
+      <li><b>Inspect:</b> click any satellite or Earth data center. The panel on the right shows its state now; <b>Follow</b> rides along with it.</li>
+      <li><b>Break it:</b> pick a site or plane under <b>Failure drill</b>, or press <b>Switch off</b> on the selected one. The rest of the fleet takes its users at once.</li>
+      <li><b>Time:</b> the dock runs time at ×1 (real time) up to ×600, and jumps to 21 June or 21 December, when each half of the fleet is in eclipse season.</li>
+    </ul>
+    <h3>Keyboard</h3>
+    <div class="keys"><kbd>Space</kbd><span>pause or play</span><kbd>L</kbd><span>back to live, real time</span><kbd>F</kbd><span>follow the selected satellite</span><kbd>O</kbd><span>overview</span><kbd>H</kbd><span>hide or show the panels</span><kbd>Esc</kbd><span>close this, or clear the selection</span><kbd>?</kbd><span>this help</span></div>
+    <h3>How it works</h3>
+    <p id="selfcheck2">Checking this page's model against the Python twin…</p>
+    <p>Positions come from real orbital mechanics (circular orbits at 650 km, sun-synchronous at 97.99°) and the real Sun for the time shown. The fleet's load, background queue and power come from the Python twin's minute-by-minute model (twin/simulate.py), run here from two days back by twin/twin3d_engine.js. On every load this page re-runs every day the Python twin simulated and checks it gets the same answers; <code>node twin/check_twin3d.js</code> does the same from the command line.</p>
+    <p>Our placement choices, which the model doesn't fix: each group's six planes fan out by 4 minutes of local time, and the 16 ground stations sit at existing optical, observatory and polar ground-station sites, linking above 20° of elevation. Earth and orbits are to scale; satellites, sites and stations are drawn far larger than life. Earth: NASA Blue Marble and Black Marble.</p>
+    <p>Flat charts and every table: <a href="twin.html">twin.html</a> · the presentation: <a href="explained.html">explained.html</a></p>
+  </div>
+</div>
 
 <script id="twin-data" type="application/json">__TWIN_DATA__</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -158,7 +322,7 @@ a { color: var(--sun); }
   var E = window.TwinEngine;    // twin/twin3d_engine.js: real Sun, Earth, orbits, and simulate.py's fleet model
   // the twin starts at the real time now, running x10 so the satellites visibly move (one lap in about 10 min); #live opens in real time
   var S = { view: location.hash === "#satellite" ? "sat" : "fleet", d: 0, cam: "overview", speed: location.hash === "#live" || REDUCED ? 1 : 10,
-            ms: Date.now(), sel: null, shade: false, spin: !REDUCED };
+            ms: Date.now(), sel: null, shade: false, spin: !REDUCED, tab: "", pane: "status", last: 10, hover: null };
   var D = function () { return DATA.designs[S.d]; };
   var site = function (n) { return D().sites.filter(function (x) { return x.site === n; })[0]; };
 
@@ -409,14 +573,15 @@ a { color: var(--sun); }
   // ---------------------------------------------------------------- camera: drag to orbit, wheel to zoom, presets
   var cam = { theta: 0.9, phi: 1.15, dist: 24, target: new THREE.Vector3() };
   var SUN3 = new THREE.Vector3(1, 0, 0);
+  function fitDist() { var t = Math.tan(20 * Math.PI / 180) * 0.6 * Math.min(1, camera.aspect); return 7.1 / Math.sin(Math.atan(t)); }
   function preset(mode) {
     var th = Math.atan2(SUN3.z, SUN3.x), ph = Math.acos(Math.max(-1, Math.min(1, SUN3.y)));
-    if (mode === "overview") Object.assign(cam, { theta: th + 0.95, phi: 1.12, dist: 24 });
-    if (mode === "sun") Object.assign(cam, { theta: th, phi: ph, dist: 22 });
+    if (mode === "overview") Object.assign(cam, { theta: th + 0.95, phi: 1.12, dist: fitDist() });
+    if (mode === "sun") Object.assign(cam, { theta: th, phi: ph, dist: fitDist() * 0.95 });
     if (mode === "sites") {
       var c = new THREE.Vector3(); pins.forEach(function (p) { c.add(p.dot.getWorldPosition(new THREE.Vector3())); });
       if (!pins.length) c.copy(SUN3);
-      c.normalize(); Object.assign(cam, { theta: Math.atan2(c.z, c.x), phi: Math.acos(c.y), dist: 15 });
+      c.normalize(); Object.assign(cam, { theta: Math.atan2(c.z, c.x), phi: Math.acos(c.y), dist: fitDist() * 0.62 });
     }
   }
   function selectedSat() { if (!S.sel || S.sel.kind !== "sat") return null; var p = planes.filter(function (x) { return x.pl.site === S.sel.site; })[0]; return p ? { p: p, s: p.sats[S.sel.j] } : null; }
@@ -439,13 +604,13 @@ a { color: var(--sun); }
   });
   canvas.addEventListener("pointerup", function (e) { if (drag && moved < 6) pick(e); drag = null; });
   canvas.addEventListener("pointercancel", function () { drag = null; });
-  canvas.addEventListener("wheel", function (e) { e.preventDefault(); if (S.view === "sat") return; cam.dist = Math.min(80, Math.max(8.5, cam.dist * Math.exp(e.deltaY * 0.0012))); }, { passive: false });
+  canvas.addEventListener("wheel", function (e) { e.preventDefault(); if (S.view === "sat") return; cam.dist = Math.min(160, Math.max(8.5, cam.dist * Math.exp(e.deltaY * 0.0012))); }, { passive: false });
   canvas.addEventListener("dblclick", function () { if (S.view === "sat") { satCam.theta = .75; satCam.phi = 1.2; satRebuild.sized = false; satRebuild(); return; } S.cam = "overview"; preset("overview"); ui(); });
   canvas.addEventListener("keydown", function (e) {
     var step = { ArrowLeft: [-0.12, 0], ArrowRight: [0.12, 0], ArrowUp: [0, -0.12], ArrowDown: [0, 0.12] }[e.key];
     if (step) { e.preventDefault(); cam.theta += step[0]; cam.phi = Math.min(3, Math.max(.15, cam.phi + step[1])); }
     if (e.key === "+" || e.key === "=") cam.dist = Math.max(8.5, cam.dist * .9);
-    if (e.key === "-") cam.dist = Math.min(80, cam.dist * 1.1);
+    if (e.key === "-") cam.dist = Math.min(160, cam.dist * 1.1);
   });
   // pick on screen: satellites are a few pixels wide and moving, so take the nearest visible one within reach
   var pv = new THREE.Vector3(), pray = new THREE.Ray(), EARTH_SPHERE = new THREE.Sphere(new THREE.Vector3(), 6.371);
@@ -466,8 +631,24 @@ a { color: var(--sun); }
     pins.forEach(function (p) { test(p.dot.getWorldPosition(new THREE.Vector3()), { kind: "site", site: p.s.site }); });
     return best;
   }
-  function pick(e) { var hit = nearest(e); if (hit) { S.sel = hit; ui(); } }
-  canvas.addEventListener("pointermove", function (e) { if (S.view === "sat" || drag || e.pointerType === "touch") return; canvas.style.cursor = nearest(e) ? "pointer" : ""; });
+  function pick(e) { var hit = nearest(e); if (hit) { S.sel = hit; S.tab = "selected"; ui(); } }
+  var hoverEl = $("hover");
+  function hoverText(h) {
+    if (h.kind === "site") return "<b>" + nice(h.site) + "</b><span>Earth data center · " + fmt(snap && snap.power[h.site] || 0) + " MW now</span>";
+    var P = planes.filter(function (x) { return x.pl.site === h.site; })[0], st = P.sats[h.j], off = lostNow() === h.site;
+    var gs = st.gs ? "linked to " + E.STATIONS[st.gs.i][0].split(",")[0] : "relaying along its ring";
+    return "<b>" + nice(h.site) + " · satellite " + (h.j + 1) + "</b><span>" + (off ? "switched off" : (st.shadow ? "in Earth's shadow" : "in sunlight") + " · " + gs) + "</span>";
+  }
+  canvas.addEventListener("pointermove", function (e) {
+    if (S.view === "sat" || drag || e.pointerType === "touch") { hoverEl.hidden = true; return; }
+    var h = nearest(e); canvas.style.cursor = h ? "pointer" : "";
+    if (!h) { hoverEl.hidden = true; return; }
+    hoverEl.innerHTML = hoverText(h); hoverEl.style.left = e.clientX + "px"; hoverEl.style.top = e.clientY + "px"; hoverEl.hidden = false;
+  });
+  canvas.addEventListener("pointerleave", function () { hoverEl.hidden = true; });
+  function hideHint() { $("hint").classList.add("gone"); }
+  canvas.addEventListener("pointerdown", hideHint); canvas.addEventListener("wheel", hideHint, { passive: true });
+  setTimeout(hideHint, 9000);
 
 
   // ---------------------------------------------------------------- every frame: real Sun, real Earth, every satellite on its orbit
@@ -569,7 +750,7 @@ a { color: var(--sun); }
       el.classList.toggle("off", lost === key);
     }
     for (var k in tagEls) tagEls[k].hidden = true;
-    pins.forEach(function (p) { if (S.sel.site === p.s.site || lost === p.s.site) put(p.s.site, p.dot.getWorldPosition(new THREE.Vector3()), true); });
+    pins.forEach(function (p) { if ((S.sel && S.sel.site === p.s.site) || lost === p.s.site) put(p.s.site, p.dot.getWorldPosition(new THREE.Vector3()), true); });
     planes.forEach(function (P) { if (lost === P.pl.site) put(P.pl.site, P.sats[0].m.position.clone().multiplyScalar(1.03), false); });
     var ss = selectedSat();
     if (ss) {
@@ -579,17 +760,15 @@ a { color: var(--sun); }
     put("sun", SUN3.clone().multiplyScalar(60), false);
   }
   function overlay() {
-    var batt = D().eclipse_battery, chips = [];
-    if (count.shadow) chips.push('<span class="chip">' + count.shadow + " of " + count.total + " satellites in Earth's shadow" +
-      (batt === "all" ? ", running on batteries" : batt === "live" ? ": live racks on batteries, background racks paused" : ", their racks paused") + "</span>");
-    else chips.push('<span class="chip">all ' + count.total + " satellites in sunlight</span>");
-    chips.push('<span class="chip">' + count.linked + " see a ground station · the rest relay along their ring</span>");
-    $("overlay").innerHTML = chips.join("");
+    if ($("overlay").firstChild) $("overlay").innerHTML = "";
     var lag = (S.ms - Date.now()) / 60000, isLive = S.speed === 1 && Math.abs(lag) < 0.2;
     $("clock").textContent = clock(S.ms);
-    var stEl = $("status"); stEl.className = "chip" + (isLive ? " live" : "");
-    stEl.textContent = isLive ? "● live" : S.speed === 0 ? "paused" + (Math.abs(lag) >= 1 ? " · " + ago(lag) : "") : "×" + S.speed + (Math.abs(lag) >= 1 ? " · " + ago(lag) : "");
+    var stEl = $("status"); stEl.className = "status" + (isLive ? " live" : "");
+    var off = Math.abs(lag) >= 1 ? " · " + (lag > 0 ? "+" : "−") + agoShort(Math.abs(lag)) : "";
+    stEl.textContent = isLive ? "Live" : (S.speed === 0 ? "Paused" : "×" + S.speed) + off;
+    $("golive").hidden = isLive;
   }
+  function agoShort(a) { return a < 90 ? Math.round(a) + " min" : a < 2880 ? fmt(a / 60, 1) + " h" : fmt(a / 1440, 0) + " days"; }
   function ago(lagMin) {
     var a = Math.abs(lagMin), t = a < 90 ? Math.round(a) + " min" : a < 2880 ? fmt(a / 60, 1) + " h" : fmt(a / 1440, 0) + " days";
     return t + (lagMin > 0 ? " ahead of now" : " behind now");
@@ -597,41 +776,42 @@ a { color: var(--sun); }
 
   // ---------------------------------------------------------------- side panels
   function kpis() {
-    var d = D(); $("dname").textContent = d.label;
-    var ok = d.cost_busd <= 30;
+    var d = D(), ok = d.cost_busd <= 30;
     var rows = [
+      ["$" + fmt(d.cost_busd, 2) + "B" + (ok ? "<em>✓</em>" : "<em style='color:var(--bad)'>✗</em>"), "5-year cost, budget $30B"],
       [fmt(d.users_served / 1e9, 2) + "B", "users served of " + fmt(d.users_target / 1e9, 2) + "B"],
-      ["$" + fmt(d.cost_busd, 2) + "B", "5 years <span class='pill " + (ok ? "ok'>✓ in $30B" : "bad'>✗ over $30B") + "</span>"],
-      [fmt(d.earth_grid_mw) + " MW", "Earth grid, cap 500"],
-      [fmt(d.comms.satellites) + " satellites", "12 planes, 650 km, " + fmt(E.INC * 180 / Math.PI, 1) + "°"],
-      [fmt(d.latency_s.chat, 2) + " s", "chat first word (≤ " + d.slo.chat_ttft_s + " s)"],
-      [fmt(d.latency_s.agent_int, 2) + " s", "agent first word (≤ " + d.slo.agent_ttft_s + " s)"],
+      [fmt(d.earth_grid_mw) + "<span class='lg'> MW</span>", "Earth grid, of 500"],
+      [fmt(d.comms.satellites), "satellites in 12 planes"],
     ];
-    $("kpis").innerHTML = rows.map(function (r) { return "<div class='kpi'><b class='num'>" + r[0] + "</b><span>" + r[1] + "</span></div>"; }).join("");
+    var short = ["5-yr cost", "users", "grid MW", "satellites"];
+    $("kpis").innerHTML = rows.map(function (r, i) { return "<div class='kpi'><b>" + r[0] + "</b><span class='lg'>" + r[1] + "</span><span class='sh'>" + short[i] + "</span></div>"; }).join("");
+    var who = (d.label.split(": ")[1] || d.label).split(" (")[0];
+    $("dname").textContent = who.charAt(0).toUpperCase() + who.slice(1) + " · first word in " + fmt(d.latency_s.chat, 2) + " s for chat, " + fmt(d.latency_s.agent_int, 2) + " s for agents";
   }
   function sumPower(kind) { var t = 0; if (snap) Object.keys(snap.power).forEach(function (k) { var s = site(k); if (s && s.kind === kind) t += snap.power[k]; }); return t; }
-  var CHECK = null;
+  function rowsHTML(rows) {
+    return rows.map(function (r) { return r.length === 1 ? "<dt class='group'>" + r[0] + "</dt>" : "<dt>" + r[0] + "</dt><dd>" + r[1] + "</dd>"; }).join("");
+  }
   function nowPanel() {
     if (!snap) return;
     var lost = lostNow(), allow = snap.allowance, late = snap.oldestWait > allow, short = snap.liveShort > 0;
     var season = []; ["06:00", "18:00"].forEach(function (g) {
       var worst = 0; live.planes.forEach(function (pl) { if (pl.ltan === g) worst = Math.max(worst, E.eclipseMinutes(E.beta(pl, S.ms, E.sunEci(S.ms)))); });
-      if (worst > 0) season.push(g + " planes, up to " + fmt(worst, 1) + " min a lap");
+      if (worst > 0) season.push(g + " planes, ≤" + fmt(worst, 1) + " min");
     });
-    var rows = [
-      ["Live answers now", tok(snap.liveDemand) + " tokens/s of " + tok(snap.liveCap)],
+    var rows = [["Users"],
       ["Live users served", short ? "<span class='pill bad'>✗ " + fmt(100 * (1 - snap.liveShort), 1) + "%</span>" : "<span class='pill ok'>✓ 100%</span>"],
+      ["Live answers", tok(snap.liveDemand) + " of " + tok(snap.liveCap) + " tok/s"],
       ["Background queue", fmt(snap.queueMin, 0) + " min of work"],
       ["Oldest job waiting", "<span class='pill " + (late ? "bad'>✗ " : "ok'>✓ ") + fmt(snap.oldestWait) + " of " + fmt(allow) + " min</span>"],
-      ["Power now", (D().earth_grid_mw ? "Earth " + fmt(sumPower("earth")) + " MW · " : "") + "orbit " + fmt(sumPower("space")) + " MW"],
+      ["Fleet"],
+      ["Power", (D().earth_grid_mw ? "Earth " + fmt(sumPower("earth")) + " · " : "") + "orbit " + fmt(sumPower("space")) + " MW"],
       ["In Earth's shadow", count.shadow + " of " + count.total + " satellites"],
-      ["Ground links", count.linked + " satellites see a station"],
-      ["Eclipse season now", season.length ? season.join("; ") : "none: every ring is in full sunlight"],
-      ["Switched off", lost ? nice(lost) + " <button class='btn mini' type='button' id='restore'>switch back on</button>" : "nothing"],
-    ];
-    $("now").innerHTML = rows.map(function (r) { return "<dt>" + r[0] + "</dt><dd>" + r[1] + "</dd>"; }).join("");
+      ["Ground links", count.linked + " see a station"],
+      ["Eclipse season", season.length ? season.join("; ") : "none now"]];
+    if (lost) rows.push(["Switched off", nice(lost) + " <button class='btn mini' type='button' id='restore'>switch on</button>"]);
+    $("now").innerHTML = rowsHTML(rows);
     if ($("restore")) $("restore").onclick = function () { setLost(""); };
-    if (CHECK) $("check").innerHTML = CHECK;
   }
   function planeUse(name, darkPools) {    // the plane's power at the meter (MW) and its racks' busy share, from the model's utilization now
     var L = D().live, u = snap.u, mw = 0, busy = 0, it = 0;
@@ -650,46 +830,57 @@ a { color: var(--sun); }
   }
   function card() {
     if (!snap) return;
-    var L = D().live, lost = lostNow(), rows = [], actions = "", ss = selectedSat();
+    var L = D().live, lost = lostNow(), rows = [], actions = [], ss = selectedSat();
+    $("closeSel").hidden = !S.sel;
+    if (!S.sel) {
+      $("cardKind").textContent = "Selected"; $("cardTitle").textContent = "Nothing selected";
+      $("card").innerHTML = "<dd class='empty' style='grid-column:1/-1;text-align:left;font-family:var(--display);font-size:12.5px'>Click any satellite or Earth data center to see its state right now. Hover over one to see its name.</dd>";
+      $("cardActions").innerHTML = ""; return;
+    }
     if (ss) {
       var P = ss.p, s = P.s, sat = ss.s, n = P.pl.n, off = lost === P.pl.site, sun = E.sunEci(S.ms), ll = E.latLon(sat.eci.p, S.ms);
       var b = E.beta(P.pl, S.ms, sun), lap = E.eclipseMinutes(b), over = D().satellite.overhead;
       var use = planeUse(s.site, sat.shadow), mw = off ? 0 : use.mw / n, Qr = (mw * over) / (s.it_mw / n * over);
       var Tf = s.radiator_c + 273.15, Ts = L.sink_k, Trad = Math.pow(Math.pow(Ts, 4) + (Math.pow(Tf, 4) - Math.pow(Ts, 4)) * Qr, 0.25), Tchip = Trad + L.chain_dt_k * Qr;
-      $("cardTitle").textContent = nice(s.site) + " · satellite " + (sat.j + 1) + " of " + n;
-      rows.push(["Orbit", "dawn-dusk, 650 km, " + fmt(E.INC * 180 / Math.PI, 2) + "°"], ["Crosses the equator", hm(P.pl.ltanH) + " local time, northbound"],
-        ["Over", fmt(Math.abs(ll[0]), 1) + "° " + (ll[0] >= 0 ? "N" : "S") + ", " + fmt(Math.abs(ll[1]), 1) + "° " + (ll[1] >= 0 ? "E" : "W")],
-        ["Speed", fmt(Math.sqrt(398600.4418 / E.A), 2) + " km/s, one lap " + fmt(E.PERIOD_MIN, 1) + " min"]);
+      $("cardKind").textContent = "Satellite " + (sat.j + 1) + " of " + n + " · " + P.pl.ltan + " plane";
+      $("cardTitle").textContent = nice(s.site) + " · satellite " + (sat.j + 1);
+      rows.push(["Where"], ["Over", fmt(Math.abs(ll[0]), 1) + "° " + (ll[0] >= 0 ? "N" : "S") + ", " + fmt(Math.abs(ll[1]), 1) + "° " + (ll[1] >= 0 ? "E" : "W")],
+        ["Orbit", "dawn-dusk · 650 km · " + fmt(E.INC * 180 / Math.PI, 2) + "°"], ["Crosses the equator", hm(P.pl.ltanH) + " local, northbound"],
+        ["Speed", fmt(Math.sqrt(398600.4418 / E.A), 2) + " km/s · lap " + fmt(E.PERIOD_MIN, 1) + " min"]);
+      rows.push(["State now"]);
       if (off) rows.push(["State", "<span class='pill bad'>switched off</span>"]);
       else {
         rows.push(["Light", sat.shadow ? "<span class='pill warn'>in Earth's shadow " + fmt(shadowMinutes(P, sat.j), 1) + " min</span>" : "<span class='pill ok'>in sunlight</span>"]);
-        rows.push(["Power now", fmt(mw, 2) + " MW" + (sat.shadow ? (D().eclipse_battery === "live" ? " (live racks; background racks paused)" : D().eclipse_battery ? " (on batteries)" : " (racks paused)") : "")]);
+        rows.push(["Power", fmt(mw, 2) + " MW" + (sat.shadow ? (D().eclipse_battery === "live" ? " · live racks only" : D().eclipse_battery ? " · on batteries" : " · paused") : "")]);
         rows.push(["Racks busy", fmt(use.busy * 100, 0) + "%"]);
         rows.push(["Solar arrays", sat.shadow ? "dark" : fmt(mw * over, 2) + " of " + fmt(s.it_mw / n * D().satellite.power_factor * over, 2) + " MW"]);
         var eSat = s.battery_mwh / n;
-        rows.push(["Battery", !eSat ? "none" : sat.shadow ? fmt(Math.max(0, 1 - mw * shadowMinutes(P, sat.j) / 60 / eSat) * 100, 0) + "% left of " + fmt(eSat, 2) + " MWh" : "full · " + fmt(eSat, 2) + " MWh"]);
+        rows.push(["Battery", !eSat ? "none" : sat.shadow ? fmt(Math.max(0, 1 - mw * shadowMinutes(P, sat.j) / 60 / eSat) * 100, 0) + "% of " + fmt(eSat, 2) + " MWh" : "full · " + fmt(eSat, 2) + " MWh"]);
         rows.push(["Radiator · chips", fmt(Trad - 273.15, 0) + " · " + fmt(Tchip - 273.15, 0) + " °C"]);
-        var link = sat.gs ? E.STATIONS[sat.gs.i][0] + ", " + fmt(sat.gs.el * 180 / Math.PI, 0) + "° up, " + fmt(sat.gs.km) + " km"
-          : relay ? "relays " + relay.hops + " hop" + (relay.hops > 1 ? "s" : "") + " along the ring to " + E.STATIONS[relay.via.gs.i][0] : "no station in reach of this ring right now";
-        rows.push(["Link to Earth", link], ["Link capacity", fmt(L.ground_link_gbps * L.link_availability, 0) + " Gbps (100 Gbps × 95% clear sky)"]);
+        rows.push(["Link"], ["To Earth", sat.gs ? E.STATIONS[sat.gs.i][0] + " · " + fmt(sat.gs.el * 180 / Math.PI, 0) + "° up · " + fmt(sat.gs.km) + " km"
+          : relay ? relay.hops + " hop" + (relay.hops > 1 ? "s" : "") + " along the ring, then " + E.STATIONS[relay.via.gs.i][0] : "no station in reach of this ring"],
+          ["Capacity", fmt(L.ground_link_gbps * L.link_availability, 0) + " Gbps · 100 × 95% clear sky"]);
       }
-      rows.push(["Shadow this lap", lap ? "up to " + fmt(lap, 1) + " min" : "none (Sun " + fmt(Math.abs(b) * 180 / Math.PI, 0) + "° off the ring)"], ["Eclipse season", "around " + s.eclipse_season]);
-      actions = "<button class='btn' type='button' id='toggle'>" + (off ? "Switch this plane back on" : "Switch off this whole plane") + "</button>";
+      rows.push(["This plane"], ["Shadow this lap", lap ? "up to " + fmt(lap, 1) + " min" : "none · Sun " + fmt(Math.abs(b) * 180 / Math.PI, 0) + "° off the ring"], ["Eclipse season", "around " + s.eclipse_season]);
+      actions.push("<button class='btn primary' type='button' id='follow'>" + (S.cam === "ride" ? "Stop following" : "Follow") + "</button>");
+      actions.push("<button class='btn" + (off ? "" : " danger") + "' type='button' id='toggle'>" + (off ? "Switch the plane back on" : "Switch off this plane") + "</button>");
     } else {
       var s2 = site(S.sel.site), off2 = lost === s2.site, ll2 = LATLON[s2.site] || [0, 0], use2 = planeUse(s2.site, false);
-      $("cardTitle").textContent = nice(s2.site) + " · Earth site";
-      var lt = pymod((S.ms / 3600000) + ll2[1] / 15, 24);
-      rows.push(["Local time", hm(lt) + " (solar)"], ["Power now", off2 ? "<span class='pill bad'>switched off</span>" : fmt(snap.power[s2.site] || 0, 1) + " of " + fmt(s2.facility_mw, 1) + " MW"],
-        ["Racks busy", off2 ? "–" : fmt(use2.busy * 100, 0) + "%"], ["Grid", fmt(s2.facility_mw, 1) + " MW nameplate, site limit " + fmt(s2.grid_cap_mw) + " MW"],
-        ["Cooling", s2.cooling.replace("_", " ") + ", PUE " + fmt(s2.pue, 2)], ["Electricity", "$" + s2.usd_per_mwh + "/MWh · " + s2.g_co2_kwh + " g CO₂/kWh"],
+      $("cardKind").textContent = "Earth data center"; $("cardTitle").textContent = nice(s2.site);
+      rows.push(["State now"], ["Local time", hm(pymod((S.ms / 3600000) + ll2[1] / 15, 24)) + " solar"],
+        ["Power", off2 ? "<span class='pill bad'>switched off</span>" : fmt(snap.power[s2.site] || 0, 1) + " of " + fmt(s2.facility_mw, 1) + " MW"],
+        ["Racks busy", off2 ? "–" : fmt(use2.busy * 100, 0) + "%"],
+        ["The site"], ["Grid", fmt(s2.facility_mw, 1) + " MW · limit " + fmt(s2.grid_cap_mw) + " MW"],
+        ["Cooling", s2.cooling.replace("_", " ") + " · PUE " + fmt(s2.pue, 2)], ["Electricity", "$" + s2.usd_per_mwh + "/MWh · " + s2.g_co2_kwh + " g CO₂/kWh"],
         ["Round trip", fmt(s2.rtt_ms) + " ms"]);
-      actions = "<button class='btn' type='button' id='toggle'>" + (off2 ? "Switch this site back on" : "Switch off this site") + "</button>";
+      actions.push("<button class='btn" + (off2 ? "" : " danger") + "' type='button' id='toggle'>" + (off2 ? "Switch the site back on" : "Switch off this site") + "</button>");
     }
     var sx = site(S.sel.site);
     rows.push(["Racks", Object.keys(sx.racks).map(function (k) { return fmt(sx.racks[k]) + " " + ({ lpu: "LPU", gpu: "GPU", air: "air", sandbox: "sandbox" }[k] || k); }).join(", ")], ["5-year cost", "$" + fmt(sx.cost_busd, 2) + "B for the " + (sx.kind === "space" ? "plane" : "site")]);
-    $("card").innerHTML = rows.map(function (r) { return "<dt>" + r[0] + "</dt><dd>" + r[1] + "</dd>"; }).join("");
-    $("cardActions").innerHTML = actions;
+    $("card").innerHTML = rowsHTML(rows);
+    $("cardActions").innerHTML = actions.join("");
     $("toggle").onclick = function () { setLost(lost === S.sel.site ? "" : S.sel.site); };
+    if ($("follow")) $("follow").onclick = function () { if (S.cam === "ride") { S.cam = "overview"; preset("overview"); } else S.cam = "ride"; ui(); };
   }
   var tip = $("tip");
   function strip() {
@@ -698,17 +889,17 @@ a { color: var(--sun); }
     var NS = "http://www.w3.org/2000/svg", el = function (t, a, txt) { var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); if (txt != null) e.textContent = txt; svg.appendChild(e); return e; };
     var rows = stripRows.rows.map(function (r) { var e = 0, o = 0; Object.keys(r.power).forEach(function (k) { site(k).kind === "earth" ? (e += r.power[k]) : (o += r.power[k]); }); return [e, o, r]; });
     var max = Math.max.apply(null, rows.map(function (r) { return r[0] + r[1]; })), top = Math.ceil(max / 200) * 200;
-    var L = 56, R = 892, T = 8, B = 112, bw = (R - L) / 24, y = function (v) { return B - v / top * (B - T); };
+    var L = 34, R = 328, T = 6, B = 106, bw = (R - L) / 24, y = function (v) { return B - v / top * (B - T); };
     var nowH = (stMin - stripRows.day0) / 60 + (S.ms / 60000 - stMin) / 60;
-    [0, top / 2, top].forEach(function (v) { el("line", { x1: L, x2: R, y1: y(v), y2: y(v), stroke: "#2a3352" }); el("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", class: "ax" }, fmt(v) + " MW"); });
+    [0, top / 2, top].forEach(function (v) { el("line", { x1: L, x2: R, y1: y(v), y2: y(v), stroke: "rgba(168,188,228,.14)" }); el("text", { x: L - 5, y: y(v) + 3, "text-anchor": "end", class: "ax" }, fmt(v)); });
     rows.forEach(function (r, h) {
-      var x = L + h * bw + 2, future = h > nowH;
-      if (r[0]) el("rect", { x: x, y: y(r[0]), width: bw - 4, height: Math.max(0, y(0) - y(r[0]) - 1), fill: "#3987e5", rx: 2, opacity: future ? .45 : 1 });
-      if (r[1]) el("rect", { x: x, y: y(r[0] + r[1]), width: bw - 4, height: Math.max(0, y(r[0]) - y(r[0] + r[1]) - 2), fill: "#d95926", rx: 2, opacity: future ? .45 : 1 });
+      var x = L + h * bw + 1, future = h > nowH;
+      if (r[0]) el("rect", { x: x, y: y(r[0]), width: bw - 2, height: Math.max(0, y(0) - y(r[0]) - 1), fill: "#3987e5", rx: 2, opacity: future ? .45 : 1 });
+      if (r[1]) el("rect", { x: x, y: y(r[0] + r[1]), width: bw - 2, height: Math.max(0, y(r[0]) - y(r[0] + r[1]) - 2), fill: "#d95926", rx: 2, opacity: future ? .45 : 1 });
       var hit = el("rect", { x: L + h * bw, y: T, width: bw, height: B - T, fill: "transparent" });
       hit.addEventListener("mousemove", function (ev) { tip.innerHTML = "<b>" + pad(h) + ":00 UTC</b>" + (future ? " (if nothing changes)" : "") + "<br>Earth " + fmt(r[0]) + " MW<br>Orbit " + fmt(r[1]) + " MW<br>Live users served " + (r[2].liveShort ? fmt(100 * (1 - r[2].liveShort), 1) + "%" : "100%"); tip.hidden = false; tip.style.left = ev.clientX + 12 + "px"; tip.style.top = ev.clientY + 12 + "px"; });
       hit.addEventListener("mouseleave", function () { tip.hidden = true; });
-      if (h % 3 === 0) el("text", { x: L + (h + .5) * bw, y: B + 16, "text-anchor": "middle", class: "ax" }, pad(h) + ":00");
+      if (h % 6 === 0) el("text", { x: L + h * bw, y: B + 15, "text-anchor": "start", class: "ax" }, pad(h) + ":00");
     });
     var cx = L + nowH * bw; el("line", { x1: cx, x2: cx, y1: T, y2: B, stroke: "#ffd27a", "stroke-width": 2 });
   }
@@ -865,48 +1056,84 @@ a { color: var(--sun); }
     var box = $("jumpSeg"), y = new Date(S.ms).getUTCFullYear(), now = Date.now();
     box.innerHTML = "";
     [["Now", function () { return Date.now(); }],
-     ["21 June", function () { var t = Date.UTC(y, 5, 21, 12); return t < now - 864e5 ? Date.UTC(y + 1, 5, 21, 12) : t; }],
-     ["21 December", function () { var t = Date.UTC(y, 11, 21, 12); return t < now - 864e5 ? Date.UTC(y + 1, 11, 21, 12) : t; }]].forEach(function (j) {
+     ["21 Jun", function () { var t = Date.UTC(y, 5, 21, 12); return t < now - 864e5 ? Date.UTC(y + 1, 5, 21, 12) : t; }],
+     ["21 Dec", function () { var t = Date.UTC(y, 11, 21, 12); return t < now - 864e5 ? Date.UTC(y + 1, 11, 21, 12) : t; }]].forEach(function (j) {
       var b = document.createElement("button"); b.type = "button"; b.textContent = j[0];
+      b.title = j[0] === "Now" ? "Jump to the real time now" : "Jump to noon UTC on " + j[0] + ", when " + (j[0] === "21 Jun" ? "the 18:00" : "the 06:00") + " planes are in eclipse season";
       b.onclick = function () { S.ms = j[1](); warm(); ui(); }; box.appendChild(b);
     });
   }
+  var PLAY = '<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.2 1.6v10.8L12.4 7z"/></svg>', PAUSE = '<svg viewBox="0 0 14 14" aria-hidden="true"><rect x="2.2" y="1.6" width="3.4" height="10.8" rx="1"/><rect x="8.4" y="1.6" width="3.4" height="10.8" rx="1"/></svg>';
+  function tabs() {
+    var sat = S.view === "sat", list = sat ? [["fleet", "Weight & cost"], ["selected", "Tweak it"]] : [["fleet", "The fleet"], ["selected", "Selected"]];
+    if (S.tab && !list.some(function (t) { return t[0] === S.tab; })) S.tab = "";
+    var box = $("tabs"); box.innerHTML = "";
+    list.forEach(function (t) { var b = document.createElement("button"); b.type = "button"; b.textContent = t[1]; b.setAttribute("aria-pressed", String(S.tab === t[0]));
+      b.onclick = function () { S.tab = S.tab === t[0] ? "" : t[0]; tabs(); }; box.appendChild(b); });
+    [].forEach.call(document.querySelectorAll(".panel[data-tab]"), function (p) { p.classList.toggle("active", p.dataset.tab === S.tab); });
+  }
   function ui() {
     if (lastBuilt !== S.d) { lastBuilt = S.d; build(); if (S.cam === "free" || S.cam === "ride") S.cam = "overview"; frame(0); preset(S.cam); }
-    seg("viewSeg", [{ label: "Whole fleet", value: "fleet" }, { label: "One satellite", value: "sat" }], "view", function () { if (S.view === "sat") satRebuild(); });
+    seg("viewSeg", [{ label: "Fleet", value: "fleet" }, { label: "One satellite", value: "sat" }], "view", function () { if (S.view === "sat") satRebuild(); S.tab = ""; });
     seg("lightSeg", [{ label: "In sunlight", value: false }, { label: "In Earth's shadow", value: true }], "shade");
     var sat = S.view === "sat";
-    $("fleetCtl").style.display = sat ? "none" : "contents"; $("satCtl").style.display = sat ? "contents" : "none";
-    $("designSeg").style.display = sat ? "none" : "";
+    $("fleetCtl").hidden = sat; $("satCtl").hidden = !sat;
+    ["designSeg", "kpis", "dname"].forEach(function (id) { $(id).hidden = sat; });
     ["satPanel", "satOut"].forEach(function (id) { $(id).hidden = !sat; });
-    ["fleetK", "nowPanel", "cardPanel", "stripPanel", "clockbox"].forEach(function (id) { $(id).hidden = sat; });
+    ["nowPanel", "cardPanel", "clockbox", "check"].forEach(function (id) { $(id).hidden = sat; });
+    seg("paneSeg", [{ label: "Status", value: "status" }, { label: "Power", value: "power" }, { label: "Key", value: "key" }], "pane");
+    $("paneStatus").hidden = S.pane !== "status"; $("panePower").hidden = S.pane !== "power"; $("paneKey").hidden = S.pane !== "key";
+    if (sat) $("hover").hidden = true;
     for (var k in tagEls) if (sat) tagEls[k].hidden = true;
     for (var k2 in satTags) if (!sat) satTags[k2].hidden = true;
-    seg("designSeg", DATA.designs.map(function (d, i) { return { label: d.label.split(":")[0], value: i }; }), "d");
-    seg("speedSeg", [{ label: "Pause", value: 0 }, { label: "×1 real time", value: 1 }, { label: "×10", value: 10 }, { label: "×60", value: 60 }, { label: "×600", value: 600 }], "speed");
+    seg("designSeg", DATA.designs.map(function (d, i) { return { label: d.label.split(":")[0] + (i === 0 ? " · Earth + orbit" : " · all orbit"), value: i }; }), "d");
+    seg("speedSeg", [{ label: "×1 live", value: 1 }, { label: "×10", value: 10 }, { label: "×60", value: 60 }, { label: "×600", value: 600 }], "speed", function () { S.last = S.speed; });
+    $("playBtn").innerHTML = S.speed ? PAUSE : PLAY; $("playBtn").setAttribute("aria-label", S.speed ? "Pause (Space)" : "Play (Space)");
     jumps();
-    seg("camSeg", [{ label: "Overview", value: "overview" }, { label: "From the Sun", value: "sun" }, { label: "Ride the selected satellite", value: "ride" }]
-      .concat(pins.length ? [{ label: "Earth sites", value: "sites" }] : []), "cam", function () { preset(S.cam); });
+    seg("camSeg", [{ label: "Overview", value: "overview" }, { label: "Sun", value: "sun" }, { label: "Follow", value: "ride" }]
+      .concat(pins.length ? [{ label: "Sites", value: "sites" }] : []), "cam", function () { preset(S.cam); });
     var lose = $("lose"), lost = lostNow();
-    lose.innerHTML = ['<option value="">nothing</option>'].concat(D().sites.map(function (s) { return '<option value="' + s.site + '">' + nice(s.site) + "</option>"; })).join("");
+    lose.innerHTML = ['<option value="">nothing switched off</option>'].concat(D().sites.map(function (s) { return '<option value="' + s.site + '">' + nice(s.site) + (s.kind === "space" ? " · " + s.ltan : "") + "</option>"; })).join("");
     lose.value = lost || "";
-    kpis(); panels();
+    tabs(); kpis(); panels();
   }
+  $("playBtn").onclick = function () { if (S.speed) { S.last = S.speed; S.speed = 0; } else S.speed = S.last || 10; ui(); };
+  $("golive").onclick = function () { S.ms = Date.now(); S.speed = 1; S.last = 1; warm(); ui(); };
+  $("closeSel").onclick = function () { S.sel = null; if (S.cam === "ride") { S.cam = "overview"; preset("overview"); } ui(); };
+  function openHelp() { $("help").hidden = false; $("helpClose").focus(); }
+  function closeHelp() { $("help").hidden = true; }
+  $("helpBtn").onclick = openHelp; $("helpClose").onclick = closeHelp; $("check").onclick = openHelp;
+  $("help").addEventListener("click", function (e) { if (e.target === this) closeHelp(); });
+  function toggleClean() { var on = document.body.classList.toggle("clean"); $("hideBtn").setAttribute("aria-pressed", String(on)); }
+  $("hideBtn").onclick = toggleClean;
+  document.addEventListener("keydown", function (e) {
+    var tag = e.target.tagName; if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA" || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (!$("help").hidden) { if (e.key === "Escape") closeHelp(); return; }
+    var k = e.key.toLowerCase();
+    if (e.key === " " && tag !== "BUTTON" && S.view === "fleet") { e.preventDefault(); $("playBtn").click(); }
+    else if (k === "l" && S.view === "fleet") $("golive").click();
+    else if (k === "f" && selectedSat()) { S.cam = "ride"; ui(); }
+    else if (k === "o" && S.view === "fleet") { S.cam = "overview"; preset("overview"); ui(); }
+    else if (k === "h") toggleClean();
+    else if (e.key === "?") openHelp();
+    else if (e.key === "Escape" && S.sel) $("closeSel").click();
+  });
 
   function resize() {
-    var w = stage.clientWidth, h = Math.max(340, Math.min(720, Math.round(w * 0.62)));
-    renderer.setSize(w, h, false); canvas.style.height = h + "px"; camera.aspect = w / h; camera.updateProjectionMatrix();
+    var w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
   }
   window.addEventListener("resize", resize);
   function resizeSat() { satCamera.aspect = camera.aspect; satCamera.updateProjectionMatrix(); }
   window.addEventListener("resize", resizeSat);
-  sliders(); satRebuild(); ui(); resize(); resizeSat();
+  resize(); resizeSat(); sliders(); satRebuild(); ui();
   setTimeout(function () {                 // the self-check: re-run every day the Python twin stored and compare
     var days = 0, bad = 0;
     DATA.designs.forEach(function (d) { var r = E.check(d); days += d.outages.length; bad += r.mismatches.length; });
-    CHECK = bad ? "✗ This page's model disagrees with the Python twin on " + bad + " values. Rebuild the page."
-      : "✓ Same model as the Python twin (twin/simulate.py): on load this page re-ran all " + days + " simulated days and the hourly power for both designs, and matched every value.";
-    nowPanel();
+    var msg = bad ? "✗ Out of step with the Python twin: " + bad + " values differ. Rebuild the page."
+      : "✓ Same model as the Python twin: on load this page re-ran all " + days + " simulated days and the hourly power for both designs, and every value matched.";
+    $("check").classList.toggle("bad", !!bad); $("check").textContent = bad ? "✗ check failed" : "✓ verified"; $("check").title = msg;
+    $("selfcheck2").textContent = msg; $("selfcheck2").style.color = bad ? "var(--bad)" : "var(--good)";
   }, 400);
   var last = performance.now(), lastPanels = 0;
   (function loop(now) {
