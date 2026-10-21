@@ -334,21 +334,21 @@ a { color: var(--sun); }
   function tok(x) { return x >= 1e9 ? fmt(x / 1e9, 2) + "B" : fmt(x / 1e6, 1) + "M"; }
 
   // ---------------------------------------------------------------- fleet objects (rebuilt when the design changes)
-  var fleet = null, onEarth = null, live = null, planes = [], pins = [], stations = [], tagEls = {}, pickables = [];
+  var fleet = null, onEarth = null, live = null, planes = [], pins = [], stations = [], tagEls = {};
   var linkGeo, linkLines, selGeo, selLine, RING = 129;
   var tagsEl = $("tags");
   function addTag(key, text) { var d = document.createElement("div"); d.className = "tag"; d.textContent = text; d.hidden = true; tagsEl.appendChild(d); tagEls[key] = d; return d; }
   function build() {
     if (fleet) scene.remove(fleet); if (onEarth) earth.remove(onEarth);
     fleet = new THREE.Group(); scene.add(fleet); onEarth = new THREE.Group(); earth.add(onEarth);
-    planes = []; pins = []; stations = []; pickables = []; tagsEl.innerHTML = ""; tagEls = {};
+    planes = []; pins = []; stations = []; tagsEl.innerHTML = ""; tagEls = {};
     live = E.Live(D());
     D().sites.filter(function (s) { return s.kind === "earth"; }).forEach(function (s) {
       var ll = LATLON[s.site] || [0, 0], mat = new THREE.MeshBasicMaterial({ color: 0x9cc8ff });
       var dot = new THREE.Mesh(new THREE.SphereGeometry(.05, 16, 12), mat); dot.position.copy(local(ll[0], ll[1], R_EARTH * 1.003));
       var glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: SITE_TEX, color: 0x7fb4ff, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
       glow.position.copy(local(ll[0], ll[1], R_EARTH * 1.01)); glow.scale.set(.5, .5, 1);
-      onEarth.add(dot); onEarth.add(glow); dot.userData = { kind: "site", site: s.site }; pickables.push(dot);
+      onEarth.add(dot); onEarth.add(glow);
       pins.push({ s: s, dot: dot, glow: glow, mat: mat }); addTag(s.site, nice(s.site));
     });
     E.STATIONS.forEach(function (st, i) {
@@ -362,8 +362,8 @@ a { color: var(--sun); }
       var mat = new THREE.LineDashedMaterial({ color: morning ? 0xd95926 : 0xf0a070, dashSize: morning ? 10 : .25, gapSize: morning ? 0 : .18, transparent: true, opacity: .32, blending: THREE.AdditiveBlending, depthWrite: false });
       var ring = new THREE.Line(geo, mat); fleet.add(ring);
       var sats = [];
-      for (var j = 0; j < pl.n; j++) { var m = satMesh(); m.traverse(function (o) { o.userData = { kind: "sat", site: pl.site, j: j }; }); fleet.add(m);
-        sats.push({ m: m, j: j, eci: {}, shadow: false, gs: null }); pickables.push(m.children[0]); }
+      for (var j = 0; j < pl.n; j++) { var m = satMesh(); fleet.add(m);
+        sats.push({ m: m, j: j, eci: {}, shadow: false, gs: null }); }
       planes.push({ pl: pl, s: s, ring: ring, ringMat: mat, sats: sats });
       addTag(pl.site, nice(pl.site) + " · crosses the equator at " + hm(pl.ltanH));
     });
@@ -447,14 +447,28 @@ a { color: var(--sun); }
     if (e.key === "+" || e.key === "=") cam.dist = Math.max(8.5, cam.dist * .9);
     if (e.key === "-") cam.dist = Math.min(80, cam.dist * 1.1);
   });
-  var ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
-  function pick(e) {
-    var rect = canvas.getBoundingClientRect();
-    mouse.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
-    ray.setFromCamera(mouse, camera);
-    var hit = ray.intersectObjects(pickables, true)[0];
-    if (hit && hit.object.userData.kind) { var u = hit.object.userData; S.sel = u.kind === "sat" ? { kind: "sat", site: u.site, j: u.j } : { kind: "site", site: u.site }; ui(); }
+  // pick on screen: satellites are a few pixels wide and moving, so take the nearest visible one within reach
+  var pv = new THREE.Vector3(), pray = new THREE.Ray(), EARTH_SPHERE = new THREE.Sphere(new THREE.Vector3(), 6.371);
+  function hidden(pos) {                  // behind Earth from the camera
+    pray.set(camera.position, pv.copy(pos).sub(camera.position).normalize());
+    var hit = pray.intersectSphere(EARTH_SPHERE, new THREE.Vector3());
+    return hit && hit.distanceTo(camera.position) < pos.distanceTo(camera.position) - 0.02;
   }
+  function nearest(e) {
+    var rect = canvas.getBoundingClientRect(), mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    var reach = e.pointerType === "touch" ? 28 : 18, best = null, bd = reach * reach;
+    function test(pos, sel) {
+      pv.copy(pos).project(camera); if (pv.z > 1) return;
+      var dx = (pv.x + 1) / 2 * rect.width - mx, dy = (1 - pv.y) / 2 * rect.height - my, d = dx * dx + dy * dy;
+      if (d < bd && !hidden(pos)) { bd = d; best = sel; }
+    }
+    planes.forEach(function (P) { P.sats.forEach(function (st) { test(st.m.position, { kind: "sat", site: P.pl.site, j: st.j }); }); });
+    pins.forEach(function (p) { test(p.dot.getWorldPosition(new THREE.Vector3()), { kind: "site", site: p.s.site }); });
+    return best;
+  }
+  function pick(e) { var hit = nearest(e); if (hit) { S.sel = hit; ui(); } }
+  canvas.addEventListener("pointermove", function (e) { if (S.view === "sat" || drag || e.pointerType === "touch") return; canvas.style.cursor = nearest(e) ? "pointer" : ""; });
+
 
   // ---------------------------------------------------------------- every frame: real Sun, real Earth, every satellite on its orbit
   var count = { shadow: 0, batt: 0, linked: 0, total: 0 }, basis = new THREE.Matrix4(), vx = new THREE.Vector3(), vy = new THREE.Vector3(), vz = new THREE.Vector3();
