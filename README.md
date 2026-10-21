@@ -76,6 +76,46 @@ survive losing one. Design 2 is $0.4B cheaper than Design 1, but it
 depends on one kind of place (orbit), so a big solar storm hitting every plane at once is its
 worst case. Design 1 mixes two kinds of place that fail for different reasons.
 
+## ⚠️ Known limits
+
+Both designs fit the rules with our 2035 estimates. Some of those estimates are kinder than
+today's published figures. Here is what today's figures do to each design, re-scored as built
+(same racks; `python3 twin/today_prices.py`). Every figure's source is on the deck's
+[sources slide](https://madhanj05.github.io/Orbital_DataCenter/explained.html#s14) and in
+[`present/sources.py`](present/sources.py).
+
+| Using today's figure instead of ours | Design 1 | Design 2 |
+|---|---|---|
+| Our 2035 estimates (the designs above) | ✅ $29.88B | ✅ $29.44B |
+| Earth electricity: $32–101 per MWh by site (ours $25–70) | ❌ $30.07B | not used |
+| Earth building cost: $10.7M per MW (ours $7M; $1M for cooling on top of both) | ❌ $30.96B | not used |
+| Electricity, grid carbon and building cost together | ❌ $31.22B | not used |
+| Solar arrays: best flown about 200 W/kg (ours 500) | not used | ❌ $30.12B (14.8 t per MW) |
+| Radiators: flown deployables 3.5 kg/m² (ours 2) | not used | ✅ $29.94B (13.1 t per MW) |
+| Arrays and radiators together | not used | ❌ $30.63B (17.0 t per MW) |
+
+So **Design 1 needs Earth costs below today's, and Design 2 needs solar arrays that don't fly
+yet.** Each goes over the $30B by 0.2–4%. These rows keep the same racks; re-planning under the
+new figures could claw a little of that back.
+
+Other things the numbers rest on:
+- **2035 chips.** The organizers' 2035 GPU (3 TB of memory, 120 TB/s, slide 13) has about 10×
+  the memory and 6× the bandwidth of [NVIDIA's Rubin](https://www.nvidia.com/en-us/data-center/vera-rubin-nvl72/)
+  (288 GB, 19.2 TB/s). Making chip speed, the usable share of it, attention maths, cross-chip sync
+  or draft acceptance 25% worse breaks both designs (`twin/stress.py`).
+- **Guessing ahead.** We assume 70% of drafted words are accepted, inside what
+  [EAGLE](https://arxiv.org/abs/2401.15077) reports (64–79%). But published speedups shrink at
+  big batch sizes: [EAGLE-3](https://arxiv.org/abs/2503.01840) gets 1.38× at batch 64.
+- **Pausing tool sandboxes.** We pause each background agent's sandbox while the AI writes,
+  about 17 seconds (500 words at 30 per second). Pausing takes about 4 s per GiB of memory today
+  ([E2B](https://docs.e2b.dev/sandbox/persistence)), so this only works for small sandboxes.
+- **Prices with no public source:** $0.5M per laser terminal (past units cost about
+  [$10M](https://aerospace.org/sites/default/files/2023-05/FY23_12205_SOP_Lasercom%20Ppr_r10.pdf)),
+  $300/kWh space batteries (ground packs are $108/kWh), $3/GB pooled memory (about $30/GB during
+  the 2026 shortage), and $2M sandbox racks.
+- **Launch at $200/kg** is the organizers' figure. SpaceX targets it with Starship; Falcon 9 is
+  about $2,700/kg today.
+
 ## Design 1: the safest (Earth + orbit)
 
 - 🌍 **Earth:** all 6 sites (Nordics, Iceland, West Texas, Virginia, Midwest, Gulf), 323 of 500 MW
@@ -193,9 +233,12 @@ some. We made each of our 16 guesses 25% worse, one at a time:
 - **Design 1 still fits in 9 of 16 cases; Design 2 in 10 of 16.** Each has $0.1–0.6B to spare
   after batteries, tool sandboxes and communications, thanks to two cost cuts: sandboxes are
   snapshotted between tool calls, and the fleet uses 12 smaller orbital planes.
-- The two that break both designs are about **how good 2035 chips are** (compute speed, and
-  how often the AI's drafted words are right). Weaker chips mean every team needs more of
-  them, which makes Earth's power limit tighter and orbit *more* necessary.
+- What breaks both designs is mostly **how good 2035 chips are** (compute speed, the share of it
+  we can use, attention maths, cross-chip sync, and how often the AI's drafted words are right),
+  plus the price of satellite hardware. Weaker chips mean every team needs more of them, which
+  makes Earth's power limit tighter and orbit *more* necessary.
+- Today's published Earth prices and flown satellite hardware are further off than 25% for some
+  inputs; see **Known limits** above.
 
 ## How we checked it
 
@@ -307,7 +350,7 @@ python3 twin/score.py designs/whatif_all_orbit_light.json  # check Design 2
 python3 twin/simulate.py designs/final_resilient.json designs/whatif_all_orbit_light.json   # a full day, every outage
 python3 twin/stress.py                                     # Design 1 with every guess 25% worse
 python3 twin/stress.py --light --orbit-only                # Design 2 with every guess 25% worse
-python3 twin/today_prices.py                               # Design 1 at today's published Earth prices
+python3 twin/today_prices.py                               # both designs with today's published figures (Known limits)
 python3 twin/test_calibration.py                           # our model matches the organizers' numbers
 python3 twin/check_rules.py                                # every deck rule, both designs, PASS/FAIL
 python3 twin/handcheck.py                                  # key numbers redone by hand

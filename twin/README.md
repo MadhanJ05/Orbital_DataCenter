@@ -66,6 +66,9 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | **Design 1: survives losing any one site or plane, and the worst eclipse day with it** | **4.45B (100%)** | **$29.88B** | **323 MW, 6 sites** | **12 planes x 50 MW, 84 satellites, 11,661 t, batteries on live racks** |
 | **Design 2: 11.0 t/MW satellite, all orbit, batteries on every rack** | **4.45B (100%)** | **$29.44B** | **0 MW** | **12 x 75 MW, 120 satellites, 11,452 t** |
 
+With today's published Earth prices or flown solar arrays instead of our 2035 estimates, each goes
+over budget: see Known limits in the main README (`twin/today_prices.py`).
+
 Both include the 5% memory reserve (`MEMORY_USABLE = 0.95`), tool sandboxes (snapshotted between
 tool calls, `serving.sandbox_snapshot`), communications (`COMMS`) and eclipse batteries.
 `DEMAND_MARGIN` (default 0) makes the scorer size and check service at that much above the
