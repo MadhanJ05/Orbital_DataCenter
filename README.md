@@ -23,7 +23,7 @@ only 58% of them are served.
 
 ## 🛰️ The digital twin
 
-**Plain-language explainer for anyone:** [`explained.html`](https://madhanj05.github.io/Orbital_DataCenter/explained.html): the two designs, the tests and the simulation in simple words and diagrams.
+**The presentation:** [`explained.html`](https://madhanj05.github.io/Orbital_DataCenter/explained.html) is our 15-slide deck, and [`briefing.html`](https://madhanj05.github.io/Orbital_DataCenter/briefing.html) tells the same story as one dashboard. Every estimate on them is checked against a cited source. Both are built from [`present/`](present/): edit `present/deck_page.html`, `present/briefing_page.html` or `present/sources.py`, then run `python3 present/build.py`.
 
 **[`twin3d.html`](twin3d.html)** ([live](https://madhanj05.github.io/Orbital_DataCenter/twin3d.html)) is the twin in 3D, seen from space, with two views:
 - **One satellite** (`#satellite`): a single satellite drawn to scale. Sliders change its size, chip temperature, cooling loops, solar W/kg, radiator kg/m², rack weight, structure, batteries and launch price; the wings, radiator and battery resize live, and it shows tonnes per MW, launches, and cost per MW against the Nordics. It runs the same physics as `twin/orbit_mass.py` and checks itself against Python's answers on every load.
@@ -304,6 +304,7 @@ python3 twin/score.py designs/whatif_all_orbit_light.json  # check Design 2
 python3 twin/simulate.py designs/final_resilient.json designs/whatif_all_orbit_light.json   # a full day, every outage
 python3 twin/stress.py                                     # Design 1 with every guess 25% worse
 python3 twin/stress.py --light --orbit-only                # Design 2 with every guess 25% worse
+python3 twin/today_prices.py                               # Design 1 at today's published Earth prices
 python3 twin/test_calibration.py                           # our model matches the organizers' numbers
 python3 twin/check_rules.py                                # every deck rule, both designs, PASS/FAIL
 python3 twin/handcheck.py                                  # key numbers redone by hand

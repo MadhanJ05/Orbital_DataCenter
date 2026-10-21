@@ -1,0 +1,620 @@
+<title>Orbital Fleet Briefing</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: mission-control dashboard. A KPI strip, then the 15 talk panels on a 12-column grid in talk order;
+   any panel expands to full screen for presenting (arrows step 01→15). Single deliberate dark look: deep space + sunlight gold. */
+:root {
+  color-scheme: dark;
+  --space: #05080F; --panel: #0B1220; --panel2: #101a2c; --hair: #1C2840; --hair2: #2A3858;
+  --ink: #EEF2F8; --muted: #94A0B8; --faint: #627090;
+  --sun: #F2B544; --sun-dim: #8E6A24;
+  --c-chips: #6C8BDD; --c-earth: #14A486; --c-orbit: #C7821A; --c-net: #C177B5;
+  --good: #5CC48A; --warn: #F2B544; --bad: #F07067; --on-bar: #05080F;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+html { background: var(--space); }
+body { background: radial-gradient(120% 80% at 85% 0%, #0B1730 0%, var(--space) 55%) fixed, var(--space); color: var(--ink); font: 400 14px/1.45 var(--display); -webkit-font-smoothing: antialiased;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1480px; margin: 0 auto; padding-block: 22px 56px; display: grid; gap: 14px; }
+h1, h2, h3 { margin: 0; font-family: var(--display); text-wrap: balance; }
+p { margin: 0; }
+b, strong { font-weight: 650; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.gold { color: var(--sun); }
+code { font: 400 0.92em var(--mono); background: var(--panel2); padding: 0.05em 0.4em; border-radius: 4px; }
+
+/* header */
+.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; border-bottom: 1px solid var(--hair); padding-bottom: 14px; }
+.brand { display: grid; gap: 6px; }
+.eyebrow { font: 500 11px/1 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--sun); }
+.brand h1 { font-size: 28px; font-weight: 700; font-stretch: 116%; letter-spacing: -0.01em; }
+.brand p { color: var(--muted); max-width: 70ch; }
+.top-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.btn { font: 500 12px/1 var(--mono); letter-spacing: 0.04em; color: var(--ink); background: var(--panel2); border: 1px solid var(--hair2); border-radius: 999px; padding: 9px 14px; cursor: pointer; }
+.btn:hover { border-color: var(--sun-dim); }
+.btn.primary { background: var(--sun); color: var(--on-bar); border-color: var(--sun); }
+.btn:focus-visible, .expand:focus-visible, .tab:focus-visible { outline: 2px solid var(--sun); outline-offset: 2px; }
+
+/* KPI strip */
+.kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.kpi { background: var(--panel); border: 1px solid var(--hair); border-radius: 12px; padding: 12px 14px; display: grid; gap: 6px; min-width: 0; }
+.kpi .k { font: 500 10.5px/1.2 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.kpi .v { font: 700 22px/1.05 var(--display); font-stretch: 110%; font-variant-numeric: tabular-nums; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.kpi .v small { font: 500 11px var(--mono); color: var(--muted); }
+.kpi .d1 { color: var(--ink); } .kpi .d2 { color: var(--sun); }
+.pill { justify-self: start; font: 500 10.5px/1 var(--mono); padding: 4px 8px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.pill.ok { color: var(--good); border-color: rgba(92,196,138,.45); }
+.pill.warn { color: var(--warn); border-color: rgba(242,181,68,.45); }
+.pill.bad { color: var(--bad); border-color: rgba(240,112,103,.45); }
+.dkey { display: flex; gap: 14px; font: 500 11px var(--mono); color: var(--muted); }
+.dkey i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: -0.05em; }
+
+/* grid of panels */
+.board { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 14px; grid-auto-flow: row dense; }
+.panel { background: linear-gradient(180deg, var(--panel2), var(--panel)); border: 1px solid var(--hair); border-radius: 14px; padding: 1.15em 1.25em 1.2em; display: grid; gap: 0.85em; align-content: start; min-width: 0; position: relative; font-size: 14px; }
+.panel > * { min-width: 0; }
+.s3 { grid-column: span 3; } .s4 { grid-column: span 4; } .s5 { grid-column: span 5; } .s6 { grid-column: span 6; } .s7 { grid-column: span 7; } .s8 { grid-column: span 8; } .s12 { grid-column: span 12; }
+.r2 { grid-row: span 2; }
+.ph { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.ph .t { display: grid; gap: 0.3em; }
+.ph .n { font: 500 0.78em/1 var(--mono); color: var(--sun); letter-spacing: 0.12em; }
+.ph h2 { font-size: 1.22em; font-weight: 650; font-stretch: 108%; line-height: 1.2; }
+.expand { all: unset; cursor: pointer; font: 500 0.78em/1 var(--mono); color: var(--muted); border: 1px solid var(--hair2); border-radius: 999px; padding: 0.45em 0.7em; white-space: nowrap; }
+.expand:hover { color: var(--ink); border-color: var(--sun-dim); }
+.src { font: 400 0.76em/1.4 var(--mono); color: var(--faint); }
+.ref { color: var(--sun); text-decoration: none; font: 500 0.78em/1 var(--mono); vertical-align: 0.35em; margin-left: 0.1em; }
+.ref:hover { text-decoration: underline; }
+.big { font: 700 2.1em/1 var(--display); font-stretch: 112%; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.big small { font-size: 0.42em; font-weight: 500; color: var(--muted); margin-left: 0.15em; letter-spacing: 0; }
+.label { font: 500 0.74em/1.3 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.sm { font-size: 0.9em; color: var(--muted); }
+.row { display: grid; gap: 0.8em; }
+.c2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .c4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tile { border: 1px solid var(--hair); border-radius: 10px; padding: 0.8em 0.9em; display: grid; gap: 0.35em; align-content: start; background: rgba(5, 8, 15, 0.35); min-width: 0; }
+.dot { display: inline-block; width: 0.65em; height: 0.65em; border-radius: 50%; margin-right: 0.45em; }
+
+/* tables */
+.tbl { overflow-x: auto; min-width: 0; border: 1px solid var(--hair); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92em; }
+th, td { text-align: left; padding: 0.5em 0.75em; border-bottom: 1px solid var(--hair); vertical-align: top; }
+th { font: 500 0.82em/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: rgba(16, 26, 44, 0.9); }
+tr:last-child td { border-bottom: 0; }
+td.r, th.r { text-align: right; }
+td.r { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.ok::before { content: "✓ "; color: var(--good); }
+td.calc { color: var(--muted); font-family: var(--mono); font-size: 0.92em; }
+tr.total td { font-weight: 650; border-top: 1px solid var(--sun-dim); }
+td .sub { display: block; color: var(--faint); font: 400 0.82em/1.3 var(--mono); }
+.verdict { font: 500 0.82em/1 var(--mono); border: 1px solid; border-radius: 999px; padding: 0.25em 0.6em; white-space: nowrap; }
+.sw { display: inline-block; width: 0.75em; height: 0.75em; border-radius: 3px; margin-right: 0.55em; vertical-align: -0.05em; }
+.d2col { color: var(--sun); }
+
+/* tabs */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.tab { font: 500 0.8em/1 var(--mono); color: var(--muted); background: transparent; border: 1px solid var(--hair2); border-radius: 999px; padding: 0.55em 0.9em; cursor: pointer; }
+.tab[aria-selected="true"] { color: var(--on-bar); background: var(--sun); border-color: var(--sun); }
+
+/* charts */
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: var(--display); fill: var(--ink); }
+svg .t { font-size: 13px; } svg .th { font-size: 15px; font-weight: 650; }
+svg .ts { font-size: 11.5px; fill: var(--muted); } svg .tm { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 0.4em 1.3em; font-size: 0.86em; color: var(--muted); }
+.legend i { display: inline-block; width: 1em; height: 0.7em; border-radius: 2px; margin-right: 0.45em; }
+
+/* globe */
+.globe { position: relative; border-radius: 10px; overflow: hidden; background: #03060c; min-height: 320px; aspect-ratio: 4 / 3; max-width: 100%; }
+.globe canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.globe .tag { position: absolute; left: 12px; top: 12px; font: 500 11px/1 var(--mono); background: rgba(5,8,15,.7); border: 1px solid rgba(242,181,68,.55); border-radius: 999px; padding: 6px 10px; }
+.globe .tag b { color: var(--sun); font-weight: 500; }
+.globe .credit { position: absolute; right: 10px; bottom: 8px; font: 400 10px var(--mono); color: var(--faint); }
+.globe .fallback { position: absolute; inset: 0; display: none; place-items: center; color: var(--muted); font-size: 0.9em; }
+.globe.no-gl .fallback { display: grid; }
+.kv { display: grid; gap: 0.4em; margin: 0; padding: 0; list-style: none; }
+.kv li { display: flex; justify-content: space-between; gap: 1em; border-top: 1px solid var(--hair); padding-top: 0.4em; }
+.kv li span:last-child { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+
+/* focus mode for presenting */
+.scrim { position: fixed; inset: 0; background: rgba(3, 5, 10, 0.82); backdrop-filter: blur(4px); z-index: 20; }
+.panel.focus { position: fixed; z-index: 21; inset: calc(24px + env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
+  font-size: clamp(15px, 1.45vw, 22px); overflow: auto; grid-column: auto; grid-row: auto; max-width: 1500px; margin: 0 auto; padding: 1.6em 1.9em; align-content: center; border-color: var(--sun-dim); }
+.panel.focus .globe { aspect-ratio: auto; height: 52vh; min-height: 300px; }
+.panel.focus { align-content: start; }
+.fnav { position: fixed; z-index: 22; left: 50%; transform: translateX(-50%); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 6px; align-items: center; background: rgba(11,18,32,.92); border: 1px solid var(--hair2); border-radius: 999px; padding: 5px; }
+.fnav button { all: unset; cursor: pointer; font: 500 12px/1 var(--mono); color: var(--ink); padding: 8px 12px; border-radius: 999px; }
+.fnav button:hover { background: var(--panel2); }
+.fnav button:focus-visible { outline: 2px solid var(--sun); }
+.fnav span { font: 400 12px var(--mono); color: var(--muted); min-width: 64px; text-align: center; }
+
+@media (max-width: 1180px) {
+  .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .s3, .s4, .s5 { grid-column: span 6; } .s6, .s7, .s8 { grid-column: span 12; }
+  .r2 { grid-row: auto; }
+}
+@media (max-width: 720px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .board > .panel { grid-column: 1 / -1; }
+  .c3, .c4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .c2 { grid-template-columns: minmax(0, 1fr); }
+  table { min-width: 520px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow">Sundai Hack 145 · Track 1 · The AI data center of 2035</span>
+      <h1>Orbital AI Fleet</h1>
+      <p>Two designs that serve all 4.45 billion users inside every limit. Every number comes from our open model or a cited source.</p>
+    </div>
+    <div class="top-actions">
+      <span class="dkey"><span><i style="background:var(--ink)"></i>Design 1 · Earth + orbit</span><span><i style="background:var(--sun)"></i>Design 2 · all orbit</span></span>
+      <button class="btn primary" id="presentBtn" type="button">Present from 01 ▸</button>
+    </div>
+  </header>
+
+  <section class="kpis" aria-label="Key numbers">
+    <div class="kpi"><span class="k">Users served</span><span class="v"><span class="d1">100%</span><span class="d2">100%</span><small>of 4.45B</small></span><span class="pill ok">✓ goal met</span></div>
+    <div class="kpi"><span class="k">5-year cost</span><span class="v"><span class="d1">$29.88B</span><span class="d2">$29.44B</span></span><span class="pill ok">✓ under $30B</span></div>
+    <div class="kpi"><span class="k">Earth grid used</span><span class="v"><span class="d1">323</span><span class="d2">0</span><small>of 500 MW</small></span><span class="pill ok">✓ under the cap</span></div>
+    <div class="kpi"><span class="k">Satellites · 12 planes</span><span class="v"><span class="d1">84</span><span class="d2">120</span><small>× 8 MW</small></span><span class="pill ok">✓ survive losing any plane</span></div>
+    <div class="kpi"><span class="k">Chat first word</span><span class="v"><span class="d1">0.22 s</span><span class="d2">0.14 s</span></span><span class="pill ok">✓ limit 0.6 s</span></div>
+    <div class="kpi"><span class="k">Energy per chat answer</span><span class="v"><span class="d1">0.049</span><span class="d2">0.054</span><small>Wh</small></span><span class="pill ok">✓ ~4× below Gemini's 0.24</span></div>
+  </section>
+
+  <main class="board" id="board">
+
+    <!-- 01 -->
+    <section class="panel s5" data-n="1">
+      <div class="ph"><div class="t"><span class="n">01 · THE CASE</span><h2>The AI data center of 2035 belongs in orbit</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <p class="muted">On Earth, the power runs out first. A few hundred kilometres up, the Sun almost never sets.</p>
+      <div class="row c3">
+        <div class="tile"><span class="big gold">58%</span><span class="sm">of 2035's users is all Earth's 500 MW grid can serve</span></div>
+        <div class="tile"><span class="big">8×</span><span class="sm">more sunlight per solar panel a year than on the ground <a class="ref" data-k="suncatcher"></a></span></div>
+        <div class="tile"><span class="big">4×</span><span class="sm">less energy per chat answer than a 2025 Gemini prompt <a class="ref" data-k="gemini"></a></span></div>
+      </div>
+      <p class="src">58%: Earth-only run, designs/A+B+C-earth-only.json · 0.054 Wh (Design 2) counts whole racks, idle time and cooling; Google's 0.24 Wh is its median Gemini text prompt, May 2025</p>
+    </section>
+
+    <!-- 02 -->
+    <section class="panel s7" data-n="2">
+      <div class="ph"><div class="t"><span class="n">02 · WHY SPACE</span><h2>What orbit has that the ground doesn't</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="tbl"><table>
+        <thead><tr><th></th><th>On Earth</th><th>In orbit</th></tr></thead>
+        <tbody>
+          <tr><td><b>Power</b></td><td>Grids are full: Texas has ~474 GW of big new loads asking to connect <a class="ref" data-k="ercot"></a></td><td>No grid. A dawn-dusk orbit sees the Sun almost all year <a class="ref" data-k="suncatcher"></a></td></tr>
+          <tr><td><b>Cooling</b></td><td>Evaporative cooling uses 1.8 L of water per kWh (slide 14)</td><td>Radiators shed heat to −53 °C space; no water, no land</td></tr>
+          <tr><td><b>Cost trend</b></td><td>Building cost rose $7.7M → $10.7M per MW, 2020–2025 <a class="ref" data-k="jll"></a></td><td>Launch heading from ~$2,700/kg to ≲$200/kg by the mid-2030s <a class="ref" data-k="starship"></a></td></tr>
+          <tr><td><b>Reach</b></td><td>25–110 ms round trip from our sites</td><td>40 ms to everyone, from overhead (slide 12)</td></tr>
+        </tbody>
+      </table></div>
+      <p class="sm">The catch: a megawatt in orbit only costs the same as the cheapest Earth site once satellites get lighter. That is Design 2.</p>
+    </section>
+
+    <!-- 03 -->
+    <section class="panel s4" data-n="3">
+      <div class="ph"><div class="t"><span class="n">03 · THE BRIEF</span><h2>4.45 billion users, four hard limits</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="row c2">
+        <div class="tile"><span class="label">Budget</span><span class="big">$30B</span><span class="sm">5 years</span></div>
+        <div class="tile"><span class="label">Earth's grid</span><span class="big">500<small>MW</small></span><span class="sm">all sites</span></div>
+        <div class="tile"><span class="label">Launch</span><span class="big">$200<small>/kg</small></span><span class="sm">to orbit</span></div>
+        <div class="tile"><span class="label">First word</span><span class="big">0.6<small>s</small> · 2<small>s</small></span><span class="sm">chat · agents</span></div>
+      </div>
+      <ul class="kv">
+        <li><span>Everyday prompters</span><span>4B · 30 chats a day</span></li>
+        <li><span>Agent developers</span><span>50M · 12 live + 30 bg tasks</span></li>
+        <li><span>Knowledge workers</span><span>400M · 20 chats, 1 + 4 tasks</span></li>
+      </ul>
+      <p class="src">Organizers' slides 9–11 and 14</p>
+    </section>
+
+    <!-- 04 -->
+    <section class="panel s8" data-n="4">
+      <div class="ph"><div class="t"><span class="n">04 · OUR ANSWER</span><h2>Two designs, both inside every limit</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Rule or fact</th><th class="r">Limit</th><th class="r">Design 1 · Earth + orbit</th><th class="r d2col">Design 2 · all orbit</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>5-year cost</td><td class="r">$30B</td><td class="r">$29.88B</td><td class="r d2col">$29.44B</td><td><span class="pill ok">✓ both</span></td></tr>
+          <tr><td>Earth grid</td><td class="r">500 MW</td><td class="r">323 MW · 6 sites</td><td class="r d2col">0 MW</td><td><span class="pill ok">✓ both</span></td></tr>
+          <tr><td>Orbit</td><td class="r">–</td><td class="r">12 planes · 84 sats</td><td class="r d2col">12 planes · 120 sats</td><td></td></tr>
+          <tr><td>Satellite weight</td><td class="r">18 t/MW (slide 14)</td><td class="r">18.0 t per MW</td><td class="r d2col">11.0 t per MW</td><td></td></tr>
+          <tr><td>Chat · agent first word</td><td class="r">0.6 s · 2 s</td><td class="r">0.22 s · 0.26 s</td><td class="r d2col">0.14 s · 0.16 s</td><td><span class="pill ok">✓ both</span></td></tr>
+          <tr><td>Lose any one site or plane</td><td class="r">100% live</td><td class="r">100%</td><td class="r d2col">100%</td><td><span class="pill ok">✓ both</span></td></tr>
+          <tr><td>Worst eclipse day + an outage</td><td class="r">100% live</td><td class="r">batteries on live racks</td><td class="r d2col">batteries on all racks</td><td><span class="pill ok">✓ both</span></td></tr>
+        </tbody>
+      </table></div>
+      <p class="src">designs/final_resilient.json · designs/whatif_all_orbit_light.json · every rule re-checked by twin/check_rules.py</p>
+    </section>
+
+    <!-- 05 -->
+    <section class="panel s7" data-n="5">
+      <div class="ph"><div class="t"><span class="n">05 · THE BUDGET</span><h2>Where every dollar of the $30 billion goes</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="legend">
+        <span><i style="background:var(--c-chips)"></i>Chips, racks, memory</span><span><i style="background:var(--c-earth)"></i>Earth sites</span>
+        <span><i style="background:var(--c-orbit)"></i>Getting to orbit</span><span><i style="background:var(--c-net)"></i>Network</span><span><i style="border:1px dashed var(--muted)"></i>Unspent</span>
+      </div>
+      <svg id="budgetBars" viewBox="0 0 1000 250" role="img" aria-label="Design 1: chips 20.45, Earth sites 3.06, orbit 6.01, network 0.37, unspent 0.12 billion dollars. Design 2: chips 21.62, orbit 7.41, network 0.42, unspent 0.56."></svg>
+      <div class="row c4">
+        <div class="tile"><span class="big" style="font-size:1.5em">⅔</span><span class="sm">of the money is chips</span></div>
+        <div class="tile"><span class="big" style="font-size:1.5em">$6.71 · $6.62</span><span class="sm">per user, 5 years</span></div>
+        <div class="tile"><span class="big" style="font-size:1.5em">$9.73B</span><span class="sm">Design 1's Earth part</span></div>
+        <div class="tile"><span class="big" style="font-size:1.5em">$20.15B</span><span class="sm">Design 1's orbit part</span></div>
+      </div>
+      <p class="src">twin/score.py · hand check of Design 1's total: $29,880,769,535 (twin/handcheck.py)</p>
+    </section>
+
+    <!-- 09 globe (placed beside the budget on wide screens) -->
+    <section class="panel s5 r2" data-n="9" id="orbitPanel">
+      <div class="ph"><div class="t"><span class="n">09 · WHERE WE OPERATE</span><h2>Dawn-dusk sun-synchronous orbit, 650 km up</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="globe" id="globeBox"><canvas id="globe" aria-label="Earth with our 12 dawn-dusk orbital planes and their satellites"></canvas>
+        <span class="tag"><b>Our orbit</b> · dawn-dusk SSO · 650 km · 98°</span><span class="credit">Earth: NASA Blue Marble, Black Marble</span>
+        <div class="fallback">3D view needs WebGL</div></div>
+      <ul class="kv">
+        <li><span>Height · tilt</span><span>~650 km · 98°, over both poles</span></li>
+        <li><span>Crosses the equator</span><span>06:00 (6 planes) · 18:00 (6 planes)</span></li>
+        <li><span>One lap</span><span>98 min · 7.5 km/s · 14.7 a day</span></li>
+        <li><span>Eclipses</span><span>~95 days a year, ≤19.6 min a lap <a class="ref" data-k="hinode"></a></span></li>
+        <li><span>Satellites per plane</span><span>7 (50 MW) · 10 (75 MW)</span></li>
+        <li><span>Radiation over 5 years</span><span>0.75 krad <a class="ref" data-k="suncatcher"></a></span></li>
+      </ul>
+      <p class="src">Rings drawn on the real day/night line: solid = 06:00 planes, dashed = 18:00 · same orbit family as Google's Suncatcher <a class="ref" data-k="suncatcher"></a> · geometry <a class="ref" data-k="turyshev"></a></p>
+    </section>
+
+    <!-- 06–08 -->
+    <section class="panel s7" data-n="6">
+      <div class="ph"><div class="t"><span class="n">06–08 · EVERY NUMBER</span><h2>How each budget line is calculated</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" data-tab="t1" id="tab1" type="button">Chips $20.45B · $21.62B</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="t2" id="tab2" type="button">Earth + network $3.43B · $0.42B</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="t3" id="tab3" type="button">Orbit $6.01B · $7.41B</button>
+      </div>
+      <div class="tbl" data-pane="t1"><table>
+        <thead><tr><th>Line</th><th>Quantity × price (Design 1 · Design 2)</th><th class="r">Design 1</th><th class="r d2col">Design 2</th></tr></thead>
+        <tbody>
+          <tr><td>Writer chips (LPU racks)</td><td class="calc">996 · 924 racks × $14.3M</td><td class="r">$14.24B</td><td class="r d2col">$13.21B</td></tr>
+          <tr><td>GPU racks</td><td class="calc">72 · 192 racks × $23.8M</td><td class="r">$1.71B</td><td class="r d2col">$4.57B</td></tr>
+          <tr><td>Reader chips (air-card racks)</td><td class="calc">7,746 · 6,444 racks × $0.5M</td><td class="r">$3.87B</td><td class="r d2col">$3.22B</td></tr>
+          <tr><td>Tool-sandbox racks</td><td class="calc">198 · 192 racks × $2M <a class="ref" data-k="firecracker"></a></td><td class="r">$0.40B</td><td class="r d2col">$0.38B</td></tr>
+          <tr><td>Agent memory store</td><td class="calc">74 · 76 PB × $3 per GB <a class="ref" data-k="dramx"></a></td><td class="r">$0.22B</td><td class="r d2col">$0.23B</td></tr>
+          <tr class="total"><td>Chips, racks and memory</td><td class="calc">rack prices: organizers' slide 12</td><td class="r">$20.45B</td><td class="r d2col">$21.62B</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl" data-pane="t2" hidden><table>
+        <thead><tr><th>Line</th><th>Quantity × price</th><th class="r">Design 1</th><th class="r d2col">Design 2</th></tr></thead>
+        <tbody>
+          <tr><td><span class="sw" style="background:var(--c-earth)"></span>Buildings and cooling</td><td class="calc">292 MW of computers × $8M per MW <a class="ref" data-k="jll"></a></td><td class="r">$2.34B</td><td class="r d2col">–</td></tr>
+          <tr><td><span class="sw" style="background:var(--c-earth)"></span>Electricity, 5 years</td><td class="calc">11,265 GWh × $40 per MWh (6-site average) <a class="ref" data-k="eia"></a></td><td class="r">$0.45B</td><td class="r d2col">–</td></tr>
+          <tr><td><span class="sw" style="background:var(--c-earth)"></span>Carbon</td><td class="calc">2.67 Mt CO₂ × $100 per tonne (slide 14) <a class="ref" data-k="egrid"></a></td><td class="r">$0.27B</td><td class="r d2col">–</td></tr>
+          <tr><td><span class="sw" style="background:var(--c-net)"></span>Laser terminals</td><td class="calc">252 · 360 (3 per satellite) × $0.5M <a class="ref" data-k="aerospace"></a></td><td class="r">$0.13B</td><td class="r d2col">$0.18B</td></tr>
+          <tr><td><span class="sw" style="background:var(--c-net)"></span>Optical ground stations</td><td class="calc">16 × ($10M + 5 years × $1M) <a class="ref" data-k="turyshev"></a></td><td class="r">$0.24B</td><td class="r d2col">$0.24B</td></tr>
+          <tr class="total"><td>Earth sites + network</td><td class="calc">3.06 + 0.37 · 0 + 0.42</td><td class="r">$3.43B</td><td class="r d2col">$0.42B</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl" data-pane="t3" hidden><table>
+        <thead><tr><th>Line</th><th>Quantity × price (Design 1 · Design 2)</th><th class="r">Design 1</th><th class="r d2col">Design 2</th></tr></thead>
+        <tbody>
+          <tr><td>Launch the satellites</td><td class="calc">603.6 MW × 18 t · 905.5 MW × 10.98 t = 10,864 · 9,945 t × $200/kg</td><td class="r">$2.17B</td><td class="r d2col">$1.99B</td></tr>
+          <tr><td>Launch the batteries</td><td class="calc">196 · 372 MWh × 4 kg/kWh = 784 · 1,489 t × $200/kg <a class="ref" data-k="nasasoa"></a></td><td class="r">$0.16B</td><td class="r d2col">$0.30B</td></tr>
+          <tr><td>Launch the laser terminals</td><td class="calc">252 · 360 × 50 kg = 13 · 18 t × $200/kg <a class="ref" data-k="tesat"></a></td><td class="r">$0.003B</td><td class="r d2col">$0.004B</td></tr>
+          <tr><td>Satellite hardware</td><td class="calc">603.6 MW × $6M · 905.5 MW × $5.5M</td><td class="r">$3.62B</td><td class="r d2col">$5.00B</td></tr>
+          <tr><td>Eclipse batteries</td><td class="calc">196 · 372 MWh × $300 per kWh <a class="ref" data-k="bnef"></a></td><td class="r">$0.06B</td><td class="r d2col">$0.11B</td></tr>
+          <tr class="total"><td>Getting to orbit</td><td class="calc">11,661 · 11,452 t launched</td><td class="r">$6.01B</td><td class="r d2col">$7.41B</td></tr>
+        </tbody>
+      </table></div>
+      <p class="src">Total spent $29.88B · $29.44B; unspent $0.12B · $0.56B. $6M per MW of satellite hardware is set so orbit ties the Nordics at $95/kg, as on slide 14.</p>
+    </section>
+
+    <!-- 10 -->
+    <section class="panel s6" data-n="10">
+      <div class="ph"><div class="t"><span class="n">10 · THE LIGHTER SATELLITE</span><h2>Three upgrades make orbit as cheap as the Nordics</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <svg id="ladder" viewBox="0 0 1000 330" role="img" aria-label="Cost per megawatt in orbit for each upgrade, from 11.18 million dollars to 9.07, against the Nordics at 9.29"></svg>
+      <div class="row c2">
+        <div class="tile"><span class="label">8 MW satellite · Design 1</span><span>144 t · 20,600 m² wings · chips 85 °C</span></div>
+        <div class="tile" style="border-color:var(--sun-dim)"><span class="label gold">8 MW satellite · Design 2</span><span>88 t · 18,900 m² wings · chips 58 °C</span></div>
+      </div>
+      <p class="src">twin/orbit_mass.py · 500 W/kg arrays are a 2035 stretch; best flown ~200 W/kg <a class="ref" data-k="nasasoa"></a> · radiators <a class="ref" data-k="techbriefs"></a></p>
+    </section>
+
+    <!-- 11 -->
+    <section class="panel s6" data-n="11">
+      <div class="ph"><div class="t"><span class="n">11 · ARCHITECTURE</span><h2>How a question travels</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <svg id="arch" viewBox="0 0 1000 400" role="img" aria-label="Users connect to six Earth data centers (Design 1 only) and to 16 optical ground stations, which link by laser to 12 orbital planes">
+        <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="var(--muted)"/></marker></defs>
+        <rect x="0" y="140" width="200" height="120" rx="14" fill="var(--panel2)" stroke="var(--hair2)"/>
+        <text x="100" y="185" text-anchor="middle" class="th">4.45 billion users</text>
+        <text x="100" y="210" text-anchor="middle" class="ts">chat · live agents · background</text>
+        <text x="100" y="230" text-anchor="middle" class="ts">Americas · Europe · Asia</text>
+        <rect x="300" y="10" width="320" height="160" rx="14" fill="var(--panel)" stroke="var(--c-earth)" stroke-width="1.6"/>
+        <text x="324" y="44" class="th">6 Earth data centers</text><text x="324" y="66" class="ts">Design 1 only · 323 MW of grid</text>
+        <g id="archSites"></g><text x="324" y="154" class="tm">25–110 ms round trip</text>
+        <rect x="300" y="230" width="320" height="160" rx="14" fill="var(--panel)" stroke="var(--c-chips)" stroke-width="1.6"/>
+        <text x="324" y="264" class="th">16 optical ground stations</text><text x="324" y="286" class="ts">spread worldwide, so some sky is always clear</text>
+        <g id="archGs"></g><text x="324" y="374" class="tm">100 Gbps laser per satellite</text>
+        <rect x="700" y="10" width="300" height="380" rx="14" fill="var(--panel)" stroke="var(--sun)" stroke-width="1.6"/>
+        <text x="724" y="44" class="th">12 orbital planes</text><text x="724" y="66" class="ts">each its own ring of satellites</text>
+        <g id="archPlanes"></g>
+        <text x="724" y="338" class="ts">each satellite: 8 MW, 3 lasers</text><text x="724" y="356" class="ts">1 to the ground, 2 to its neighbours</text>
+        <text x="724" y="376" class="tm">40 ms round trip</text>
+        <path d="M200,180 L296,100" stroke="var(--muted)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+        <path d="M200,220 L296,300" stroke="var(--muted)" stroke-width="1.6" fill="none" marker-end="url(#ar)"/>
+        <path d="M620,310 C660,310 660,230 696,230" stroke="var(--c-chips)" stroke-width="2.4" stroke-dasharray="7 5" fill="none" marker-end="url(#ar)"/>
+        <text x="638" y="300" class="tm">laser</text>
+      </svg>
+      <p class="sm">Inside every site and satellite: reader chips take in the whole question, writer chips write the answer, a memory store holds agents' work while tools run, and sandboxes run their code.</p>
+      <p class="src">Round trips: organizers' slide 12 · 200 Gbps laser downlink already flown <a class="ref" data-k="tbird"></a> · clear sky across many sites <a class="ref" data-k="birch"></a></p>
+    </section>
+
+    <!-- 12 -->
+    <section class="panel s6" data-n="12">
+      <div class="ph"><div class="t"><span class="n">12 · PROOF</span><h2>Five ways we checked every number</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Test</th><th class="r">Design 1</th><th class="r d2col">Design 2</th></tr></thead>
+        <tbody>
+          <tr><td>1 · Reproduce the organizers' own numbers first</td><td class="r ok" colspan="2" style="text-align:center">11 of 11</td></tr>
+          <tr><td>2 · Re-check every rule from the raw design file</td><td class="r ok">39 of 39</td><td class="r ok d2col">33 of 33</td></tr>
+          <tr><td>3 · Redo key numbers by hand, no model code</td><td class="r ok">16 of 16</td><td class="r">–</td></tr>
+          <tr><td>4 · Simulate whole days minute by minute</td><td class="r ok">57 of 57</td><td class="r ok d2col">39 of 39</td></tr>
+          <tr><td>5 · Make each of 16 estimates 25% worse</td><td class="r">fits 9 of 16</td><td class="r d2col">fits 10 of 16</td></tr>
+        </tbody>
+      </table></div>
+      <div class="row c4">
+        <div class="tile"><span class="label">Chat users / GPU</span><span class="mono">960 → 951</span></div>
+        <div class="tile"><span class="label">Agents / GPU</span><span class="mono">117 → 118</span></div>
+        <div class="tile"><span class="label">Launch 1 MW</span><span class="mono">$3.6M → $3.6M</span></div>
+        <div class="tile"><span class="label">Ties Nordics at</span><span class="mono">$95 → $95/kg</span></div>
+      </div>
+      <p class="src">Organizers' slides 13–14 → our model · re-run all of it in ~6 s: python3 twin/prove.py</p>
+    </section>
+
+    <!-- 13 -->
+    <section class="panel s6" data-n="13">
+      <div class="ph"><div class="t"><span class="n">13 · BREAK IT ON PURPOSE</span><h2>Switch off any site or ring: no live user is dropped</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Simulated days</th><th class="r">Days</th><th>Live users</th><th class="r">Longest bg wait</th></tr></thead>
+        <tbody>
+          <tr><td>Design 1 · normal + lose each of 18 places</td><td class="r">19</td><td class="ok">100%</td><td class="r">55 · 85 of 228 min</td></tr>
+          <tr><td>Design 1 · worst eclipse days ± an outage</td><td class="r">38</td><td class="ok">100%</td><td class="r">200 of 228 min</td></tr>
+          <tr><td class="d2col">Design 2 · normal + lose each of 12 planes</td><td class="r">13</td><td class="ok">100%</td><td class="r">44 · 81 of 218 min</td></tr>
+          <tr><td class="d2col">Design 2 · worst eclipse days ± an outage</td><td class="r">26</td><td class="ok">100%</td><td class="r">81 of 218 min</td></tr>
+        </tbody>
+      </table></div>
+      <div class="row c3">
+        <div class="tile"><span class="label">Biggest saving</span><span>Background agents use quiet hours: <b class="gold">$4.8B</b></span></div>
+        <div class="tile"><span class="label">Why it holds</span><span>Many small places, so each outage is a small slice</span></div>
+        <div class="tile" style="border-color:rgba(240,112,103,.4)"><span class="label" style="color:var(--bad)">Before the fix</span><span>One big orbit block: 37% of live users dropped</span></div>
+      </div>
+      <p class="src">twin/simulate.py --eclipse · busiest hour 2.5× the average: organizers' slide 16</p>
+    </section>
+
+    <!-- 14 -->
+    <section class="panel s12" data-n="14">
+      <div class="ph"><div class="t"><span class="n">14 · WHERE THE ESTIMATES COME FROM</span><h2>Every estimate, against a published source</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="tbl"><table id="srcTable">
+        <thead><tr><th>Input</th><th class="r">Ours</th><th>What the source says</th><th>Verdict</th><th>Source</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <div class="tile" style="border-color:var(--sun-dim)"><span>At today's electricity, carbon and building prices together, <b>Design 1 would cost about $31.2B, over budget</b>. Design 2 uses none of these inputs and stays at $29.44B. <span class="pill warn" style="margin-left:.4em">risk · Design 1</span></span></div>
+      <p class="src">Everything else comes from the organizers' slides: 19 inputs, each tagged with its slide number in twin/catalog.py</p>
+    </section>
+
+    <!-- 15 -->
+    <section class="panel s12" data-n="15">
+      <div class="ph"><div class="t"><span class="n">15 · EVERYTHING IS OPEN</span><h2>Check every number yourself</h2></div><button class="expand" type="button">⤢ Present</button></div>
+      <div class="row c3">
+        <div class="tile"><span class="label">Re-run every test</span><span class="mono">python3 twin/prove.py</span></div>
+        <div class="tile"><span class="label">Code and data</span><span class="mono" style="word-break:break-all">github.com/MadhanJ05/Orbital_DataCenter</span></div>
+        <div class="tile"><span class="label">3D digital twin</span><span class="mono" style="word-break:break-all">madhanj05.github.io/Orbital_DataCenter/twin3d.html</span></div>
+      </div>
+      <ol id="refList" style="margin:0;padding-left:2em;columns:3 280px;column-gap:2em;font-size:.82em;line-height:1.38;color:var(--muted)"></ol>
+    </section>
+  </main>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<nav class="fnav" id="fnav" hidden aria-label="Presenter controls">
+  <button type="button" id="fPrev" aria-label="Previous panel">←</button>
+  <span id="fCount">01 / 15</span>
+  <button type="button" id="fNext" aria-label="Next panel">→</button>
+  <button type="button" id="fClose">Close ✕</button>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent, text) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/'/g, "&#39;"); }
+
+  // ---------------------------------------------------------------- references, numbered in talk order
+  var REFS = __REFS__, SOURCES = __SOURCES__;
+  var order = [], seen = {};
+  function num(k) { if (!(k in seen)) { seen[k] = order.length + 1; order.push(k); } return seen[k]; }
+  function link(k, inline) { return "<a class='ref'" + (inline ? " style='vertical-align:0;font-size:.9em'" : "") + " href='" + REFS[k].url + "' target='_blank' rel='noopener' title='" + esc(REFS[k].title) + "'>[" + num(k) + "]</a>"; }
+  var panels = [].slice.call(document.querySelectorAll(".panel")).sort(function (a, b) { return +a.dataset.n - +b.dataset.n; });
+  panels.forEach(function (p) {
+    p.querySelectorAll(".ref[data-k]").forEach(function (a) { var k = a.getAttribute("data-k"); if (!REFS[k]) { a.remove(); return; } a.outerHTML = link(k, false); });
+    if (p.dataset.n === "14") {
+      var VC = { "matches": "var(--good)", "conservative": "var(--good)", "below today": "var(--sun)", "optimistic": "var(--sun)", "stretch": "var(--bad)", "projection": "var(--muted)" };
+      var tb = p.querySelector("tbody");
+      SOURCES.forEach(function (r) {
+        var vc = VC[r.verdict] || "var(--muted)", tr = document.createElement("tr");
+        tr.innerHTML = "<td>" + esc(r.input) + "</td><td class='r'>" + esc(r.ours) + "</td><td class='muted'>" + esc(r.says) + "</td><td><span class='verdict' style='color:" + vc + "'>" + esc(r.verdict) + "</span></td><td style='white-space:nowrap'>" + r.refs.filter(function (k) { return REFS[k]; }).map(function (k) { return link(k, true); }).join(" ") + "</td>";
+        tb.appendChild(tr);
+      });
+    }
+  });
+  var ol = document.getElementById("refList");
+  order.forEach(function (k) {
+    var r = REFS[k], li = document.createElement("li");
+    li.style.breakInside = "avoid"; li.style.marginBottom = "0.4em";
+    li.innerHTML = "<span style='color:var(--ink)'>" + esc(r.title) + "</span>. " + esc(r.pub) + ". <a href='" + r.url + "' target='_blank' rel='noopener' style='color:var(--sun);text-decoration:none'>" + esc(r.url.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]) + "</a>";
+    ol.appendChild(li);
+  });
+
+  // ---------------------------------------------------------------- tabs
+  document.querySelectorAll('[role="tablist"]').forEach(function (list) {
+    var tabs = [].slice.call(list.querySelectorAll(".tab")), box = list.parentNode;
+    function show(t) { tabs.forEach(function (x) { var on = x === t; x.setAttribute("aria-selected", on); box.querySelector('[data-pane="' + x.dataset.tab + '"]').hidden = !on; }); }
+    tabs.forEach(function (t, i) {
+      t.addEventListener("click", function (e) { e.stopPropagation(); show(t); });
+      t.addEventListener("keydown", function (e) { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); e.stopPropagation(); var n = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length]; n.focus(); show(n); } });
+    });
+  });
+
+  // ---------------------------------------------------------------- budget bars (twin/score.py)
+  var groups = [["chips, racks, memory", "--c-chips"], ["Earth sites", "--c-earth"], ["getting to orbit", "--c-orbit"], ["network", "--c-net"]];
+  var budget = [["Design 1 · Earth + orbit", [20.4463, 3.0561, 6.0123, 0.366], 29.8808], ["Design 2 · all orbit", [21.6167, 0, 7.4056, 0.42], 29.4423]];
+  var bb = document.getElementById("budgetBars"), BW = 1000, sc = BW / 30;
+  budget.forEach(function (row, r) {
+    var y0 = 30 + r * 104, x = 0, small = [];
+    el("text", { x: 0, y: y0 - 10, class: "th" }, bb, row[0]);
+    el("text", { x: BW, y: y0 - 10, class: "th", "text-anchor": "end", style: "fill:var(--sun)" }, bb, "$" + row[2].toFixed(2) + "B spent");
+    row[1].forEach(function (v, gi) {
+      if (!v) return;
+      var w = v * sc, lbl = "$" + v.toFixed(2) + "B " + groups[gi][0];
+      el("rect", { x: x, y: y0, width: Math.max(w - 3, 2), height: 48, rx: 5, fill: "var(" + groups[gi][1] + ")" }, bb);
+      if (w > lbl.length * 8.2 + 24) el("text", { x: x + 14, y: y0 + 30, class: "t", style: "fill:var(--on-bar);font-weight:650" }, bb, lbl); else small.push(lbl);
+      x += w;
+    });
+    var left = 30 - row[2];
+    el("rect", { x: x, y: y0 + 1, width: Math.max(left * sc - 2, 2), height: 46, rx: 5, fill: "none", stroke: "var(--muted)", "stroke-dasharray": "3 3" }, bb);
+    small.push("$" + left.toFixed(2) + "B unspent");
+    el("text", { x: BW, y: y0 + 68, class: "tm", "text-anchor": "end" }, bb, small.join("  ·  "));
+  });
+  for (var tk = 0; tk <= 30; tk += 5) { var tx = tk * sc; el("line", { x1: tx, x2: tx, y1: 228, y2: 234, stroke: "var(--faint)" }, bb); el("text", { x: tx, y: 248, class: "tm", "text-anchor": tk === 0 ? "start" : tk === 30 ? "end" : "middle" }, bb, "$" + tk + "B"); }
+
+  // ---------------------------------------------------------------- ladder (twin/orbit_mass.py)
+  var steps = [["Organizers' satellite", 18.0, 11.18], ["+ thin-film solar, 500 W/kg", 15.3, 10.31], ["+ carbon-fiber radiators, 2 kg/m²", 12.9, 9.69], ["+ racks stripped for space · Design 2", 11.0, 9.30], ["+ wings carry the frame", 9.9, 9.07]];
+  var ld = document.getElementById("ladder"), L0 = 380, L1 = 940, vmin = 8.5, vmax = 11.5;
+  var lx = function (v) { return L0 + (v - vmin) / (vmax - vmin) * (L1 - L0); };
+  for (var gv = 9; gv <= 11; gv += 1) { el("line", { x1: lx(gv), x2: lx(gv), y1: 10, y2: 290, stroke: "var(--hair)" }, ld); el("text", { x: lx(gv), y: 312, class: "tm", "text-anchor": "middle" }, ld, "$" + gv + "M per MW"); }
+  el("line", { x1: lx(9.29), x2: lx(9.29), y1: 4, y2: 296, stroke: "var(--c-earth)", "stroke-width": 2, "stroke-dasharray": "6 4" }, ld);
+  el("text", { x: lx(9.29) - 8, y: 330, class: "ts", "text-anchor": "end", style: "fill:var(--c-earth)" }, ld, "cheapest Earth site: Nordics, $9.29M");
+  steps.forEach(function (st, i) {
+    var y = 34 + i * 58, isD2 = i === 3;
+    el("text", { x: 0, y: y + 5, class: "t", style: isD2 ? "fill:var(--sun);font-weight:650" : "" }, ld, st[0]);
+    el("text", { x: 0, y: y + 23, class: "tm" }, ld, st[1].toFixed(1) + " t per MW");
+    el("line", { x1: L0, x2: lx(st[2]), y1: y, y2: y, stroke: "var(--hair2)", "stroke-width": 1.5 }, ld);
+    el("circle", { cx: lx(st[2]), cy: y, r: isD2 ? 9 : 7, fill: isD2 ? "var(--sun)" : "var(--c-orbit)", stroke: "var(--space)", "stroke-width": 2 }, ld);
+    el("text", { x: lx(st[2]) + 16, y: y + 5, class: "tm", style: "fill:var(--ink)" }, ld, "$" + st[2].toFixed(2) + "M");
+  });
+
+  // ---------------------------------------------------------------- architecture details
+  var sg = document.getElementById("archSites");
+  ["N. Virginia", "Midwest", "W. Texas", "Nordics", "Iceland", "Gulf"].forEach(function (n, i) { var x = 324 + (i % 3) * 98, y = 100 + Math.floor(i / 3) * 26; el("circle", { cx: x + 5, cy: y - 4, r: 5, fill: "var(--c-earth)" }, sg); el("text", { x: x + 15, y: y, class: "ts", style: "fill:var(--ink)" }, sg, n); });
+  var gg = document.getElementById("archGs");
+  for (var g = 0; g < 16; g++) { var gx = 332 + g * 17; el("path", { d: "M" + (gx - 6) + ",340 L" + gx + ",324 L" + (gx + 6) + ",340 Z", fill: "var(--c-chips)" }, gg); }
+  var pl = document.getElementById("archPlanes");
+  [["Plane 1", "06:00"], ["Plane 2", "18:00"], ["Plane 3", "06:00"], ["Plane 4", "18:00"], ["Plane 5", "06:00"]].forEach(function (r, k) {
+    var y = 104 + k * 40;
+    el("text", { x: 724, y: y + 4, class: "tm", style: "fill:var(--ink)" }, pl, r[0] + " · " + r[1]);
+    el("line", { x1: 840, x2: 980, y1: y, y2: y, stroke: "var(--sun)", "stroke-opacity": 0.6, "stroke-dasharray": r[1] === "18:00" ? "4 3" : "0" }, pl);
+    for (var q = 0; q < 7; q++) el("rect", { x: 844 + q * 19.5, y: y - 4, width: 8, height: 8, rx: 2, fill: "var(--sun)" }, pl);
+  });
+  el("text", { x: 724, y: 314, class: "ts" }, pl, "… 12 planes · 7 satellites each (10 in Design 2)");
+
+  // ---------------------------------------------------------------- live Earth with 12 dawn-dusk planes (same shaders as twin3d.html)
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  (function () {
+    var box = document.getElementById("globeBox"), cv = document.getElementById("globe");
+    if (!window.THREE) { box.classList.add("no-gl"); return; }
+    var renderer;
+    try { renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true }); } catch (e) { box.classList.add("no-gl"); return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setClearColor(0x03060c, 1);
+    var scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(30, 4 / 3, 0.1, 200); camera.position.set(0, 0, 5.2);
+    var SUN = new THREE.Vector3(-1.0, 0.3, 0.12).normalize();
+    var sp = [], rs = 11; function rnd() { rs = (rs * 16807) % 2147483647; return rs / 2147483647; }
+    for (var i = 0; i < 1800; i++) { var th = rnd() * 6.283, ph = Math.acos(2 * rnd() - 1); sp.push(80 * Math.sin(ph) * Math.cos(th), 80 * Math.sin(ph) * Math.sin(th), -Math.abs(80 * Math.cos(ph)) - 10); }
+    var sgeo = new THREE.BufferGeometry(); sgeo.setAttribute("position", new THREE.Float32BufferAttribute(sp, 3));
+    scene.add(new THREE.Points(sgeo, new THREE.PointsMaterial({ color: 0xdfe7ff, size: 0.16, transparent: true, opacity: 0.7 })));
+    var loader = new THREE.TextureLoader(), IMG = { day: "__EARTH_DAY__", night: "__EARTH_NIGHT__", clouds: "__EARTH_CLOUDS__" };
+    function tex(k) { var t = loader.load(IMG[k]); t.anisotropy = 8; return t; }
+    var TC = tex("clouds"); TC.wrapS = THREE.RepeatWrapping;
+    var earthMat = new THREE.ShaderMaterial({
+      uniforms: { day: { value: tex("day") }, night: { value: tex("night") }, clouds: { value: TC }, sunDir: { value: SUN }, cloudShift: { value: 0 } },
+      vertexShader: "varying vec2 vUv; varying vec3 vN; varying vec3 vW; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }",
+      fragmentShader: "uniform sampler2D day; uniform sampler2D night; uniform sampler2D clouds; uniform vec3 sunDir; uniform float cloudShift; varying vec2 vUv; varying vec3 vN; varying vec3 vW;" +
+        "void main(){ vec3 N = normalize(vN); vec3 V = normalize(cameraPosition - vW); vec3 L = normalize(sunDir); float ndl = dot(N, L);" +
+        " vec3 d = texture2D(day, vUv).rgb; vec3 n = texture2D(night, vUv).rgb; float c = texture2D(clouds, vec2(vUv.x + cloudShift, vUv.y)).r; c = smoothstep(0.15, 0.85, c);" +
+        " float dayK = smoothstep(-0.10, 0.22, ndl); vec3 lit = d * (0.03 + 1.25 * max(ndl, 0.0)); float ocean = smoothstep(0.03, 0.14, d.b - max(d.r, d.g * 0.9));" +
+        " vec3 H = normalize(L + V); float spec = pow(max(dot(N, H), 0.0), 70.0) * ocean * (1.0 - c) * step(0.0, ndl); vec3 cloudLit = vec3(0.98, 0.98, 1.0) * (0.02 + 1.15 * max(ndl, 0.0));" +
+        " vec3 dayCol = mix(lit, cloudLit, c * 0.9) + vec3(1.0, 0.9, 0.72) * spec * 1.1; vec3 nightCol = pow(n, vec3(1.4)) * vec3(1.25, 1.0, 0.7) * 2.2 * (1.0 - c * 0.75);" +
+        " vec3 col = mix(nightCol, dayCol, dayK); float tw = exp(-pow(ndl * 6.0, 2.0)); col += vec3(0.45, 0.16, 0.03) * tw * 0.22 * (0.4 + c); gl_FragColor = vec4(col, 1.0); }"
+    });
+    var atmo = new THREE.ShaderMaterial({ uniforms: { sunDir: { value: SUN } }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+      vertexShader: "varying vec3 vN; varying vec3 vW; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }",
+      fragmentShader: "uniform vec3 sunDir; varying vec3 vN; varying vec3 vW; void main(){ vec3 V = normalize(cameraPosition - vW); float rim = pow(1.0 - max(dot(normalize(vN), V), 0.0), 3.2); float lit = smoothstep(-0.35, 0.6, dot(normalize(vN), normalize(sunDir))); vec3 col = mix(vec3(0.95, 0.45, 0.2) * 0.4, vec3(0.32, 0.6, 1.0), lit); gl_FragColor = vec4(col * rim * (0.15 + 1.25 * lit), rim * (0.2 + 0.8 * lit)); }" });
+    var globe = new THREE.Mesh(new THREE.SphereGeometry(1, 128, 96), earthMat); globe.rotation.y = -1.9; globe.rotation.x = 0.18;
+    scene.add(globe); scene.add(new THREE.Mesh(new THREE.SphereGeometry(1.035, 96, 64), atmo));
+    var glow = (function () { var c = document.createElement("canvas"); c.width = c.height = 64; var x = c.getContext("2d"); var gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(0.25, "rgba(255,220,150,0.9)"); gr.addColorStop(1, "rgba(255,200,100,0)"); x.fillStyle = gr; x.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(c); })();
+    var PLANES = [], NPER = 7, Y = new THREE.Vector3(0, 1, 0);
+    for (var p = 0; p < 12; p++) {
+      var dusk = p % 2 === 1, nrm = SUN.clone().applyAxisAngle(Y, (p - 5.5) * 0.022);
+      var u = new THREE.Vector3().crossVectors(nrm, Y).normalize(), v = new THREE.Vector3().crossVectors(nrm, u).normalize(), R = 1.086 + p * 0.0028, pts = [];
+      for (var a = 0; a <= 256; a++) { var t = a / 256 * Math.PI * 2; pts.push(u.clone().multiplyScalar(Math.cos(t) * R).addScaledVector(v, Math.sin(t) * R)); }
+      var lm = dusk ? new THREE.LineDashedMaterial({ color: 0xf2b544, dashSize: 0.025, gapSize: 0.018, transparent: true, opacity: 0.45 }) : new THREE.LineBasicMaterial({ color: 0xf2b544, transparent: true, opacity: 0.45 });
+      var line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lm); if (dusk) line.computeLineDistances(); scene.add(line);
+      PLANES.push({ u: u, v: v, R: R, dir: dusk ? -1 : 1, off: p * 0.37 });
+    }
+    var satPos = new Float32Array(12 * NPER * 3), satGeo = new THREE.BufferGeometry(); satGeo.setAttribute("position", new THREE.BufferAttribute(satPos, 3));
+    scene.add(new THREE.Points(satGeo, new THREE.PointsMaterial({ map: glow, color: 0xffd27a, size: 0.07, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })));
+    function size() { var w = box.clientWidth, h = box.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+    size(); if (window.ResizeObserver) new ResizeObserver(size).observe(box); else addEventListener("resize", size);
+    var visible = true, t0 = performance.now(), running = false;
+    if (window.IntersectionObserver) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) start(); }).observe(box);
+    function frame(now) {
+      var dt = Math.min(0.05, (now - t0) / 1000); t0 = now;
+      if (!reduce) { globe.rotation.y += dt * 0.025; earthMat.uniforms.cloudShift.value += dt * 0.0012; }
+      var ph = reduce ? 0 : now / 1000 * 0.07, k = 0;
+      PLANES.forEach(function (P) { for (var s = 0; s < NPER; s++, k++) { var an = P.dir * ph + P.off + s / NPER * Math.PI * 2, c = Math.cos(an) * P.R, d = Math.sin(an) * P.R; satPos[k * 3] = P.u.x * c + P.v.x * d; satPos[k * 3 + 1] = P.u.y * c + P.v.y * d; satPos[k * 3 + 2] = P.u.z * c + P.v.z * d; } });
+      satGeo.attributes.position.needsUpdate = true;
+      renderer.render(scene, camera);
+      if (visible && !document.hidden) requestAnimationFrame(frame); else running = false;
+    }
+    function start() { if (running) return; running = true; t0 = performance.now(); requestAnimationFrame(frame); }
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) start(); });
+    start();
+  })();
+
+  // ---------------------------------------------------------------- present: expand a panel, step through 01 → 15
+  var scrim = document.getElementById("scrim"), fnav = document.getElementById("fnav"), cur = -1, home = null;
+  var talk = panels.filter(function (p, i, a) { return true; });          // panel order = talk order (06–08 share one panel)
+  function label(p) { var n = +p.dataset.n; return (n === 6 ? "06–08" : String(n).padStart(2, "0")) + " / 15"; }
+  function open(i) {
+    close(true);
+    cur = Math.max(0, Math.min(talk.length - 1, i));
+    var p = talk[cur]; home = { parent: p.parentNode, next: p.nextSibling };
+    document.body.appendChild(p); p.classList.add("focus");
+    scrim.hidden = false; fnav.hidden = false; document.getElementById("fCount").textContent = label(p);
+    p.querySelector(".expand").textContent = "✕ Close";
+    try { history.replaceState(null, "", "#p" + p.dataset.n); } catch (e) {}
+  }
+  function close(silent) {
+    if (cur < 0) return;
+    var p = talk[cur]; p.classList.remove("focus"); p.querySelector(".expand").textContent = "⤢ Present";
+    home.parent.insertBefore(p, home.next); cur = -1;
+    if (!silent) { scrim.hidden = true; fnav.hidden = true; try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} }
+  }
+  talk.forEach(function (p, i) { p.querySelector(".expand").addEventListener("click", function () { if (cur === i) close(); else open(i); }); });
+  document.getElementById("presentBtn").addEventListener("click", function () { open(0); });
+  document.getElementById("fPrev").addEventListener("click", function () { if (cur > 0) open(cur - 1); });
+  document.getElementById("fNext").addEventListener("click", function () { if (cur < talk.length - 1) open(cur + 1); });
+  document.getElementById("fClose").addEventListener("click", function () { close(); });
+  scrim.addEventListener("click", function () { close(); });
+  document.addEventListener("keydown", function (e) {
+    if (cur < 0 || e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.target.classList && e.target.classList.contains("tab")) return;
+    if (["ArrowRight", "PageDown", " "].indexOf(e.key) >= 0) { e.preventDefault(); if (cur < talk.length - 1) open(cur + 1); }
+    else if (["ArrowLeft", "PageUp"].indexOf(e.key) >= 0) { e.preventDefault(); if (cur > 0) open(cur - 1); }
+    else if (e.key === "Escape") close();
+  });
+  var m = /^#p(\d+)$/.exec(location.hash);
+  if (m) { var idx = talk.findIndex(function (p) { return p.dataset.n === m[1]; }); if (idx >= 0) open(idx); }
+})();
+</script>
