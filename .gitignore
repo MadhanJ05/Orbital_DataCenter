@@ -9,3 +9,5 @@ dist/
 /twin3d.html
 /explained.html
 /briefing.html
+# per-step fleet designs from python3 twin/orbit_mass.py (their results are in designs/whatif_ladder.json)
+/designs/ladder/

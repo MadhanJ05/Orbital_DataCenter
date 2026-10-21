@@ -81,7 +81,7 @@ def scenarios(pct):
 
 
 def light_satellite():
-    """The what-if satellite (10.7 t/MW, space-stripped racks step of orbit_mass)."""
+    """The what-if satellite (11.0 t/MW, space-stripped racks step of orbit_mass)."""
     import orbit_mass as M
     row = M.ladder()[5]
     C.SPACE_KG_PER_MW = row["total_t"] * 1000

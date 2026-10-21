@@ -27,13 +27,13 @@ python3 twin/score.py designs/final_A+B+C.json   # score a design (add --json fo
 | `twin/catalog.py` | Every constant. Each one is tagged `DECK sN` (from slide N), `ASSUMED`, or `CALIB` (tuned to reproduce a deck number). |
 | `twin/score.py` | The model and the scorer. |
 | `twin/build.py` | Greedy planner: best chip per stream, cheapest sites up to their grid caps, the rest in LEO. |
-| `twin/orbit_mass.py` | The 18-tonne what-if: one orbital MW broken into compute, solar, radiators and structure, with physical levers (chip temperature vs leakage, two cooling loops, solar W/kg, radiator kg/m², stripped racks, structure share, launch price). It re-optimizes the whole fleet at each step and writes `designs/whatif_ladder.json`. |
+| `twin/orbit_mass.py` | The 18-tonne what-if: one orbital MW broken into compute, solar, radiators and structure, with physical levers (chip temperature vs leakage, two cooling loops, solar W/kg, radiator kg/m², stripped racks, structure share, launch price). It re-optimizes the whole fleet at each step and writes `designs/whatif_ladder.json` (each step's fleet design goes to `designs/ladder/`, not committed). |
 | `twin/simulate.py` | Minute-by-minute day. Builds global demand curves from three regions in their own time zones, serves live work first, queues background work into what's left, and checks every background task against its 4 h deadline, on a normal day and with each site or plane lost. Writes `designs/sim_24h.json`. |
 | `twin/check_rules.py` | Rule-by-rule check against the deck for Design 1 and Design 2 (or any design). Each line gives the slide, the limit, the design's value and PASS/FAIL. It recomputes from the pools instead of trusting the scorer. |
 | `twin/handcheck.py` | Redoes 16 key Design 1 results with calculator arithmetic from deck numbers, without the scorer's physics, and compares: demand, sessions per chip, capacity, first-token time, one site's bill, launch, off-peak shift, outage margins. |
 | `twin/physical.py` | The twin's physical layer: per site and plane, power at the meter hour by hour (normal day and both eclipse days), solar-array and radiator area, chip and radiator temperature, batteries, link traffic, the 5-year energy flow, and every outage/eclipse day. Writes `designs/twin.json`. |
 | `twin/build_twin_page.py` | Embeds `designs/twin.json` into `twin_page.html` and writes the standalone `twin.html` and `twin3d.html` at the repo root. The page has no model logic. The pages aren't committed; the Pages workflow builds them. |
-| `twin/stress.py` | Makes each ASSUMED/CALIB number 25% worse (`--pct`), one at a time and then all together. Re-scores the final design as built and re-optimizes from scratch. `--light` uses the 10.7 t/MW satellite; `--orbit-only` removes Earth sites (Design 2). Writes `designs/stress_25*.json`. |
+| `twin/stress.py` | Makes each ASSUMED/CALIB number 25% worse (`--pct`), one at a time and then all together. Re-scores the final design as built and re-optimizes from scratch. `--light` uses the 11.0 t/MW satellite; `--orbit-only` removes Earth sites (Design 2). Writes `designs/stress_25*.json`. |
 | `twin/optimize.py` | Coordinate search over every lever. Keeps a change only if the design stays at 100% served, stays valid, and gets cheaper. |
 | `twin/test_calibration.py` | Checks against the deck: ~960 chat and ~117 agent sessions per GPU, per-user peak tokens, 972 W/m² radiators, $3.6M/MW launch, orbit break-even with the Nordics at $95/kg and West Texas at $170/kg, Moon and Mars latency rules. |
 | `twin/export_ui.py` | Scores every design in `designs/` and bundles the results with the 24-hour simulation, the stress ladders and the agents-in-orbit strand into `designs/ui.json`, the data behind `dashboard.html` (published copy: https://claude.ai/artifact/K2eTB3o7SGMvccLEJCppxL). The page has no model logic of its own. |
@@ -100,7 +100,7 @@ existing design (`from_design`) and do several fresh starts (`restarts`).
 | | Design 1 ($29.88B) | Design 2 ($29.44B) |
 |---|---|---|
 | Single assumptions that still fit the budget with every outage covered | 9 of 16 | 10 of 16 |
-| Breaks it | building cost, space hardware, chip FLOPS, attention math, draft acceptance, cross-chip sync | space hardware, chip FLOPS, attention math, draft acceptance, cross-chip sync |
+| Breaks it | building cost, space hardware, chip FLOPS, usable FLOPS share, attention math, draft acceptance, cross-chip sync | space hardware, chip FLOPS, usable FLOPS share, attention math, draft acceptance, cross-chip sync |
 | All 16 worse at once | $53.8B | $54.2B |
 
 ## Deck interpretations (where the slides leave room)

@@ -19,7 +19,7 @@ All three user groups together are 4.45 billion people: chat users, agent develo
 office workers. **Earth runs out of power first.** If we stay on Earth, the grid is full when
 only 58% of them are served.
 
-**Presenting?** See [`DEMO.md`](DEMO.md) for the 5-minute script, and run `python3 twin/prove.py` to show every check live (about 6 seconds).
+**Presenting?** Use the [deck](https://madhanj05.github.io/Orbital_DataCenter/explained.html) or the [briefing dashboard](https://madhanj05.github.io/Orbital_DataCenter/briefing.html), and run `python3 twin/prove.py` to show every check live (about 6 seconds).
 
 ## 🛰️ The digital twin
 
@@ -45,7 +45,7 @@ It shows, for every Earth site and orbital plane:
 - solar-array and radiator area, chip and radiator temperature, and eclipse batteries;
 - link traffic to Earth;
 - energy per chat and per agent task, and where 5 years of energy goes (sunlight to chips to heat);
-- all 72 failure days we simulate.
+- all 96 days we simulate (57 for Design 1, 39 for Design 2): normal, every outage, eclipses.
 
 The HTML pages aren't committed: the site builds `twin.html`, `twin3d.html`, `explained.html` and `briefing.html` on every push. After a model change, run `python3 twin/physical.py` and commit `designs/twin.json`. To open the pages locally, run `python3 twin/build_twin_page.py && python3 present/build.py`.
 
@@ -53,7 +53,7 @@ The HTML pages aren't committed: the site builds `twin.html`, `twin3d.html`, `ex
 
 | | 🏁 **Design 1: the safest (Earth + orbit)** | 💡 **Design 2: our what-if (all orbit)** |
 |---|---|---|
-| What it is | The organizers' catalog exactly as given (18-tonne satellite), 6 Earth sites + 12 orbital planes | Our lighter satellite (10.7 tonnes); the whole fleet in 8 orbital planes, no Earth grid at all |
+| What it is | The organizers' catalog exactly as given (18-tonne satellite), 6 Earth sites + 12 orbital planes | Our lighter satellite (11.0 tonnes per MW); the whole fleet in 12 orbital planes, no Earth grid at all |
 | 💰 Budget ($30B) | ✅ $29.88B | ✅ $29.44B |
 | ⚡ Earth grid (500 MW) | ✅ 323 MW | ✅ 0 MW |
 | 🚀 Launch ($200/kg) | ✅ 11,661 t = $2.33B | ✅ 11,452 t = $2.29B |
@@ -67,7 +67,7 @@ The HTML pages aren't committed: the site builds `twin.html`, `twin3d.html`, `ex
 **Design 1 is our entry and the safest.** It uses the organizers' numbers exactly, and it mixes
 Earth and orbit, which fail for different reasons (grid outages vs solar storms). **Design 2 is our
 idea:** the organizers invite each team to change one assumption, and ours is the satellite's
-weight. With a 10.7-tonne satellite, the entire fleet can leave Earth's grid and still fit the
+weight. With an 11.0-tonne satellite, the entire fleet can leave Earth's grid and still fit the
 budget. Design 2 is also faster, because orbit is only 40 ms from everyone.
 
 **Where we are:** both fit the budget again after two cost cuts. Sandboxes are snapshotted between
@@ -114,7 +114,7 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
 
 - **How far apart the planes are:** the model doesn't fix their exact positions. It treats them
   only as independent failure zones. In the 3D twin they are turned about 2° to 10° from the
-  exact day/night line and stepped 30 km apart in height, from 550 to 760 km. That's realistic in
+  exact day/night line and stepped 20 km apart in height, from 550 to 770 km. That's realistic in
   kind, because dawn-dusk planes can only fan out a little (within about an hour of 06:00 or 18:00
   local time) before they see more shadow. The exact numbers are a drawing choice.
 - **Spread out, not clustered:** Google's Suncatcher flies 81 satellites 100-200 m apart so they
@@ -137,7 +137,7 @@ slow for chat. Orbit is only 40 ms away, about as close as a data center in Virg
   days a year.
 - **In the 3D twin,** the clock shows UTC (world time, for demand and Earth's rotation). The
   06:00 rings are solid and the 18:00 rings are dashed. The planes are drawn between 550 and
-  760 km so you can tell them apart; the model treats them all as about 650 km.
+  770 km so you can tell them apart; the model treats them all as about 650 km.
 
 ## The five tricks that made it fit
 
@@ -203,8 +203,8 @@ some. We made each of our 16 guesses 25% worse, one at a time:
 |---|---|---|
 | 🎯 Matches the organizers | Our model reproduces the deck's own numbers: 960 chat users per chip, 117 agents per chip, $3.6M to launch a megawatt, orbit breaking even with the Nordics at $95/kg | 11 of 11 tests pass |
 | 🛡️ Safety rules | We keep 5% of every chip's memory free, as real systems do (see below) | Included in both designs |
-| 🌑 Eclipses | Real orbit geometry (from Alfred's app and Andrey's model): Earth's shadow up to 21 minutes of every 96-minute orbit, about 95 days a year. Worst eclipse day simulated alone and with every possible outage | Design 1: 30 of 30 days OK. Design 2: 18 of 18 |
-| 🧰 Tool sandboxes | Background agents run their tools on CPU racks next to the model (from Andrey's model). We now buy, power and launch them | 232–244 racks, $0.6–0.7B |
+| 🌑 Eclipses | Real orbit geometry (from Alfred's app and Andrey's model): Earth's shadow up to about 20 minutes per orbit, about 95 days a year (the model uses the teammates' 21 minutes, a little longer than the 19.6 at our 650 km). Worst eclipse day simulated alone and with every possible outage | Design 1: 38 of 38 days OK. Design 2: 26 of 26 |
+| 🧰 Tool sandboxes | Background agents run their tools on CPU racks next to the model (from Andrey's model). We buy, power and launch them, and pause idle ones to disk between tool calls | 198 racks (Design 1), 192 (Design 2): $0.53–0.59B with power, buildings and launch |
 | 📡 Communications | 3 laser terminals per 8 MW satellite (50 kg, $0.5M each, from Andrey's model) and 16 optical ground stations ($10M each + $1M/yr); each plane's Earth capacity = satellites x 100 Gbps x 95% weather availability (from Alfred's app) | $0.37–0.42B; busiest plane uses 0.09 of 0.67 Tbps (D1), 0.13 of 0.95 Tbps (D2) |
 | 📋 Every rule, one by one | Budget, grid, launch, chip and cooling rules, every speed target, users served, outages, Earth-orbit network traffic, energy bookkeeping. Each is recalculated from the raw design | Design 1: 39 of 39. Design 2: 33 of 33 |
 | 🕐 A full day, minute by minute | Users in 3 time zones, live users first, background jobs fill the gaps. Run on a normal day, once per possible outage, and on the worst eclipse day with and without each outage | 96 days simulated: no live user ever waits. Longest background wait: 200 min (limit 228) |
@@ -269,10 +269,13 @@ Gemini prompt in 2025.
 
 ## Safety rules we tried
 
+Costs below are from when we chose the rule, before batteries, tool sandboxes and communications were
+added. With all of those, the final designs cost $29.88B and $29.44B.
+
 | Rule | Design 1 | Design 2 | Decision |
 |---|---|---|---|
 | None (chip memory filled to 100%) | $28.78B | $28.79B | Too optimistic |
-| **Keep 5% of chip memory free** | **$29.05B** | **$29.22B** | ✅ **Used** (before batteries and sandboxes were added) |
+| **Keep 5% of chip memory free** | **$29.05B** | **$29.22B** | ✅ **Used** |
 | Keep 10% of chip memory free | $29.86B | $29.95B | Fits, but only $0.05–0.14B to spare |
 | Serve 100% at 5% above the organizers' demand, even during an outage | $30.20B | $30.13B | ❌ Over budget |
 

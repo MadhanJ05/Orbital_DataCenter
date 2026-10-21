@@ -183,11 +183,13 @@ def main():
             design["name"] = f"whatif_{len(out)}"
             design["satellite"] = dict(kg_per_mw=round(row["total_t"] * 1000), hw_factor=round(row["power_factor"], 4),
                                        launch_usd_per_kg=row["launch_usd_per_kg"], note=row["label"])
-            (root / "designs" / f"whatif_{len(out)}.json").write_text(json.dumps(design, indent=2) + "\n")
+            steps = root / "designs" / "ladder"   # not committed, and not on the dashboard
+            steps.mkdir(exist_ok=True)
+            (steps / f"whatif_{len(out)}.json").write_text(json.dumps(design, indent=2) + "\n")
         print(line)
         out.append(rec)
     (root / "designs" / "whatif_ladder.json").write_text(json.dumps(out, indent=2, default=str) + "\n")
-    print(f"\nwrote designs/whatif_ladder.json and designs/whatif_0..{len(out) - 1}.json")
+    print(f"\nwrote designs/whatif_ladder.json" + ("" if a.no_fleet else f" and designs/ladder/whatif_0..{len(out) - 1}.json"))
 
 
 if __name__ == "__main__":
