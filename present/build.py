@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Build explained.html (the 15-slide deck) and briefing.html (the dashboard) at the repo root,
 each one standalone file, from their templates, present/sources.py and the NASA Earth images.
+The pages aren't committed: the Pages workflow runs this on every push.
 
     python3 present/build.py
     python3 present/build.py --fragments /tmp/out    # also write content-only copies for claude.ai artifacts

@@ -23,9 +23,9 @@ only 58% of them are served.
 
 ## 🛰️ The digital twin
 
-**The presentation:** [`explained.html`](https://madhanj05.github.io/Orbital_DataCenter/explained.html) is our 15-slide deck, and [`briefing.html`](https://madhanj05.github.io/Orbital_DataCenter/briefing.html) tells the same story as one dashboard. Every estimate on them is checked against a cited source. Both are built from [`present/`](present/): edit `present/deck_page.html`, `present/briefing_page.html` or `present/sources.py`, then run `python3 present/build.py`.
+**The presentation:** [`explained.html`](https://madhanj05.github.io/Orbital_DataCenter/explained.html) is our 15-slide deck, and [`briefing.html`](https://madhanj05.github.io/Orbital_DataCenter/briefing.html) tells the same story as one dashboard. Every estimate on them is checked against a cited source. Both are built from [`present/`](present/): edit `present/deck_page.html`, `present/briefing_page.html` or `present/sources.py` and push; the site rebuilds them (`python3 present/build.py` builds them locally).
 
-**[`twin3d.html`](twin3d.html)** ([live](https://madhanj05.github.io/Orbital_DataCenter/twin3d.html)) is the twin in 3D, seen from space, with two views:
+**[`twin3d.html`](https://madhanj05.github.io/Orbital_DataCenter/twin3d.html)** is the twin in 3D, seen from space, with two views:
 - **One satellite** (`#satellite`): a single satellite drawn to scale. Sliders change its size, chip temperature, cooling loops, solar W/kg, radiator kg/m², rack weight, structure, batteries and launch price; the wings, radiator and battery resize live, and it shows tonnes per MW, launches, and cost per MW against the Nordics. It runs the same physics as `twin/orbit_mass.py` and checks itself against Python's answers on every load.
 - **Realistic rendering:** Earth uses NASA's Blue Marble (day), Black Marble (city lights at night) and cloud imagery (public domain, `twin/assets/`). It adds an atmosphere glow, sunlight glinting off the oceans, the Sun with a lens flare, and a starfield with the Milky Way. It opens on the whole fleet; add `#satellite` to the link to open straight on the one-satellite view.
 - **Whole fleet:**
@@ -35,7 +35,7 @@ only 58% of them are served.
 - On a June or December eclipse day, that half of the planes tilts into Earth's shadow, and you can watch satellites switch to batteries or pause.
 - Switch off any site or plane. Camera views: overview, from the Sun, ride along with a satellite, Earth sites.
 
-**[`twin.html`](twin.html)** (open it straight in a browser, no server needed) is the same twin as flat charts and tables:
+**[`twin.html`](https://madhanj05.github.io/Orbital_DataCenter/twin.html)** (build it locally and it opens straight in a browser, no server needed) is the same twin as flat charts and tables:
 - **Pick a design and a day** (normal, or the worst eclipse day).
 - **Switch off any site or orbital plane.**
 - **Scrub or play the 24 hours.**
@@ -47,7 +47,7 @@ It shows, for every Earth site and orbital plane:
 - energy per chat and per agent task, and where 5 years of energy goes (sunlight to chips to heat);
 - all 72 failure days we simulate.
 
-Rebuild after any model change: `python3 twin/physical.py && python3 twin/build_twin_page.py`.
+The HTML pages aren't committed: the site builds `twin.html`, `twin3d.html`, `explained.html` and `briefing.html` on every push. After a model change, run `python3 twin/physical.py` and commit `designs/twin.json`. To open the pages locally, run `python3 twin/build_twin_page.py && python3 present/build.py`.
 
 ## Our answer: two designs
 

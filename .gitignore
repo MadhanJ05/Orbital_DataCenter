@@ -4,3 +4,8 @@ __pycache__/
 node_modules/
 dist/
 .claude/
+# built by the Pages workflow; locally: python3 twin/build_twin_page.py && python3 present/build.py
+/twin.html
+/twin3d.html
+/explained.html
+/briefing.html

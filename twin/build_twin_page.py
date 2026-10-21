@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build twin.html and twin3d.html (repo root) from their templates and designs/twin.json, each one standalone file.
+The pages aren't committed: the Pages workflow runs this on every push.
 
     python3 twin/physical.py && python3 twin/build_twin_page.py
 """

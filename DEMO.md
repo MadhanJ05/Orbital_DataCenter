@@ -10,7 +10,7 @@ Open these in this order:
 2. **A terminal** in the repo folder, with this typed and ready: `python3 twin/prove.py`
    (it runs every check in about 6 seconds and needs no internet)
 3. **Backup, if the 3D view doesn't load:** https://madhanj05.github.io/Orbital_DataCenter/explained.html
-   (the plain-language explainer). Offline, open `twin.html` from the repo.
+   (the plain-language explainer). Offline, run `python3 twin/build_twin_page.py` and open `twin.html`.
 
 ## The script
 
@@ -121,5 +121,5 @@ up to 5 and down again, so people see the satellite and the numbers change.
 
 ## If something goes wrong
 
-- **3D view is black or blank:** the network blocked the 3D library. Switch to the explainer link above, or open `twin.html`.
+- **3D view is black or blank:** the network blocked the 3D library. Switch to the explainer link above, or build and open `twin.html` (`python3 twin/build_twin_page.py`).
 - **No internet at all:** `python3 twin/prove.py` and `python3 twin/score.py designs/final_resilient.json` work offline.
